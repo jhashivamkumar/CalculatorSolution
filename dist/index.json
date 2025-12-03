@@ -1,0 +1,446 @@
+[
+  {
+    "slug": "percentage-calculator",
+    "title": "Percentage Calculator",
+    "category": "finance",
+    "short": "Compute percentages and simple percent changes."
+  },
+  {
+    "slug": "percentage-change-calculator",
+    "title": "Percentage Increase/Decrease Calculator",
+    "category": "finance",
+    "short": "Calculate percent increase or decrease between two values."
+  },
+  {
+    "slug": "discount-calculator",
+    "title": "Discount Calculator",
+    "category": "finance",
+    "short": "Compute price after discount and the amount saved."
+  },
+  {
+    "slug": "gst-calculator-india",
+    "title": "GST Calculator (India)",
+    "category": "finance",
+    "short": "Calculate GST amount and final price for Indian GST rates."
+  },
+  {
+    "slug": "loan-emi-calculator",
+    "title": "Loan EMI Calculator",
+    "category": "finance",
+    "short": "Calculate monthly EMI, total payment and interest."
+  },
+  {
+    "slug": "home-loan-emi-calculator",
+    "title": "Home Loan EMI Calculator",
+    "category": "finance",
+    "short": "EMI calculator tailored for home loans and longer tenures."
+  },
+  {
+    "slug": "car-loan-emi-calculator",
+    "title": "Car Loan EMI Calculator",
+    "category": "finance",
+    "short": "EMI for car loans with downpayment and tenure options."
+  },
+  {
+    "slug": "personal-loan-emi-calculator",
+    "title": "Personal Loan EMI Calculator",
+    "category": "finance",
+    "short": "Monthly payments for unsecured personal loans."
+  },
+  {
+    "slug": "simple-interest-calculator",
+    "title": "Simple Interest Calculator",
+    "category": "finance",
+    "short": "Compute simple interest over time."
+  },
+  {
+    "slug": "compound-interest-calculator",
+    "title": "Compound Interest Calculator",
+    "category": "finance",
+    "short": "Calculate compound growth for investments."
+  },
+  {
+    "slug": "sip-calculator",
+    "title": "SIP Calculator",
+    "category": "finance",
+    "short": "Estimate SIP returns with periodic investments."
+  },
+  {
+    "slug": "fd-calculator",
+    "title": "FD Calculator",
+    "category": "finance",
+    "short": "Fixed deposit returns with interest and compounding."
+  },
+  {
+    "slug": "rd-calculator",
+    "title": "Recurring Deposit (RD) Calculator",
+    "category": "finance",
+    "short": "Estimate maturity amount for recurring deposits."
+  },
+  {
+    "slug": "salary-inhand-calculator",
+    "title": "Salary In-Hand Calculator",
+    "category": "finance",
+    "short": "Estimate take-home salary after deductions."
+  },
+  {
+    "slug": "income-tax-india-calculator",
+    "title": "Income Tax Calculator (India)",
+    "category": "finance",
+    "short": "Estimate income tax payable under Indian tax slabs."
+  },
+  {
+    "slug": "currency-converter",
+    "title": "Currency Converter",
+    "category": "finance",
+    "short": "Convert between currencies using exchange rates."
+  },
+  {
+    "slug": "profit-calculator",
+    "title": "Profit Calculator",
+    "category": "finance",
+    "short": "Compute profit and profit percentage."
+  },
+  {
+    "slug": "loss-calculator",
+    "title": "Loss Calculator",
+    "category": "finance",
+    "short": "Compute loss amount and percentage."
+  },
+  {
+    "slug": "break-even-calculator",
+    "title": "Break-even Calculator",
+    "category": "finance",
+    "short": "Find break-even point for product sales."
+  },
+  {
+    "slug": "roi-calculator",
+    "title": "ROI Calculator",
+    "category": "finance",
+    "short": "Calculate return on investment percentage."
+  },
+  {
+    "slug": "emi-vs-rent-calculator",
+    "title": "EMI vs Rent Calculator",
+    "category": "finance",
+    "short": "Compare cost of buying vs renting per month."
+  },
+  {
+    "slug": "credit-card-interest-calculator",
+    "title": "Credit Card Interest Calculator",
+    "category": "finance",
+    "short": "Estimate interest charged on credit card balances."
+  },
+  {
+    "slug": "inflation-calculator",
+    "title": "Inflation Calculator",
+    "category": "finance",
+    "short": "Adjust past values for inflation or compute future purchasing power."
+  },
+  {
+    "slug": "budget-calculator",
+    "title": "Budget Calculator",
+    "category": "finance",
+    "short": "Create a simple monthly budget and savings target."
+  },
+  {
+    "slug": "margin-markup-calculator",
+    "title": "Margin / Markup Calculator",
+    "category": "finance",
+    "short": "Convert between markup and margin percentages."
+  },
+  {
+    "slug": "vat-calculator",
+    "title": "VAT Calculator",
+    "category": "finance",
+    "short": "Compute VAT-inclusive and VAT-exclusive prices."
+  },
+  {
+    "slug": "tip-calculator",
+    "title": "Tip Calculator",
+    "category": "finance",
+    "short": "Split bills and calculate tips by percent."
+  },
+  {
+    "slug": "unit-price-calculator",
+    "title": "Unit Price Calculator",
+    "category": "finance",
+    "short": "Find unit price to compare product value."
+  },
+  {
+    "slug": "invoice-total-calculator",
+    "title": "Invoice Total Calculator",
+    "category": "finance",
+    "short": "Sum items, apply tax and discounts for final invoice."
+  },
+  {
+    "slug": "subscription-pricing-calculator",
+    "title": "Subscription Pricing Calculator",
+    "category": "finance",
+    "short": "Model subscription tiers, MRR and ARR."
+  },
+  {
+    "slug": "nps-calculator",
+    "title": "NPS Calculator",
+    "category": "finance",
+    "short": "Compute Net Promoter Score from survey responses."
+  },
+  {
+    "slug": "swp-calculator",
+    "title": "SWP Calculator",
+    "category": "finance",
+    "short": "Systematic Withdrawal Plan projections for investments."
+  },
+  {
+    "slug": "gratuity-calculator",
+    "title": "Gratuity Calculator",
+    "category": "finance",
+    "short": "Estimate gratuity payout based on tenure and final salary."
+  },
+  {
+    "slug": "epf-contribution-calculator",
+    "title": "EPF Contribution Calculator",
+    "category": "finance",
+    "short": "Compute employee and employer EPF contributions."
+  },
+  {
+    "slug": "hra-calculator",
+    "title": "HRA Calculator",
+    "category": "finance",
+    "short": "Calculate House Rent Allowance exemptions (India-oriented)."
+  },
+  {
+    "slug": "debt-payoff-calculator",
+    "title": "Debt Payoff Calculator",
+    "category": "finance",
+    "short": "Plan accelerated debt repayment and interest savings."
+  },
+  {
+    "slug": "net-worth-calculator",
+    "title": "Net Worth Calculator",
+    "category": "finance",
+    "short": "Summarize assets and liabilities to compute net worth."
+  },
+  {
+    "slug": "freelancer-earnings-calculator",
+    "title": "Freelancer Earnings Calculator",
+    "category": "finance",
+    "short": "Model take-home pay after fees, taxes and expenses."
+  },
+  {
+    "slug": "car-loan-vs-cash-calculator",
+    "title": "Car Loan vs Cash Purchase",
+    "category": "finance",
+    "short": "Compare financing vs cash purchase total costs."
+  },
+  {
+    "slug": "savings-goal-calculator",
+    "title": "Savings Goal Calculator",
+    "category": "finance",
+    "short": "Plan monthly savings to reach a future target."
+  },
+  {
+    "slug": "forex-profit-calculator",
+    "title": "Forex Currency Profit Calculator",
+    "category": "finance",
+    "short": "Estimate profit/loss from forex trades including spreads."
+  },
+  {
+    "slug": "mortgage-amortization-calculator",
+    "title": "Mortgage Amortization Calculator",
+    "category": "finance",
+    "short": "Full amortization schedule for mortgage payments."
+  },
+  {
+    "slug": "credit-score-estimator",
+    "title": "Credit Score Estimator",
+    "category": "finance",
+    "short": "Estimate credit score range based on inputs (non-official)."
+  },
+  {
+    "slug": "emi-prepayment-calculator",
+    "title": "EMI Prepayment Calculator",
+    "category": "finance",
+    "short": "Estimate savings from making prepayments on your loan."
+  },
+  {
+    "slug": "crypto-percentage-profit-calculator",
+    "title": "Crypto Percentage Profit Calculator",
+    "category": "finance",
+    "short": "Compute percent gain/loss on crypto trades."
+  },
+  {
+    "slug": "bmr-calculator",
+    "title": "BMR Calculator",
+    "category": "health",
+    "short": "Estimate basal metabolic rate from age, sex, height and weight."
+  },
+  {
+    "slug": "body-fat-percentage-calculator",
+    "title": "Body Fat Percentage Calculator",
+    "category": "health",
+    "short": "Estimate body fat using measurements or formulas."
+  },
+  {
+    "slug": "daily-calorie-needs-calculator",
+    "title": "Daily Calorie Needs Calculator",
+    "category": "health",
+    "short": "Estimate daily calorie needs based on activity level."
+  },
+  {
+    "slug": "ideal-weight-calculator",
+    "title": "Ideal Weight Calculator",
+    "category": "health",
+    "short": "Estimate ideal weight ranges from BMI or other formulas."
+  },
+  {
+    "slug": "calories-burned-running-walking",
+    "title": "Calories Burned Calculator (Running/Walking)",
+    "category": "health",
+    "short": "Estimate calories burned for running and walking sessions."
+  },
+  {
+    "slug": "water-intake-calculator",
+    "title": "Water Intake Calculator",
+    "category": "health",
+    "short": "Estimate recommended daily water intake based on weight/activity."
+  },
+  {
+    "slug": "pregnancy-due-date-calculator",
+    "title": "Pregnancy Due Date Calculator",
+    "category": "health",
+    "short": "Estimate expected due date from last menstrual period or conception."
+  },
+  {
+    "slug": "ovulation-calculator",
+    "title": "Ovulation Calculator",
+    "category": "health",
+    "short": "Estimate ovulation day and fertile window from cycle length."
+  },
+  {
+    "slug": "target-heart-rate-calculator",
+    "title": "Target Heart Rate Calculator",
+    "category": "health",
+    "short": "Find exercise heart rate zones for training."
+  },
+  {
+    "slug": "child-growth-percentile-calculator",
+    "title": "Child Growth Percentile Calculator",
+    "category": "health",
+    "short": "Estimate growth percentiles using WHO/CDC charts."
+  },
+  {
+    "slug": "steps-to-calories-calculator",
+    "title": "Steps to Calories Calculator",
+    "category": "health",
+    "short": "Estimate calories burned from step count."
+  },
+  {
+    "slug": "waist-to-hip-ratio-calculator",
+    "title": "Waist to Hip Ratio Calculator",
+    "category": "health",
+    "short": "Compute WHR for health risk assessment."
+  },
+  {
+    "slug": "calories-deficit-weight-loss-calculator",
+    "title": "Calories Deficit Weight Loss Target",
+    "category": "health",
+    "short": "Plan calorie deficit to achieve weight loss goal."
+  },
+  {
+    "slug": "diabetes-sugar-converter",
+    "title": "Diabetes Sugar Converter",
+    "category": "health",
+    "short": "Convert glucose values between mg/dL and mmol/L."
+  },
+  {
+    "slug": "age-calculator",
+    "title": "Age Calculator",
+    "category": "utility",
+    "short": "Calculate age from date of birth to today or a target date."
+  },
+  {
+    "slug": "date-difference-calculator",
+    "title": "Date Difference Calculator",
+    "category": "utility",
+    "short": "Find difference between two dates in days, months, years."
+  },
+  {
+    "slug": "time-duration-calculator",
+    "title": "Time Duration Calculator",
+    "category": "utility",
+    "short": "Add/subtract times and compute durations."
+  },
+  {
+    "slug": "unit-converter",
+    "title": "Unit Converter",
+    "category": "utility",
+    "short": "Convert between length, mass, volume, temperature and more."
+  },
+  {
+    "slug": "fuel-cost-calculator",
+    "title": "Fuel Cost Calculator",
+    "category": "utility",
+    "short": "Estimate trip fuel cost using distance and mileage."
+  },
+  {
+    "slug": "gpa-calculator",
+    "title": "GPA Calculator",
+    "category": "education",
+    "short": "Compute GPA or CGPA from course grades and credits."
+  },
+  {
+    "slug": "cgpa-calculator",
+    "title": "CGPA Calculator",
+    "category": "education",
+    "short": "Compute cumulative GPA across multiple semesters."
+  },
+  {
+    "slug": "grade-calculator",
+    "title": "Grade Calculator",
+    "category": "education",
+    "short": "Convert scores to grades based on your grading scale."
+  },
+  {
+    "slug": "percentage-needed-final-exam",
+    "title": "Percentage Needed in Final Exam",
+    "category": "education",
+    "short": "Calculate required percentage in final to achieve overall target."
+  },
+  {
+    "slug": "area-calculator",
+    "title": "Area Calculator",
+    "category": "education",
+    "short": "Compute area for common shapes: circle, square, rectangle, triangle."
+  },
+  {
+    "slug": "travel-distance-cost-split",
+    "title": "Travel Distance Cost Split",
+    "category": "utility",
+    "short": "Split travel costs based on distance or passengers."
+  },
+  {
+    "slug": "download-time-calculator",
+    "title": "Download Time Calculator",
+    "category": "utility",
+    "short": "Estimate download time given file size and bandwidth."
+  },
+  {
+    "slug": "bandwidth-calculator",
+    "title": "Bandwidth Calculator",
+    "category": "utility",
+    "short": "Estimate required bandwidth for streaming or transfers."
+  },
+  {
+    "slug": "aspect-ratio-calculator",
+    "title": "Aspect Ratio Calculator",
+    "category": "utility",
+    "short": "Convert resolutions to maintain aspect ratio or compute new dimensions."
+  },
+  {
+    "slug": "reading-time-calculator",
+    "title": "Reading Time Calculator",
+    "category": "utility",
+    "short": "Estimate reading time for text based on words per minute."
+  }
+]

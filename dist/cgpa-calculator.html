@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CGPA Calculator | CalculatorSolution</title>
+  <meta name="description" content="CGPA Calculator - compute cumulative grade point average.">
+  <!-- Preload critical CSS and fonts to reduce render-blocking -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+  <link rel="preload" href="/assets/og-image.svg" as="image">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+  <style>
+    /* Expanded critical CSS for faster LCP: includes hero, header, grid, buttons, and typography */
+    html,body{height:100%;margin:0;}
+    body{font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:linear-gradient(135deg, #f8fafc 0%, #f0f4f8 100%); color:#0f172a; line-height:1.6; min-height:100vh;}
+    *{box-sizing:border-box;}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px;}
+    .site-header{padding:14px 0; border-bottom: 1px solid #e2e8f0;}
+    .brand{font-weight:700; color:#3b82f6; text-decoration:none; font-size:1.2rem;}
+    .search{padding:8px 12px; border:1px solid #e2e8f0; border-radius:6px; width:200px; font-size:0.95rem;}
+    .hero{background:linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); color:white; padding:60px 20px; text-align:center;}
+    .hero h1{font-size:2.5rem; margin:0 0 12px 0; font-weight:800;}
+    .hero > .wrap > p{font-size:1.1rem; margin:0 0 20px 0; opacity:0.95;}
+    .hero-grid,.cards-grid,.featured-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px; margin-top:20px;}
+    .btn{display:inline-block; padding:10px 14px; border-radius:8px; text-decoration:none; font-weight:600; background:linear-gradient(90deg,#3b82f6,#6c9cff); color:#fff; box-shadow:0 8px 24px rgba(59,130,246,0.12);}
+    .btn:hover{transform:translateY(-3px); box-shadow:0 14px 40px rgba(59,130,246,0.12);}
+    .card{display:block; background:#fff; padding:14px; border-radius:10px; box-shadow:0 6px 18px rgba(8,13,26,0.06); text-decoration:none; color:inherit; transition:transform .28s; border:1px solid #e2e8f0;}
+    .card:hover{transform:translateY(-4px);}
+    .footer{padding:20px 0; border-top:1px solid #e2e8f0; color:#64748b; font-size:0.9rem;}
+  </style>
+  <!-- GA4 Analytics: replace MEASUREMENT_ID with your actual ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PLACEHOLDER"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-PLACEHOLDER');
+  </script>
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/cgpa-calculator.html">
+  <script type="application/ld+json">[
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "CGPA Calculator"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://calculatorsolution.com/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://calculatorsolution.com/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Calculator Solution",
+        "item": "https://calculatorsolution.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "CGPA Calculator",
+        "item": "https://calculatorsolution.com/cgpa-calculator.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Transfer credits?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Follow institution rules for counting transfer credits."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Different scales?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Normalize grades before combining if scales differ."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Exemptions?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Process may vary per institution."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Rounding?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use institutional rounding rules."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Appeals?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Grade appeals handled by institution."
+        }
+      }
+    ]
+  }
+]</script>
+  <script defer src="/assets/calculators-complete.js"></script>
+</head>
+<body>
+  <header class="site-header"><div class="wrap"><a class="brand" href="/">
+    <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+    <span class="brand-text">CalculatorSolution</span>
+  </a></div></header>
+  <main class="wrap">
+    <article>
+      <div class="calculator-hero">
+        <h1>CGPA Calculator</h1>
+        <p class="lead">Compute cumulative GPA across multiple semesters.</p>
+      </div>
+
+      <section class="calculator-main">
+        <!-- interactive area -->
+        <!-- Interactive placeholder for CGPA Calculator -->
+<div id="calc-cgpa-calculator">
+  <p>Open this page in the browser and use the calculator fields below.</p>
+</div>
+      </section>
+
+      <section class="explanation">
+        <h2>Explanation</h2>
+        <p>CGPA Calculator helps users perform a common education calculation quickly and accurately. This page provides a clear interface to enter the necessary inputs and receive instantaneous results without needing spreadsheets or complex software. The calculator focuses on usability: labeled fields, sensible defaults, unit options where relevant, and immediate feedback so users can iterate through scenarios and compare outcomes.
+
+Practical examples and short guidance are included to help both beginners and experienced users. Use cases range from everyday decisions like shopping discounts and budgeting to more advanced planning like loan comparisons and investment projections. Because this tool runs entirely in the browser, it is fast and private — no data leaves your device.
+
+The formulas used are standard and widely accepted in financial and technical contexts. For reference, a formula section shows the exact mathematical relationship used for the calculation so you can verify results or reproduce them elsewhere. Always verify critical financial decisions with a professional, especially for tax and legal matters.
+
+This calculator is optimized for mobile and desktop: the layout adapts to narrow screens and preserves readability. Performance and SEO best practices were considered when building this page: concise content, unique metadata, structured data (JSON-LD), and a sitemap entry to help search engines index the page quickly.
+
+Tip: try multiple input combinations to compare scenarios. For loan-related calculators, compare shorter and longer tenures to see trade-offs between monthly payments and total interest. For investment calculators, adjust expected rates conservatively and consider inflation when planning long-term goals.</p>
+      </section>
+
+      <section class="formula">
+        <h3>Formula</h3>
+        <pre>CGPA = weighted average over semesters</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Transfer credits?</strong></summary><p>Follow institution rules for counting transfer credits.</p></details>
+<details class="card"><summary><strong>Different scales?</strong></summary><p>Normalize grades before combining if scales differ.</p></details>
+<details class="card"><summary><strong>Exemptions?</strong></summary><p>Process may vary per institution.</p></details>
+<details class="card"><summary><strong>Rounding?</strong></summary><p>Use institutional rounding rules.</p></details>
+<details class="card"><summary><strong>Appeals?</strong></summary><p>Grade appeals handled by institution.</p></details>
+      </section>
+
+      <section class="related">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="gpa-calculator.html"><h4>GPA Calculator</h4><p>Compute GPA or CGPA from course grades and credits.</p></a>
+<a class="card" href="grade-calculator.html"><h4>Grade Calculator</h4><p>Convert scores to grades based on your grading scale.</p></a>
+<a class="card" href="percentage-needed-final-exam.html"><h4>Percentage Needed in Final Exam</h4><p>Calculate required percentage in final to achieve overall target.</p></a>
+<a class="card" href="area-calculator.html"><h4>Area Calculator</h4><p>Compute area for common shapes: circle, square, rectangle, triangle.</p></a>
+        </div>
+      </section>
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/dist/privacy-policy.html">Privacy Policy</a> |
+        <a href="/dist/terms-of-service.html">Terms</a> |
+        <a href="/dist/contact.html">Contact</a> |
+        <a href="/dist/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+</body>
+  <!-- interactive script placeholder -->
+  
+</html>
+*** End Patch

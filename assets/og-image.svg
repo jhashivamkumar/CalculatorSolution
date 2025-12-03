@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)" />
+  <g fill="#fff" font-family="Segoe UI, Roboto, Arial, sans-serif">
+    <text x="60" y="160" font-size="48" font-weight="700">Calculator Solution</text>
+    <text x="60" y="220" font-size="28">80+ Free Calculators • 98+ Expert Articles</text>
+
+    <rect x="60" y="280" width="520" height="44" rx="8" fill="rgba(255,255,255,0.12)" />
+    <text x="80" y="312" font-size="20">Try Percentage Calculator — Quick Start</text>
+
+    <g transform="translate(60,360)" font-size="18">
+      <text y="0">💰 Finance • EMI, Loans, Tax</text>
+      <text y="36">❤️ Health • BMI, Calories</text>
+      <text y="72">🛠️ Utilities • Converters</text>
+    </g>
+  </g>
+</svg>

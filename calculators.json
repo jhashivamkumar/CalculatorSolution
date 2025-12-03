@@ -1,0 +1,82 @@
+[
+  {
+    "slug":"percentage-calculator",
+    "title":"Percentage Calculator",
+    "short":"Find percentage values, increase, decrease and parts of totals.",
+    "category":"finance",
+    "meta_description":"Percentage Calculator — compute percentages, percentage change, and parts. Fast, mobile-friendly and SEO-optimized.",
+    "explanation":"Percentage calculations are among the most common arithmetic tasks in finance and daily life. This calculator helps with core percentage operations: finding what percentage one number is of another, computing the absolute or relative percent change between two numbers, and applying percentage increases or decreases to base amounts. The tool is valuable for quickly computing discounts, markups, commission rates, tax calculations, and simple financial comparisons. The interface keeps inputs clear and produces immediate results to minimize errors. It is especially useful for small business owners, students, and shoppers who want a reliable, fast answer without complex spreadsheets. The calculator is pure client-side code so it works offline in modern browsers and loads quickly — both important for SEO and user engagement.",
+    "formula":"1) Percent = (part / whole) * 100\n2) New value after increase = original * (1 + percent/100)\n3) Percent change = ((new - old) / old) * 100",
+    "faqs":[
+      {"q":"How do I find what percent A is of B?","a":"Divide A by B and multiply by 100. Example: (A/B)*100."},
+      {"q":"How do I calculate a 20% discount?","a":"Multiply the price by (1 - 20/100) or subtract 20% of the price."},
+      {"q":"What is percent increase?","a":"Percent increase compares the difference to the original value: ((new-old)/old)*100."},
+      {"q":"Can the calculator handle negative percentages?","a":"Yes. Negative results show a decrease or negative change."},
+      {"q":"Is this tool accurate for finance?","a":"It gives accurate mathematical results; for legal or tax calculations consult an accountant."}
+    ],
+    "jsonld":{
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Percentage Calculator - CalculatorSolution",
+      "url":"https://calculatorsolution.com/percentage-calculator.html",
+      "description":"Compute percentages, increases, decreases and parts quickly.",
+      "mainEntity":{
+        "@type":"Question",
+        "name":"How to calculate percentages?",
+        "acceptedAnswer":{"@type":"Answer","text":"Use basic formulas: percent = (part/whole)*100"}
+      }
+    }
+  },
+
+  {
+    "slug":"bmi-calculator",
+    "title":"BMI Calculator",
+    "short":"Calculate Body Mass Index from weight and height.",
+    "category":"health",
+    "meta_description":"BMI Calculator — assess body mass index using metric or imperial units. Fast and mobile-friendly.",
+    "explanation":"Body Mass Index (BMI) is a quick screening tool that uses a person’s height and weight to estimate body fat for most adults. This calculator supports metric and imperial units and displays the numeric BMI along with category guidance such as Underweight, Normal, Overweight, and Obesity. While BMI is useful for population-level screening, it does not measure body fat directly and may not reflect muscle mass or distribution. Use it as a general indicator and consult health professionals for individualized advice. The calculator is designed for speed and clarity: enter weight and height, switch units if needed, and get instant results. The page includes formula details and frequently asked questions to help users understand implications and limitations of BMI as a health metric.",
+    "formula":"BMI = weight(kg) / (height(m))^2\nFor pounds/inches: BMI = (weight(lb) / (height(in))^2) * 703",
+    "faqs":[
+      {"q":"Is BMI a perfect measure of health?","a":"No. BMI is a screening tool and doesn't account for muscle mass, bone density, or fat distribution."},
+      {"q":"What BMI is considered healthy?","a":"A BMI between 18.5 and 24.9 is generally considered normal for adults."},
+      {"q":"Can athletes have high BMI?","a":"Yes, muscular individuals can have higher BMI but low body fat."},
+      {"q":"Does age affect BMI interpretation?","a":"Yes. For children and teens, BMI is age- and sex-specific. For adults, standard ranges are used."},
+      {"q":"Should I change my diet based on BMI alone?","a":"No. Consult a healthcare professional for personalized advice."}
+    ],
+    "jsonld":{
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"BMI Calculator - CalculatorSolution",
+      "url":"https://calculatorsolution.com/bmi-calculator.html",
+      "description":"Calculate Body Mass Index with metric or imperial units.",
+      "mainEntity":{"@type":"Question","name":"How to calculate BMI?","acceptedAnswer":{"@type":"Answer","text":"BMI = weight(kg)/height(m)^2"}}
+    }
+  },
+
+  {
+    "slug":"loan-emi-calculator",
+    "title":"Loan EMI Calculator",
+    "short":"Compute monthly EMI for loans with interest and tenure.",
+    "category":"finance",
+    "meta_description":"Loan EMI Calculator — calculate monthly payments (EMI) for loans. Use principal, rate and tenure.",
+    "explanation":"The Equated Monthly Installment (EMI) is the fixed payment a borrower makes to a lender each month to repay a loan within a certain tenure. This calculator computes EMI based on loan amount, annual interest rate and number of months (or years). It also provides the total payment and total interest paid over the loan term. This tool helps borrowers compare loan offers and plan budgets. The calculation uses the standard amortization formula and assumes fixed interest rate for the loan duration. Use it to estimate monthly cashflow and to compare scenarios such as shorter tenures (higher EMI, lower interest) vs longer tenures (lower EMI, higher interest). Always verify with lender statements for exact schedules and prepayment rules.",
+    "formula":"EMI = P * r * (1+r)^n / ((1+r)^n - 1)\nWhere P = principal, r = monthly interest rate (annualRate/12/100), n = number of monthly payments",
+    "faqs":[
+      {"q":"What is EMI?","a":"EMI is a fixed monthly payment to repay loan principal and interest over tenure."},
+      {"q":"How do interest rates affect EMI?","a":"Higher interest rates increase EMI and total interest paid."},
+      {"q":"Can I prepay part of my loan?","a":"Depends on lender — prepayment reduces principal and future interest, but check charges."},
+      {"q":"Does loan tenure change interest paid?","a":"Longer tenure lowers EMI but increases total interest paid."},
+      {"q":"Is EMI same as total cost?","a":"No. Total cost = EMI * n. Interest portion = total cost - principal."}
+    ],
+    "jsonld":{
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Loan EMI Calculator - CalculatorSolution",
+      "url":"https://calculatorsolution.com/loan-emi-calculator.html",
+      "description":"Calculate monthly EMI and total interest for loans.",
+      "mainEntity":{"@type":"Question","name":"How to calculate EMI?","acceptedAnswer":{"@type":"Answer","text":"Use EMI formula with monthly rate r and n payments."}}
+    }
+  }
+
+  /* Additional calculator entries can be appended here with slug, title, category, short, meta_description, explanation, formula, faqs, jsonld */
+]
