@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Steps to Calories Calculator (Walking/Running) | CalculatorSolution</title>
+  <meta name="description" content="Free Steps to Calories Calculator: enter steps, weight, height/stride and pace to estimate calories burned, distance and time. Works for walking or running.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/steps-to-calories-calculator.html">
+
+  <meta property="og:title" content="Steps to Calories Calculator">
+  <meta property="og:description" content="Convert steps to estimated calories burned, distance and time. Includes stride length and walking/running pace options.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (responsive polished UI, NO logic changes) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+    :root{
+      --radius-1:12px;
+      --radius-2:16px;
+      --radius-3:18px;
+      --border:#e2e8f0;
+      --bg-panel:rgba(255,255,255,.92);
+      --shadow-1:0 14px 40px rgba(8,13,26,.06);
+      --shadow-2:0 18px 50px rgba(2,6,23,.15);
+      --focus:0 0 0 4px rgba(59,130,246,.12);
+    }
+
+    /* Header */
+    .site-header{
+      padding:14px 0;border-bottom:1px solid var(--border);
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;white-space:nowrap}
+    .brand-logo{border-radius:10px;flex:0 0 auto}
+
+    /* Hero */
+    .hero{
+      margin:18px 0 14px 0;border-radius:var(--radius-3);padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:var(--shadow-2);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em}
+    .hero p{margin:0;opacity:.95;max-width:78ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+    }
+
+    /* Layout */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+
+    /* Panels */
+    .panel{
+      background:var(--bg-panel);
+      border:1px solid var(--border);border-radius:var(--radius-2);
+      box-shadow:var(--shadow-1);
+      padding:14px;
+      min-width:0;
+    }
+    .panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem;white-space:nowrap}
+
+    /* Forms */
+    .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      width:100%;
+      padding:10px 12px;border:1px solid var(--border);border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      min-width:0;
+    }
+    .input:focus{border-color:#93c5fd;box-shadow:var(--focus)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    /* inline input groups (weight/height/stride) */
+    .inline-row{
+      display:flex;gap:10px;align-items:stretch;
+      flex-wrap:wrap;
+    }
+    .inline-row .input{flex:1 1 180px}
+    .inline-row select.input{flex:0 0 140px;max-width:140px}
+
+    /* Actions */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:42px;
+      white-space:nowrap;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn:focus-visible{outline:none;box-shadow:var(--focus),0 16px 34px rgba(37,99,235,.22)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid var(--border);box-shadow:none}
+    .btn-ghost:hover{box-shadow:0 10px 22px rgba(8,13,26,.06)}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .btn-dark:hover{box-shadow:0 18px 42px rgba(2,6,23,.22)}
+
+    /* Results sticky */
+    .sticky{position:sticky;top:82px}
+
+    /* Metrics */
+    .metric{
+      border:1px solid var(--border);border-radius:var(--radius-2);padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+      min-width:0;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{margin:4px 0 0;font-size:1.55rem;font-weight:1000;letter-spacing:-.02em;word-break:break-word}
+    .mini{font-size:.86rem;color:#64748b}
+
+    .bar{height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px}
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* Table */
+    .table-wrap{
+      overflow:auto;
+      border:1px solid var(--border);
+      border-radius:var(--radius-2);
+      background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{width:100%;border-collapse:collapse;min-width:860px}
+    th,td{padding:10px 12px;border-bottom:1px solid var(--border);text-align:left;font-size:.95rem;vertical-align:top}
+    th{background:#f8fafc;font-weight:1000}
+    tr:last-child td{border-bottom:0}
+
+    /* Details cards (FAQs + related) */
+    .card{
+      background:#fff;border:1px solid var(--border);
+      border-radius:14px;box-shadow:0 10px 24px rgba(8,13,26,.05);
+      padding:12px;
+      min-width:0;
+    }
+    details.card{padding:0}
+    details.card summary{cursor:pointer;padding:12px;list-style:none}
+    details.card summary::-webkit-details-marker{display:none}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    .note{
+      border:1px dashed #cbd5e1;border-radius:14px;padding:12px;background:rgba(255,255,255,.7);
+      margin-top:10px
+    }
+
+    /* Make "pre" readable on mobile */
+    pre{
+      white-space:pre-wrap;
+      word-break:break-word;
+      overflow:auto;
+      background:rgba(255,255,255,.7);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      margin:10px 0 0;
+    }
+
+    /* Related grid: provide fallback if global css not present */
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+      margin-top:10px;
+    }
+    .cards-grid a.card{display:block;text-decoration:none;color:inherit}
+    .cards-grid h4{margin:0 0 6px;font-size:1rem}
+    .cards-grid p{margin:0;color:#475569;font-size:.92rem}
+
+    /* Responsive improvements */
+    @media (max-width: 1024px){
+      .wrap{padding:0 16px}
+      table{min-width:760px}
+    }
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static}
+      table{min-width:680px}
+    }
+    @media (max-width: 640px){
+      .hero{padding:18px 14px}
+      .hero h1{font-size:1.45rem}
+      .hero p{font-size:.98rem}
+      .grid-2{grid-template-columns:1fr}
+      .pill{font-size:.8rem}
+      .btn{flex:1 1 calc(50% - 10px)}
+      .btn-dark{flex:1 1 100%}
+      table{min-width:560px}
+      th,td{font-size:.92rem}
+      .metric .v{font-size:1.35rem}
+    }
+    @media (max-width: 380px){
+      .btn{flex:1 1 100%}
+      table{min-width:520px}
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .btn,.card{transition:none}
+      .btn:hover{transform:none}
+      .card:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Steps to Calories Calculator",
+      "url":"https://calculatorsolution.com/steps-to-calories-calculator.html",
+      "description":"Convert steps to estimated calories burned with stride length and walking/running intensity."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Steps to Calories Calculator","item":"https://calculatorsolution.com/steps-to-calories-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to convert steps into calories",
+      "step":[
+        {"@type":"HowToStep","name":"Enter steps and weight","text":"Add your step count and body weight to estimate energy burned."},
+        {"@type":"HowToStep","name":"Set stride/height and activity","text":"Stride length affects distance; walking vs running affects intensity."},
+        {"@type":"HowToStep","name":"Calculate results","text":"See estimated calories burned, distance, and time."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Accuracy?","acceptedAnswer":{"@type":"Answer","text":"This is an estimate. Actual calories vary by pace, terrain, stride, efficiency and fitness level."}},
+        {"@type":"Question","name":"Stride length?","acceptedAnswer":{"@type":"Answer","text":"Stride length converts steps to distance. If you don't know it, enter height and we estimate stride."}},
+        {"@type":"Question","name":"Use wearable data?","acceptedAnswer":{"@type":"Answer","text":"Wearables can be more accurate because they may use heart rate and personal calibration."}},
+        {"@type":"Question","name":"Calories per step?","acceptedAnswer":{"@type":"Answer","text":"A rough range is about 0.04–0.06 kcal per step for many adults, but it can be higher or lower."}},
+        {"@type":"Question","name":"Walking vs running?","acceptedAnswer":{"@type":"Answer","text":"Running burns more calories for the same steps due to higher intensity."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Steps to Calories Calculator</h1>
+        <p>Convert steps into estimated calories burned — includes stride length, distance, time, and walking vs running intensity.</p>
+        <div class="chips">
+          <span class="chip">👣 Steps → Distance</span>
+          <span class="chip">🔥 Calories estimate</span>
+          <span class="chip">⏱️ Time estimate</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-steps-to-calories">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Steps to calories inputs">
+              <div class="panel-title">
+                <h2>Inputs</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="st_steps">Steps</label>
+                  <input id="st_steps" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="e.g., 10000">
+                  <p class="help">Your total steps for the day/session.</p>
+                </div>
+
+                <div class="field">
+                  <label for="st_weight">Weight</label>
+                  <div class="inline-row">
+                    <input id="st_weight" class="input" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g., 70">
+                    <select id="st_weight_unit" class="input">
+                      <option value="kg" selected>kg</option>
+                      <option value="lb">lb</option>
+                    </select>
+                  </div>
+                  <p class="help">Calories scale strongly with body weight.</p>
+                </div>
+
+                <div class="field">
+                  <label for="st_height">Height (optional)</label>
+                  <div class="inline-row">
+                    <input id="st_height" class="input" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 170">
+                    <select id="st_height_unit" class="input">
+                      <option value="cm" selected>cm</option>
+                      <option value="in">in</option>
+                    </select>
+                  </div>
+                  <p class="help">Used to estimate stride if you don’t know it.</p>
+                </div>
+
+                <div class="field">
+                  <label for="st_stride">Stride length (optional)</label>
+                  <div class="inline-row">
+                    <input id="st_stride" class="input" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g., 0.75">
+                    <select id="st_stride_unit" class="input">
+                      <option value="m" selected>meters</option>
+                      <option value="cm">cm</option>
+                      <option value="in">in</option>
+                    </select>
+                  </div>
+                  <p class="help">If provided, it overrides height-based stride estimate.</p>
+                </div>
+
+                <div class="field">
+                  <label for="st_activity">Activity type</label>
+                  <select id="st_activity" class="input">
+                    <option value="walk" selected>Walking</option>
+                    <option value="run">Running</option>
+                  </select>
+                  <p class="help">Running generally burns more per step.</p>
+                </div>
+
+                <div class="field">
+                  <label for="st_pace">Pace</label>
+                  <select id="st_pace" class="input">
+                    <option value="easy" selected>Easy</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="fast">Fast</option>
+                  </select>
+                  <p class="help">Used to estimate calories-per-step and time.</p>
+                </div>
+
+                <div class="field">
+                  <label for="st_round">Round calories</label>
+                  <select id="st_round" class="input">
+                    <option value="0" selected>No rounding</option>
+                    <option value="1">Nearest 1</option>
+                    <option value="10">Nearest 10</option>
+                  </select>
+                  <p class="help">Helps for cleaner display.</p>
+                </div>
+
+                <div class="field">
+                  <label for="st_note">Note (optional)</label>
+                  <input id="st_note" class="input" type="text" placeholder="e.g., treadmill / outdoor / hilly">
+                  <p class="help">Not used in calculation; for your reference.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="st_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="st_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="st_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note mini">
+                We estimate calories using a conservative <strong>calories-per-step</strong> model based on weight and intensity.
+                If you want higher accuracy, use a wearable with heart-rate data.
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Steps to calories results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Calories burned (estimate)</p>
+                <p class="v" id="st_out_cal">—</p>
+                <p class="mini" id="st_out_cal_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Distance</p>
+                <p class="v" id="st_out_dist">—</p>
+                <p class="mini" id="st_out_stride_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Time (approx.)</p>
+                <p class="v" id="st_out_time">—</p>
+                <div class="bar"><span id="st_bar_intensity"></span></div>
+                <p class="mini" id="st_out_time_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Per-step calories</p>
+                <p class="v" id="st_out_perstep">—</p>
+                <p class="mini" id="st_out_perstep_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="st_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Breakdown</h2>
+          <p class="mini" style="margin:0 0 10px;">A simple breakdown using your stride estimate. (Great for sanity-checking.)</p>
+
+          <div class="table-wrap">
+            <table aria-label="Steps to calories breakdown table">
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>Value</th>
+                  <th>How it’s calculated</th>
+                </tr>
+              </thead>
+              <tbody id="st_table">
+                <tr><td colspan="3" class="mini">Click <strong>Calculate</strong> to generate the breakdown.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          This <strong>Steps to Calories Calculator</strong> estimates calories burned from your step count.
+          Calories depend on body weight, pace (intensity), stride length (distance), and whether you are walking or running.
+        </p>
+        <p class="mini">
+          Tip: If you know your stride length, enter it for a better distance estimate. Otherwise, height-based stride is a good approximation.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>Distance (m) = Steps × Stride length (m)
+Calories ≈ Steps × (kcal_per_step)
+kcal_per_step is estimated using weight and intensity (walking vs running + pace).</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Accuracy?</strong></summary><p>It’s an estimate. Real calories vary with pace, terrain, biomechanics and fitness level.</p></details>
+        <details class="card"><summary><strong>Stride length?</strong></summary><p>Stride length converts steps into distance. If unknown, we estimate it using height.</p></details>
+        <details class="card"><summary><strong>Use wearable data?</strong></summary><p>Wearables can be more accurate because they may use heart rate and personal calibration.</p></details>
+        <details class="card"><summary><strong>Calories per step?</strong></summary><p>Often around 0.04–0.06 kcal per step for many adults, but can vary widely.</p></details>
+        <details class="card"><summary><strong>Walking vs running?</strong></summary><p>Running burns more calories for the same steps due to higher intensity.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="bmr-calculator.html"><h4>BMR Calculator</h4><p>Estimate basal metabolic rate from age, sex, height and weight.</p></a>
+          <a class="card" href="daily-calorie-needs-calculator.html"><h4>Daily Calorie Needs Calculator</h4><p>Estimate daily calorie needs based on activity level.</p></a>
+          <a class="card" href="body-fat-percentage-calculator.html"><h4>Body Fat Percentage Calculator</h4><p>Estimate body fat using measurements or formulas.</p></a>
+          <a class="card" href="ideal-weight-calculator.html"><h4>Ideal Weight Calculator</h4><p>Estimate ideal weight ranges from BMI or other formulas.</p></a>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;line-height:1.7;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const nf0 = new Intl.NumberFormat(undefined,{maximumFractionDigits:0});
+      const nf2 = new Intl.NumberFormat(undefined,{maximumFractionDigits:2});
+      const fmt0 = (n)=> (isFinite(n) ? nf0.format(n) : '—');
+      const fmt2 = (n)=> (isFinite(n) ? nf2.format(n) : '—');
+
+      function roundTo(x, step){
+        step = parseInt(step,10) || 0;
+        if(!step) return x;
+        return Math.round(x/step)*step;
+      }
+
+      function toKg(w, unit){
+        if(!isFinite(w)) return NaN;
+        return unit === 'lb' ? (w * 0.45359237) : w;
+      }
+
+      function toMetersFromStride(v, unit){
+        if(!isFinite(v)) return NaN;
+        if(unit === 'm') return v;
+        if(unit === 'cm') return v / 100;
+        if(unit === 'in') return v * 0.0254;
+        return v;
+      }
+
+      function toCmFromHeight(v, unit){
+        if(!isFinite(v)) return NaN;
+        return unit === 'in' ? (v * 2.54) : v;
+      }
+
+      // Stride estimate (simple, common approximation)
+      // walking stride length ≈ height * 0.415 (men) / 0.413 (women)
+      // We don't ask gender, so use 0.414 as neutral.
+      function estimateStrideMetersFromHeightCm(hCm){
+        if(!isFinite(hCm) || hCm<=0) return NaN;
+        const strideCm = hCm * 0.414;
+        return strideCm / 100;
+      }
+
+      // Calories-per-step baseline:
+      // We use a conservative model anchored around ~0.04–0.06 kcal/step for typical adult walking,
+      // scaled by weight and intensity.
+      function kcalPerStep(weightKg, activity, pace){
+        if(!isFinite(weightKg) || weightKg<=0) return NaN;
+
+        // Baseline at 70 kg easy walk ~0.045 kcal/step
+        let base = 0.045 * (weightKg / 70);
+
+        // Activity multiplier
+        const actMul = (activity === 'run') ? 1.35 : 1.0;
+
+        // Pace multiplier
+        const paceMul =
+          pace === 'easy' ? 0.95 :
+          pace === 'moderate' ? 1.05 :
+          1.18; // fast
+
+        return base * actMul * paceMul;
+      }
+
+      // Time estimate using cadence (steps per minute)
+      function cadenceSpm(activity, pace){
+        if(activity === 'run'){
+          return pace === 'easy' ? 155 : (pace === 'moderate' ? 170 : 185);
+        }
+        // walk
+        return pace === 'easy' ? 95 : (pace === 'moderate' ? 115 : 135);
+      }
+
+      const stepsEl = $('st_steps');
+      const wEl = $('st_weight');
+      const wUnitEl = $('st_weight_unit');
+      const hEl = $('st_height');
+      const hUnitEl = $('st_height_unit');
+      const strideEl = $('st_stride');
+      const strideUnitEl = $('st_stride_unit');
+      const actEl = $('st_activity');
+      const paceEl = $('st_pace');
+      const roundEl = $('st_round');
+
+      const outCal = $('st_out_cal');
+      const outCalNote = $('st_out_cal_note');
+      const outDist = $('st_out_dist');
+      const outStrideNote = $('st_out_stride_note');
+      const outTime = $('st_out_time');
+      const outTimeNote = $('st_out_time_note');
+      const outPer = $('st_out_perstep');
+      const outPerNote = $('st_out_perstep_note');
+      const outSummary = $('st_out_summary');
+      const bar = $('st_bar_intensity');
+      const tbody = $('st_table');
+
+      function calc(){
+        const steps = parseFloat(stepsEl.value);
+        const w = parseFloat(wEl.value);
+        const wUnit = wUnitEl.value;
+        const h = parseFloat(hEl.value);
+        const hUnit = hUnitEl.value;
+        const strideV = parseFloat(strideEl.value);
+        const strideUnit = strideUnitEl.value;
+        const activity = actEl.value;
+        const pace = paceEl.value;
+        const roundStep = parseInt(roundEl.value, 10) || 0;
+
+        if(!isFinite(steps) || steps<=0){
+          outCal.textContent='—';
+          outCalNote.textContent='Enter valid steps.';
+          tbody.innerHTML = '<tr><td colspan="3" class="mini">Click <strong>Calculate</strong> to generate the breakdown.</td></tr>';
+          return;
+        }
+        if(!isFinite(w) || w<=0){
+          outCal.textContent='—';
+          outCalNote.textContent='Enter valid weight.';
+          tbody.innerHTML = '<tr><td colspan="3" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+
+        const weightKg = toKg(w, wUnit);
+
+        // stride: prefer explicit stride; else estimate from height; else use default 0.75m
+        let strideM = toMetersFromStride(strideV, strideUnit);
+        let strideSource = 'Provided stride length';
+
+        if(!isFinite(strideM) || strideM<=0){
+          const hCm = toCmFromHeight(h, hUnit);
+          const est = estimateStrideMetersFromHeightCm(hCm);
+          if(isFinite(est) && est>0){
+            strideM = est;
+            strideSource = 'Estimated from height';
+          } else {
+            strideM = 0.75; // fallback
+            strideSource = 'Default stride (0.75m)';
+          }
+        }
+
+        const distM = steps * strideM;
+        const distKm = distM / 1000;
+
+        const kps = kcalPerStep(weightKg, activity, pace);
+        let cal = steps * kps;
+        cal = roundTo(cal, roundStep);
+
+        const spm = cadenceSpm(activity, pace);
+        const mins = steps / spm;
+        const hrs = mins / 60;
+
+        // Bar intensity (visual only)
+        const intensityPct =
+          activity === 'run'
+            ? (pace === 'easy' ? 70 : (pace === 'moderate' ? 82 : 92))
+            : (pace === 'easy' ? 35 : (pace === 'moderate' ? 48 : 60));
+
+        bar.style.width = intensityPct + '%';
+        bar.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+
+        // Output formatting
+        outCal.textContent = fmt0(cal) + ' kcal';
+        outCalNote.textContent = `Weight: ${fmt0(weightKg)} kg • Activity: ${activity} • Pace: ${pace}`;
+
+        outDist.textContent = fmt2(distKm) + ' km';
+        outStrideNote.textContent = `${strideSource}: ${fmt2(strideM)} m per step`;
+
+        const hPart = Math.floor(hrs);
+        const mPart = Math.round((hrs - hPart) * 60);
+        outTime.textContent = (hPart>0 ? `${hPart}h ` : '') + `${mPart}m`;
+        outTimeNote.textContent = `Cadence used: ~${spm} steps/min (estimate)`;
+
+        outPer.textContent = fmt3(kpsSafe(kps)) + ' kcal/step';
+        outPerNote.textContent = 'Per-step burn varies widely; this is a conservative estimate.';
+
+        outSummary.textContent =
+          `${fmt0(steps)} steps • ${fmt2(distKm)} km • ~${fmt0(cal)} kcal • ~${(hPart>0?`${hPart}h `:'')}${mPart}m • ${activity}/${pace}.`;
+
+        // Breakdown table
+        const rows = [
+          ['Steps', `${fmt0(steps)}`, 'Input'],
+          ['Stride length', `${fmt2(strideM)} m`, strideSource],
+          ['Distance', `${fmt2(distKm)} km`, 'Steps × stride'],
+          ['Weight', `${fmt0(weightKg)} kg`, wUnit==='lb' ? 'Converted from lb' : 'Input'],
+          ['Activity', `${activity}`, 'Walking vs running affects intensity'],
+          ['Pace', `${pace}`, 'Easy/Moderate/Fast affects intensity'],
+          ['Calories per step', `${fmt3(kpsSafe(kps))} kcal/step`, 'Weight-scaled baseline × intensity multipliers'],
+          ['Calories burned', `${fmt0(cal)} kcal`, 'Steps × kcal_per_step'],
+          ['Cadence', `~${fmt0(spm)} steps/min`, 'Preset by activity + pace'],
+          ['Time', `${(hPart>0?`${hPart}h `:'')}${mPart}m`, 'Steps ÷ cadence'],
+        ];
+
+        tbody.innerHTML = rows.map(r=>`
+          <tr>
+            <td><strong>${escapeHtml(r[0])}</strong></td>
+            <td>${escapeHtml(r[1])}</td>
+            <td class="mini">${escapeHtml(r[2])}</td>
+          </tr>
+        `).join('');
+      }
+
+      // helpers used above
+      function fmt3(n){
+        const nf3 = new Intl.NumberFormat(undefined,{maximumFractionDigits:3});
+        return isFinite(n) ? nf3.format(n) : '—';
+      }
+      function kpsSafe(kps){ return (isFinite(kps) && kps>0) ? kps : NaN; }
+      function escapeHtml(s){
+        return String(s).replace(/[&<>"']/g, (m)=>({
+          '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+        }[m]));
+      }
+
+      $('st_calc_btn').addEventListener('click', calc);
+
+      $('st_example_btn').addEventListener('click', ()=>{
+        stepsEl.value = '10000';
+        wEl.value = '70';
+        wUnitEl.value = 'kg';
+        hEl.value = '170';
+        hUnitEl.value = 'cm';
+        strideEl.value = '';
+        strideUnitEl.value = 'm';
+        actEl.value = 'walk';
+        paceEl.value = 'moderate';
+        roundEl.value = '1';
+        calc();
+      });
+
+      $('st_reset_btn').addEventListener('click', ()=>{
+        [stepsEl,wEl,hEl,strideEl,$('st_note')].forEach(el=>el.value='');
+        wUnitEl.value='kg';
+        hUnitEl.value='cm';
+        strideUnitEl.value='m';
+        actEl.value='walk';
+        paceEl.value='easy';
+        roundEl.value='0';
+
+        outCal.textContent='—';
+        outCalNote.textContent='—';
+        outDist.textContent='—';
+        outStrideNote.textContent='—';
+        outTime.textContent='—';
+        outTimeNote.textContent='—';
+        outPer.textContent='—';
+        outPerNote.textContent='—';
+        outSummary.textContent='Enter details to see a clean summary.';
+        bar.style.width='0%';
+        tbody.innerHTML = '<tr><td colspan="3" class="mini">Click <strong>Calculate</strong> to generate the breakdown.</td></tr>';
+      });
+
+      // Auto-calc on input (optional)
+      [stepsEl,wEl,wUnitEl,hEl,hUnitEl,strideEl,strideUnitEl,actEl,paceEl,roundEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(stepsEl.value && wEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(stepsEl.value && wEl.value) calc(); });
+      });
+    })();
+  </script>
+</body>
+</html>

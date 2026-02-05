@@ -75,7 +75,7 @@
 
 ✅ **Sitemap Stats**
 - Total URLs in sitemap: 83 (1 homepage + 74 calculators + 6 compliance pages + 2 articles)
-- Sitemap available at: `/sitemap.xml` (project root) and `/dist/sitemap.xml`
+- Sitemap available at: `/sitemap.xml` (project root) and `/sitemap.xml`
 - Both sitemaps auto-generated and auto-updated on each build
 
 ---

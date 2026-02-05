@@ -1,0 +1,901 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>EMI Prepayment Calculator (Reduce Tenure/EMI) + Savings & Schedule | CalculatorSolution</title>
+  <meta name="description" content="Free EMI Prepayment Calculator: enter loan amount, interest rate, tenure and prepayment to calculate new EMI/tenure, interest saved, months saved and updated amortization schedule.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/emi-prepayment-calculator.html">
+
+  <meta property="og:title" content="EMI Prepayment Calculator">
+  <meta property="og:description" content="Calculate interest saved, months saved, new EMI or new tenure after loan prepayment — with updated amortization schedule.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (RESPONSIVE ENHANCED ONLY — NO JS/LOGIC CHANGED) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    a{color:inherit}
+    :root{
+      --wrap:1100px;
+      --pad:18px;
+      --radius-lg:18px;
+      --radius-md:16px;
+      --radius-sm:12px;
+      --shadow-lg:0 18px 50px rgba(2,6,23,.15);
+      --shadow-md:0 14px 40px rgba(8,13,26,.06);
+      --shadow-sm:0 12px 26px rgba(8,13,26,.05);
+    }
+    .wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--pad)}
+
+    /* Header: better mobile spacing without changing structure */
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;white-space:nowrap}
+    .brand-logo{border-radius:10px;flex:0 0 auto}
+
+    /* Hero: fluid typography + padding */
+    .hero{
+      margin:18px 0 14px 0;border-radius:var(--radius-lg);
+      padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:var(--shadow-lg);
+      position:relative;overflow:hidden;
+      isolation:isolate;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{
+      margin:0 0 6px 0;
+      font-size:clamp(1.35rem, 2.6vw, 1.9rem);
+      letter-spacing:-.02em;
+      line-height:1.15;
+    }
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      backdrop-filter:blur(6px);
+    }
+
+    /* Main layout */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:var(--radius-md);
+      box-shadow:var(--shadow-md);
+      padding:14px;
+      min-width:0; /* critical for grid overflow */
+    }
+    .panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+    .panel-title h2{margin:0;font-size:1.05rem;line-height:1.25}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem}
+
+    /* Inputs grid */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      width:100%;
+      max-width:100%;
+      min-height:44px; /* touch target */
+    }
+    select.input{appearance:none;-webkit-appearance:none}
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+    .mini{font-size:.86rem;color:#64748b}
+
+    /* Buttons: full-width on small screens */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px;
+      white-space:nowrap;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+
+    /* Sticky results: safe offset */
+    .sticky{position:sticky;top:82px}
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{
+      margin:4px 0 0;
+      font-size:clamp(1.25rem, 2.6vw, 1.55rem);
+      font-weight:1000;
+      letter-spacing:-.02em;
+      line-height:1.1;
+      word-break:break-word;
+    }
+
+    .bar{
+      height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px
+    }
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* Table: smooth horizontal scroll + better mobile */
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:var(--shadow-sm);
+    }
+    table{width:100%;border-collapse:collapse;min-width:980px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem;white-space:nowrap}
+    th{background:#f8fafc;font-weight:1000;position:sticky;top:0;z-index:1}
+    tr:last-child td{border-bottom:0}
+
+    /* Typography blocks */
+    .note{
+      border:1px dashed #cbd5e1;border-radius:14px;padding:12px;background:rgba(255,255,255,.7);
+      margin-top:10px
+    }
+    pre{
+      max-width:100%;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      background:rgba(255,255,255,.85);
+      border:1px solid #e2e8f0;
+      border-radius:14px;
+      padding:12px;
+      box-shadow:0 8px 18px rgba(8,13,26,.04);
+    }
+    ul{padding-left:18px}
+    li{margin:6px 0}
+
+    /* FAQ cards */
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 10px 24px rgba(8,13,26,.05);padding:12px}
+    details.card{padding:0}
+    details.card summary{cursor:pointer;padding:12px;list-style:none}
+    details.card summary::-webkit-details-marker{display:none}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Related grid (in case global CSS doesn't) */
+    .cards-grid{display:grid;gap:12px}
+    .related-grid{grid-template-columns:repeat(4, minmax(0,1fr))}
+    .related .card h4{margin:0 0 6px}
+    .related .card p{margin:0;color:#475569}
+
+    /* -------- Responsive breakpoints (ONLY CSS changes) -------- */
+
+    /* Large tablets / small laptops */
+    @media (max-width: 1024px){
+      :root{--pad:16px}
+      .hero{padding:22px 16px}
+      table{min-width:900px}
+      .related-grid{grid-template-columns:repeat(2, minmax(0,1fr))}
+    }
+
+    /* Tablets */
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      table{min-width:780px}
+      .sticky{position:static}
+    }
+
+    /* Phones */
+    @media (max-width: 640px){
+      :root{--pad:14px}
+      .hero{padding:18px 14px;border-radius:16px}
+      .grid-2{grid-template-columns:1fr}
+      .actions{gap:8px}
+      .actions .btn{flex:1 1 100%} /* buttons stack */
+      table{min-width:720px}
+      th,td{padding:10px}
+      .panel{padding:12px}
+      .panel-title{margin-bottom:8px}
+      .brand-text{font-size:1.05rem}
+    }
+
+    /* Small phones */
+    @media (max-width: 380px){
+      .brand-text{font-size:1rem}
+      .chip{font-size:.82rem}
+      .metric{padding:10px}
+    }
+
+    /* Prefer-reduced-motion */
+    @media (prefers-reduced-motion: reduce){
+      .btn, .card{transition:none}
+      .btn:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 (replace placeholder) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"EMI Prepayment Calculator",
+      "url":"https://calculatorsolution.com/emi-prepayment-calculator.html",
+      "description":"Calculate new EMI or reduced tenure after a loan prepayment and estimate interest saved with updated amortization."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"EMI Prepayment Calculator","item":"https://calculatorsolution.com/emi-prepayment-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate savings with EMI prepayment",
+      "step":[
+        {"@type":"HowToStep","name":"Enter your loan details","text":"Add loan amount, interest rate and tenure to compute your current EMI and schedule."},
+        {"@type":"HowToStep","name":"Add prepayment details","text":"Choose prepayment type (one-time/monthly), month of payment and whether to reduce tenure or EMI."},
+        {"@type":"HowToStep","name":"Compare results","text":"See interest saved, months saved, and updated amortization schedule."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Is prepayment always beneficial?","acceptedAnswer":{"@type":"Answer","text":"Prepayment usually reduces interest because it reduces principal. If your loan has penalties or you can earn higher returns elsewhere, compare both options."}},
+        {"@type":"Question","name":"Should I reduce EMI or tenure after prepayment?","acceptedAnswer":{"@type":"Answer","text":"Reducing tenure typically saves more interest. Reducing EMI improves monthly cash flow. This calculator shows both so you can choose."}},
+        {"@type":"Question","name":"How is interest saved calculated?","acceptedAnswer":{"@type":"Answer","text":"We compute your original amortization schedule, then recompute a new schedule after applying prepayments. The difference in total interest is your savings."}},
+        {"@type":"Question","name":"What about prepayment penalties?","acceptedAnswer":{"@type":"Answer","text":"Some lenders charge a fee. If applicable, subtract the penalty from your interest saved to get net savings."}},
+        {"@type":"Question","name":"Does this work for home loans and personal loans?","acceptedAnswer":{"@type":"Answer","text":"Yes. Any standard EMI loan (fixed rate, monthly EMI) can be estimated using this calculator."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>EMI Prepayment Calculator</h1>
+        <p>Estimate how much interest and time you can save by making extra payments — and compare “reduce tenure” vs “reduce EMI”.</p>
+        <div class="chips">
+          <span class="chip">💰 Interest saved</span>
+          <span class="chip">🗓️ Months saved</span>
+          <span class="chip">📊 Updated amortization</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-emi-prepayment">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="EMI prepayment inputs">
+              <div class="panel-title">
+                <h2>Loan & prepayment details</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="pp_loan">Loan amount (Principal)</label>
+                  <input id="pp_loan" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 800000">
+                  <p class="help">Total loan principal (not including interest).</p>
+                </div>
+
+                <div class="field">
+                  <label for="pp_rate">Interest rate (annual)</label>
+                  <input id="pp_rate" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 10.5">
+                  <p class="help">Example: 10.5 means 10.5% per year.</p>
+                </div>
+
+                <div class="field">
+                  <label for="pp_tenure_years">Tenure</label>
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                    <input id="pp_tenure_years" class="input" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 5">
+                    <span class="mini" style="align-self:center;">years</span>
+                  </div>
+                  <p class="help">Converted to months for EMI calculation.</p>
+                </div>
+
+                <div class="field">
+                  <label for="pp_mode">After prepayment, reduce</label>
+                  <select id="pp_mode" class="input">
+                    <option value="tenure" selected>Tenure (save more interest)</option>
+                    <option value="emi">EMI (lower monthly burden)</option>
+                  </select>
+                  <p class="help">Tenure reduction usually saves more interest.</p>
+                </div>
+
+                <div class="field">
+                  <label for="pp_type">Prepayment type</label>
+                  <select id="pp_type" class="input">
+                    <option value="lumpsum" selected>One-time (lumpsum)</option>
+                    <option value="monthly">Every month (extra EMI)</option>
+                  </select>
+                  <p class="help">Choose a one-time payment or monthly extra payment.</p>
+                </div>
+
+                <div class="field">
+                  <label for="pp_amount">Prepayment amount</label>
+                  <input id="pp_amount" class="input" type="number" inputmode="numeric" min="0" step="500" placeholder="e.g., 50000">
+                  <p class="help" id="pp_amount_help">For one-time, this is applied once.</p>
+                </div>
+
+                <div class="field" id="pp_month_wrap">
+                  <label for="pp_month">Apply one-time prepayment at month</label>
+                  <input id="pp_month" class="input" type="number" inputmode="numeric" min="1" step="1" placeholder="e.g., 12">
+                  <p class="help">Month 12 means after 12 EMIs are paid.</p>
+                </div>
+
+                <div class="field">
+                  <label for="pp_penalty">Prepayment penalty / fee (optional)</label>
+                  <input id="pp_penalty" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="e.g., 2000">
+                  <p class="help">Used to compute net savings.</p>
+                </div>
+
+                <div class="field">
+                  <label for="pp_round">Round EMI</label>
+                  <select id="pp_round" class="input">
+                    <option value="0" selected>No rounding</option>
+                    <option value="10">Nearest 10</option>
+                    <option value="100">Nearest 100</option>
+                  </select>
+                  <p class="help">Useful to match bank EMI rounding.</p>
+                </div>
+
+                <div class="field">
+                  <label for="pp_max_months">Show schedule</label>
+                  <select id="pp_max_months" class="input">
+                    <option value="120" selected>First 120 months</option>
+                    <option value="240">First 240 months</option>
+                    <option value="9999">Full schedule (may be large)</option>
+                  </select>
+                  <p class="help">Large tables can slow mobile devices.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="pp_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="pp_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="pp_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note mini">
+                EMI Formula: <strong>EMI = P × r × (1+r)^n / ((1+r)^n − 1)</strong> where r is monthly rate, n is number of months.
+                Prepayment reduces principal, which reduces future interest.
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="EMI prepayment results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Original EMI</p>
+                <p class="v" id="pp_out_emi_old">—</p>
+                <p class="mini" id="pp_out_emi_old_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">After prepayment</p>
+                <p class="v" id="pp_out_after_key">—</p>
+                <p class="mini" id="pp_out_after_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Interest saved (gross)</p>
+                <p class="v" id="pp_out_saved">—</p>
+                <div class="bar"><span id="pp_bar_saved"></span></div>
+                <p class="mini" id="pp_out_saved_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Net savings (after fee)</p>
+                <p class="v" id="pp_out_net">—</p>
+                <p class="mini" id="pp_out_net_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="pp_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Amortization Schedule (Comparison)</h2>
+          <p class="mini" style="margin:0 0 10px;">See original schedule vs updated schedule after prepayment. (Table is capped based on your selection.)</p>
+
+          <div class="table-wrap">
+            <table aria-label="EMI prepayment amortization comparison table">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Original EMI</th>
+                  <th>Original Interest</th>
+                  <th>Original Principal</th>
+                  <th>Original Balance</th>
+                  <th>New EMI</th>
+                  <th>New Interest</th>
+                  <th>New Principal</th>
+                  <th>New Balance</th>
+                </tr>
+              </thead>
+              <tbody id="pp_table">
+                <tr><td colspan="9" class="mini">Click <strong>Calculate</strong> to generate the schedules.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          An <strong>EMI prepayment</strong> (also called part-payment) reduces your outstanding loan principal.
+          Because EMI loans calculate interest on the remaining principal, a prepayment reduces future interest
+          and can either <strong>shorten your tenure</strong> or <strong>reduce your EMI</strong> (depending on lender rules).
+        </p>
+        <p>
+          This calculator compares your <strong>original loan schedule</strong> with a <strong>new schedule after prepayment</strong>
+          to show:
+        </p>
+        <ul>
+          <li><strong>Interest saved</strong> (difference in total interest paid)</li>
+          <li><strong>Months saved</strong> (if you reduce tenure)</li>
+          <li><strong>New EMI</strong> (if you reduce EMI)</li>
+          <li>Updated <strong>amortization schedule</strong> month-by-month</li>
+        </ul>
+        <p class="mini">
+          Tip: In most cases, choosing <strong>reduce tenure</strong> maximizes interest saved. Choose <strong>reduce EMI</strong> if your priority is monthly cash flow.
+          Always check lender terms for prepayment penalties and minimum part-payment rules.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>EMI = P × r × (1+r)^n / ((1+r)^n − 1)
+Interest per month = Balance × r
+Principal per month = EMI − Interest</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Prepayment penalty?</strong></summary><p>Some lenders charge a fee. Enter it above to see net savings.</p></details>
+        <details class="card"><summary><strong>Reduce EMI or reduce tenure?</strong></summary><p>Reduce tenure usually saves more interest. Reduce EMI improves monthly cash flow.</p></details>
+        <details class="card"><summary><strong>Partial prepayment effect?</strong></summary><p>It reduces outstanding principal; future interest is computed on a smaller balance.</p></details>
+        <details class="card"><summary><strong>Multiple prepayments?</strong></summary><p>Monthly prepayment is supported. For multiple lump sums, run scenarios month-by-month.</p></details>
+        <details class="card"><summary><strong>Tax effect?</strong></summary><p>Lower interest paid may reduce interest deductions. Check tax rules for your loan type.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="loan-emi-calculator.html"><h4>Loan EMI Calculator</h4><p>Calculate EMI, total interest and total payable.</p></a>
+          <a class="card" href="home-loan-emi-calculator.html"><h4>Home Loan EMI Calculator</h4><p>Estimate EMI for home loans.</p></a>
+          <a class="card" href="personal-loan-emi-calculator.html"><h4>Personal Loan EMI Calculator</h4><p>Compute EMI and interest quickly.</p></a>
+          <a class="card" href="loan-interest-calculator.html"><h4>Loan Interest Calculator</h4><p>Compare interest across loan options.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const fmt0 = (n)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:0}).format(n) : '—');
+      const money = (n)=> '₹ ' + fmt0(n);
+
+      const loanEl = $('pp_loan');
+      const rateEl = $('pp_rate');
+      const yearsEl = $('pp_tenure_years');
+      const modeEl = $('pp_mode');
+      const typeEl = $('pp_type');
+      const amtEl  = $('pp_amount');
+      const monthWrap = $('pp_month_wrap');
+      const monthEl = $('pp_month');
+      const feeEl = $('pp_penalty');
+      const roundEl = $('pp_round');
+      const maxMonthsEl = $('pp_max_months');
+      const amtHelp = $('pp_amount_help');
+
+      const outEmiOld = $('pp_out_emi_old');
+      const outEmiOldNote = $('pp_out_emi_old_note');
+      const outAfterKey = $('pp_out_after_key');
+      const outAfterNote = $('pp_out_after_note');
+      const outSaved = $('pp_out_saved');
+      const outSavedNote = $('pp_out_saved_note');
+      const outNet = $('pp_out_net');
+      const outNetNote = $('pp_out_net_note');
+      const outSummary = $('pp_out_summary');
+      const barSaved = $('pp_bar_saved');
+      const tbody = $('pp_table');
+
+      function roundTo(x, step){
+        step = parseInt(step,10) || 0;
+        if(!step) return x;
+        return Math.round(x/step)*step;
+      }
+
+      function emi(P, r, n){
+        if(P<=0 || r<=0 || n<=0) return NaN;
+        const pow = Math.pow(1+r, n);
+        return (P * r * pow) / (pow - 1);
+      }
+
+      function buildSchedule(P, r, n, fixedEmi, opts){
+        // opts: { prepayType, prepayAmt, prepayMonth, reduceMode, maxMonths }
+        const rows = [];
+        let balance = P;
+        let currentEmi = fixedEmi; // may change for reduce-EMI mode after prepay
+        let totalInterest = 0;
+        let months = 0;
+
+        for(let m=1; m<=n; m++){
+          months = m;
+
+          // Apply prepayment just BEFORE calculating interest/principal of this month?
+          // Industry convention varies; we apply prepayment AFTER previous EMI(s) are paid.
+          // If prepayMonth=12 => after 12 EMIs paid, apply at month 13 start.
+          const shouldApplyLump = (opts.prepayType === 'lumpsum' && (m === (opts.prepayMonth + 1)));
+          const monthlyExtra = (opts.prepayType === 'monthly') ? (opts.prepayAmt || 0) : 0;
+
+          // Apply one-time prepayment at start of month m
+          if(shouldApplyLump){
+            balance = Math.max(0, balance - (opts.prepayAmt || 0));
+            // If reduce EMI, recompute EMI for remaining months
+            if(opts.reduceMode === 'emi'){
+              const remaining = (n - m + 1);
+              const newEmi = emi(balance, r, remaining);
+              currentEmi = roundTo(newEmi, opts.roundStep);
+            }
+          }
+
+          const interest = balance * r;
+          let principal = currentEmi - interest;
+
+          // If EMI is too small (can happen if reduce EMI & large rate), protect
+          if(principal < 0){
+            principal = 0;
+          }
+
+          // Apply monthly extra payment (goes directly to principal)
+          let extra = 0;
+          if(monthlyExtra > 0 && balance > 0){
+            extra = monthlyExtra;
+          }
+
+          // Last month adjustment
+          if(m === n){
+            principal = balance; // close balance
+          }
+
+          const paidToPrincipal = Math.min(balance, principal + extra);
+          balance = Math.max(0, balance - paidToPrincipal);
+
+          totalInterest += interest;
+
+          rows.push({
+            month: m,
+            emi: currentEmi,
+            interest,
+            principal: Math.max(0, paidToPrincipal - extra),
+            extra,
+            balance
+          });
+
+          // Tenure reduction: if balance becomes 0 early, stop
+          if(opts.reduceMode === 'tenure' && balance <= 0){
+            break;
+          }
+
+          // Safety cap if EMI reduction and ends early
+          if(balance <= 0){
+            break;
+          }
+        }
+
+        return { rows, totalInterest, monthsUsed: months, lastEmi: currentEmi };
+      }
+
+      function calc(){
+        const P = parseFloat(loanEl.value);
+        const rateA = parseFloat(rateEl.value);
+        const years = parseFloat(yearsEl.value);
+
+        const reduceMode = modeEl.value; // tenure or emi
+        const prepayType = typeEl.value; // lumpsum or monthly
+        const prepayAmt = parseFloat(amtEl.value) || 0;
+        const prepayMonth = Math.max(1, parseInt(monthEl.value || '1', 10));
+        const fee = parseFloat(feeEl.value) || 0;
+        const roundStep = parseInt(roundEl.value, 10) || 0;
+        const maxMonths = parseInt(maxMonthsEl.value, 10) || 120;
+
+        // UI toggle
+        const isLump = prepayType === 'lumpsum';
+        monthWrap.style.display = isLump ? 'block' : 'none';
+        amtHelp.textContent = isLump ? 'Applied once at the selected month.' : 'Added every month as extra principal payment.';
+
+        // Validation
+        const n = Math.round((isFinite(years) ? years : 0) * 12);
+        const r = (isFinite(rateA) ? (rateA/100)/12 : NaN);
+
+        if(!isFinite(P) || P<=0){
+          outEmiOld.textContent='—'; outEmiOldNote.textContent='Enter valid loan amount.';
+          tbody.innerHTML = '<tr><td colspan="9" class="mini">Enter valid inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+        if(!isFinite(rateA) || rateA<=0){
+          outEmiOld.textContent='—'; outEmiOldNote.textContent='Enter valid interest rate.';
+          tbody.innerHTML = '<tr><td colspan="9" class="mini">Enter valid inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+        if(!isFinite(years) || years<=0 || n<=0){
+          outEmiOld.textContent='—'; outEmiOldNote.textContent='Enter valid tenure in years.';
+          tbody.innerHTML = '<tr><td colspan="9" class="mini">Enter valid inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+        if(prepayAmt < 0){
+          outEmiOld.textContent='—'; outEmiOldNote.textContent='Prepayment amount cannot be negative.';
+          tbody.innerHTML = '<tr><td colspan="9" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+        if(isLump && (prepayMonth < 1 || prepayMonth > n)){
+          outEmiOld.textContent='—'; outEmiOldNote.textContent=`Prepayment month must be between 1 and ${n}.`;
+          tbody.innerHTML = '<tr><td colspan="9" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+
+        // Original EMI & schedule
+        let oldEmi = emi(P, r, n);
+        oldEmi = roundTo(oldEmi, roundStep);
+
+        const old = buildSchedule(P, r, n, oldEmi, {
+          prepayType: 'none', prepayAmt: 0, prepayMonth: 0, reduceMode: 'tenure', maxMonths, roundStep
+        });
+
+        const oldTotalPay = (oldEmi * old.monthsUsed);
+        const oldTotalInterest = old.totalInterest;
+
+        // New schedule with prepayment
+        const np = buildSchedule(P, r, n, oldEmi, {
+          prepayType, prepayAmt, prepayMonth,
+          reduceMode,
+          maxMonths,
+          roundStep
+        });
+
+        const newMonths = np.monthsUsed;
+        const newEmi = np.lastEmi; // may change for reduce-EMI mode
+        const newTotalPay = np.rows.reduce((acc, row)=> acc + (row.emi), 0); // EMI sum (not including extra for monthly prepay)
+        const newExtraPay = np.rows.reduce((acc, row)=> acc + (row.extra || 0), 0);
+        const newTotalInterest = np.totalInterest;
+
+        // Interest saved (gross): difference in interest
+        const saved = Math.max(0, oldTotalInterest - newTotalInterest);
+        const net = Math.max(0, saved - fee);
+
+        // Months saved if reduce tenure (or if monthly extra closes early)
+        const monthsSaved = Math.max(0, old.monthsUsed - newMonths);
+
+        // Outputs
+        outEmiOld.textContent = money(oldEmi);
+        outEmiOldNote.textContent = `Tenure: ${old.monthsUsed} months • Rate: ${rateA}% p.a.`;
+
+        if(reduceMode === 'tenure'){
+          outAfterKey.textContent = `${newMonths} months`;
+          outAfterNote.textContent = monthsSaved>0 ? `Months saved: ${monthsSaved}` : 'No months saved based on current inputs.';
+        } else {
+          outAfterKey.textContent = money(newEmi);
+          outAfterNote.textContent = `New EMI (remaining tenure stays ~${old.monthsUsed} months).`;
+        }
+
+        outSaved.textContent = money(saved);
+        const savedPct = oldTotalInterest>0 ? (saved/oldTotalInterest)*100 : 0;
+        barSaved.style.width = Math.max(0, Math.min(100, savedPct)).toFixed(1) + '%';
+        barSaved.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+        outSavedNote.textContent = `Saved ≈ ${savedPct.toFixed(1)}% of original total interest.`;
+
+        outNet.textContent = money(net);
+        outNetNote.textContent = fee>0 ? `Fee considered: ₹ ${fmt0(fee)} • Net savings shown above.` : 'No fee entered.';
+
+        const modeLabel = (reduceMode === 'tenure') ? 'Reduce tenure' : 'Reduce EMI';
+        const typeLabel = (prepayType === 'lumpsum') ? `Lumpsum ₹${fmt0(prepayAmt)} at month ${prepayMonth}` : `Monthly extra ₹${fmt0(prepayAmt)}`;
+
+        outSummary.textContent =
+          `Loan ₹${fmt0(P)} • Rate ${rateA}% • Tenure ${years}y (${old.monthsUsed}m) • ${typeLabel} • Mode: ${modeLabel} • Interest saved ₹${fmt0(saved)} • Net ₹${fmt0(net)}.`;
+
+        // Build comparison table
+        // Align by month (use longest of both, capped)
+        const maxRow = Math.min(
+          (maxMonths === 9999 ? Math.max(old.rows.length, np.rows.length) : maxMonths),
+          Math.max(old.rows.length, np.rows.length)
+        );
+
+        const rowsHtml = [];
+        for(let i=0; i<maxRow; i++){
+          const o = old.rows[i];
+          const nn = np.rows[i];
+
+          // If one schedule ended early
+          const oMonth = o ? o.month : (i+1);
+          const nMonth = nn ? nn.month : (i+1);
+
+          const oEmi = o ? money(o.emi) : '—';
+          const oInt = o ? money(o.interest) : '—';
+          const oPrin = o ? money(o.principal + (o.extra||0)) : '—';
+          const oBal = o ? money(o.balance) : '—';
+
+          const nEmi = nn ? money(nn.emi) : '—';
+          const nInt = nn ? money(nn.interest) : '—';
+          const nPrin = nn ? money(nn.principal + (nn.extra||0)) : '—';
+          const nBal = nn ? money(nn.balance) : '—';
+
+          const monthNo = Math.max(oMonth, nMonth);
+
+          rowsHtml.push(`
+            <tr>
+              <td>${monthNo}</td>
+              <td>${oEmi}</td>
+              <td>${oInt}</td>
+              <td>${oPrin}</td>
+              <td>${oBal}</td>
+              <td>${nEmi}</td>
+              <td>${nInt}</td>
+              <td>${nPrin}</td>
+              <td>${nBal}</td>
+            </tr>
+          `);
+
+          // Stop if both ended
+          if((!o || o.balance<=0) && (!nn || nn.balance<=0)){
+            break;
+          }
+        }
+
+        if(rowsHtml.length === 0){
+          tbody.innerHTML = '<tr><td colspan="9" class="mini">No schedule generated. Check inputs.</td></tr>';
+        } else {
+          tbody.innerHTML = rowsHtml.join('');
+        }
+      }
+
+      $('pp_calc_btn').addEventListener('click', calc);
+
+      $('pp_example_btn').addEventListener('click', ()=>{
+        loanEl.value = '800000';
+        rateEl.value = '10.5';
+        yearsEl.value = '5';
+        modeEl.value = 'tenure';
+        typeEl.value = 'lumpsum';
+        amtEl.value = '75000';
+        monthEl.value = '12';
+        feeEl.value = '0';
+        roundEl.value = '0';
+        maxMonthsEl.value = '120';
+        calc();
+      });
+
+      $('pp_reset_btn').addEventListener('click', ()=>{
+        [loanEl, rateEl, yearsEl, amtEl, monthEl, feeEl].forEach(el=>el.value='');
+        modeEl.value='tenure';
+        typeEl.value='lumpsum';
+        roundEl.value='0';
+        maxMonthsEl.value='120';
+        monthWrap.style.display='block';
+        outEmiOld.textContent='—';
+        outEmiOldNote.textContent='—';
+        outAfterKey.textContent='—';
+        outAfterNote.textContent='—';
+        outSaved.textContent='—';
+        outSavedNote.textContent='—';
+        outNet.textContent='—';
+        outNetNote.textContent='—';
+        outSummary.textContent='Enter details to see a clean summary.';
+        barSaved.style.width='0%';
+        tbody.innerHTML = '<tr><td colspan="9" class="mini">Click <strong>Calculate</strong> to generate the schedules.</td></tr>';
+      });
+
+      function syncTypeUi(){
+        const isLump = typeEl.value === 'lumpsum';
+        monthWrap.style.display = isLump ? 'block' : 'none';
+        amtHelp.textContent = isLump ? 'Applied once at the selected month.' : 'Added every month as extra principal payment.';
+      }
+
+      typeEl.addEventListener('change', ()=>{ syncTypeUi(); if(loanEl.value) calc(); });
+      modeEl.addEventListener('change', ()=>{ if(loanEl.value) calc(); });
+      [loanEl,rateEl,yearsEl,amtEl,monthEl,feeEl,roundEl,maxMonthsEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(loanEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(loanEl.value) calc(); });
+      });
+
+      syncTypeUi();
+    })();
+  </script>
+</body>
+</html>

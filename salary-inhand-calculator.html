@@ -1,0 +1,881 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Salary In-Hand Calculator (India) | Take Home Salary After Tax, PF, NPS | CalculatorSolution</title>
+  <meta name="description" content="Free Salary In-Hand Calculator (India): enter CTC or gross salary, allowances, PF, NPS, professional tax and choose Old vs New tax regime to estimate monthly & yearly take-home salary with a clear breakdown.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/salary-inhand-calculator.html">
+
+  <meta property="og:title" content="Salary In-Hand Calculator (India)">
+  <meta property="og:description" content="Calculate monthly take-home salary after income tax, PF, NPS, professional tax and other deductions — with a clean breakdown.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <style>
+    /* =========================
+       Base + Layout Foundations
+       ========================= */
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:
+        radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+        radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+        linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    a{color:inherit}
+    :focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:2px;border-radius:10px}
+
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:0 18px;
+    }
+
+    /* Prevent horizontal overflow on small devices (often caused by <pre>) */
+    main,article,section{min-width:0}
+    pre{max-width:100%;overflow:auto;-webkit-overflow-scrolling:touch}
+
+    /* =========================
+       Header
+       ========================= */
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);
+      backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{
+      display:flex;align-items:center;gap:10px;text-decoration:none;
+      min-height:44px; /* tap target */
+    }
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;letter-spacing:-.01em}
+    .brand-logo{border-radius:10px}
+
+    /* =========================
+       Hero
+       ========================= */
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{
+      margin:0 0 6px 0;
+      font-size:clamp(1.4rem, 2.4vw, 1.9rem);
+      letter-spacing:-.02em;
+      line-height:1.2;
+    }
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      min-height:36px;
+    }
+
+    /* =========================
+       Calculator shell
+       ========================= */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      min-width:0;
+    }
+    .panel-title{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px
+    }
+    .panel-title h2{margin:0;font-size:1.05rem;line-height:1.25}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(37,99,235,.10);
+      color:#1d4ed8;font-weight:900;font-size:.85rem;
+      white-space:nowrap;
+      min-height:32px;
+    }
+
+    /* Form grid */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem;line-height:1.25}
+    .input{
+      padding:10px 12px;
+      border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      min-height:44px; /* touch */
+      width:100%;
+    }
+    select.input{appearance:none;background-image:
+      linear-gradient(45deg, transparent 50%, #64748b 50%),
+      linear-gradient(135deg, #64748b 50%, transparent 50%);
+      background-position:
+        calc(100% - 18px) calc(50% - 3px),
+        calc(100% - 12px) calc(50% - 3px);
+      background-size:6px 6px, 6px 6px;
+      background-repeat:no-repeat;
+      padding-right:40px;
+    }
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+    .mini{font-size:.86rem;color:#64748b}
+    .mini, .help{max-width:70ch}
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff;
+      box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px;
+      min-width:140px;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{
+      background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none
+    }
+    .btn-dark{
+      background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)
+    }
+
+    /* Results side */
+    .sticky{position:sticky;top:82px}
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{
+      margin:4px 0 0;
+      font-size:clamp(1.25rem, 2.4vw, 1.55rem);
+      font-weight:1000;
+      letter-spacing:-.02em;
+      line-height:1.15;
+      word-break:break-word;
+    }
+
+    .bar{
+      height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px
+    }
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* Breakdown */
+    .breakdown{
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05);
+      overflow:hidden
+    }
+    .row{
+      display:flex;justify-content:space-between;gap:10px;
+      padding:10px 12px;border-bottom:1px solid #e2e8f0;font-size:.95rem;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .row:last-child{border-bottom:0}
+    .row strong{font-weight:1000}
+    .row .muted{color:#64748b;font-weight:800}
+    .row.total{background:#f8fafc}
+
+    /* Badges row */
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 10px;border-radius:999px;border:1px solid #e2e8f0;
+      background:rgba(15,23,42,.03);
+      font-weight:900;font-size:.85rem;color:#0f172a;
+      min-height:34px;
+      max-width:100%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    /* FAQ cards + related cards */
+    .card{
+      background:#fff;border:1px solid #e2e8f0;border-radius:14px;
+      box-shadow:0 10px 24px rgba(8,13,26,.05);
+      padding:12px;
+      min-width:0;
+    }
+    details.card{padding:0}
+    details.card summary{
+      cursor:pointer;
+      padding:12px;
+      list-style:none;
+      min-height:44px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    details.card summary::-webkit-details-marker{display:none}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Typography spacing for content sections */
+    article > section{margin-top:18px}
+    section h2, section h3{line-height:1.25;letter-spacing:-.01em}
+    section p{max-width:75ch}
+    pre{
+      padding:12px 14px;
+      border:1px solid #e2e8f0;
+      border-radius:14px;
+      background:rgba(255,255,255,.9);
+      box-shadow:0 10px 24px rgba(8,13,26,.04);
+      font-size:.95rem;
+      line-height:1.5;
+      white-space:pre;
+    }
+
+    /* Footer links better wrapping */
+    .site-footer a{display:inline-block;padding:6px 4px;border-radius:10px}
+    .site-footer a:focus-visible{outline:3px solid rgba(59,130,246,.35)}
+
+    /* =========================
+       Responsive breakpoints
+       ========================= */
+
+    /* Tablets */
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static;top:auto}
+      .panel-title{align-items:center}
+    }
+
+    /* Large phones / small tablets */
+    @media (max-width: 640px){
+      .wrap{padding:0 14px}
+      .hero{padding:20px 14px;border-radius:16px}
+      .grid-2{grid-template-columns:1fr}
+      .actions{gap:10px}
+      .btn{flex:1;min-width:0}
+      .badge{max-width:100%}
+      .row{font-size:.94rem}
+      pre{font-size:.9rem}
+    }
+
+    /* Small phones */
+    @media (max-width: 420px){
+      .brand-text{font-size:1.05rem}
+      .chip{font-size:.85rem}
+      .metric .v{font-size:1.2rem}
+      .panel{padding:12px}
+    }
+
+    /* Reduce motion preference */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto}
+      .btn, .card{transition:none}
+      .btn:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Salary In-Hand Calculator",
+      "url":"https://calculatorsolution.com/salary-inhand-calculator.html",
+      "description":"Estimate monthly in-hand salary after tax and deductions (PF, NPS, professional tax, insurance) with a clear breakdown."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Salary In-Hand Calculator","item":"https://calculatorsolution.com/salary-inhand-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate in-hand salary",
+      "step":[
+        {"@type":"HowToStep","name":"Enter salary details","text":"Add monthly gross or annual salary components, including bonus and allowances if needed."},
+        {"@type":"HowToStep","name":"Add deductions","text":"Enter PF, NPS, professional tax and other deductions like insurance."},
+        {"@type":"HowToStep","name":"Select tax regime","text":"Choose Old or New regime to estimate annual tax, then see monthly take-home salary."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Include bonuses?","acceptedAnswer":{"@type":"Answer","text":"Bonuses can be included as annual bonus or averaged monthly. Tax treatment may vary; this tool provides an estimate."}},
+        {"@type":"Question","name":"Taxable components?","acceptedAnswer":{"@type":"Answer","text":"Basic, DA, most allowances and bonus are usually taxable. Some exemptions may apply depending on rules and regime."}},
+        {"@type":"Question","name":"EPF contribution?","acceptedAnswer":{"@type":"Answer","text":"Employee PF reduces in-hand salary. Employer PF is part of CTC but not directly received in-hand."}},
+        {"@type":"Question","name":"How is monthly tax computed?","acceptedAnswer":{"@type":"Answer","text":"We estimate annual income tax based on your inputs and selected regime, then divide it into monthly TDS."}},
+        {"@type":"Question","name":"Insurance and other deductions?","acceptedAnswer":{"@type":"Answer","text":"If deducted from salary, enter them as monthly deductions to get a closer take-home estimate."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Salary In-Hand Calculator</h1>
+        <p>Estimate your take-home (in-hand) salary after tax and deductions — with a clean monthly & yearly breakdown.</p>
+        <div class="chips">
+          <span class="chip">🧾 Old vs New Regime</span>
+          <span class="chip">🏦 PF / NPS / PT</span>
+          <span class="chip">📊 Take-home breakdown</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-salary-inhand">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Salary in-hand inputs">
+              <div class="panel-title">
+                <h2>Salary & deductions</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="si_mode">Input type</label>
+                  <select id="si_mode" class="input">
+                    <option value="monthly" selected>Monthly gross salary</option>
+                    <option value="annual">Annual gross salary</option>
+                    <option value="ctc">Annual CTC (approx)</option>
+                  </select>
+                  <p class="help">CTC includes employer PF etc. (approximate model).</p>
+                </div>
+
+                <div class="field">
+                  <label for="si_amount">Salary amount</label>
+                  <input id="si_amount" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 80000">
+                  <p class="help" id="si_amount_help">Your monthly gross before deductions.</p>
+                </div>
+
+                <div class="field">
+                  <label for="si_bonus">Bonus (annual, optional)</label>
+                  <input id="si_bonus" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 100000">
+                  <p class="help">Included in annual taxable income.</p>
+                </div>
+
+                <div class="field">
+                  <label for="si_regime">Tax regime (India)</label>
+                  <select id="si_regime" class="input">
+                    <option value="new" selected>New regime (standard deduction only)</option>
+                    <option value="old">Old regime (standard deduction + deductions input)</option>
+                  </select>
+                  <p class="help">Estimates tax; real TDS can differ.</p>
+                </div>
+
+                <div class="field">
+                  <label for="si_std_ded">Standard deduction (annual)</label>
+                  <input id="si_std_ded" class="input" type="number" inputmode="numeric" min="0" step="1000" value="50000">
+                  <p class="help">Default ₹50,000 (change if rules differ).</p>
+                </div>
+
+                <div class="field">
+                  <label for="si_deductions">Other deductions (annual)</label>
+                  <input id="si_deductions" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 150000">
+                  <p class="help">80C/80D etc. (mainly for Old regime).</p>
+                </div>
+
+                <div class="field">
+                  <label for="si_pf">Employee PF (monthly)</label>
+                  <input id="si_pf" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="e.g., 1800">
+                  <p class="help">Deducted from monthly salary.</p>
+                </div>
+
+                <div class="field">
+                  <label for="si_nps">NPS (monthly, optional)</label>
+                  <input id="si_nps" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="e.g., 2000">
+                  <p class="help">If deducted from salary.</p>
+                </div>
+
+                <div class="field">
+                  <label for="si_pt">Professional tax (monthly)</label>
+                  <input id="si_pt" class="input" type="number" inputmode="numeric" min="0" step="10" placeholder="e.g., 200">
+                  <p class="help">Varies by state; enter your amount.</p>
+                </div>
+
+                <div class="field">
+                  <label for="si_ins">Insurance/other deductions (monthly)</label>
+                  <input id="si_ins" class="input" type="number" inputmode="numeric" min="0" step="50" placeholder="e.g., 500">
+                  <p class="help">Meal card, insurance, etc. if deducted.</p>
+                </div>
+
+                <div class="field">
+                  <label for="si_round">Round take-home</label>
+                  <select id="si_round" class="input">
+                    <option value="0" selected>No rounding</option>
+                    <option value="10">Nearest 10</option>
+                    <option value="100">Nearest 100</option>
+                  </select>
+                  <p class="help">Rounding only affects displayed values.</p>
+                </div>
+
+                <div class="field">
+                  <label for="si_surcharge_cess">Cess & surcharge</label>
+                  <select id="si_surcharge_cess" class="input">
+                    <option value="cess" selected>Include 4% cess</option>
+                    <option value="none">No cess (estimate)</option>
+                  </select>
+                  <p class="help">High-income surcharge not modeled (simple estimate).</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="si_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="si_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="si_reset_btn" type="button">Reset</button>
+              </div>
+
+              <p class="mini" style="margin-top:10px;">
+                Note: This tool provides an estimate for salary planning. Actual tax depends on current rules, exemptions, employer TDS settings and proofs submitted.
+              </p>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Salary in-hand results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Monthly take-home (in-hand)</p>
+                <p class="v" id="si_out_takehome_m">—</p>
+                <p class="mini" id="si_out_takehome_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Yearly take-home</p>
+                <p class="v" id="si_out_takehome_y">—</p>
+                <p class="mini">Take-home across 12 months (estimate).</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Estimated yearly tax (TDS)</p>
+                <p class="v" id="si_out_tax_y">—</p>
+                <div class="bar"><span id="si_bar_tax"></span></div>
+                <p class="mini" id="si_out_tax_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Monthly deductions total</p>
+                <p class="v" id="si_out_ded_m">—</p>
+                <p class="mini">PF + NPS + PT + insurance + monthly tax.</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="si_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Breakdown</h2>
+          <p class="mini" style="margin:0 0 10px;">A quick view of how we estimate your take-home salary.</p>
+
+          <div class="breakdown" aria-label="Salary in-hand breakdown">
+            <div class="row"><span class="muted">Gross salary (monthly)</span><strong id="si_b_gross_m">—</strong></div>
+            <div class="row"><span class="muted">PF (employee, monthly)</span><strong id="si_b_pf_m">—</strong></div>
+            <div class="row"><span class="muted">NPS (monthly)</span><strong id="si_b_nps_m">—</strong></div>
+            <div class="row"><span class="muted">Professional tax (monthly)</span><strong id="si_b_pt_m">—</strong></div>
+            <div class="row"><span class="muted">Insurance/other (monthly)</span><strong id="si_b_ins_m">—</strong></div>
+            <div class="row"><span class="muted">Estimated tax (monthly)</span><strong id="si_b_tax_m">—</strong></div>
+            <div class="row total"><span class="muted">Estimated take-home (monthly)</span><strong id="si_b_takehome_m">—</strong></div>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+            <span class="badge" id="si_badge_regime">Regime: —</span>
+            <span class="badge" id="si_badge_taxable">Taxable income: —</span>
+            <span class="badge" id="si_badge_tax_rate">Effective tax rate: —</span>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          Your <strong>in-hand salary</strong> (take-home) is what you actually receive after deductions like PF, professional tax,
+          insurance/benefits deductions, and income tax (TDS). Many offers mention <strong>CTC</strong>, which can include employer PF and other benefits,
+          so CTC is usually higher than in-hand salary.
+        </p>
+        <p class="mini">
+          Tip: Compare Old vs New regime using the same salary to see which gives higher take-home. If you claim deductions (80C/80D, etc.),
+          Old regime may work better. If you don’t claim many deductions, New regime is often simpler.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>Monthly Take-home ≈ Monthly Gross − (PF + NPS + PT + Insurance/Other + Monthly Tax)
+Yearly Tax ≈ Tax(Annual Taxable Income) + Cess (optional)</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Include bonuses?</strong></summary><p>Bonuses can be included as annual bonus or averaged monthly. Tax treatment may vary; this tool provides an estimate.</p></details>
+        <details class="card"><summary><strong>Taxable components?</strong></summary><p>Basic, DA, most allowances and bonus are usually taxable. Exemptions vary by regime and rules.</p></details>
+        <details class="card"><summary><strong>EPF contribution?</strong></summary><p>Employee PF is deducted from salary and reduces in-hand. Employer PF is part of CTC but not received in-hand.</p></details>
+        <details class="card"><summary><strong>How to compute monthly tax?</strong></summary><p>We estimate annual tax based on your inputs and selected regime, then divide by 12 for monthly TDS.</p></details>
+        <details class="card"><summary><strong>Add-ons like insurance?</strong></summary><p>If deducted from salary, add them as monthly deductions for a closer estimate.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="income-tax-calculator-india.html"><h4>Income Tax Calculator (India)</h4><p>Estimate income tax under Old vs New regime.</p></a>
+          <a class="card" href="hra-calculator.html"><h4>HRA Calculator</h4><p>Calculate HRA exemption (Old regime).</p></a>
+          <a class="card" href="pf-calculator.html"><h4>PF Calculator</h4><p>Estimate monthly and yearly PF contributions.</p></a>
+          <a class="card" href="salary-hike-percentage-calculator.html"><h4>Salary Hike Calculator</h4><p>Calculate hike percentage and revised salary.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+        <a href="/sitemap.xml">Sitemap</a> <span aria-hidden="true">|</span>
+        <a href="/">Home</a> <span aria-hidden="true">|</span>
+        <a href="/privacy-policy.html">Privacy Policy</a> <span aria-hidden="true">|</span>
+        <a href="/terms-of-service.html">Terms</a> <span aria-hidden="true">|</span>
+        <a href="/contact.html">Contact</a> <span aria-hidden="true">|</span>
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const fmt0 = (n)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:0}).format(n) : '—');
+      const money = (n)=> '₹ ' + fmt0(n);
+
+      const modeEl = $('si_mode');
+      const amtEl  = $('si_amount');
+      const bonusEl= $('si_bonus');
+      const regimeEl = $('si_regime');
+      const stdEl  = $('si_std_ded');
+      const dedEl  = $('si_deductions');
+
+      const pfEl   = $('si_pf');
+      const npsEl  = $('si_nps');
+      const ptEl   = $('si_pt');
+      const insEl  = $('si_ins');
+
+      const roundEl= $('si_round');
+      const cessEl = $('si_surcharge_cess');
+
+      const amountHelp = $('si_amount_help');
+
+      const outTakeM = $('si_out_takehome_m');
+      const outTakeNote = $('si_out_takehome_note');
+      const outTakeY = $('si_out_takehome_y');
+      const outTaxY  = $('si_out_tax_y');
+      const outTaxNote = $('si_out_tax_note');
+      const outDedM  = $('si_out_ded_m');
+      const outSummary = $('si_out_summary');
+      const barTax = $('si_bar_tax');
+
+      const bGrossM = $('si_b_gross_m');
+      const bPfM = $('si_b_pf_m');
+      const bNpsM = $('si_b_nps_m');
+      const bPtM = $('si_b_pt_m');
+      const bInsM = $('si_b_ins_m');
+      const bTaxM = $('si_b_tax_m');
+      const bTakeM = $('si_b_takehome_m');
+
+      const badgeRegime = $('si_badge_regime');
+      const badgeTaxable = $('si_badge_taxable');
+      const badgeRate = $('si_badge_tax_rate');
+
+      function roundTo(x, step){
+        step = parseInt(step,10) || 0;
+        if(!step) return x;
+        return Math.round(x/step)*step;
+      }
+
+      // Simplified slab calculators (estimate). For accuracy, keep slabs updated in code when rules change.
+      function taxOldRegime(taxable){
+        // Very simplified classic slabs: 0-2.5L:0, 2.5-5L:5%, 5-10L:20%, >10L:30%
+        // (No rebate/surcharge modeled here; add separately if needed.)
+        let t = 0;
+        const a = taxable;
+        if(a <= 250000) return 0;
+        if(a > 250000){
+          const x = Math.min(a, 500000) - 250000;
+          t += x * 0.05;
+        }
+        if(a > 500000){
+          const x = Math.min(a, 1000000) - 500000;
+          t += x * 0.20;
+        }
+        if(a > 1000000){
+          const x = a - 1000000;
+          t += x * 0.30;
+        }
+        return Math.max(0, t);
+      }
+
+      function taxNewRegime(taxable){
+        // Simplified NEW regime slabs (estimate):
+        // 0-3L:0, 3-6L:5%, 6-9L:10%, 9-12L:15%, 12-15L:20%, >15L:30%
+        let t = 0;
+        const a = taxable;
+        if(a <= 300000) return 0;
+        if(a > 300000){
+          const x = Math.min(a, 600000) - 300000;
+          t += x * 0.05;
+        }
+        if(a > 600000){
+          const x = Math.min(a, 900000) - 600000;
+          t += x * 0.10;
+        }
+        if(a > 900000){
+          const x = Math.min(a, 1200000) - 900000;
+          t += x * 0.15;
+        }
+        if(a > 1200000){
+          const x = Math.min(a, 1500000) - 1200000;
+          t += x * 0.20;
+        }
+        if(a > 1500000){
+          const x = a - 1500000;
+          t += x * 0.30;
+        }
+        return Math.max(0, t);
+      }
+
+      function calc(){
+        const mode = modeEl.value; // monthly | annual | ctc
+        const amt = parseFloat(amtEl.value);
+        const bonus = parseFloat(bonusEl.value) || 0;
+
+        const regime = regimeEl.value; // new | old
+        const stdDed = parseFloat(stdEl.value) || 0;
+        const otherDed = parseFloat(dedEl.value) || 0;
+
+        const pf = parseFloat(pfEl.value) || 0;
+        const nps = parseFloat(npsEl.value) || 0;
+        const pt = parseFloat(ptEl.value) || 0;
+        const ins = parseFloat(insEl.value) || 0;
+
+        const step = parseInt(roundEl.value, 10) || 0;
+        const includeCess = (cessEl.value === 'cess');
+
+        if(!isFinite(amt) || amt<=0){
+          outTakeM.textContent='—';
+          outTakeNote.textContent='Enter a valid salary amount.';
+          outTakeY.textContent='—';
+          outTaxY.textContent='—';
+          outTaxNote.textContent='—';
+          outDedM.textContent='—';
+          outSummary.textContent='Enter details to see a clean summary.';
+          barTax.style.width='0%';
+
+          [bGrossM,bPfM,bNpsM,bPtM,bInsM,bTaxM,bTakeM].forEach(x=>x.textContent='—');
+          badgeRegime.textContent='Regime: —';
+          badgeTaxable.textContent='Taxable income: —';
+          badgeRate.textContent='Effective tax rate: —';
+          return;
+        }
+
+        // Convert input to monthly gross
+        let grossMonthly = 0;
+        if(mode === 'monthly'){
+          grossMonthly = amt;
+          amountHelp.textContent = 'Your monthly gross before deductions.';
+        } else if(mode === 'annual'){
+          grossMonthly = amt / 12;
+          amountHelp.textContent = 'Your annual gross (we convert to monthly).';
+        } else { // ctc
+          // Approx: assume employer PF ~12% of basic; without breakup we estimate 5% of CTC as employer PF.
+          // This is only for approximation. User can refine by using annual/monthly gross mode.
+          grossMonthly = (amt * 0.95) / 12;
+          amountHelp.textContent = 'CTC is approximate. We estimate ~5% as employer PF/benefits and compute gross.';
+        }
+
+        grossMonthly = Math.max(0, grossMonthly);
+        const grossAnnual = (grossMonthly * 12) + bonus;
+
+        // Annual taxable income estimate
+        // New regime generally allows standard deduction; old regime allows standard + entered deductions.
+        let taxable = grossAnnual - stdDed;
+        if(regime === 'old'){
+          taxable -= otherDed;
+        }
+        taxable = Math.max(0, taxable);
+
+        // Tax calc
+        let tax = (regime === 'old') ? taxOldRegime(taxable) : taxNewRegime(taxable);
+        if(includeCess){
+          tax = tax * 1.04; // add 4% cess
+        }
+
+        const taxMonthly = tax / 12;
+
+        // Monthly take-home
+        const monthlyDeductions = pf + nps + pt + ins + taxMonthly;
+        let takeHomeM = grossMonthly - monthlyDeductions;
+        takeHomeM = Math.max(0, takeHomeM);
+
+        // Rounding for display
+        const takeHomeMDisp = roundTo(takeHomeM, step);
+        const takeHomeYDisp = roundTo(takeHomeM * 12, step);
+        const taxYDisp = roundTo(tax, step);
+        const dedMDisp = roundTo(monthlyDeductions, step);
+
+        outTakeM.textContent = money(takeHomeMDisp);
+        outTakeNote.textContent = `Gross: ${money(roundTo(grossMonthly, step))}/month • Regime: ${regime.toUpperCase()} • Bonus: ${money(bonus)}/year`;
+        outTakeY.textContent = money(takeHomeYDisp);
+
+        outTaxY.textContent = money(taxYDisp);
+        const effRate = grossAnnual>0 ? (tax / grossAnnual) * 100 : 0;
+        outTaxNote.textContent = `Estimated taxable income: ₹ ${fmt0(taxable)} • Effective rate ≈ ${effRate.toFixed(1)}%`;
+
+        outDedM.textContent = money(dedMDisp);
+
+        // Tax share bar (tax vs gross annual)
+        const taxPct = grossAnnual>0 ? (tax / grossAnnual) * 100 : 0;
+        barTax.style.width = Math.max(0, Math.min(100, taxPct)).toFixed(1) + '%';
+        barTax.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+
+        outSummary.textContent =
+          `Gross ₹${fmt0(grossMonthly)}/mo • PF ₹${fmt0(pf)} • NPS ₹${fmt0(nps)} • PT ₹${fmt0(pt)} • Other ₹${fmt0(ins)} • Tax ₹${fmt0(taxMonthly)}/mo • Take-home ₹${fmt0(takeHomeM)}.`;
+
+        // Breakdown
+        bGrossM.textContent = money(roundTo(grossMonthly, step));
+        bPfM.textContent = money(roundTo(pf, step));
+        bNpsM.textContent = money(roundTo(nps, step));
+        bPtM.textContent = money(roundTo(pt, step));
+        bInsM.textContent = money(roundTo(ins, step));
+        bTaxM.textContent = money(roundTo(taxMonthly, step));
+        bTakeM.textContent = money(takeHomeMDisp);
+
+        badgeRegime.textContent = `Regime: ${regime === 'new' ? 'New' : 'Old'}`;
+        badgeTaxable.textContent = `Taxable income: ₹ ${fmt0(taxable)}`;
+        badgeRate.textContent = `Effective tax rate: ${effRate.toFixed(1)}%`;
+      }
+
+      $('si_calc_btn').addEventListener('click', calc);
+
+      $('si_example_btn').addEventListener('click', ()=>{
+        modeEl.value = 'monthly';
+        amtEl.value = '80000';
+        bonusEl.value = '100000';
+        regimeEl.value = 'new';
+        stdEl.value = '50000';
+        dedEl.value = '150000';
+        pfEl.value = '1800';
+        npsEl.value = '2000';
+        ptEl.value = '200';
+        insEl.value = '500';
+        roundEl.value = '0';
+        cessEl.value = 'cess';
+        calc();
+      });
+
+      $('si_reset_btn').addEventListener('click', ()=>{
+        modeEl.value = 'monthly';
+        amtEl.value = '';
+        bonusEl.value = '';
+        regimeEl.value = 'new';
+        stdEl.value = '50000';
+        dedEl.value = '';
+        pfEl.value = '';
+        npsEl.value = '';
+        ptEl.value = '';
+        insEl.value = '';
+        roundEl.value = '0';
+        cessEl.value = 'cess';
+        calc();
+      });
+
+      modeEl.addEventListener('change', ()=>{ if(amtEl.value) calc(); });
+      regimeEl.addEventListener('change', ()=>{ if(amtEl.value) calc(); });
+      [amtEl,bonusEl,stdEl,dedEl,pfEl,npsEl,ptEl,insEl,roundEl,cessEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(amtEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(amtEl.value) calc(); });
+      });
+
+      // Initial hint text
+      modeEl.dispatchEvent(new Event('change'));
+    })();
+  </script>
+</body>
+</html>

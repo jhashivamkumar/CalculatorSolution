@@ -1,0 +1,225 @@
+<!doctype html> 
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Aspect Ratio Calculator (16:9, 9:16, 4:3, 1:1) | CalculatorSolution</title>
+  <meta name="description" content="Free Aspect Ratio Calculator to resize images/videos without distortion. Enter width/height, keep ratio (16:9, 9:16, 4:3, 1:1, 4:5), and get matching dimensions instantly.">
+  <!-- Preload critical CSS and fonts to reduce render-blocking -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+  <link rel="preload" href="/assets/og-image.svg" as="image">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+  <style>
+    /* Expanded critical CSS for faster LCP: includes hero, header, grid, buttons, and typography */
+    html,body{height:100%;margin:0;}
+    body{font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:linear-gradient(135deg, #f8fafc 0%, #f0f4f8 100%); color:#0f172a; line-height:1.6; min-height:100vh;}
+    *{box-sizing:border-box;}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px;}
+    .site-header{padding:14px 0; border-bottom: 1px solid #e2e8f0;}
+    .brand{font-weight:700; color:#3b82f6; text-decoration:none; font-size:1.2rem;}
+    .search{padding:8px 12px; border:1px solid #e2e8f0; border-radius:6px; width:200px; font-size:0.95rem;}
+    .hero{background:linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); color:white; padding:60px 20px; text-align:center;}
+    .hero h1{font-size:2.5rem; margin:0 0 12px 0; font-weight:800;}
+    .hero > .wrap > p{font-size:1.1rem; margin:0 0 20px 0; opacity:0.95;}
+    .hero-grid,.cards-grid,.featured-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px; margin-top:20px;}
+    .btn{display:inline-block; padding:10px 14px; border-radius:8px; text-decoration:none; font-weight:600; background:linear-gradient(90deg,#3b82f6,#6c9cff); color:#fff; box-shadow:0 8px 24px rgba(59,130,246,0.12);}
+    .btn:hover{transform:translateY(-3px); box-shadow:0 14px 40px rgba(59,130,246,0.12);}
+    .card{display:block; background:#fff; padding:14px; border-radius:10px; box-shadow:0 6px 18px rgba(8,13,26,0.06); text-decoration:none; color:inherit; transition:transform .28s; border:1px solid #e2e8f0;}
+    .card:hover{transform:translateY(-4px);}
+    .footer{padding:20px 0; border-top:1px solid #e2e8f0; color:#64748b; font-size:0.9rem;}
+  </style>
+  <!-- GA4 Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/aspect-ratio-calculator.html">
+
+  <!-- ✅ Improved JSON-LD: more useful FAQs + matches on-page intent -->
+  <script type="application/ld+json">[
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Aspect Ratio Calculator",
+    "description": "Resize images and videos while keeping aspect ratio. Calculate matching width/height for 16:9, 9:16, 4:3, 1:1, and more."
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://calculatorsolution.com/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://calculatorsolution.com/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Calculator Solution",
+        "item": "https://calculatorsolution.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Aspect Ratio Calculator",
+        "item": "https://calculatorsolution.com/aspect-ratio-calculator.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is aspect ratio?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Aspect ratio is the proportional relationship between width and height (e.g., 16:9 or 9:16). Keeping the same ratio prevents stretching and distortion."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I keep aspect ratio when resizing an image or video?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Pick one dimension (width or height) and calculate the other using the ratio. This calculator gives the matching dimension instantly to keep the media proportional."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are common aspect ratios for YouTube, Instagram, and reels?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Common ratios include 16:9 for YouTube landscape, 9:16 for Shorts/Reels/Stories, 1:1 for square posts, and 4:5 for Instagram feed portraits."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is letterboxing vs cropping?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Letterboxing keeps the full image visible by adding bars, while cropping cuts parts of the image to fill the frame. Use fit/letterbox for safety; crop for full-screen composition."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why does my resized image look blurry?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Upscaling increases size without adding real detail, which can cause blur. For best quality, resize from a higher-resolution source and use good resampling/upscaling settings."
+        }
+      }
+    ]
+  }
+]</script>
+
+  <script defer src="/assets/calculators-complete.js"></script>
+</head>
+<body>
+  <header class="site-header"><div class="wrap"><a class="brand" href="/">
+    <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+    <span class="brand-text">CalculatorSolution</span>
+  </a></div></header>
+  <main class="wrap">
+    <article>
+      <div class="calculator-hero">
+        <h1>Aspect Ratio Calculator</h1>
+        <p class="lead">Convert resolutions to maintain aspect ratio or compute new dimensions.</p>
+      </div>
+
+      <section class="calculator-main">
+        <!-- interactive area -->
+        <!-- Interactive placeholder for Aspect Ratio Calculator -->
+<div id="calc-aspect-ratio-calculator">
+  <p>Open this page in the browser and use the calculator fields below.</p>
+</div>
+      </section>
+<section class="related">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="age-calculator.html"><h4>Age Calculator</h4><p>Calculate age from date of birth to today or a target date.</p></a>
+          <a class="card" href="date-difference-calculator.html"><h4>Date Difference Calculator</h4><p>Find difference between two dates in days, months, years.</p></a>
+          <a class="card" href="time-duration-calculator.html"><h4>Time Duration Calculator</h4><p>Add/subtract times and compute durations.</p></a>
+          <a class="card" href="unit-converter.html"><h4>Unit Converter</h4><p>Convert between length, mass, volume, temperature and more.</p></a>
+        </div>
+      </section>
+      <section class="explanation">
+        <h2>Explanation</h2>
+        <p>
+          The <strong>Aspect Ratio Calculator</strong> helps you resize an image or video while keeping the same proportions so it does not look stretched.
+          An aspect ratio compares <strong>width</strong> to <strong>height</strong>, such as <strong>16:9</strong> (landscape), <strong>9:16</strong> (vertical),
+          <strong>1:1</strong> (square), and <strong>4:5</strong> (portrait).
+        </p>
+        <p>
+          This is useful for creators and editors working with <strong>YouTube thumbnails</strong>, <strong>YouTube videos</strong>, <strong>Instagram posts</strong>,
+          <strong>Reels/Shorts</strong>, presentations, web banners, and Canva designs. When you change only width or only height, this tool calculates the matching
+          dimension so the output remains proportional.
+        </p>
+        <p>
+          If you resize without preserving the ratio, the media can become distorted (faces look wider/taller). To avoid that, choose one dimension as fixed,
+          then compute the other using the aspect ratio. If you must fit a different screen size, you typically choose between:
+          <strong>Fit (letterbox)</strong> — keeps all content visible with bars, or <strong>Crop (fill)</strong> — fills the screen but trims edges.
+        </p>
+        <p>
+          Tip: Common creator ratios — <strong>16:9</strong> for YouTube landscape, <strong>9:16</strong> for Shorts/Reels/Stories, <strong>1:1</strong> for square posts,
+          and <strong>4:5</strong> for portrait Instagram feed posts. Use this calculator to get exact matching width/height quickly.
+        </p>
+      </section>
+
+      <section class="formula">
+        <h3>Formula</h3>
+        <pre>
+Given ratio = ARw : ARh
+
+If width is known:
+NewHeight = width × (ARh / ARw)
+
+If height is known:
+NewWidth  = height × (ARw / ARh)
+        </pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>What is aspect ratio?</strong></summary><p>Aspect ratio is the relationship between width and height (e.g., 16:9). Keeping it the same prevents stretching.</p></details>
+        <details class="card"><summary><strong>Which aspect ratio is best for YouTube and reels?</strong></summary><p>16:9 is standard for YouTube videos; 9:16 is used for Shorts/Reels/Stories; 1:1 is common for square posts; 4:5 is popular for portrait feed posts.</p></details>
+        <details class="card"><summary><strong>Letterbox vs crop: what should I choose?</strong></summary><p>Letterbox keeps the full image and adds bars. Crop fills the frame but removes edges. Choose based on what content must remain visible.</p></details>
+        <details class="card"><summary><strong>Why does upscaling reduce quality?</strong></summary><p>Upscaling increases pixel dimensions without true detail, which can cause blur. Use higher-res source files and good resampling settings.</p></details>
+        <details class="card"><summary><strong>Do pixels have to be square?</strong></summary><p>Most modern screens use square pixels, but some older video formats may use non-square pixels (pixel aspect ratio). If in doubt, use square-pixel presets.</p></details>
+      </section>
+
+      
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+</body>
+  <!-- interactive script placeholder -->
+  
+</html>

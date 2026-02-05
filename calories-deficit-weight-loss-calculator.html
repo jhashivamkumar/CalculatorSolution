@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Calorie Deficit Calculator for Weight Loss Target | CalculatorSolution</title>
+  <meta name="description" content="Free Calorie Deficit Calculator: set goal weight loss, choose timeline, estimate daily calorie deficit, total kcal to burn, and weekly plan. Includes safe ranges and FAQ.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/calories-deficit-weight-loss-calculator.html">
+
+  <!-- Social -->
+  <meta property="og:title" content="Calorie Deficit Calculator for Weight Loss Target">
+  <meta property="og:description" content="Plan daily calorie deficit for your target weight loss and timeline. Includes weekly summary and safe deficit guidance.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Keep your global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(34,197,94,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(59,130,246,.15), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    /* ---------- Header (responsive + safe-area) ---------- */
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10;
+      padding-top:calc(14px + env(safe-area-inset-top));
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-height:44px}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;line-height:1.1}
+    .brand-logo{border-radius:10px}
+
+    /* ---------- Hero (fluid type + spacing) ---------- */
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#16a34a,#2563eb);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+    }
+    .hero h1{
+      margin:0 0 6px 0;
+      font-size:clamp(1.35rem, 2.1vw + 1rem, 2.05rem);
+      letter-spacing:-.02em;
+      line-height:1.15;
+    }
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      white-space:nowrap;
+    }
+
+    /* ---------- Calculator Layout ---------- */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px;
+    }
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      min-width:0; /* IMPORTANT for grid overflow on small screens */
+    }
+    .panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem}
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+
+    /* Make inputs bulletproof on mobile */
+    .input,select{
+      width:100%;
+      padding:10px 12px;
+      border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      min-height:44px; /* touch target */
+    }
+    select{appearance:auto}
+    .input:focus,select:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    /* Inline units row: prevent squish */
+    .unit-row{display:flex;gap:10px;align-items:center}
+    .unit-row .input{flex:1 1 auto;min-width:0}
+    .unit-row .mini{flex:0 0 auto;white-space:nowrap}
+
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-block;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .btn:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:2px}
+
+    /* Sticky results only on larger screens */
+    .sticky{position:sticky;top:82px}
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(34,197,94,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{margin:4px 0 0;font-size:clamp(1.25rem, 1.6vw + 1rem, 1.65rem);font-weight:1000;letter-spacing:-.02em}
+    .mini{font-size:.86rem;color:#64748b}
+
+    .warnbox{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(245,158,11,.10), rgba(255,255,255,.92));
+    }
+
+    /* ---------- Table responsiveness ---------- */
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{width:100%;border-collapse:collapse;min-width:820px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem}
+    th{background:#f8fafc;font-weight:1000}
+    tr:last-child td{border-bottom:0}
+
+    .tag{display:inline-block;padding:4px 8px;border-radius:999px;font-weight:1000;font-size:.8rem;background:rgba(16,185,129,.10);color:#065f46}
+    .tag.warn{background:rgba(245,158,11,.12);color:#92400e}
+    .tag.bad{background:rgba(239,68,68,.10);color:#991b1b}
+
+    /* FAQ cards */
+    .card{
+      background:#fff;border:1px solid #e2e8f0;border-radius:14px;
+      box-shadow:0 10px 24px rgba(8,13,26,.05);padding:12px;
+      min-width:0;
+    }
+    details.card{padding:0}
+    details.card summary{
+      cursor:pointer;padding:12px;
+      list-style:none;
+      min-height:44px;
+      display:flex;align-items:center;
+    }
+    details.card summary::-webkit-details-marker{display:none}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Related grid: let it wrap nicely */
+    .related-grid{gap:12px}
+    .related-grid .card h4{margin:0 0 6px}
+    .related-grid .card p{margin:0;color:#475569}
+
+    /* ---------- Breakpoints ---------- */
+    @media (max-width: 1024px){
+      .wrap{padding:0 16px}
+      .hero{padding:22px 16px}
+      table{min-width:720px}
+      .sticky{top:74px}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static}
+      table{min-width:660px}
+    }
+
+    @media (max-width: 640px){
+      .hero{border-radius:16px;margin:14px 0 12px}
+      .chip{white-space:normal}
+      .grid-2{grid-template-columns:1fr}
+      .actions{gap:10px}
+      .btn{flex:1 1 auto}
+      .panel{padding:12px}
+      th,td{padding:10px}
+      table{min-width:600px}
+      pre{overflow:auto;-webkit-overflow-scrolling:touch}
+    }
+
+    @media (max-width: 380px){
+      .brand-text{font-size:1.05rem}
+      .hero{padding:18px 14px}
+      table{min-width:560px}
+    }
+
+    /* Reduce motion preference */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto}
+      .btn,.card{transition:none}
+      .btn:hover{transform:none}
+      .card:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 (use your real id) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema (WebPage + Breadcrumb + FAQ + HowTo) -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Calorie Deficit Calculator for Weight Loss Target",
+      "url":"https://calculatorsolution.com/calories-deficit-weight-loss-calculator.html",
+      "description":"Plan daily calorie deficit for a target weight loss and timeline. Includes weekly summary and safe ranges."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Calorie Deficit Calculator","item":"https://calculatorsolution.com/calories-deficit-weight-loss-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate calorie deficit for weight loss",
+      "step":[
+        {"@type":"HowToStep","name":"Set your goal","text":"Enter how many kg you want to lose."},
+        {"@type":"HowToStep","name":"Choose a timeline","text":"Pick target weeks or days to reach the goal."},
+        {"@type":"HowToStep","name":"Calculate daily deficit","text":"The calculator estimates daily calories to cut/burn to hit your goal."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"What is a safe rate of weight loss?","acceptedAnswer":{"@type":"Answer","text":"Many people aim around 0.5–1 kg per week, but individual needs vary."}},
+        {"@type":"Question","name":"Does metabolism adapt during dieting?","acceptedAnswer":{"@type":"Answer","text":"Yes. Over time, your energy expenditure may reduce as body weight drops and intake stays low."}},
+        {"@type":"Question","name":"Does exercise help?","acceptedAnswer":{"@type":"Answer","text":"Exercise increases calorie expenditure and can help preserve lean mass along with sufficient protein."}},
+        {"@type":"Question","name":"Why is protein important?","acceptedAnswer":{"@type":"Answer","text":"Adequate protein supports muscle retention during a calorie deficit."}},
+        {"@type":"Question","name":"Should I consult a professional?","acceptedAnswer":{"@type":"Answer","text":"If you have medical conditions or complex goals, consult a dietitian/doctor for personalization."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Calorie Deficit Calculator (Weight Loss Target)</h1>
+        <p>Plan your daily calorie deficit from a target weight-loss goal and timeline — with weekly summary & safety guidance.</p>
+        <div class="chips">
+          <span class="chip">🎯 Goal-based planning</span>
+          <span class="chip">📅 Weekly + monthly summary</span>
+          <span class="chip">🧮 Uses 1 kg ≈ 7700 kcal</span>
+        </div>
+      </div>
+
+      <section>
+        <!-- IMPORTANT: do NOT use calc- prefix if you keep calculators-complete.js on other pages -->
+        <div id="premium-calorie-deficit-calculator">
+          <div class="calc-shell">
+            <!-- Inputs -->
+            <div class="panel" aria-label="Calorie deficit inputs">
+              <div class="panel-title">
+                <h2>Enter your goal</h2>
+                <span class="pill">✅ Goal Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="cd_goal_kg">Target weight loss</label>
+                  <div class="unit-row">
+                    <input id="cd_goal_kg" class="input" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g., 5">
+                    <span class="mini">kg</span>
+                  </div>
+                  <p class="help">How many kilograms you want to lose.</p>
+                </div>
+
+                <div class="field">
+                  <label for="cd_rate">Desired rate</label>
+                  <select id="cd_rate">
+                    <option value="0.5" selected>0.5 kg/week (gentle)</option>
+                    <option value="0.75">0.75 kg/week (moderate)</option>
+                    <option value="1.0">1.0 kg/week (aggressive)</option>
+                  </select>
+                  <p class="help">Rate affects daily deficit. Faster ≈ bigger deficit.</p>
+                </div>
+
+                <div class="field">
+                  <label for="cd_days_override">Or set exact timeline (days)</label>
+                  <input id="cd_days_override" class="input" type="number" inputmode="numeric" min="0" step="1" placeholder="optional, e.g., 60">
+                  <p class="help">If filled, this overrides the rate-based timeline.</p>
+                </div>
+
+                <div class="field">
+                  <label for="cd_activity_boost">Daily activity burn (optional)</label>
+                  <div class="unit-row">
+                    <input id="cd_activity_boost" class="input" type="number" inputmode="numeric" min="0" step="10" placeholder="e.g., 250">
+                    <span class="mini">kcal/day</span>
+                  </div>
+                  <p class="help">If you plan to exercise, add estimated extra burn.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="cd_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="cd_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="cd_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="warnbox" style="margin-top:12px;">
+                <p class="mini" style="margin:0;">
+                  <strong>Safety note:</strong> Very large deficits can be hard to sustain. If your daily deficit is extremely high,
+                  consider a longer timeline or consult a professional.
+                </p>
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Calorie deficit results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Daily calorie deficit needed</p>
+                <p class="v" id="cd_out_daily">—</p>
+                <p class="mini" id="cd_out_daily_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Timeline</p>
+                <p class="v" id="cd_out_timeline">—</p>
+                <p class="mini" id="cd_out_timeline_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Total calories to lose</p>
+                <p class="v" id="cd_out_total">—</p>
+                <p class="mini">Based on 1 kg ≈ 7700 kcal.</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Plan summary</p>
+                <p class="mini" id="cd_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Weekly & Monthly Summary</h2>
+          <p class="mini" style="margin:0 0 10px;">What the same daily deficit looks like over time.</p>
+
+          <div class="table-wrap">
+            <table aria-label="Calorie deficit summary table">
+              <thead>
+                <tr>
+                  <th>Period</th>
+                  <th>Deficit</th>
+                  <th>Estimated weight loss</th>
+                  <th>Note</th>
+                </tr>
+              </thead>
+              <tbody id="cd_table">
+                <tr><td colspan="4" class="mini">Click <strong>Calculate</strong> to generate summary.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          A <strong>calorie deficit</strong> means you consume fewer calories than your body burns. This tool estimates a daily deficit
+          to reach your <strong>weight loss target</strong> within your chosen timeline. A common approximation is
+          <strong>1 kg fat ≈ 7700 kcal</strong>, so your total required deficit is goal_kg × 7700.
+        </p>
+        <p class="mini">
+          For related planning, also try: <a href="bmr-calculator.html">BMR Calculator</a>,
+          <a href="daily-calorie-needs-calculator.html">Daily Calorie Needs</a>, and
+          <a href="calories-burned-running-walking.html">Calories Burned (Running/Walking)</a>.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>total_deficit_kcal = goal_kg × 7700
+daily_deficit_kcal = total_deficit_kcal ÷ days</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Safe rate?</strong></summary><p>Many people aim around 0.5–1 kg/week, but it varies by body size, health, and adherence.</p></details>
+        <details class="card"><summary><strong>Metabolic adaptation?</strong></summary><p>Your energy needs may drop as you lose weight. Recalculate every few weeks.</p></details>
+        <details class="card"><summary><strong>Exercise effect?</strong></summary><p>Exercise increases burn and can help preserve muscle when paired with enough protein.</p></details>
+        <details class="card"><summary><strong>Diet composition?</strong></summary><p>Higher protein + strength training can improve body composition during fat loss.</p></details>
+        <details class="card"><summary><strong>Consult professional?</strong></summary><p>If you have medical conditions or need personalized macro targets, consult a professional.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="bmr-calculator.html"><h4>BMR Calculator</h4><p>Estimate basal metabolic rate.</p></a>
+          <a class="card" href="daily-calorie-needs-calculator.html"><h4>Daily Calorie Needs</h4><p>Estimate maintenance calories.</p></a>
+          <a class="card" href="calories-burned-running-walking.html"><h4>Calories Burned (Run/Walk)</h4><p>Estimate calories burned by activity.</p></a>
+          <a class="card" href="body-fat-percentage-calculator.html"><h4>Body Fat % Calculator</h4><p>Estimate body fat using formulas.</p></a>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id) => document.getElementById(id);
+      const fmt = (n, d=0) => (isFinite(n) ? new Intl.NumberFormat(undefined, {maximumFractionDigits:d}).format(n) : '—');
+
+      const goalEl = $('cd_goal_kg');
+      const rateEl = $('cd_rate');
+      const daysEl = $('cd_days_override');
+      const boostEl = $('cd_activity_boost');
+
+      const outDaily = $('cd_out_daily');
+      const outDailyNote = $('cd_out_daily_note');
+      const outTimeline = $('cd_out_timeline');
+      const outTimelineNote = $('cd_out_timeline_note');
+      const outTotal = $('cd_out_total');
+      const outSummary = $('cd_out_summary');
+      const tableBody = $('cd_table');
+
+      const KCAL_PER_KG = 7700;
+
+      function calc(){
+        const goalKg = parseFloat(goalEl.value);
+        const rateKgWeek = parseFloat(rateEl.value);
+        const daysOverride = parseFloat(daysEl.value);
+        const activityBoost = parseFloat(boostEl.value);
+
+        if (!isFinite(goalKg) || goalKg <= 0){
+          outDaily.textContent = '—';
+          outDailyNote.textContent = 'Enter a valid target weight loss.';
+          outTimeline.textContent = '—';
+          outTimelineNote.textContent = '—';
+          outTotal.textContent = '—';
+          outSummary.textContent = '—';
+          tableBody.innerHTML = '<tr><td colspan="4" class="mini">Click <strong>Calculate</strong> to generate summary.</td></tr>';
+          return;
+        }
+
+        const totalKcal = goalKg * KCAL_PER_KG;
+
+        // timeline
+        let days;
+        if (isFinite(daysOverride) && daysOverride > 0){
+          days = daysOverride;
+        } else {
+          // weeks = goal/rate
+          const weeks = goalKg / rateKgWeek;
+          days = weeks * 7;
+        }
+
+        const dailyDeficit = totalKcal / days;
+
+        // if user adds exercise burn, show split idea (diet vs activity)
+        const boost = (isFinite(activityBoost) && activityBoost > 0) ? activityBoost : 0;
+        const remainingForFood = Math.max(0, dailyDeficit - boost);
+
+        outTotal.textContent = fmt(totalKcal,0) + ' kcal';
+        outDaily.textContent = fmt(dailyDeficit,0) + ' kcal/day';
+
+        const weeksOut = days / 7;
+        outTimeline.textContent = fmt(days,0) + ' days';
+        outTimelineNote.textContent = '≈ ' + fmt(weeksOut,1) + ' weeks';
+
+        // safety indicator
+        let safetyText = 'This is a reasonable starting estimate.';
+        if (dailyDeficit >= 1200) safetyText = 'Very aggressive. Consider longer timeline or professional guidance.';
+        else if (dailyDeficit >= 900) safetyText = 'Aggressive. Ensure nutrition and recovery.';
+        else if (dailyDeficit >= 500) safetyText = 'Moderate. Often sustainable with good habits.';
+        else safetyText = 'Gentle. Slower, but easier to sustain.';
+
+        outDailyNote.textContent = safetyText;
+
+        const splitText = boost > 0
+          ? `If you burn ~${fmt(boost,0)} kcal/day via activity, remaining diet deficit ≈ ${fmt(remainingForFood,0)} kcal/day.`
+          : 'Tip: you can split deficit between diet and activity for better adherence.';
+
+        outSummary.textContent =
+          `Goal: ${fmt(goalKg,1)} kg • Total deficit: ${fmt(totalKcal,0)} kcal • Timeline: ${fmt(days,0)} days • Daily deficit: ${fmt(dailyDeficit,0)} kcal/day. ${splitText}`;
+
+        // weekly/month summary
+        const perWeek = dailyDeficit * 7;
+        const perMonth = dailyDeficit * 30.4;
+        const perYear = dailyDeficit * 365;
+
+        const wlWeek = perWeek / KCAL_PER_KG;
+        const wlMonth = perMonth / KCAL_PER_KG;
+
+        tableBody.innerHTML = `
+          <tr>
+            <td><strong>Per day</strong></td>
+            <td>${fmt(dailyDeficit,0)} kcal</td>
+            <td>${fmt(dailyDeficit/KCAL_PER_KG,3)} kg</td>
+            <td class="mini">Daily target deficit</td>
+          </tr>
+          <tr>
+            <td><strong>Per week</strong></td>
+            <td>${fmt(perWeek,0)} kcal</td>
+            <td>${fmt(wlWeek,2)} kg</td>
+            <td class="mini">Compare with “safe rate” guidance</td>
+          </tr>
+          <tr>
+            <td><strong>Per month</strong></td>
+            <td>${fmt(perMonth,0)} kcal</td>
+            <td>${fmt(wlMonth,2)} kg</td>
+            <td class="mini">Approx using 30.4 days/month</td>
+          </tr>
+          <tr>
+            <td><strong>Per year</strong></td>
+            <td>${fmt(perYear,0)} kcal</td>
+            <td>${fmt(perYear/KCAL_PER_KG,1)} kg</td>
+            <td class="mini">Not a recommended fixed long-term deficit</td>
+          </tr>
+        `;
+      }
+
+      $('cd_calc_btn').addEventListener('click', calc);
+
+      $('cd_example_btn').addEventListener('click', function(){
+        goalEl.value = '6';
+        rateEl.value = '0.75';
+        daysEl.value = '';
+        boostEl.value = '250';
+        calc();
+      });
+
+      $('cd_reset_btn').addEventListener('click', function(){
+        [goalEl, daysEl, boostEl].forEach(el=>el.value='');
+        rateEl.value = '0.5';
+        outDaily.textContent='—';
+        outDailyNote.textContent='—';
+        outTimeline.textContent='—';
+        outTimelineNote.textContent='—';
+        outTotal.textContent='—';
+        outSummary.textContent='Enter details to see a clean summary.';
+        tableBody.innerHTML = '<tr><td colspan="4" class="mini">Click <strong>Calculate</strong> to generate summary.</td></tr>';
+      });
+
+      [goalEl, rateEl, daysEl, boostEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if (goalEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if (goalEl.value) calc(); });
+      });
+    })();
+  </script>
+</body>
+</html>

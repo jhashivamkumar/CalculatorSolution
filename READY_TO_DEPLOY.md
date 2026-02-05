@@ -129,7 +129,7 @@ TOTAL: ~1 month to first earnings
 ```
 d:\sam\cal\
 │
-├── /dist/                    ← UPLOAD THIS FOLDER TO HOSTING
+├── /                    ← UPLOAD THIS FOLDER TO HOSTING
 │   ├── *.html               (80 HTML files - ready to deploy)
 │   ├── sitemap.xml          (81 URLs for Google)
 │   ├── robots.txt           (Crawler configuration)
@@ -240,7 +240,7 @@ d:\sam\cal\
 
 ### Files Generated ✅
 ```
-✅ 80 HTML files (.../dist/)
+✅ 80 HTML files (.../)
 ✅ 1 Sitemap (81 URLs)
 ✅ 1 robots.txt
 ✅ 1 CSS file (714 lines)

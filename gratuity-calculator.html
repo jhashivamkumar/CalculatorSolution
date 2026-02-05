@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Gratuity Calculator (India) – Amount, Eligibility & Tax | CalculatorSolution</title>
+  <meta name="description" content="Free Gratuity Calculator (India): calculate gratuity using last drawn basic+DA, service years/months, eligibility (5 years rule) and maximum cap. Includes step-by-step breakdown.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/gratuity-calculator.html">
+
+  <meta property="og:title" content="Gratuity Calculator (India)">
+  <meta property="og:description" content="Calculate gratuity amount from last drawn salary and service period. Check eligibility and gratuity cap with clear breakdown.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- ✅ Responsive + UI/UX upgrades (NO logic changes) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto;display:block}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    /* Header */
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-height:44px}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;letter-spacing:-.01em}
+    .brand-logo{border-radius:10px}
+
+    /* Hero */
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+    }
+    .hero h1{margin:0 0 6px 0;font-size:clamp(1.45rem, 2.4vw, 1.95rem);letter-spacing:-.02em}
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      min-height:34px;
+      backdrop-filter: blur(6px);
+    }
+
+    /* Layout */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      min-width:0; /* prevents overflow in grid */
+    }
+    .panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .panel-title h2{margin:0;font-size:1.05rem;letter-spacing:-.01em}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem
+    }
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;min-width:0}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      min-height:44px; /* mobile tap target */
+      width:100%;
+    }
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    .actions{
+      display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px; /* tap target */
+      min-width:160px;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn:focus-visible{
+      outline:3px solid rgba(59,130,246,.35);
+      outline-offset:2px;
+    }
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+
+    /* Results sticky: safe on desktop, non-sticky on smaller screens via media queries */
+    .sticky{position:sticky;top:82px}
+
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+      min-width:0;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{
+      margin:4px 0 0;
+      font-size:clamp(1.2rem, 2.1vw, 1.6rem);
+      font-weight:1000;letter-spacing:-.02em;
+      overflow-wrap:anywhere;
+    }
+    .mini{font-size:.86rem;color:#64748b;overflow-wrap:anywhere}
+
+    .bar{
+      height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px
+    }
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* Table */
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{width:100%;border-collapse:collapse;min-width:860px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem}
+    th{background:#f8fafc;font-weight:1000}
+    tr:last-child td{border-bottom:0}
+
+    .note{
+      border:1px dashed #cbd5e1;border-radius:14px;padding:12px;
+      background:rgba(255,255,255,.7);
+      margin-top:10px
+    }
+
+    /* Cards (FAQ + related) */
+    .card{
+      background:#fff;border:1px solid #e2e8f0;border-radius:14px;
+      box-shadow:0 10px 24px rgba(8,13,26,.05);
+      padding:12px;
+      min-width:0;
+    }
+    details.card{padding:0;overflow:hidden}
+    details.card summary{
+      cursor:pointer;
+      padding:12px;
+      list-style:none;
+      min-height:44px; /* tap target */
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    details.card summary::-webkit-details-marker{display:none}
+    details.card summary:after{
+      content:"▾";
+      font-weight:900;
+      color:#64748b;
+      transition:transform .2s ease;
+    }
+    details[open].card summary:after{transform:rotate(180deg)}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* General typography spacing */
+    article > section{margin-top:18px}
+    pre{
+      white-space:pre-wrap;
+      word-break:break-word;
+      background:rgba(255,255,255,.75);
+      border:1px solid #e2e8f0;
+      border-radius:14px;
+      padding:12px;
+      overflow:auto;
+    }
+
+    /* Related grid: make sure it is responsive even if global CSS missing */
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:12px;
+      margin-top:10px;
+    }
+    .cards-grid a.card{display:block;text-decoration:none;color:inherit}
+    .cards-grid h4{margin:0 0 6px;font-size:1rem}
+    .cards-grid p{margin:0;color:#475569}
+
+    /* Footer links wrap nicely */
+    .site-footer a{color:inherit}
+    .site-footer a:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:2px;border-radius:6px}
+
+    /* ✅ Responsive breakpoints */
+    @media (max-width: 1024px){
+      .wrap{padding:0 16px}
+      table{min-width:760px}
+      .cards-grid{grid-template-columns:repeat(2, minmax(0,1fr))}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      table{min-width:680px}
+      .sticky{position:static;top:auto}
+    }
+
+    @media (max-width: 640px){
+      .hero{padding:20px 14px;border-radius:16px}
+      .grid-2{grid-template-columns:1fr}
+      .actions{flex-direction:column;align-items:stretch}
+      .btn{width:100%;min-width:0}
+      table{min-width:560px}
+      .cards-grid{grid-template-columns:1fr}
+      .chip{font-size:.85rem}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .btn, .card, details.card summary:after{transition:none !important}
+      .btn:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Gratuity Calculator (India)",
+      "url":"https://calculatorsolution.com/gratuity-calculator.html",
+      "description":"Calculate gratuity amount using last drawn basic+DA and service period, and check eligibility and cap."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Gratuity Calculator","item":"https://calculatorsolution.com/gratuity-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate gratuity",
+      "step":[
+        {"@type":"HowToStep","name":"Enter last drawn salary (Basic + DA)","text":"Gratuity is usually computed on Basic + Dearness Allowance for covered employees."},
+        {"@type":"HowToStep","name":"Enter years and months of service","text":"Service is converted to eligible years (often rounding rules apply)."},
+        {"@type":"HowToStep","name":"Apply formula and cap","text":"Gratuity = (Salary × 15/26) × eligible years, then apply maximum cap if needed."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"When is gratuity payable?","acceptedAnswer":{"@type":"Answer","text":"Typically when employment ends after completing the qualifying service period (often 5 years), subject to rules and exceptions."}},
+        {"@type":"Question","name":"What salary components are used?","acceptedAnswer":{"@type":"Answer","text":"For many statutory calculations, last drawn Basic + DA is used. Company policy may differ."}},
+        {"@type":"Question","name":"Is there a maximum cap?","acceptedAnswer":{"@type":"Answer","text":"Some jurisdictions set a maximum gratuity limit. Enter the cap to see capped payout."}},
+        {"@type":"Question","name":"How are partial years treated?","acceptedAnswer":{"@type":"Answer","text":"Rules may round service months to a full year after a threshold (often 6 months). This calculator supports both modes."}},
+        {"@type":"Question","name":"Is gratuity taxable?","acceptedAnswer":{"@type":"Answer","text":"Taxability depends on employee type and exemptions. Please confirm with current tax rules or a professional."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Gratuity Calculator</h1>
+        <p>Estimate gratuity payout from last drawn salary and service period — with eligibility check and cap support.</p>
+        <div class="chips">
+          <span class="chip">🧾 Basic+DA support</span>
+          <span class="chip">✅ Eligibility check</span>
+          <span class="chip">🧮 Cap & breakdown</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-gratuity">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Gratuity inputs">
+              <div class="panel-title">
+                <h2>Employee details</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="gr_salary">Last drawn monthly salary (Basic + DA)</label>
+                  <input id="gr_salary" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="e.g., 35000">
+                  <p class="help">Most statutory gratuity uses last drawn <strong>Basic + DA</strong>.</p>
+                </div>
+
+                <div class="field">
+                  <label for="gr_years">Completed years of service</label>
+                  <input id="gr_years" class="input" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 7">
+                  <p class="help">Enter full completed years (e.g., 7).</p>
+                </div>
+
+                <div class="field">
+                  <label for="gr_months">Additional months (0–11)</label>
+                  <input id="gr_months" class="input" type="number" inputmode="numeric" min="0" max="11" step="1" placeholder="e.g., 8">
+                  <p class="help">Enter remaining months after years (e.g., 8).</p>
+                </div>
+
+                <div class="field">
+                  <label for="gr_rounding">Service rounding rule</label>
+                  <select id="gr_rounding" class="input">
+                    <option value="six" selected>Count 6+ months as 1 year</option>
+                    <option value="exact">Exact years (years + months/12)</option>
+                    <option value="ignore">Ignore months (years only)</option>
+                  </select>
+                  <p class="help">Different employers apply different rounding rules.</p>
+                </div>
+
+                <div class="field">
+                  <label for="gr_eligible">Eligibility check</label>
+                  <select id="gr_eligible" class="input">
+                    <option value="auto" selected>Auto (5-year rule)</option>
+                    <option value="yes">Assume eligible</option>
+                    <option value="no">Assume not eligible</option>
+                  </select>
+                  <p class="help">Common rule is <strong>5 years</strong> (exceptions may apply).</p>
+                </div>
+
+                <div class="field">
+                  <label for="gr_cap">Maximum gratuity cap (optional)</label>
+                  <input id="gr_cap" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 2000000">
+                  <p class="help">Leave blank to see uncapped gratuity.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="gr_calc_btn" type="button">Calculate Gratuity</button>
+                <button class="btn btn-dark" id="gr_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="gr_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note mini">
+                Formula used (commonly cited): <strong>Gratuity = (Salary × 15 / 26) × Eligible Years</strong> (then apply cap if applicable).
+                Use as an estimate; employer policy and law interpretations can vary.
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Gratuity results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Estimated gratuity</p>
+                <p class="v" id="gr_out_gratuity">—</p>
+                <p class="mini" id="gr_out_gratuity_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Eligible years used</p>
+                <p class="v" id="gr_out_years">—</p>
+                <p class="mini" id="gr_out_years_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Eligibility</p>
+                <p class="v" id="gr_out_elig">—</p>
+                <div class="bar"><span id="gr_bar"></span></div>
+                <p class="mini" id="gr_out_elig_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Calculation breakdown</p>
+                <p class="mini" id="gr_out_breakdown">Enter details to see a clear breakdown.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Breakdown Table</h2>
+          <p class="mini" style="margin:0 0 10px;">A quick breakdown of inputs and the computed components.</p>
+
+          <div class="table-wrap">
+            <table aria-label="Gratuity breakdown table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody id="gr_table">
+                <tr><td colspan="2" class="mini">Click <strong>Calculate Gratuity</strong> to generate the breakdown.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          This <strong>Gratuity Calculator</strong> estimates the gratuity amount based on your <strong>last drawn monthly salary</strong>
+          (commonly <strong>Basic + DA</strong>) and your <strong>years of service</strong>. In many statutory models, gratuity is computed
+          as <strong>15 days’ salary for each completed year</strong>, using a 26-day working month convention.
+        </p>
+        <p class="mini">
+          Important: Eligibility rules (like the 5-year requirement), rounding of partial years, salary definitions, and maximum caps can vary
+          based on jurisdiction and employer policy. Use this tool for estimation and confirm with HR/payroll for final payout.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>Gratuity = (Last Drawn Salary × 15/26) × Eligible Years
+Eligible Years may use rounding rules (e.g., 6+ months treated as 1 year) and may be capped.</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>When payable?</strong></summary><p>Commonly payable on termination/resignation/retirement after qualifying service (often 5 years), subject to rules and exceptions.</p></details>
+        <details class="card"><summary><strong>Cap?</strong></summary><p>Some jurisdictions specify a maximum gratuity limit. Enter your cap to see capped payout.</p></details>
+        <details class="card"><summary><strong>Taxable?</strong></summary><p>Tax treatment varies by employee type and exemptions. Please confirm with current tax rules.</p></details>
+        <details class="card"><summary><strong>Include allowances?</strong></summary><p>Many statutory calculations use Basic + DA. Company policies may include/exclude other components.</p></details>
+        <details class="card"><summary><strong>Partial service?</strong></summary><p>Often 6+ months may be rounded to a full year, but rules can vary. Use the rounding options above.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="salary-calculator.html"><h4>Salary Calculator</h4><p>Estimate monthly or annual salary breakdown.</p></a>
+          <a class="card" href="pf-calculator.html"><h4>PF Calculator</h4><p>Calculate provident fund contributions.</p></a>
+          <a class="card" href="income-tax-calculator-india.html"><h4>Income Tax Calculator (India)</h4><p>Estimate taxes under common regimes.</p></a>
+          <a class="card" href="simple-interest-calculator.html"><h4>Simple Interest Calculator</h4><p>Calculate interest for basic scenarios.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+      const fmt0 = (n)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:0}).format(n) : '—');
+      const money = (n)=> '₹ ' + fmt0(n);
+
+      const salaryEl = $('gr_salary');
+      const yearsEl  = $('gr_years');
+      const monthsEl = $('gr_months');
+      const roundingEl = $('gr_rounding');
+      const eligEl = $('gr_eligible');
+      const capEl = $('gr_cap');
+
+      const outG = $('gr_out_gratuity');
+      const outGNote = $('gr_out_gratuity_note');
+      const outY = $('gr_out_years');
+      const outYNote = $('gr_out_years_note');
+      const outE = $('gr_out_elig');
+      const outENote = $('gr_out_elig_note');
+      const outB = $('gr_out_breakdown');
+      const bar = $('gr_bar');
+      const tbody = $('gr_table');
+
+      function clamp(x, a, b){
+        return Math.max(a, Math.min(b, x));
+      }
+
+      function computeEligibleYears(y, m, mode){
+        y = Math.max(0, y);
+        m = clamp(m, 0, 11);
+
+        if(mode === 'ignore') return y;
+        if(mode === 'exact') return y + (m/12);
+
+        // six+ months => +1 year
+        return y + (m >= 6 ? 1 : 0);
+      }
+
+      function isEligibleBy5YearRule(eligibleYears){
+        // Simple assumption: >= 5 years is eligible (exceptions exist in real life).
+        return eligibleYears >= 5;
+      }
+
+      function calc(){
+        const salary = parseFloat(salaryEl.value);
+        const years = parseInt(yearsEl.value || '0', 10);
+        const months = parseInt(monthsEl.value || '0', 10);
+        const rounding = roundingEl.value;
+        const eligMode = eligEl.value;
+        const cap = parseFloat(capEl.value);
+
+        if(!isFinite(salary) || salary <= 0){
+          outG.textContent = '—';
+          outGNote.textContent = 'Enter valid last drawn Basic + DA.';
+          tbody.innerHTML = '<tr><td colspan="2" class="mini">Enter inputs and click <strong>Calculate Gratuity</strong>.</td></tr>';
+          return;
+        }
+
+        if(!isFinite(years) || years < 0){
+          outG.textContent = '—';
+          outGNote.textContent = 'Years of service must be 0 or more.';
+          tbody.innerHTML = '<tr><td colspan="2" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+
+        if(!isFinite(months) || months < 0 || months > 11){
+          outG.textContent = '—';
+          outGNote.textContent = 'Months must be between 0 and 11.';
+          tbody.innerHTML = '<tr><td colspan="2" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+
+        const eligibleYears = computeEligibleYears(years, months, rounding);
+
+        // Eligibility decision
+        let eligible = true;
+        if(eligMode === 'no') eligible = false;
+        else if(eligMode === 'yes') eligible = true;
+        else eligible = isEligibleBy5YearRule(eligibleYears);
+
+        // Core formula: (salary * 15/26) * eligibleYears
+        const factor = 15/26;
+        const baseGratuity = salary * factor * eligibleYears;
+
+        // Apply cap if provided
+        const hasCap = isFinite(cap) && cap > 0;
+        const cappedGratuity = hasCap ? Math.min(baseGratuity, cap) : baseGratuity;
+
+        // If not eligible, gratuity = 0 (for estimation)
+        const finalGratuity = eligible ? cappedGratuity : 0;
+
+        // Outputs
+        outG.textContent = money(finalGratuity);
+        outGNote.textContent = eligible
+          ? (hasCap && baseGratuity > cap ? `Capped at ₹ ${fmt0(cap)}.` : 'Calculated using Salary × (15/26) × Eligible Years.')
+          : 'Not eligible by selected rule (estimate shows ₹ 0).';
+
+        outY.textContent = (Math.round(eligibleYears*100)/100).toString();
+        outYNote.textContent = rounding === 'six'
+          ? 'Rounding: 6+ months counted as 1 year.'
+          : (rounding === 'exact' ? 'Exact years: years + months/12.' : 'Months ignored (years only).');
+
+        outE.textContent = eligible ? 'Eligible' : 'Not eligible';
+        const pct = clamp((eligibleYears/5)*100, 0, 100);
+        bar.style.width = pct.toFixed(1) + '%';
+        bar.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+        outENote.textContent = eligMode === 'auto'
+          ? `Auto check: ${eligibleYears.toFixed(2)} years vs 5-year rule (exceptions may apply).`
+          : 'Eligibility set manually (assumption).';
+
+        const perYearAmount = salary * factor;
+        outB.textContent =
+          `Per-year gratuity ≈ ₹${fmt0(perYearAmount)} (Salary × 15/26). ` +
+          `Eligible years used: ${eligibleYears.toFixed(2)}. ` +
+          (hasCap ? `Cap: ₹${fmt0(cap)}. ` : '') +
+          (eligible ? `Estimated gratuity: ₹${fmt0(finalGratuity)}.` : `Estimated gratuity: ₹0.`);
+
+        // Table
+        const rows = [];
+        rows.push(`<tr><td>Last drawn salary (Basic+DA)</td><td>${money(salary)}</td></tr>`);
+        rows.push(`<tr><td>Service entered</td><td>${years} years, ${months} months</td></tr>`);
+        rows.push(`<tr><td>Rounding mode</td><td>${rounding === 'six' ? '6+ months => 1 year' : (rounding === 'exact' ? 'Exact (years + months/12)' : 'Ignore months')}</td></tr>`);
+        rows.push(`<tr><td>Eligible years used</td><td>${eligibleYears.toFixed(2)}</td></tr>`);
+        rows.push(`<tr><td>Per-year gratuity</td><td>${money(perYearAmount)}</td></tr>`);
+        rows.push(`<tr><td>Computed gratuity (before cap)</td><td>${money(baseGratuity)}</td></tr>`);
+        rows.push(`<tr><td>Cap applied?</td><td>${hasCap ? `Yes (₹ ${fmt0(cap)})` : 'No'}</td></tr>`);
+        rows.push(`<tr><td>Eligibility</td><td>${eligible ? 'Eligible' : 'Not eligible (estimate assumes ₹0)'}</td></tr>`);
+        rows.push(`<tr><td><strong>Final gratuity (estimate)</strong></td><td><strong>${money(finalGratuity)}</strong></td></tr>`);
+        tbody.innerHTML = rows.join('');
+      }
+
+      $('gr_calc_btn').addEventListener('click', calc);
+
+      $('gr_example_btn').addEventListener('click', ()=>{
+        salaryEl.value = '35000';
+        yearsEl.value = '7';
+        monthsEl.value = '8';
+        roundingEl.value = 'six';
+        eligEl.value = 'auto';
+        capEl.value = '2000000';
+        calc();
+      });
+
+      $('gr_reset_btn').addEventListener('click', ()=>{
+        [salaryEl, yearsEl, monthsEl, capEl].forEach(el=>el.value='');
+        roundingEl.value='six';
+        eligEl.value='auto';
+        outG.textContent='—';
+        outGNote.textContent='—';
+        outY.textContent='—';
+        outYNote.textContent='—';
+        outE.textContent='—';
+        outENote.textContent='—';
+        outB.textContent='Enter details to see a clear breakdown.';
+        bar.style.width='0%';
+        tbody.innerHTML = '<tr><td colspan="2" class="mini">Click <strong>Calculate Gratuity</strong> to generate the breakdown.</td></tr>';
+      });
+
+      // Live calculate when user edits (optional)
+      [salaryEl, yearsEl, monthsEl, roundingEl, eligEl, capEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(salaryEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(salaryEl.value) calc(); });
+      });
+    })();
+  </script>
+</body>
+</html>

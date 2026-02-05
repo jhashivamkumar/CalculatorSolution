@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>
+      Debt Payoff Calculator (Snowball & Avalanche) | CalculatorSolution
+    </title>
+    <meta
+      name="description"
+      content="Debt Payoff Calculator — plan payoff date, total interest, and savings using Snowball or Avalanche with extra payments."
+    />
+
+    <link
+      rel="preload"
+      href="/assets/style.css"
+      as="style"
+      onload="this.rel='stylesheet'"
+    />
+    <noscript><link rel="stylesheet" href="/assets/style.css" /></noscript>
+
+    <link rel="preload" href="/assets/og-image.svg" as="image" />
+    <meta
+      property="og:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+    <meta
+      name="twitter:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+
+    <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/logo.png" />
+    <link rel="manifest" href="/assets/site.webmanifest" />
+
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://calculatorsolution.com/debt-payoff-calculator.html"
+    />
+
+    <style>
+      /* =========================================================
+         RESPONSIVE + UI/UX POLISH (NO LOGIC CHANGES)
+         ========================================================= */
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial;
+        background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+        color: #0f172a;
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+      * {
+        box-sizing: border-box;
+      }
+
+      :root {
+        --container: 1100px;
+        --padX: 18px;
+        --radius-lg: 18px;
+        --radius-md: 16px;
+        --radius-sm: 12px;
+        --shadow: 0 12px 28px rgba(2, 6, 23, 0.08);
+        --border: 1px solid #e2e8f0;
+      }
+
+      .wrap {
+        max-width: var(--container);
+        margin: 0 auto;
+        padding: 0 var(--padX);
+      }
+
+      /* Header */
+      .site-header {
+        padding: 14px 0;
+        border-bottom: var(--border);
+        background: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(6px);
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        min-height: 44px;
+      }
+      .brand img {
+        flex: 0 0 auto;
+      }
+      .brand-text {
+        font-weight: 900;
+        color: #2563eb;
+        font-size: 1.15rem;
+        letter-spacing: 0.2px;
+        line-height: 1.2;
+      }
+
+      /* Hero */
+      .hero {
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: #fff;
+        border-radius: var(--radius-lg);
+        padding: 26px;
+        margin: 16px 0;
+        box-shadow: 0 18px 40px rgba(2, 6, 23, 0.12);
+      }
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(1.55rem, 2.6vw, 2.05rem);
+        font-weight: 1000;
+        line-height: 1.2;
+      }
+      .hero p {
+        margin: 8px 0 0;
+        opacity: 0.95;
+        font-size: clamp(0.98rem, 1.2vw, 1.05rem);
+      }
+
+      /* Panel + layout */
+      .panel {
+        background: #fff;
+        border: var(--border);
+        border-radius: var(--radius-md);
+        padding: 18px;
+        box-shadow: var(--shadow);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 18px;
+        align-items: start;
+      }
+
+      /* Make the layout feel “2-column” earlier but still safe */
+      @media (max-width: 980px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Fields */
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+      label {
+        font-weight: 900;
+      }
+
+      .input,
+      .select {
+        padding: 10px 12px;
+        border: 1px solid #cbd5f5;
+        border-radius: 12px;
+        font-size: 1rem;
+        min-height: 44px; /* better touch */
+        outline: none;
+        background: #fff;
+      }
+      .input:focus,
+      .select:focus {
+        border-color: #818cf8;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
+      }
+
+      .row2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      @media (max-width: 640px) {
+        .row2 {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Buttons */
+      .btn {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 0;
+        background: linear-gradient(90deg, #2563eb, #6366f1);
+        color: #fff;
+        font-weight: 900;
+        cursor: pointer;
+        min-height: 48px;
+        transition: transform 0.12s ease, box-shadow 0.12s ease,
+          opacity 0.12s ease;
+        box-shadow: 0 10px 22px rgba(37, 99, 235, 0.18);
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+      .btn:active {
+        transform: translateY(0);
+        opacity: 0.95;
+      }
+      .btn.secondary {
+        background: #0f172a;
+        margin-top: 10px;
+        box-shadow: 0 10px 22px rgba(2, 6, 23, 0.15);
+      }
+
+      /* Results */
+      .result {
+        background: linear-gradient(180deg, #eef2ff, #fff);
+        border: 1px solid #c7d2fe;
+        border-radius: 16px;
+        padding: 14px;
+        overflow: hidden;
+      }
+      .kpi {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .kbox {
+        background: #fff;
+        border: var(--border);
+        border-radius: 12px;
+        padding: 10px;
+        min-height: 76px;
+      }
+      .big {
+        font-size: 1.35rem;
+        font-weight: 1000;
+        line-height: 1.2;
+        word-break: break-word;
+      }
+      .muted {
+        color: #475569;
+        font-size: 0.92rem;
+      }
+
+      @media (max-width: 480px) {
+        .kpi {
+          grid-template-columns: 1fr;
+        }
+        .big {
+          font-size: 1.2rem;
+        }
+      }
+
+      /* Table: responsive without changing render logic */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+        font-size: 0.92rem;
+      }
+      th,
+      td {
+        border-bottom: 1px solid #e2e8f0;
+        padding: 10px 8px;
+        text-align: left;
+        vertical-align: top;
+        white-space: nowrap;
+      }
+      th {
+        font-weight: 900;
+        color: #0f172a;
+        background: #f8fafc;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+      }
+
+      /* Allow table to scroll on small screens */
+      #scheduleWrap .panel {
+        overflow: hidden;
+      }
+      #scheduleWrap table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+      }
+      #scheduleWrap thead,
+      #scheduleWrap tbody,
+      #scheduleWrap tr {
+        width: 100%;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 999px;
+        background: #e0e7ff;
+        border: 1px solid #c7d2fe;
+        font-weight: 800;
+        font-size: 0.85rem;
+      }
+      .note {
+        margin-top: 10px;
+        color: #475569;
+        font-size: 0.92rem;
+      }
+
+      details.card {
+        margin-top: 10px;
+        border: var(--border);
+        border-radius: 12px;
+        background: #fff;
+        padding: 10px;
+      }
+      details.card summary {
+        cursor: pointer;
+        padding: 6px 4px;
+        list-style: none;
+      }
+      details.card summary::-webkit-details-marker {
+        display: none;
+      }
+      details.card summary strong {
+        display: inline-block;
+      }
+      details.card[open] {
+        box-shadow: 0 10px 24px rgba(2, 6, 23, 0.06);
+      }
+
+      /* Related cards */
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+      }
+      .cardLink {
+        display: block;
+        background: #fff;
+        border: var(--border);
+        border-radius: 14px;
+        padding: 14px;
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.12s ease, box-shadow 0.12s ease;
+        min-height: 110px;
+      }
+      .cardLink h4 {
+        margin: 0 0 6px;
+        line-height: 1.25;
+      }
+      .cardLink p {
+        margin: 0;
+        color: #475569;
+      }
+      .cardLink:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 30px rgba(2, 6, 23, 0.08);
+      }
+
+      /* Footer */
+      .site-footer {
+        margin-top: 40px;
+        padding: 20px 0;
+        border-top: var(--border);
+        background: #fff;
+        color: #64748b;
+      }
+      .site-footer a {
+        color: inherit;
+      }
+
+      /* Small device spacing improvements */
+      @media (max-width: 520px) {
+        :root {
+          --padX: 14px;
+        }
+        .hero {
+          padding: 18px;
+          border-radius: 16px;
+        }
+        .panel {
+          padding: 14px;
+          border-radius: 14px;
+        }
+      }
+
+      /* Large screens: a bit more breathing room */
+      @media (min-width: 1280px) {
+        .hero {
+          padding: 30px;
+        }
+      }
+
+      /* Accessibility preference */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+          scroll-behavior: auto !important;
+        }
+      }
+    </style>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Snowball vs avalanche — what’s the difference?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Snowball pays the smallest balance first for motivation. Avalanche pays the highest interest rate first to reduce total interest faster."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does paying extra each month help?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Extra payments reduce the balance faster, which lowers future interest and shortens the payoff time."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Should I keep an emergency fund before paying off debt?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Usually yes. A small buffer helps avoid new debt when unexpected expenses happen."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do lenders charge prepayment penalties?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Some loans do. Check your lender terms before making large early payments."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is this calculator an exact lender statement?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It’s an estimate using standard interest math. Real statements can differ due to billing cycles, fees, and rounding."
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">
+          <img
+            src="/assets/logo.png"
+            alt="CalculatorSolution logo"
+            width="36"
+            height="36"
+          />
+          <span class="brand-text">CalculatorSolution</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <article>
+        <div class="hero">
+          <h1>Debt Payoff Calculator</h1>
+          <p>
+            Plan payoff date, interest cost, and savings using
+            <strong>Snowball</strong> or <strong>Avalanche</strong> + extra
+            payments.
+          </p>
+        </div>
+
+        <section class="panel">
+          <div class="grid">
+            <!-- Inputs -->
+            <div>
+              <div class="row2">
+                <div class="field">
+                  <label>Total Debt Balance</label>
+                  <input
+                    id="balance"
+                    class="input"
+                    type="number"
+                    step="0.01"
+                    placeholder="e.g. 250000"
+                  />
+                  <div class="muted">
+                    Total outstanding amount (all debts combined).
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Average Interest Rate (APR %)</label>
+                  <input
+                    id="apr"
+                    class="input"
+                    type="number"
+                    step="0.01"
+                    placeholder="e.g. 18"
+                  />
+                  <div class="muted">Use weighted average if you know it.</div>
+                </div>
+              </div>
+
+              <div class="row2">
+                <div class="field">
+                  <label>Monthly Payment</label>
+                  <input
+                    id="payment"
+                    class="input"
+                    type="number"
+                    step="0.01"
+                    placeholder="e.g. 12000"
+                  />
+                  <div class="muted">Your regular monthly payment amount.</div>
+                </div>
+                <div class="field">
+                  <label>Extra Monthly Payment (optional)</label>
+                  <input
+                    id="extra"
+                    class="input"
+                    type="number"
+                    step="0.01"
+                    placeholder="e.g. 2000"
+                  />
+                  <div class="muted">
+                    Adds to monthly payment to speed payoff.
+                  </div>
+                </div>
+              </div>
+
+              <div class="row2">
+                <div class="field">
+                  <label>Strategy</label>
+                  <select id="strategy" class="select">
+                    <option value="avalanche">
+                      Avalanche (save most interest)
+                    </option>
+                    <option value="snowball">
+                      Snowball (small wins first)
+                    </option>
+                  </select>
+                  <div class="muted">
+                    For a single combined debt, both give same math — strategy
+                    matters most for multiple debts.
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Start Month</label>
+                  <input id="startDate" class="input" type="month" />
+                  <div class="muted">Used only for payoff date display.</div>
+                </div>
+              </div>
+
+              <button class="btn" onclick="calculate()">Calculate Payoff</button>
+              <button class="btn secondary" onclick="fillExample()">
+                Try Example
+              </button>
+
+              <p class="note">
+                ⚠️ Educational estimate only. Real lender statements may include
+                fees, compounding rules, and billing-cycle differences.
+              </p>
+            </div>
+
+            <!-- Results -->
+            <div>
+              <div class="result" id="resultBox">
+                <div class="big">Enter values to calculate</div>
+                <div class="muted">
+                  You’ll see payoff time, interest, and savings.
+                </div>
+              </div>
+
+              <div id="scheduleWrap"></div>
+            </div>
+          </div>
+        </section>
+
+        <section style="margin-top: 20px">
+          <h2>How Debt Payoff Works</h2>
+          <p>
+            Debt payoff depends on three main things: your current balance, the
+            interest rate, and how much you pay each month. When you pay more
+            than the interest due, the remaining amount reduces your principal.
+            Over time, the interest portion shrinks.
+          </p>
+          <p>
+            <strong>Avalanche</strong> is usually the fastest way to reduce
+            total interest (highest rate first). <strong>Snowball</strong> can
+            feel easier to stick with because you clear smaller balances
+            earlier. This calculator models the payoff timeline and compares
+            interest costs with and without extra payments.
+          </p>
+        </section>
+
+        <section>
+          <h3>Formula</h3>
+          <pre>
+Monthly interest = balance * (APR/100) / 12
+New balance = balance + interest - payment</pre
+          >
+        </section>
+
+        <section>
+          <h3>FAQs</h3>
+          <details class="card">
+            <summary><strong>Snowball vs avalanche?</strong></summary>
+            <p>
+              Snowball focuses on smallest balance first. Avalanche targets
+              highest interest first and usually saves more interest.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>What if my payment is too low?</strong></summary>
+            <p>
+              If your monthly payment is less than monthly interest, your
+              balance can grow (negative amortization).
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Does extra payment always help?</strong></summary>
+            <p>
+              Yes — extra payment reduces principal faster and lowers future
+              interest.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Should I consolidate?</strong></summary>
+            <p>
+              Consolidation can simplify payments, but compare interest rates
+              and fees carefully.
+            </p>
+          </details>
+        </section>
+
+        <section>
+          <h3>Related Calculators</h3>
+          <div class="cards-grid">
+            <a class="cardLink" href="credit-card-interest-calculator.html"
+              ><h4>Credit Card Interest Calculator</h4>
+              <p>Estimate interest charged on revolving balances.</p></a
+            >
+            <a class="cardLink" href="compound-interest-calculator.html"
+              ><h4>Compound Interest Calculator</h4>
+              <p>See how investments grow over time.</p></a
+            >
+            <a class="cardLink" href="loan-emi-calculator.html"
+              ><h4>Loan EMI Calculator</h4>
+              <p>Calculate monthly EMI and total interest paid.</p></a
+            >
+            <a class="cardLink" href="budget-planner-calculator.html"
+              ><h4>Budget Planner</h4>
+              <p>Plan monthly income vs expenses and savings.</p></a
+            >
+          </div>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>&copy; CalculatorSolution</p>
+        <p style="margin-top: 8px; font-size: 0.9rem">
+          <a href="/sitemap.xml">Sitemap</a> | <a href="/">Home</a> |
+          <a href="/privacy-policy.html">Privacy Policy</a> |
+          <a href="/terms-of-service.html">Terms</a> |
+          <a href="/contact.html">Contact</a> |
+          <a href="/about.html">About</a>
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      const $ = (id) => document.getElementById(id);
+
+      function money(n) {
+        if (!isFinite(n)) return "—";
+        return n.toLocaleString(undefined, { maximumFractionDigits: 2 });
+      }
+      function monthAdd(yyyymm, addMonths) {
+        const [y, m] = yyyymm.split("-").map(Number);
+        const d = new Date(y, m - 1, 1);
+        d.setMonth(d.getMonth() + addMonths);
+        const yy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        return `${yy}-${mm}`;
+      }
+      function fmtMonth(yyyymm) {
+        const [y, m] = yyyymm.split("-").map(Number);
+        const d = new Date(y, m - 1, 1);
+        return d.toLocaleString(undefined, { month: "long", year: "numeric" });
+      }
+
+      function calculate() {
+        const balance = +$("balance").value || 0;
+        const apr = +$("apr").value || 0;
+        const payment = +$("payment").value || 0;
+        const extra = +$("extra").value || 0;
+        const startDate =
+          $("startDate").value || new Date().toISOString().slice(0, 7);
+
+        if (balance <= 0 || apr < 0 || payment <= 0) {
+          $(
+            "resultBox"
+          ).innerHTML = `<div class="big">Please enter valid values</div><div class="muted">Balance > 0 and Payment > 0 required.</div>`;
+          $("scheduleWrap").innerHTML = "";
+          return;
+        }
+
+        const r = apr / 100 / 12;
+        const monthlyPay = payment + extra;
+
+        // Case A: with extra
+        const simA = simulate(balance, r, monthlyPay, startDate);
+
+        // Case B: without extra (baseline)
+        const simB = simulate(balance, r, payment, startDate);
+
+        // guard: if payment can't cover interest
+        if (simA.negative) {
+          $("resultBox").innerHTML = `<div class="big">Payment too low</div>
+      <div class="muted">Your monthly payment is less than monthly interest, so debt may grow. Increase payment or lower APR.</div>`;
+          $("scheduleWrap").innerHTML = "";
+          return;
+        }
+
+        const savedInterest = Math.max(
+          0,
+          simB.totalInterest - simA.totalInterest
+        );
+        const savedMonths = Math.max(0, simB.months - simA.months);
+
+        $("resultBox").innerHTML = `
+    <div class="big">Payoff Plan <span class="badge">${
+      $("strategy").value === "avalanche" ? "Avalanche" : "Snowball"
+    }</span></div>
+    <div class="kpi">
+      <div class="kbox"><div class="big">${
+        simA.months
+      }</div><div class="muted">Months to payoff</div></div>
+      <div class="kbox"><div class="big">${fmtMonth(
+        simA.payoffMonth
+      )}</div><div class="muted">Estimated payoff date</div></div>
+      <div class="kbox"><div class="big">${money(
+        simA.totalInterest
+      )}</div><div class="muted">Total interest (with extra)</div></div>
+      <div class="kbox"><div class="big">${money(
+        simA.totalPaid
+      )}</div><div class="muted">Total paid (with extra)</div></div>
+    </div>
+    <div class="note" style="margin-top:10px">
+      Baseline (no extra): <strong>${
+        simB.months
+      }</strong> months, interest <strong>${money(
+          simB.totalInterest
+        )}</strong><br>
+      Savings: <strong>${savedMonths}</strong> months faster, <strong>${money(
+          savedInterest
+        )}</strong> interest saved
+    </div>
+  `;
+
+        renderSchedule(simA.schedule, simA.months);
+      }
+
+      function simulate(startBalance, r, monthlyPay, startMonth) {
+        let bal = startBalance;
+        let totalInterest = 0;
+        let totalPaid = 0;
+        let month = 0;
+
+        const schedule = [];
+        const maxMonths = 1200; // safety (100 years)
+
+        while (bal > 0.01 && month < maxMonths) {
+          const interest = bal * r;
+          if (monthlyPay <= interest + 0.00001) {
+            return { negative: true };
+          }
+          let pay = Math.min(monthlyPay, bal + interest);
+          let principal = pay - interest;
+
+          bal = bal + interest - pay;
+          totalInterest += interest;
+          totalPaid += pay;
+
+          if (month < 24) {
+            // preview first 24 months
+            schedule.push({
+              m: month + 1,
+              date: fmtMonth(monthAdd(startMonth, month)),
+              payment: pay,
+              interest: interest,
+              principal: principal,
+              balance: Math.max(0, bal),
+            });
+          }
+
+          month++;
+        }
+
+        const payoffMonth = monthAdd(startMonth, Math.max(0, month - 1));
+
+        return {
+          negative: false,
+          months: month,
+          payoffMonth,
+          totalInterest,
+          totalPaid,
+          schedule,
+        };
+      }
+
+      function renderSchedule(rows, totalMonths) {
+        if (!rows || !rows.length) {
+          $("scheduleWrap").innerHTML = "";
+          return;
+        }
+
+        let html = `<div class="panel" style="margin-top:14px">
+    <div class="big">Payment Schedule Preview</div>
+    <div class="muted">First ${rows.length} months shown (total payoff: ${totalMonths} months)</div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Month</th>
+          <th>Payment</th>
+          <th>Interest</th>
+          <th>Principal</th>
+          <th>Balance</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+        for (const r of rows) {
+          html += `<tr>
+      <td>${r.m}</td>
+      <td>${r.date}</td>
+      <td>${money(r.payment)}</td>
+      <td>${money(r.interest)}</td>
+      <td>${money(r.principal)}</td>
+      <td>${money(r.balance)}</td>
+    </tr>`;
+        }
+
+        html += `</tbody></table></div>`;
+        $("scheduleWrap").innerHTML = html;
+      }
+
+      function fillExample() {
+        $("balance").value = 250000;
+        $("apr").value = 18;
+        $("payment").value = 12000;
+        $("extra").value = 2000;
+        $("strategy").value = "avalanche";
+        $("startDate").value = new Date().toISOString().slice(0, 7);
+        calculate();
+      }
+    </script>
+  </body>
+</html>

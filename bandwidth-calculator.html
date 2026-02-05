@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <!-- ✅ SEO: stronger title with intent keywords -->
+  <title>Bandwidth Calculator (Mbps/Gbps) | Calculate Required Internet Speed | CalculatorSolution</title>
+
+  <!-- ✅ SEO: richer meta description (includes Mbps, streaming, VoIP, users, overhead) -->
+  <meta name="description" content="Free Bandwidth Calculator to estimate required internet speed (Mbps/Gbps) for streaming, video calls, downloads, and business networks. Calculate bandwidth by concurrent users, per-user bitrate, and overhead.">
+
+  <!-- Preload critical CSS and fonts to reduce render-blocking -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <link rel="preload" href="/assets/og-image.svg" as="image">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <style>
+    /* Expanded critical CSS for faster LCP: includes hero, header, grid, buttons, and typography */
+    html,body{height:100%;margin:0;}
+    body{font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:linear-gradient(135deg, #f8fafc 0%, #f0f4f8 100%); color:#0f172a; line-height:1.6; min-height:100vh;}
+    *{box-sizing:border-box;}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px;}
+    .site-header{padding:14px 0; border-bottom: 1px solid #e2e8f0;}
+    .brand{font-weight:700; color:#3b82f6; text-decoration:none; font-size:1.2rem;}
+    .search{padding:8px 12px; border:1px solid #e2e8f0; border-radius:6px; width:200px; font-size:0.95rem;}
+    .hero{background:linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); color:white; padding:60px 20px; text-align:center;}
+    .hero h1{font-size:2.5rem; margin:0 0 12px 0; font-weight:800;}
+    .hero > .wrap > p{font-size:1.1rem; margin:0 0 20px 0; opacity:0.95;}
+    .hero-grid,.cards-grid,.featured-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px; margin-top:20px;}
+    .btn{display:inline-block; padding:10px 14px; border-radius:8px; text-decoration:none; font-weight:600; background:linear-gradient(90deg,#3b82f6,#6c9cff); color:#fff; box-shadow:0 8px 24px rgba(59,130,246,0.12);}
+    .btn:hover{transform:translateY(-3px); box-shadow:0 14px 40px rgba(59,130,246,0.12);}
+    .card{display:block; background:#fff; padding:14px; border-radius:10px; box-shadow:0 6px 18px rgba(8,13,26,0.06); text-decoration:none; color:inherit; transition:transform .28s; border:1px solid #e2e8f0;}
+    .card:hover{transform:translateY(-4px);}
+    .footer{padding:20px 0; border-top:1px solid #e2e8f0; color:#64748b; font-size:0.9rem;}
+  </style>
+
+  <!-- GA4 Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/bandwidth-calculator.html">
+
+  <!-- ✅ SEO: Improved structured data (same design, better meaning) -->
+  <script type="application/ld+json">[
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Bandwidth Calculator",
+    "description": "Estimate required internet bandwidth (Mbps/Gbps) based on concurrent users, per-user bitrate, and overhead."
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://calculatorsolution.com/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://calculatorsolution.com/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Calculator Solution",
+        "item": "https://calculatorsolution.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Bandwidth Calculator",
+        "item": "https://calculatorsolution.com/bandwidth-calculator.html"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I calculate required bandwidth for multiple users?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Multiply the per-user bitrate by the number of concurrent users, then add overhead (typically 10–30%) for protocol, encryption, and peaks."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Burst vs sustained bandwidth: what is the difference?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sustained bandwidth is the average continuous throughput. Burst bandwidth is the peak demand during spikes. Plan for peak concurrency and include headroom."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does latency affect bandwidth?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Latency affects responsiveness (delay), while bandwidth affects how much data can be transferred per second. Both matter for video calls, gaming, and realtime apps."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Should I include overhead in bandwidth planning?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. TCP/UDP, TLS/HTTPS encryption, Wi-Fi inefficiencies, and retransmissions add overhead. Adding 10–30% headroom is common for stable performance."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much bandwidth do streaming quality tiers need?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Bandwidth depends on resolution and codec. Higher quality tiers (HD/4K) require higher Mbps. When estimating, use a realistic per-user bitrate for your content type."
+        }
+      }
+    ]
+  }
+]</script>
+
+  <script defer src="/assets/calculators-complete.js"></script>
+</head>
+
+<body>
+  <header class="site-header"><div class="wrap"><a class="brand" href="/">
+    <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+    <span class="brand-text">CalculatorSolution</span>
+  </a></div></header>
+
+  <main class="wrap">
+    <article>
+      <div class="calculator-hero">
+        <h1>Bandwidth Calculator</h1>
+        <p class="lead">Estimate required bandwidth for streaming, video calls, or data transfers.</p>
+      </div>
+
+      <section class="calculator-main">
+        <!-- interactive area -->
+        <!-- Interactive placeholder for Bandwidth Calculator -->
+        <div id="calc-bandwidth-calculator">
+          <p>Open this page in the browser and use the calculator fields below.</p>
+        </div>
+      </section>
+<section class="related">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="age-calculator.html"><h4>Age Calculator</h4><p>Calculate age from date of birth to today or a target date.</p></a>
+          <a class="card" href="date-difference-calculator.html"><h4>Date Difference Calculator</h4><p>Find difference between two dates in days, months, years.</p></a>
+          <a class="card" href="time-duration-calculator.html"><h4>Time Duration Calculator</h4><p>Add/subtract times and compute durations.</p></a>
+          <a class="card" href="unit-converter.html"><h4>Unit Converter</h4><p>Convert between length, mass, volume, temperature and more.</p></a>
+        </div>
+      </section>
+      <section class="explanation">
+        <h2>Explanation</h2>
+        <p>
+          The <strong>Bandwidth Calculator</strong> helps you estimate the <strong>internet speed</strong> you need (in <strong>Mbps</strong> or <strong>Gbps</strong>)
+          for multiple simultaneous users. It’s useful for planning home internet, offices, schools, coworking spaces, streaming setups, CCTV/NVR systems,
+          online classes, VoIP calling, and file transfers.
+        </p>
+
+        <p>
+          The idea is simple: estimate how much bandwidth one user or one device needs (called the <strong>per-user bitrate</strong>), then multiply it by the
+          number of <strong>concurrent users</strong>. Because real networks have overhead (Wi-Fi efficiency, encryption/TLS, retransmissions, protocol headers),
+          you should add extra headroom so the connection stays stable during peak usage.
+        </p>
+
+        <p>
+          Example use cases:
+          (1) Video calls for teams (Zoom/Meet),
+          (2) Live streaming (YouTube/Twitch),
+          (3) Multiple phones/laptops watching HD videos,
+          (4) Bulk downloads/updates in labs or offices.
+          If you frequently face buffering, lag, or dropped calls, it often means peak demand is exceeding available bandwidth or the network has high latency/jitter.
+        </p>
+
+        <p>
+          Tip: For reliable results, calculate separately for <strong>download</strong> and <strong>upload</strong> if your workload includes video calls, live streaming,
+          cloud backup, or CCTV uploads. Many ISPs provide high download but limited upload.
+        </p>
+      </section>
+
+      <section class="formula">
+        <h3>Formula</h3>
+        <pre>
+Base Required Bandwidth = PerUserRate × ConcurrentUsers
+
+With headroom/overhead:
+Total Bandwidth = Base Required Bandwidth × (1 + OverheadPercent/100)
+
+Units:
+1 Mbps = 1,000 Kbps
+1 Gbps = 1,000 Mbps
+        </pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>How do I calculate bandwidth for multiple users?</strong></summary><p>Multiply per-user bitrate by concurrent users, then add 10–30% overhead/headroom for peaks and protocol/encryption overhead.</p></details>
+        <details class="card"><summary><strong>Burst vs sustained bandwidth?</strong></summary><p>Sustained is the average ongoing usage; burst is the peak during spikes. Plan for peak concurrency to avoid buffering.</p></details>
+        <details class="card"><summary><strong>Should I include overhead?</strong></summary><p>Yes. TCP/UDP headers, TLS/HTTPS, Wi-Fi loss, and retransmissions add overhead. Headroom improves stability.</p></details>
+        <details class="card"><summary><strong>Does latency matter?</strong></summary><p>Latency impacts responsiveness (delay), while bandwidth impacts data capacity. Video calls and realtime apps need both good latency and enough Mbps.</p></details>
+        <details class="card"><summary><strong>Do different quality tiers require different Mbps?</strong></summary><p>Yes. HD and 4K streaming need higher Mbps than SD. Use a realistic per-user bitrate for your codec and resolution.</p></details>
+      </section>
+
+      
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+</body>
+  <!-- interactive script placeholder -->
+</html>

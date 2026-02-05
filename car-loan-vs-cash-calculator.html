@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Car Loan vs Cash Purchase Calculator (Opportunity Cost) | CalculatorSolution</title>
+  <meta name="description" content="Compare Car Loan vs Cash Purchase: calculate EMI, total interest, total loan cost, and opportunity cost if you invest the cash. Includes net worth difference and yearly table.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/car-loan-vs-cash-calculator.html">
+
+  <meta property="og:title" content="Car Loan vs Cash Purchase Calculator">
+  <meta property="og:description" content="Compare EMI + interest vs paying cash and investing the amount. See net worth difference and yearly breakdown.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto;display:block}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    /* ---------- Header (responsive + sticky safe-area) ---------- */
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10;
+    }
+    @supports (padding: max(0px)){
+      .site-header{padding-top:max(14px, env(safe-area-inset-top))}
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;letter-spacing:-.01em}
+    .brand-logo{border-radius:10px}
+
+    /* ---------- Hero ---------- */
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{margin:0 0 6px 0;font-size:clamp(1.35rem, 2.2vw + .9rem, 2rem);letter-spacing:-.02em}
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      backdrop-filter:blur(6px);
+      white-space:nowrap;
+    }
+
+    /* ---------- Layout shell ---------- */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+    }
+    .panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem}
+
+    /* ---------- Inputs grid ---------- */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      width:100%;
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none
+    }
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    /* Make the "years" inline stack gracefully */
+    .inline-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .inline-row .input{flex:1;min-width:160px}
+
+    /* ---------- Buttons (touch friendly) ---------- */
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:900;
+      border:0;
+      cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff;
+      box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px; /* better tap target */
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .btn:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:2px}
+
+    /* ---------- Sticky results panel ---------- */
+    .sticky{position:sticky;top:82px}
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92))}
+    .metric.good{background:linear-gradient(180deg, rgba(16,185,129,.10), rgba(255,255,255,.92))}
+    .metric.bad{background:linear-gradient(180deg, rgba(239,68,68,.10), rgba(255,255,255,.92))}
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{margin:4px 0 0;font-size:1.35rem;font-weight:1000;letter-spacing:-.02em;word-break:break-word}
+    .mini{font-size:.86rem;color:#64748b}
+
+    /* ---------- Table ---------- */
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{width:100%;border-collapse:collapse;min-width:980px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem;white-space:nowrap}
+    th{background:#f8fafc;font-weight:1000}
+    tr:last-child td{border-bottom:0}
+
+    /* ---------- Cards / FAQs ---------- */
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 10px 24px rgba(8,13,26,.05);padding:12px}
+    details.card{padding:0}
+    details.card summary{cursor:pointer;padding:12px;list-style:none}
+    details.card summary::-webkit-details-marker{display:none}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* ---------- Related grid fallbacks (in case global CSS missing) ---------- */
+    .cards-grid{display:grid;gap:12px}
+    .related-grid{grid-template-columns:repeat(4, minmax(0, 1fr))}
+    .related-grid .card{display:block;text-decoration:none;color:inherit}
+    .related-grid h4{margin:0 0 6px 0}
+    .related-grid p{margin:0;color:#475569}
+
+    /* ---------- Responsive breakpoints ---------- */
+    @media (max-width: 1024px){
+      .wrap{padding:0 16px}
+      table{min-width:860px}
+      .sticky{top:76px}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      table{min-width:720px}
+      .sticky{position:static}
+      .related-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
+    }
+
+    @media (max-width: 640px){
+      .hero{padding:18px 14px;border-radius:16px}
+      .grid-2{grid-template-columns:1fr}
+      .actions{gap:8px}
+      .actions .btn{flex:1} /* buttons fill width nicely */
+      .inline-row .input{min-width:0}
+      table{min-width:640px}
+      .related-grid{grid-template-columns:1fr}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto !important}
+      .btn, .card{transition:none !important}
+      .btn:hover{transform:none !important}
+      .card:hover{transform:none !important}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Car Loan vs Cash Purchase Calculator",
+      "url":"https://calculatorsolution.com/car-loan-vs-cash-calculator.html",
+      "description":"Compare total cost of financing vs paying cash, including opportunity cost of investing cash."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Car Loan vs Cash Purchase","item":"https://calculatorsolution.com/car-loan-vs-cash-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to decide between car loan vs cash purchase",
+      "step":[
+        {"@type":"HowToStep","name":"Enter car price and down payment","text":"Loan amount is car price minus down payment."},
+        {"@type":"HowToStep","name":"Enter loan rate and tenure","text":"We calculate EMI, total interest and total loan payments."},
+        {"@type":"HowToStep","name":"Enter expected investment return","text":"We estimate how much your cash could grow if invested instead."},
+        {"@type":"HowToStep","name":"Compare totals","text":"See net worth difference and a yearly table."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"What is opportunity cost?","acceptedAnswer":{"@type":"Answer","text":"Opportunity cost is what your money could earn if invested instead of used to buy the car in cash."}},
+        {"@type":"Question","name":"Does down payment matter?","acceptedAnswer":{"@type":"Answer","text":"Yes. Higher down payment reduces principal, which reduces interest and EMI."}},
+        {"@type":"Question","name":"Does insurance change this comparison?","acceptedAnswer":{"@type":"Answer","text":"Insurance is usually similar in both cases, but financing may add mandatory covers depending on lender."}},
+        {"@type":"Question","name":"Are there tax implications?","acceptedAnswer":{"@type":"Answer","text":"Typically none for private car purchase; rules vary by country/state, consult local guidance."}},
+        {"@type":"Question","name":"Why liquidity matters?","acceptedAnswer":{"@type":"Answer","text":"Paying cash reduces your emergency buffer; financing can preserve liquidity but costs interest."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Car Loan vs Cash Purchase</h1>
+        <p>Compare total cost of financing vs paying cash — including opportunity cost of investing the cash.</p>
+        <div class="chips">
+          <span class="chip">📌 EMI + Total interest</span>
+          <span class="chip">📈 Opportunity cost</span>
+          <span class="chip">🧾 Net worth difference</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-car-loan-vs-cash">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Loan vs cash inputs">
+              <div class="panel-title">
+                <h2>Enter details</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="c_price">Car price</label>
+                  <input id="c_price" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 900000">
+                  <p class="help">On-road price or purchase price.</p>
+                </div>
+
+                <div class="field">
+                  <label for="c_down">Down payment</label>
+                  <input id="c_down" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 200000">
+                  <p class="help">If you pay full cash, set down payment = car price.</p>
+                </div>
+
+                <div class="field">
+                  <label for="c_rate">Loan interest rate (annual)</label>
+                  <input id="c_rate" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 10.5">
+                  <p class="help">Example: 10.5 means 10.5% p.a.</p>
+                </div>
+
+                <div class="field">
+                  <label for="c_years">Loan tenure</label>
+                  <div class="inline-row">
+                    <input id="c_years" class="input" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 5">
+                    <span class="mini">years</span>
+                  </div>
+                  <p class="help">Used only for loan scenario.</p>
+                </div>
+
+                <div class="field">
+                  <label for="c_invest">Expected investment return (annual)</label>
+                  <input id="c_invest" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 12">
+                  <p class="help">Opportunity cost if you invest instead of paying cash.</p>
+                </div>
+
+                <div class="field">
+                  <label for="c_fees">Loan fees (optional)</label>
+                  <input id="c_fees" class="input" type="number" inputmode="numeric" min="0" step="500" placeholder="e.g., 5000">
+                  <p class="help">Adds to loan cost (comparison).</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="c_calc" type="button">Compare</button>
+                <button class="btn btn-dark" id="c_example" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="c_reset" type="button">Reset</button>
+              </div>
+
+              <div class="mini" style="margin-top:10px;">
+                Assumption: If you take a loan, you keep the remaining cash invested and withdraw monthly to pay EMI (simplified).
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Loan vs cash results">
+              <div class="panel-title">
+                <h2>Decision</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Loan EMI (monthly)</p>
+                <p class="v" id="o_emi">—</p>
+                <p class="mini" id="o_emi_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Total loan cost (EMIs + fees)</p>
+                <p class="v" id="o_loan_total">—</p>
+                <p class="mini" id="o_interest">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Cash purchase cost (today)</p>
+                <p class="v" id="o_cash_now">—</p>
+                <p class="mini">Immediate cash outflow (car price).</p>
+              </div>
+
+              <div class="metric good" id="o_win_box" style="display:none;">
+                <p class="k">Suggested choice</p>
+                <p class="v" id="o_winner">—</p>
+                <p class="mini" id="o_reason">—</p>
+              </div>
+
+              <div class="metric bad" id="o_warn_box" style="display:none;">
+                <p class="k">Note</p>
+                <p class="v">Liquidity check</p>
+                <p class="mini">Don’t reduce emergency fund too much. Consider stability over small savings.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Yearly Comparison Table</h2>
+          <p class="mini" style="margin:0 0 10px;">Shows how loan payments add up vs how invested cash could grow (simplified).</p>
+
+          <div class="table-wrap">
+            <table aria-label="Loan vs cash yearly table">
+              <thead>
+                <tr>
+                  <th>Year</th>
+                  <th>Total EMI Paid</th>
+                  <th>Remaining Loan Balance</th>
+                  <th>Invested Cash Value</th>
+                  <th>Net Position (Invested − Balance)</th>
+                </tr>
+              </thead>
+              <tbody id="c_table">
+                <tr><td colspan="5" class="mini">Click <strong>Compare</strong> to generate.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          If you pay cash, you avoid interest but lose liquidity and potential investment growth.
+          If you take a loan, you pay interest but may keep more money invested.
+          This calculator compares both using your <strong>loan interest rate</strong> and your expected <strong>investment return</strong>.
+        </p>
+        <p class="mini">Important: Investment returns are not guaranteed. Use conservative estimates.</p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>Loan: EMI via standard EMI formula
+Opportunity Cost: Invested value ≈ Cash kept × (1 + return)^time (simplified)</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Opportunity cost?</strong></summary><p>Opportunity cost is the return you could earn by investing cash instead of paying full amount upfront.</p></details>
+        <details class="card"><summary><strong>Downpayment?</strong></summary><p>Higher down payment reduces the loan amount and total interest paid.</p></details>
+        <details class="card"><summary><strong>Insurance effect?</strong></summary><p>Insurance costs are usually similar, but lenders may require extra add-ons for financed cars.</p></details>
+        <details class="card"><summary><strong>Tax implications?</strong></summary><p>Typically none for private purchase; consult your local rules if you’re buying for business use.</p></details>
+        <details class="card"><summary><strong>Liquidity?</strong></summary><p>Cash purchase reduces your emergency buffer. A loan preserves cash but costs interest.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="car-loan-emi-calculator.html"><h4>Car Loan EMI Calculator</h4><p>Calculate EMI, interest and amortization schedule.</p></a>
+          <a class="card" href="personal-loan-emi-calculator.html"><h4>Personal Loan EMI Calculator</h4><p>Compare EMI and total interest.</p></a>
+          <a class="card" href="loan-interest-calculator.html"><h4>Loan Interest Calculator</h4><p>Estimate total interest cost for different loans.</p></a>
+          <a class="card" href="gst-calculator-india.html"><h4>GST Calculator (India)</h4><p>Calculate GST amount and final price.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+      const fmt = (n)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:0}).format(n) : '—');
+
+      const priceEl = $('c_price');
+      const downEl  = $('c_down');
+      const rateEl  = $('c_rate');
+      const yearsEl = $('c_years');
+      const invEl   = $('c_invest');
+      const feesEl  = $('c_fees');
+
+      const oEmi = $('o_emi');
+      const oEmiNote = $('o_emi_note');
+      const oLoanTotal = $('o_loan_total');
+      const oInterest = $('o_interest');
+      const oCashNow = $('o_cash_now');
+
+      const winBox = $('o_win_box');
+      const warnBox = $('o_warn_box');
+      const oWinner = $('o_winner');
+      const oReason = $('o_reason');
+
+      const tbody = $('c_table');
+
+      function emiCalc(P, annualRate, months){
+        const r = (annualRate/100)/12;
+        if (r === 0) return P/months;
+        const pow = Math.pow(1+r, months);
+        return (P*r*pow)/(pow-1);
+      }
+
+      function compare(){
+        const price = parseFloat(priceEl.value);
+        const down  = parseFloat(downEl.value) || 0;
+        const rateA = parseFloat(rateEl.value);
+        const years = parseFloat(yearsEl.value);
+        const invA  = parseFloat(invEl.value);
+        const fees  = parseFloat(feesEl.value) || 0;
+
+        winBox.style.display = 'none';
+        warnBox.style.display = 'none';
+
+        if(!isFinite(price) || price<=0){
+          oEmi.textContent='—'; oEmiNote.textContent='Enter valid car price.';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Fix inputs and click <strong>Compare</strong>.</td></tr>';
+          return;
+        }
+        if(down < 0 || down > price){
+          oEmi.textContent='—'; oEmiNote.textContent='Down payment must be between 0 and car price.';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Fix inputs and click <strong>Compare</strong>.</td></tr>';
+          return;
+        }
+        if(!isFinite(rateA) || rateA<=0 || !isFinite(years) || years<=0){
+          oEmi.textContent='—'; oEmiNote.textContent='Enter valid loan rate and tenure.';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Fix inputs and click <strong>Compare</strong>.</td></tr>';
+          return;
+        }
+        if(!isFinite(invA) || invA<0){
+          oEmi.textContent='—'; oEmiNote.textContent='Enter valid investment return (can be 0).';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Fix inputs and click <strong>Compare</strong>.</td></tr>';
+          return;
+        }
+
+        const P = price - down;
+        const months = Math.round(years * 12);
+        const emi = emiCalc(P, rateA, months);
+        const totalEmiPaid = emi * months;
+        const totalLoanCost = totalEmiPaid + fees;
+        const totalInterestPaid = totalEmiPaid - P;
+
+        oEmi.textContent = '₹ ' + fmt(emi);
+        oEmiNote.textContent = `Loan: ₹${fmt(P)} for ${months} months @ ${rateA}% p.a.`;
+        oLoanTotal.textContent = '₹ ' + fmt(totalLoanCost);
+        oInterest.textContent = `Total interest (approx): ₹${fmt(totalInterestPaid)} • Fees: ₹${fmt(fees)}`;
+        oCashNow.textContent = '₹ ' + fmt(price);
+
+        const invMonthly = (invA/100)/12;
+
+        let invest = (price - down);
+        let bal = P;
+
+        const rLoan = (rateA/100)/12;
+        const yearlyRows = [];
+        let paidSoFar = 0;
+
+        for(let m=1; m<=months; m++){
+          const interest = bal * rLoan;
+          const princ = Math.min(bal, emi - interest);
+          bal = Math.max(0, bal - princ);
+          paidSoFar += emi;
+
+          invest = invest * (1 + invMonthly);
+          invest = Math.max(0, invest - emi);
+
+          if(m % 12 === 0 || m === months){
+            const year = Math.ceil(m/12);
+            const net = invest - bal;
+            yearlyRows.push(`
+              <tr>
+                <td>${year}</td>
+                <td>₹ ${fmt(paidSoFar)}</td>
+                <td>₹ ${fmt(bal)}</td>
+                <td>₹ ${fmt(invest)}</td>
+                <td>₹ ${fmt(net)}</td>
+              </tr>
+            `);
+          }
+
+          if(m===120 && months>120){
+            yearlyRows.push(`<tr><td colspan="5" class="mini">Table truncated for performance (showing up to 10 years). Reduce tenure to see full.</td></tr>`);
+            break;
+          }
+        }
+
+        tbody.innerHTML = yearlyRows.join('') || '<tr><td colspan="5" class="mini">No data</td></tr>';
+
+        const loanOutflow = down + totalEmiPaid + fees;
+        const cashOutflow = price;
+
+        const effectiveLoanCost = loanOutflow - invest;
+        const effectiveCashCost = cashOutflow;
+
+        const diff = effectiveCashCost - effectiveLoanCost;
+
+        winBox.style.display = 'block';
+        if(diff > 0){
+          oWinner.textContent = 'Loan looks better (with investing)';
+          oReason.textContent = `Because expected returns (~${invA}%) may offset interest. Estimated advantage ≈ ₹${fmt(diff)} (simplified).`;
+        }else if(diff < 0){
+          oWinner.textContent = 'Cash looks better';
+          oReason.textContent = `Because loan interest/fees outweigh expected return. Estimated advantage ≈ ₹${fmt(Math.abs(diff))} (simplified).`;
+        }else{
+          oWinner.textContent = 'Very close';
+          oReason.textContent = 'Both options are similar under your assumptions. Consider liquidity and risk.';
+        }
+
+        if(price > 0 && (price - down) === 0){
+          warnBox.style.display = 'block';
+        }
+      }
+
+      $('c_calc').addEventListener('click', compare);
+
+      $('c_example').addEventListener('click', ()=>{
+        priceEl.value='900000';
+        downEl.value='200000';
+        rateEl.value='10.5';
+        yearsEl.value='5';
+        invEl.value='12';
+        feesEl.value='5000';
+        compare();
+      });
+
+      $('c_reset').addEventListener('click', ()=>{
+        [priceEl,downEl,rateEl,yearsEl,invEl,feesEl].forEach(el=>el.value='');
+        oEmi.textContent='—';
+        oEmiNote.textContent='—';
+        oLoanTotal.textContent='—';
+        oInterest.textContent='—';
+        oCashNow.textContent='—';
+        winBox.style.display='none';
+        warnBox.style.display='none';
+        tbody.innerHTML = '<tr><td colspan="5" class="mini">Click <strong>Compare</strong> to generate.</td></tr>';
+      });
+
+      [priceEl,downEl,rateEl,yearsEl,invEl,feesEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(priceEl.value) compare(); });
+        el.addEventListener('change', ()=>{ if(priceEl.value) compare(); });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>
+      Credit Card Interest Calculator (APR / Daily Rate) | CalculatorSolution
+    </title>
+    <meta
+      name="description"
+      content="Credit Card Interest Calculator — estimate interest on revolving balance using APR and daily rate. Add payments, days, and fees to see total cost."
+    />
+
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://calculatorsolution.com/credit-card-interest-calculator.html"
+    />
+
+    <meta property="og:title" content="Credit Card Interest Calculator" />
+    <meta
+      property="og:description"
+      content="Estimate credit card interest using APR, daily rate, days, payments and fees."
+    />
+    <meta
+      property="og:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+
+    <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/logo.png" />
+    <link rel="manifest" href="/assets/site.webmanifest" />
+
+    <link
+      rel="preload"
+      href="/assets/style.css"
+      as="style"
+      onload="this.rel='stylesheet'"
+    />
+    <noscript><link rel="stylesheet" href="/assets/style.css" /></noscript>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Arial;
+        background: linear-gradient(135deg, #f8fafc, #eef2ff);
+        color: #0f172a;
+        line-height: 1.6;
+        -webkit-text-size-adjust: 100%;
+        text-rendering: optimizeLegibility;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      /* Better tap + focus on mobile */
+      :focus-visible {
+        outline: 3px solid rgba(99, 102, 241, 0.35);
+        outline-offset: 2px;
+        border-radius: 10px;
+      }
+
+      /* Responsive container */
+      .wrap {
+        max-width: 1100px;
+        margin: auto;
+        padding: 0 18px;
+      }
+
+      /* Header */
+      .site-header {
+        padding: 14px 0;
+        border-bottom: 1px solid #e2e8f0;
+        background: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(8px);
+      }
+
+      .brand {
+        display: inline-flex;
+        gap: 10px;
+        align-items: center;
+        text-decoration: none;
+        min-height: 44px; /* better tap target */
+      }
+
+      .brand img {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+      }
+
+      .brand-text {
+        font-weight: 900;
+        color: #2563eb;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+      }
+
+      /* Breadcrumbs */
+      .breadcrumbs {
+        font-size: 0.9rem;
+        color: #64748b;
+        margin: 14px 0;
+        overflow-wrap: anywhere;
+      }
+
+      .breadcrumbs a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .breadcrumbs a:hover {
+        text-decoration: underline;
+      }
+
+      /* Hero */
+      .hero {
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: #fff;
+        border-radius: 18px;
+        padding: 26px;
+        margin: 10px 0 20px;
+      }
+
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(1.4rem, 1.2rem + 1.2vw, 2rem);
+        font-weight: 1000;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+      }
+
+      .hero p {
+        margin: 10px 0 0;
+        opacity: 0.95;
+        max-width: 65ch;
+      }
+
+      .chips {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        font-weight: 900;
+        font-size: 0.85rem;
+        min-height: 34px;
+      }
+
+      /* Panels */
+      .panel {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 18px;
+        box-shadow: 0 10px 30px rgba(2, 6, 23, 0.06);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        align-items: start;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Fields */
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+
+      label {
+        font-weight: 900;
+      }
+
+      .help {
+        font-size: 0.88rem;
+        color: #64748b;
+        margin: 0;
+      }
+
+      .input,
+      .select {
+        padding: 12px 12px;
+        border: 1px solid #cbd5f5;
+        border-radius: 12px;
+        font-size: 1rem;
+        width: 100%;
+        min-height: 44px; /* mobile tap target */
+        background: #fff;
+      }
+
+      /* Prevent iOS zoom on focus */
+      @supports (-webkit-touch-callout: none) {
+        .input,
+        .select {
+          font-size: 16px;
+        }
+      }
+
+      .input:focus,
+      .select:focus {
+        border-color: #6366f1;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+      }
+
+      /* Buttons */
+      .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 6px;
+      }
+
+      .btn {
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 0;
+        background: linear-gradient(90deg, #2563eb, #6366f1);
+        color: #fff;
+        font-weight: 1000;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        box-shadow: 0 12px 28px rgba(37, 99, 235, 0.18);
+        min-height: 44px;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 34px rgba(37, 99, 235, 0.22);
+      }
+
+      .btn:active {
+        transform: translateY(0px);
+      }
+
+      .btn.secondary {
+        background: #0f172a;
+        box-shadow: 0 12px 28px rgba(2, 6, 23, 0.16);
+      }
+
+      /* Make buttons full-width on small screens for perfect UX */
+      @media (max-width: 520px) {
+        .actions {
+          gap: 12px;
+        }
+        .btn {
+          width: 100%;
+        }
+      }
+
+      /* Result */
+      .result {
+        padding: 14px;
+        border-radius: 14px;
+        background: linear-gradient(180deg, #eef2ff, #fff);
+        border: 1px solid #c7d2fe;
+      }
+
+      .big {
+        font-size: 1.35rem;
+        font-weight: 1000;
+        margin: 0;
+      }
+
+      .sub {
+        margin: 8px 0 0;
+        color: #334155;
+      }
+
+      .kpis {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      /* KPI cards stay readable on very small devices */
+      @media (max-width: 420px) {
+        .kpis {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .kpi {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 10px;
+        min-height: 64px;
+      }
+
+      .kpi small {
+        display: block;
+        color: #64748b;
+        font-weight: 900;
+      }
+
+      .kpi strong {
+        font-size: 1.05rem;
+      }
+
+      .note {
+        margin-top: 12px;
+        font-size: 0.92rem;
+        color: #475569;
+        border-left: 4px solid #6366f1;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+      }
+
+      /* Details */
+      details.card {
+        margin-top: 10px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        padding: 10px;
+      }
+
+      summary {
+        cursor: pointer;
+        padding: 8px 10px;
+        border-radius: 10px;
+        list-style: none;
+      }
+
+      summary::-webkit-details-marker {
+        display: none;
+      }
+
+      details[open] summary {
+        background: #f8fafc;
+      }
+
+      details.card p {
+        margin: 8px 10px 10px;
+        color: #334155;
+      }
+
+      /* Pre blocks: better on mobile */
+      pre {
+        background: #0b1220;
+        color: #e5e7eb;
+        padding: 12px;
+        border-radius: 12px;
+        overflow: auto;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        max-width: 100%;
+        -webkit-overflow-scrolling: touch;
+        font-size: 0.92rem;
+      }
+
+      /* Related */
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+        margin-top: 12px;
+      }
+
+      .cardLink {
+        display: block;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 14px;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: 0 10px 24px rgba(2, 6, 23, 0.05);
+        transition: transform 0.2s, box-shadow 0.2s;
+        min-height: 96px;
+      }
+
+      .cardLink:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 28px rgba(2, 6, 23, 0.08);
+      }
+
+      .cardLink h4 {
+        margin: 0 0 6px;
+        font-weight: 1000;
+        line-height: 1.25;
+      }
+
+      .cardLink p {
+        margin: 0;
+        color: #475569;
+      }
+
+      /* Footer */
+      .site-footer {
+        margin-top: 40px;
+        padding: 20px 0;
+        border-top: 1px solid #e2e8f0;
+      }
+
+      .site-footer .wrap {
+        display: grid;
+        gap: 8px;
+      }
+
+      .site-footer p {
+        margin: 0;
+      }
+
+      .site-footer a {
+        text-decoration: none;
+      }
+      .site-footer a:hover {
+        text-decoration: underline;
+      }
+
+      /* Better spacing and readability on phones */
+      @media (max-width: 640px) {
+        .hero {
+          padding: 18px;
+          border-radius: 16px;
+        }
+        .panel {
+          padding: 14px;
+          border-radius: 14px;
+        }
+        .breadcrumbs {
+          margin: 12px 0;
+        }
+        section[style] {
+          margin-top: 16px !important;
+        }
+      }
+
+      /* Reduce motion preference */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          scroll-behavior: auto !important;
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+    </style>
+
+    <!-- GA4 -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-Y5YHCPQPFS");
+    </script>
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+      [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Credit Card Interest Calculator"
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "url": "https://calculatorsolution.com/",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://calculatorsolution.com/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "CalculatorSolution",
+              "item": "https://calculatorsolution.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Credit Card Interest Calculator",
+              "item": "https://calculatorsolution.com/credit-card-interest-calculator.html"
+            }
+          ]
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Grace period?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Interest is often waived if you pay the full statement balance by the due date (not true for cash advances)."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Minimum payment effect?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Paying only the minimum can dramatically increase total interest and repayment time."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Cash advances?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Cash advances often start charging interest immediately and may include extra fees."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Compounding frequency?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Many cards calculate interest daily using a daily periodic rate."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Fees?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Late fees or other fees can increase the outstanding balance and interest cost."
+              }
+            }
+          ]
+        }
+      ]
+    </script>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">
+          <img
+            src="/assets/logo.png"
+            alt="CalculatorSolution logo"
+            width="36"
+            height="36"
+          />
+          <span class="brand-text">CalculatorSolution</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <article>
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a> › <span>Credit Card Interest Calculator</span>
+        </nav>
+
+        <div class="hero">
+          <h1>Credit Card Interest Calculator</h1>
+          <p>
+            Estimate interest on revolving balances using APR (daily rate) +
+            payments + fees.
+          </p>
+          <div class="chips">
+            <span class="chip">💳 APR / Daily Rate</span>
+            <span class="chip">📅 Days</span>
+            <span class="chip">💸 Payments</span>
+            <span class="chip">⚠️ Fees Impact</span>
+          </div>
+        </div>
+
+        <section class="panel" aria-label="Credit card interest calculator">
+          <div class="grid">
+            <div>
+              <div class="field">
+                <label for="balance">Current Balance</label>
+                <input
+                  id="balance"
+                  class="input"
+                  type="number"
+                  min="0"
+                  step="1"
+                  placeholder="e.g. 25000"
+                />
+                <p class="help">
+                  Outstanding balance that will carry interest.
+                </p>
+              </div>
+
+              <div class="field">
+                <label for="apr">APR (Annual Percentage Rate %)</label>
+                <input
+                  id="apr"
+                  class="input"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="e.g. 36"
+                />
+                <p class="help">
+                  Many cards have 24%–48% APR depending on card type.
+                </p>
+              </div>
+
+              <div class="field">
+                <label for="days">Interest Period (days)</label>
+                <input
+                  id="days"
+                  class="input"
+                  type="number"
+                  min="1"
+                  step="1"
+                  placeholder="e.g. 30"
+                />
+              </div>
+
+              <div class="field">
+                <label for="payment">Payment During Period (optional)</label>
+                <input
+                  id="payment"
+                  class="input"
+                  type="number"
+                  min="0"
+                  step="1"
+                  placeholder="e.g. 5000"
+                />
+                <p class="help">
+                  If you paid something during the period, enter it here.
+                </p>
+              </div>
+
+              <div class="field">
+                <label for="fees">Extra Fees Added (optional)</label>
+                <input
+                  id="fees"
+                  class="input"
+                  type="number"
+                  min="0"
+                  step="1"
+                  placeholder="e.g. 500"
+                />
+                <p class="help">Late fee / cash advance fee etc.</p>
+              </div>
+
+              <div class="field">
+                <label for="method">Calculation Method</label>
+                <select id="method" class="select">
+                  <option value="simple">
+                    Simple estimate (balance × daily rate × days)
+                  </option>
+                  <option value="daily" selected>
+                    Daily compounding (approx)
+                  </option>
+                </select>
+                <p class="help">
+                  Most cards compute interest daily. This tool gives an
+                  estimate.
+                </p>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="btnCalc" type="button">
+                  Calculate
+                </button>
+                <button class="btn secondary" id="btnExample" type="button">
+                  Try Example
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <div class="result" role="status" aria-live="polite">
+                <p class="big" id="out">—</p>
+                <p class="sub" id="note">
+                  Enter values to estimate interest cost.
+                </p>
+
+                <div class="kpis" id="kpis" style="display: none">
+                  <div class="kpi">
+                    <small>Daily Rate</small><strong id="kDaily">—</strong>
+                  </div>
+                  <div class="kpi">
+                    <small>Interest</small><strong id="kInterest">—</strong>
+                  </div>
+                  <div class="kpi">
+                    <small>Ending Balance</small><strong id="kEnd">—</strong>
+                  </div>
+                  <div class="kpi">
+                    <small>Payment Impact</small><strong id="kImpact">—</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="note">
+                Tip: If you can pay the full statement balance during the grace
+                period, interest may be zero (not for cash advances).
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section style="margin-top: 20px">
+          <h2>Explanation</h2>
+          <p>
+            Credit cards typically charge interest when you carry a balance from
+            one billing cycle to the next. Interest is usually calculated using
+            a <strong>daily periodic rate</strong> (APR ÷ 365), applied to your
+            balance each day. Paying more than the minimum reduces interest and
+            helps you clear the balance faster.
+          </p>
+        </section>
+
+        <section style="margin-top: 14px">
+          <h3>Formula</h3>
+          <pre>
+Daily rate = APR / 365
+
+Simple estimate:
+Interest ≈ Balance × (APR/365) × Days
+
+Daily compounding (approx):
+Balance_end ≈ (Balance - Payment + Fees) × (1 + APR/365)^Days
+Interest ≈ Balance_end - (Balance - Payment + Fees)</pre
+          >
+        </section>
+
+        <section style="margin-top: 14px">
+          <h3>FAQs</h3>
+          <details class="card">
+            <summary><strong>Grace period?</strong></summary>
+            <p>
+              Many cards waive interest if you pay the full statement balance by
+              the due date. Cash advances usually don’t get a grace period.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Minimum payment effect?</strong></summary>
+            <p>
+              Paying minimum keeps you in debt longer and you pay much more
+              interest overall.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Cash advances?</strong></summary>
+            <p>
+              They often start interest immediately and have extra fees. Always
+              check your card terms.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Compounding frequency?</strong></summary>
+            <p>
+              Many issuers compute interest daily based on your daily balance
+              (estimated here).
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Fees?</strong></summary>
+            <p>
+              Fees can increase your outstanding balance, which can increase
+              interest too.
+            </p>
+          </details>
+        </section>
+
+        <section style="margin-top: 18px">
+          <h3>Related calculators</h3>
+          <div class="cards-grid">
+            <a class="cardLink" href="compound-interest-calculator.html"
+              ><h4>Compound Interest Calculator</h4>
+              <p>Calculate compounding growth and compare frequencies.</p></a
+            >
+            <a class="cardLink" href="emi-calculator.html"
+              ><h4>EMI Calculator</h4>
+              <p>Estimate loan EMI and total interest paid.</p></a
+            >
+            <a class="cardLink" href="debt-payoff-calculator.html"
+              ><h4>Debt Payoff Calculator</h4>
+              <p>See how extra payments reduce total interest and time.</p></a
+            >
+          </div>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>&copy; CalculatorSolution</p>
+        <p style="margin-top: 8px; font-size: 0.9rem">
+          <a href="/sitemap.xml">Sitemap</a> | <a href="/">Home</a> |
+          <a href="/privacy-policy.html">Privacy Policy</a> |
+          <a href="/terms-of-service.html">Terms</a> |
+          <a href="/contact.html">Contact</a> |
+          <a href="/about.html">About</a>
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        const $ = (id) => document.getElementById(id);
+
+        const balance = $("balance");
+        const apr = $("apr");
+        const days = $("days");
+        const payment = $("payment");
+        const fees = $("fees");
+        const method = $("method");
+
+        const out = $("out");
+        const note = $("note");
+
+        const kpis = $("kpis");
+        const kDaily = $("kDaily");
+        const kInterest = $("kInterest");
+        const kEnd = $("kEnd");
+        const kImpact = $("kImpact");
+
+        function fmtMoney(n) {
+          if (!isFinite(n)) return "—";
+          return new Intl.NumberFormat(undefined, {
+            maximumFractionDigits: 0,
+          }).format(n);
+        }
+        function fmtPct(n) {
+          if (!isFinite(n)) return "—";
+          return (Math.round(n * 10000) / 100).toFixed(2) + "%";
+        }
+
+        function calc() {
+          const B0 = +balance.value || 0;
+          const APR = (+apr.value || 0) / 100;
+          const D = +days.value || 0;
+          const pay = +payment.value || 0;
+          const f = +fees.value || 0;
+
+          if (B0 <= 0 || APR < 0 || D <= 0) {
+            out.textContent = "Please enter Balance, APR, and Days.";
+            note.textContent = "";
+            kpis.style.display = "none";
+            return;
+          }
+
+          const dailyRate = APR / 365;
+          const base = Math.max(0, B0 - pay + f); // simple approximation
+
+          let interest = 0;
+          let endBal = 0;
+
+          if (method.value === "simple") {
+            interest = base * dailyRate * D;
+            endBal = base + interest;
+          } else {
+            endBal = base * Math.pow(1 + dailyRate, D);
+            interest = endBal - base;
+          }
+
+          const impact = pay > 0 ? B0 * dailyRate * D - interest : 0;
+
+          out.textContent = "Result Summary";
+          note.textContent =
+            "Estimated interest for the period (educational estimate).";
+
+          kpis.style.display = "grid";
+          kDaily.textContent = fmtPct(dailyRate * 100); // daily % rate
+          kInterest.textContent = "₹ " + fmtMoney(interest);
+          kEnd.textContent = "₹ " + fmtMoney(endBal);
+          kImpact.textContent =
+            pay > 0
+              ? "₹ " + fmtMoney(Math.max(0, impact)) + " saved (approx)"
+              : "—";
+        }
+
+        $("btnCalc").addEventListener("click", calc);
+
+        $("btnExample").addEventListener("click", function () {
+          balance.value = 25000;
+          apr.value = 36;
+          days.value = 30;
+          payment.value = 5000;
+          fees.value = 500;
+          method.value = "daily";
+          calc();
+        });
+
+        [balance, apr, days, payment, fees, method].forEach((el) => {
+          el.addEventListener("input", () => {
+            if (balance.value && apr.value && days.value) calc();
+          });
+          el.addEventListener("change", () => {
+            if (balance.value && apr.value && days.value) calc();
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -12,18 +12,18 @@
 
 ### ✅ Compliance Pages Created (6 Files)
 ```
-✅ /dist/privacy-policy.html       (GDPR/CCPA compliant, ~2,500 words)
-✅ /dist/terms-of-service.html     (Legal terms, liability disclaimers, ~3,200 words)
-✅ /dist/disclaimer.html           (Calculator disclaimers, warnings, ~2,800 words)
-✅ /dist/refund-policy.html        (Money-back guarantee, 30-day policy, ~2,600 words)
-✅ /dist/about.html                (Company credibility, mission, ~1,800 words)
-✅ /dist/contact.html              (Support forms, contact methods, ~1,600 words)
+✅ /privacy-policy.html       (GDPR/CCPA compliant, ~2,500 words)
+✅ /terms-of-service.html     (Legal terms, liability disclaimers, ~3,200 words)
+✅ /disclaimer.html           (Calculator disclaimers, warnings, ~2,800 words)
+✅ /refund-policy.html        (Money-back guarantee, 30-day policy, ~2,600 words)
+✅ /about.html                (Company credibility, mission, ~1,800 words)
+✅ /contact.html              (Support forms, contact methods, ~1,600 words)
 ```
 
 ### ✅ Calculator Pages (74 Files - All Generated)
 ```
-✅ /dist/index.html                (Homepage with hero section)
-✅ /dist/percentage-calculator.html through reading-time-calculator.html (74 total)
+✅ /index.html                (Homepage with hero section)
+✅ /percentage-calculator.html through reading-time-calculator.html (74 total)
 ✅ All pages include:
    - Unique meta titles and descriptions
    - JSON-LD schema markup
@@ -35,9 +35,9 @@
 
 ### ✅ Supporting Files
 ```
-✅ /dist/sitemap.xml               (81 URLs - 1 home + 74 calcs + 6 compliance pages)
-✅ /dist/robots.txt                (Crawler configuration)
-✅ /dist/index.json                (Calculator index for search)
+✅ /sitemap.xml               (81 URLs - 1 home + 74 calcs + 6 compliance pages)
+✅ /robots.txt                (Crawler configuration)
+✅ /index.json                (Calculator index for search)
 ✅ /assets/style.css               (Modern responsive design - 714 lines)
 ✅ /assets/app.js                  (Search/filter functionality)
 ✅ /assets/calculators-complete.js (30+ calculator implementations)

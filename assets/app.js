@@ -67,21 +67,44 @@ async function init() {
 
   let currentFilter = ''
 
-  function setCategory(cat) {
-    currentFilter = cat || ''
-    categoryLinks?.forEach(l => {
-      const isActive = l.dataset.cat === currentFilter
-      l.style.fontWeight = isActive ? '700' : '500'
-      l.style.color = isActive ? 'var(--primary)' : 'inherit'
-    })
-    if (search) search.value = ''
-    if (!currentFilter) {
-      render(data)
-    } else {
-      render(data.filter(c => c.category === currentFilter))
-    }
+  // function setCategory(cat) {
+  //   currentFilter = cat || ''
+  //   categoryLinks?.forEach(l => {
+  //     const isActive = l.dataset.cat === currentFilter
+  //     l.style.fontWeight = isActive ? '700' : '500'
+  //     l.style.color = isActive ? 'var(--primary)' : 'inherit'
+  //   })
+  //   if (search) search.value = ''
+  //   if (!currentFilter) {
+  //     render(data)
+  //   } else {
+  //     render(data.filter(c => c.category === currentFilter))
+  //   }
+  //   cardsSection?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  // }
+  function setCategory(cat, opts = { scroll: true }) {
+  currentFilter = cat || ''
+
+  categoryLinks?.forEach(l => {
+    const isActive = l.dataset.cat === currentFilter
+    l.style.fontWeight = isActive ? '700' : '500'
+    l.style.color = isActive ? 'var(--primary)' : 'inherit'
+  })
+
+  if (search) search.value = ''
+
+  if (!currentFilter) {
+    render(data)
+  } else {
+    render(data.filter(c => c.category === currentFilter))
+  }
+
+  // ✅ only scroll when user triggers it
+  if (opts.scroll) {
     cardsSection?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
+}
+
 
   function render(list) {
     cards.innerHTML = ''
@@ -212,7 +235,8 @@ async function init() {
   })
 
   // Set initial active state
-  setCategory('')
+  // setCategory('')
+  setCategory('', { scroll: false })
 }
 
 document.addEventListener('DOMContentLoaded', init)

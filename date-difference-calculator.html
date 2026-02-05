@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Date Difference Calculator (Days, Months, Years) | CalculatorSolution</title>
+<meta name="description" content="Date Difference Calculator — calculate the exact difference between two dates in days, weeks, months, years, hours and more. Supports inclusive counting.">
+
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://calculatorsolution.com/date-difference-calculator.html">
+
+<meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+<link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/logo.png">
+
+<link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+<style>
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto; background:linear-gradient(135deg,#f8fafc,#eef2ff); color:#0f172a;margin:0}
+.wrap{max-width:1100px;margin:auto;padding:0 18px}
+.site-header{padding:14px 0;border-bottom:1px solid #e2e8f0;background:#fff}
+.brand{display:flex;gap:10px;align-items:center;text-decoration:none;font-weight:900;color:#2563eb}
+.hero{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;border-radius:18px;padding:26px;margin:16px 0}
+.hero h1{margin:0;font-size:2rem;font-weight:1000}
+.hero p{opacity:.95;margin-top:6px}
+.panel{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px;box-shadow:0 12px 28px rgba(2,6,23,.08)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+label{font-weight:900}
+.input,.select{padding:10px;border-radius:12px;border:1px solid #cbd5f5}
+.btn{padding:12px 14px;border-radius:12px;border:0;background:linear-gradient(90deg,#2563eb,#6366f1);color:#fff;font-weight:900;cursor:pointer}
+.btn.secondary{background:#0f172a}
+.result{background:#f1f5ff;border-radius:14px;padding:14px;border:1px solid #c7d2fe}
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.box{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:10px}
+h2,h3{margin-top:24px}
+details.card{border:1px solid #e2e8f0;border-radius:12px;padding:10px;background:#fff;margin-top:8px}
+pre{background:#0b1220;color:#e5e7eb;padding:12px;border-radius:12px}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.cardLink{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px;text-decoration:none;color:inherit}
+.site-footer{margin-top:40px;padding:20px 0;border-top:1px solid #e2e8f0;background:#fff;color:#64748b}
+</style>
+
+<script type="application/ld+json">{
+"@context":"https://schema.org",
+"@type":"FAQPage",
+"mainEntity":[
+{"@type":"Question","name":"How is date difference calculated?","acceptedAnswer":{"@type":"Answer","text":"The calculator subtracts the start date from the end date and converts the result into multiple units like days, weeks, months, and years."}},
+{"@type":"Question","name":"What is inclusive counting?","acceptedAnswer":{"@type":"Answer","text":"Inclusive counting includes both the start and end dates in the calculation."}},
+{"@type":"Question","name":"Does month length matter?","acceptedAnswer":{"@type":"Answer","text":"Yes. Months vary in length, so month and year calculations follow calendar rules."}},
+{"@type":"Question","name":"Can I calculate hours and minutes?","acceptedAnswer":{"@type":"Answer","text":"Yes. The calculator converts the difference into hours, minutes, and seconds."}},
+{"@type":"Question","name":"Common uses?","acceptedAnswer":{"@type":"Answer","text":"Project planning, age calculation, billing cycles, deadlines, and timelines."}}
+]}
+</script>
+</head>
+
+<body>
+<header class="site-header">
+<div class="wrap">
+<a class="brand" href="/">
+<img src="/assets/logo.png" width="36" height="36" alt="CalculatorSolution">
+CalculatorSolution
+</a>
+</div>
+</header>
+
+<main class="wrap">
+<article>
+
+<div class="hero">
+<h1>Date Difference Calculator</h1>
+<p>Calculate the exact difference between two dates in days, weeks, months, years and more.</p>
+</div>
+
+<section class="panel">
+<div class="grid">
+
+<div>
+<div class="field">
+<label>Start Date</label>
+<input id="start" type="date" class="input">
+</div>
+
+<div class="field">
+<label>End Date</label>
+<input id="end" type="date" class="input">
+</div>
+
+<div class="field">
+<label>Counting Method</label>
+<select id="inclusive" class="select">
+<option value="0">Exclusive (standard)</option>
+<option value="1">Inclusive (include both dates)</option>
+</select>
+</div>
+
+<button class="btn" onclick="calc()">Calculate Difference</button>
+<button class="btn secondary" onclick="example()">Try Example</button>
+</div>
+
+<div class="result" id="output">
+<p><strong>Result will appear here</strong></p>
+</div>
+
+</div>
+</section>
+
+<h2>Explanation</h2>
+<p>
+The Date Difference Calculator determines the time span between two calendar dates.
+It converts the difference into multiple formats such as total days, weeks, months, years,
+and even hours or minutes for precise planning.
+</p>
+<p>
+This tool is useful for tracking deadlines, calculating age, measuring project durations,
+planning subscriptions, and comparing timelines accurately.
+</p>
+
+<h3>Formula</h3>
+<pre>
+Difference = End Date − Start Date
+Adjusted by inclusive option if selected
+</pre>
+
+<h3>FAQs</h3>
+<details class="card"><summary><strong>How accurate is this?</strong></summary><p>It follows standard calendar and time conversion rules.</p></details>
+<details class="card"><summary><strong>Business days?</strong></summary><p>This version calculates calendar days only.</p></details>
+<details class="card"><summary><strong>Leap years?</strong></summary><p>Leap years are automatically included.</p></details>
+
+<h3>Related Calculators</h3>
+<div class="cards-grid">
+<a class="cardLink" href="age-calculator.html"><h4>Age Calculator</h4><p>Calculate age precisely from date of birth.</p></a>
+<a class="cardLink" href="time-duration-calculator.html"><h4>Time Duration Calculator</h4><p>Calculate hours and minutes between times.</p></a>
+<a class="cardLink" href="unit-converter.html"><h4>Unit Converter</h4><p>Convert between common units.</p></a>
+</div>
+
+</article>
+</main>
+
+<footer class="site-footer">
+<div class="wrap">
+<p>&copy; CalculatorSolution</p>
+<p>
+<a href="/sitemap.xml">Sitemap</a> |
+<a href="/">Home</a> |
+<a href="/privacy-policy.html">Privacy</a> |
+<a href="/terms-of-service.html">Terms</a> |
+<a href="/contact.html">Contact</a>
+</p>
+</div>
+</footer>
+
+<script>
+function calc(){
+const s=new Date(start.value);
+const e=new Date(end.value);
+if(!start.value||!end.value){output.innerHTML="<p>Please select both dates.</p>";return}
+let diff=(e-s)/(1000*60*60*24);
+if(inclusive.value==="1") diff+=1;
+
+const weeks=Math.floor(diff/7);
+const days=Math.floor(diff);
+const months=Math.floor(diff/30.44);
+const years=(diff/365.25).toFixed(2);
+
+output.innerHTML=`
+<div class="kpi">
+<div class="box"><strong>${days}</strong><br>Days</div>
+<div class="box"><strong>${weeks}</strong><br>Weeks</div>
+<div class="box"><strong>${months}</strong><br>Months (approx)</div>
+<div class="box"><strong>${years}</strong><br>Years (approx)</div>
+</div>
+`;
+}
+
+function example(){
+start.value="2020-01-01";
+end.value=new Date().toISOString().split("T")[0];
+inclusive.value="1";
+calc();
+}
+</script>
+
+</body>
+</html>

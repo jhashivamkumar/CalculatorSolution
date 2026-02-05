@@ -1,0 +1,828 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Pregnancy Due Date Calculator (LMP / Conception / Ultrasound) | CalculatorSolution</title>
+  <meta name="description" content="Free Pregnancy Due Date Calculator: estimate due date (EDD), current gestational age (weeks & days), trimester, milestones and a week-by-week calendar using LMP, conception date or ultrasound scan date.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/pregnancy-due-date-calculator.html">
+
+  <meta property="og:title" content="Pregnancy Due Date Calculator">
+  <meta property="og:description" content="Calculate pregnancy due date, gestational age, trimester and key milestones from LMP, conception date or ultrasound dating.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (RESPONSIVE + UI/UX polish only; NO logic changed) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    /* Header */
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;line-height:1}
+    .brand-logo{border-radius:10px}
+
+    /* Hero */
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{margin:0 0 6px 0;font-size:clamp(1.35rem, 2.6vw, 1.95rem);letter-spacing:-.02em}
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      white-space:nowrap;
+    }
+
+    /* Layout */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      overflow:hidden;
+    }
+    .panel-title{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      margin-bottom:10px;flex-wrap:wrap
+    }
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem}
+
+    /* Form */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      width:100%;
+      min-width:0;
+      appearance:none;
+    }
+    select.input{background-image:linear-gradient(45deg, transparent 50%, #64748b 50%),linear-gradient(135deg, #64748b 50%, transparent 50%);background-position:calc(100% - 18px) calc(1em + 2px),calc(100% - 13px) calc(1em + 2px);background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:36px}
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    /* Scan GA inline inputs: wrap cleanly on small screens */
+    .ga-row{display:flex;gap:10px;flex-wrap:wrap}
+    .ga-row .input{flex:1 1 160px}
+
+    /* Actions */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-block;padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px; /* tap target */
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .btn:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:2px}
+
+    /* Sticky results (desktop) */
+    .sticky{position:sticky;top:82px}
+
+    /* Metrics */
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{margin:4px 0 0;font-size:clamp(1.25rem, 2.2vw, 1.55rem);font-weight:1000;letter-spacing:-.02em}
+    .mini{font-size:.86rem;color:#64748b}
+
+    .bar{
+      height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px
+    }
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* Table: responsive */
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{width:100%;border-collapse:collapse;min-width:880px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem;vertical-align:top}
+    th{background:#f8fafc;font-weight:1000;position:sticky;top:0;z-index:1}
+    tr:last-child td{border-bottom:0}
+
+    /* Content blocks */
+    pre{
+      white-space:pre-wrap;
+      word-break:break-word;
+      overflow:auto;
+      border:1px solid #e2e8f0;
+      border-radius:14px;
+      padding:12px;
+      background:rgba(255,255,255,.7);
+      box-shadow:0 10px 24px rgba(8,13,26,.04);
+    }
+
+    .note{
+      border:1px dashed #cbd5e1;border-radius:14px;padding:12px;background:rgba(255,255,255,.7);
+      margin-top:10px
+    }
+
+    /* Cards / FAQ / Related */
+    .card{
+      background:#fff;border:1px solid #e2e8f0;border-radius:14px;
+      box-shadow:0 10px 24px rgba(8,13,26,.05);
+      padding:12px;
+    }
+    details.card{padding:0;overflow:hidden}
+    details.card summary{
+      cursor:pointer;
+      padding:12px;
+      list-style:none;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    details.card summary::-webkit-details-marker{display:none}
+    details.card summary:after{
+      content:"▾";
+      font-weight:900;
+      color:#64748b;
+      transition:transform .2s;
+    }
+    details[open].card summary:after{transform:rotate(180deg)}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Related grid helper (works even if global CSS missing) */
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:12px;
+    }
+    .cards-grid a.card{
+      text-decoration:none;color:inherit;
+      transition:transform .12s, box-shadow .12s;
+    }
+    .cards-grid a.card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(8,13,26,.08)}
+    .cards-grid h4{margin:0 0 6px;font-size:1.02rem}
+    .cards-grid p{margin:0;color:#475569;font-size:.92rem}
+
+    /* Spacing rhythm */
+    article > section{margin-top:18px}
+    h2,h3{scroll-margin-top:96px}
+
+    /* ✅ Responsive breakpoints */
+    @media (max-width: 1024px){
+      .wrap{padding:0 16px}
+      table{min-width:760px}
+      .cards-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static}
+      .hero{padding:22px 16px}
+      table{min-width:720px}
+    }
+
+    @media (max-width: 640px){
+      .wrap{padding:0 14px}
+      .grid-2{grid-template-columns:1fr}
+      .actions{gap:8px}
+      .btn{flex:1 1 auto}
+      .chip{font-size:.84rem}
+      table{min-width:640px}
+      .cards-grid{grid-template-columns:1fr}
+      th,td{padding:10px}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto !important}
+      .btn,.card{transition:none !important}
+      .btn:hover,.cards-grid a.card:hover{transform:none !important}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Pregnancy Due Date Calculator",
+      "url":"https://calculatorsolution.com/pregnancy-due-date-calculator.html",
+      "description":"Estimate pregnancy due date (EDD), gestational age and milestones using LMP, conception date or ultrasound dating."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Pregnancy Due Date Calculator","item":"https://calculatorsolution.com/pregnancy-due-date-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to estimate pregnancy due date",
+      "step":[
+        {"@type":"HowToStep","name":"Choose calculation method","text":"Select LMP, conception date, or ultrasound dating."},
+        {"@type":"HowToStep","name":"Enter the date","text":"Provide your last period date (LMP), conception date, or scan date + gestational age at scan."},
+        {"@type":"HowToStep","name":"Get results","text":"See estimated due date, gestational age, trimester, and a week-by-week calendar."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Accuracy?","acceptedAnswer":{"@type":"Answer","text":"Ultrasound dating early in pregnancy is generally more accurate than using LMP, especially if cycles are irregular."}},
+        {"@type":"Question","name":"Variations?","acceptedAnswer":{"@type":"Answer","text":"Actual delivery varies. Due date is an estimate, not a guarantee."}},
+        {"@type":"Question","name":"Conception date?","acceptedAnswer":{"@type":"Answer","text":"If you know conception date, due date is often estimated as conception + 266 days (38 weeks)."}},
+        {"@type":"Question","name":"Multiple pregnancies?","acceptedAnswer":{"@type":"Answer","text":"Due date estimates are similar, but twins/triplets often deliver earlier and require closer monitoring."}},
+        {"@type":"Question","name":"Preterm?","acceptedAnswer":{"@type":"Answer","text":"Delivery before 37 completed weeks is considered preterm."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Pregnancy Due Date Calculator</h1>
+        <p>Estimate your due date (EDD), current pregnancy weeks & days, trimester, and key milestones using LMP, conception or ultrasound dating.</p>
+        <div class="chips">
+          <span class="chip">📅 Due date (EDD)</span>
+          <span class="chip">🍼 Weeks & days</span>
+          <span class="chip">🧭 Trimester + milestones</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-pregnancy-due-date">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Pregnancy due date inputs">
+              <div class="panel-title">
+                <h2>Dates & method</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="pg_method">Method</label>
+                  <select id="pg_method" class="input">
+                    <option value="lmp" selected>LMP (Last menstrual period)</option>
+                    <option value="conception">Conception date</option>
+                    <option value="ultrasound">Ultrasound dating</option>
+                  </select>
+                  <p class="help">If cycles are irregular, early ultrasound is often preferred.</p>
+                </div>
+
+                <div class="field">
+                  <label for="pg_cycle">Average cycle length (days)</label>
+                  <input id="pg_cycle" class="input" type="number" inputmode="numeric" min="20" max="45" step="1" placeholder="e.g., 28">
+                  <p class="help">Used only for LMP method (default assumes 28-day cycle).</p>
+                </div>
+
+                <div class="field" id="pg_lmp_wrap">
+                  <label for="pg_lmp">First day of last period (LMP)</label>
+                  <input id="pg_lmp" class="input" type="date">
+                  <p class="help">Due date ≈ LMP + 280 days (adjusted for cycle length).</p>
+                </div>
+
+                <div class="field" id="pg_conception_wrap" style="display:none">
+                  <label for="pg_conception">Conception date</label>
+                  <input id="pg_conception" class="input" type="date">
+                  <p class="help">Due date ≈ conception + 266 days (38 weeks).</p>
+                </div>
+
+                <div class="field" id="pg_scan_date_wrap" style="display:none">
+                  <label for="pg_scan_date">Ultrasound scan date</label>
+                  <input id="pg_scan_date" class="input" type="date">
+                  <p class="help">Use your scan date and gestational age at scan.</p>
+                </div>
+
+                <div class="field" id="pg_scan_ga_wrap" style="display:none">
+                  <label>Gestational age at scan</label>
+                  <div class="ga-row">
+                    <input id="pg_scan_weeks" class="input" type="number" inputmode="numeric" min="4" max="42" step="1" placeholder="Weeks">
+                    <input id="pg_scan_days" class="input" type="number" inputmode="numeric" min="0" max="6" step="1" placeholder="Days">
+                  </div>
+                  <p class="help">Example: 12 weeks 3 days.</p>
+                </div>
+
+                <div class="field">
+                  <label for="pg_show">Show week-by-week</label>
+                  <select id="pg_show" class="input">
+                    <option value="12" selected>Next 12 weeks</option>
+                    <option value="20">Next 20 weeks</option>
+                    <option value="40">Full pregnancy (40 weeks)</option>
+                  </select>
+                  <p class="help">A helpful calendar for planning appointments.</p>
+                </div>
+
+                <div class="field">
+                  <label for="pg_format">Date format</label>
+                  <select id="pg_format" class="input">
+                    <option value="auto" selected>Auto (device locale)</option>
+                    <option value="iso">YYYY-MM-DD</option>
+                  </select>
+                  <p class="help">Controls how dates are displayed.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="pg_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="pg_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="pg_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note mini">
+                Medical note: This is an estimate and not medical advice. If you have irregular cycles, fertility treatments, or complications, confirm dates with your clinician.
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Pregnancy due date results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Estimated Due Date (EDD)</p>
+                <p class="v" id="pg_out_edd">—</p>
+                <p class="mini" id="pg_out_edd_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Current gestational age</p>
+                <p class="v" id="pg_out_ga">—</p>
+                <p class="mini" id="pg_out_ga_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Trimester</p>
+                <p class="v" id="pg_out_tri">—</p>
+                <div class="bar"><span id="pg_bar"></span></div>
+                <p class="mini" id="pg_out_tri_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Key milestones</p>
+                <p class="mini" id="pg_out_milestones">Enter details to see milestones.</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="pg_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Week-by-week Calendar</h2>
+          <p class="mini" style="margin:0 0 10px;">Planned week start dates from your estimated pregnancy timeline.</p>
+
+          <div class="table-wrap">
+            <table aria-label="Pregnancy week-by-week calendar table">
+              <thead>
+                <tr>
+                  <th>Week</th>
+                  <th>Week Start</th>
+                  <th>Week End</th>
+                  <th>Trimester</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody id="pg_table">
+                <tr><td colspan="5" class="mini">Click <strong>Calculate</strong> to generate the calendar.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          A pregnancy due date (EDD) is an estimate of when you might deliver. Many due dates are calculated from the
+          <strong>first day of your last menstrual period (LMP)</strong>, assuming a typical 28-day cycle and ovulation around day 14.
+          If your cycle length differs, the estimate can be adjusted.
+        </p>
+        <p>
+          If you know the <strong>conception date</strong>, you can estimate due date as conception + 266 days.
+          Early <strong>ultrasound dating</strong> can also provide a strong estimate, especially when cycles are irregular.
+        </p>
+        <p class="mini">
+          Reminder: delivery can happen before or after the estimated date. Always follow your clinician’s advice for your situation.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>LMP method (typical): EDD = LMP + 280 days
+Cycle adjustment: EDD = LMP + 280 days + (cycleLength − 28)
+Conception method: EDD = conception + 266 days
+Gestational age (today): daysSinceLMP ÷ 7 = weeks + days</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Accuracy?</strong></summary><p>Ultrasound dating early in pregnancy is often more accurate than LMP, especially with irregular cycles.</p></details>
+        <details class="card"><summary><strong>Variations?</strong></summary><p>Delivery date varies. Due date is an estimate and many pregnancies do not deliver exactly on that day.</p></details>
+        <details class="card"><summary><strong>Conception date?</strong></summary><p>If you know it, due date is commonly estimated as conception + 266 days.</p></details>
+        <details class="card"><summary><strong>Multiple pregnancies?</strong></summary><p>Twins/triplets often deliver earlier and need closer monitoring.</p></details>
+        <details class="card"><summary><strong>Preterm?</strong></summary><p>Birth before 37 completed weeks is considered preterm.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="bmr-calculator.html"><h4>BMR Calculator</h4><p>Estimate basal metabolic rate from age, sex, height and weight.</p></a>
+          <a class="card" href="body-fat-percentage-calculator.html"><h4>Body Fat Percentage Calculator</h4><p>Estimate body fat using measurements or formulas.</p></a>
+          <a class="card" href="daily-calorie-needs-calculator.html"><h4>Daily Calorie Needs Calculator</h4><p>Estimate daily calorie needs based on activity level.</p></a>
+          <a class="card" href="ideal-weight-calculator.html"><h4>Ideal Weight Calculator</h4><p>Estimate ideal weight ranges from BMI or other formulas.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const methodEl = $('pg_method');
+      const cycleEl  = $('pg_cycle');
+
+      const lmpWrap = $('pg_lmp_wrap');
+      const conWrap = $('pg_conception_wrap');
+      const scanDateWrap = $('pg_scan_date_wrap');
+      const scanGaWrap = $('pg_scan_ga_wrap');
+
+      const lmpEl = $('pg_lmp');
+      const conEl = $('pg_conception');
+      const scanDateEl = $('pg_scan_date');
+      const scanWeeksEl = $('pg_scan_weeks');
+      const scanDaysEl  = $('pg_scan_days');
+
+      const showEl = $('pg_show');
+      const fmtEl  = $('pg_format');
+
+      const outEdd = $('pg_out_edd');
+      const outEddNote = $('pg_out_edd_note');
+      const outGa = $('pg_out_ga');
+      const outGaNote = $('pg_out_ga_note');
+      const outTri = $('pg_out_tri');
+      const outTriNote = $('pg_out_tri_note');
+      const outMil = $('pg_out_milestones');
+      const outSummary = $('pg_out_summary');
+      const bar = $('pg_bar');
+
+      const tbody = $('pg_table');
+
+      function parseDateInput(val){
+        // val like "YYYY-MM-DD"
+        if(!val) return null;
+        const d = new Date(val + "T00:00:00");
+        return isNaN(d.getTime()) ? null : d;
+      }
+
+      function addDays(d, days){
+        const x = new Date(d.getTime());
+        x.setDate(x.getDate() + days);
+        return x;
+      }
+
+      function daysBetween(a, b){
+        // b - a in days
+        const ms = (b.getTime() - a.getTime());
+        return Math.floor(ms / 86400000);
+      }
+
+      function formatDate(d){
+        if(!d) return '—';
+        if(fmtEl.value === 'iso'){
+          const y = d.getFullYear();
+          const m = String(d.getMonth()+1).padStart(2,'0');
+          const da = String(d.getDate()).padStart(2,'0');
+          return `${y}-${m}-${da}`;
+        }
+        return new Intl.DateTimeFormat(undefined,{year:'numeric',month:'short',day:'2-digit'}).format(d);
+      }
+
+      function trimesterFromWeeks(w){
+        // Common boundaries: 1st = 0-13w6d, 2nd = 14-27w6d, 3rd = 28+
+        if(w < 14) return 1;
+        if(w < 28) return 2;
+        return 3;
+      }
+
+      function triLabel(t){
+        return t === 1 ? '1st Trimester' : (t === 2 ? '2nd Trimester' : '3rd Trimester');
+      }
+
+      function toggleMethod(){
+        const m = methodEl.value;
+        lmpWrap.style.display = (m === 'lmp') ? 'block' : 'none';
+        conWrap.style.display = (m === 'conception') ? 'block' : 'none';
+        scanDateWrap.style.display = (m === 'ultrasound') ? 'block' : 'none';
+        scanGaWrap.style.display = (m === 'ultrasound') ? 'block' : 'none';
+      }
+
+      function compute(){
+        const today = new Date();
+        today.setHours(0,0,0,0);
+
+        const method = methodEl.value;
+        const cycle = parseInt(cycleEl.value || '28', 10);
+        const showWeeks = parseInt(showEl.value, 10) || 12;
+
+        let lmp = null;
+        let edd = null;
+        let basisNote = '';
+
+        if(method === 'lmp'){
+          const lmpIn = parseDateInput(lmpEl.value);
+          if(!lmpIn){
+            outEdd.textContent='—'; outEddNote.textContent='Select your LMP date.';
+            tbody.innerHTML = '<tr><td colspan="5" class="mini">Click <strong>Calculate</strong> after entering a valid date.</td></tr>';
+            return;
+          }
+          lmp = lmpIn;
+
+          // Naegele's rule: 280 days from LMP for 28-day cycle, adjust by (cycle-28)
+          const adj = (isFinite(cycle) ? (cycle - 28) : 0);
+          edd = addDays(lmp, 280 + adj);
+          basisNote = `Based on LMP + 280 days${adj ? ` (cycle adjust: ${adj} days)` : ''}.`;
+        }
+
+        if(method === 'conception'){
+          const con = parseDateInput(conEl.value);
+          if(!con){
+            outEdd.textContent='—'; outEddNote.textContent='Select your conception date.';
+            tbody.innerHTML = '<tr><td colspan="5" class="mini">Click <strong>Calculate</strong> after entering a valid date.</td></tr>';
+            return;
+          }
+          edd = addDays(con, 266);
+          lmp = addDays(con, -14); // approximate LMP-equivalent for GA calculations
+          basisNote = 'Based on conception + 266 days (38 weeks).';
+        }
+
+        if(method === 'ultrasound'){
+          const sd = parseDateInput(scanDateEl.value);
+          const sw = parseInt(scanWeeksEl.value || '0', 10);
+          const sday = parseInt(scanDaysEl.value || '0', 10);
+
+          if(!sd){
+            outEdd.textContent='—'; outEddNote.textContent='Select ultrasound scan date.';
+            tbody.innerHTML = '<tr><td colspan="5" class="mini">Click <strong>Calculate</strong> after entering a valid date.</td></tr>';
+            return;
+          }
+          if(!isFinite(sw) || sw <= 0 || sw > 42 || !isFinite(sday) || sday < 0 || sday > 6){
+            outEdd.textContent='—'; outEddNote.textContent='Enter valid gestational age at scan (weeks + days).';
+            tbody.innerHTML = '<tr><td colspan="5" class="mini">Fix inputs and calculate again.</td></tr>';
+            return;
+          }
+
+          const gaDaysAtScan = (sw * 7) + sday;
+          // EDD: scan date + (280 - GA at scan)
+          edd = addDays(sd, 280 - gaDaysAtScan);
+          // derive LMP-equivalent:
+          lmp = addDays(sd, -gaDaysAtScan);
+          basisNote = `Based on ultrasound dating: scan GA ${sw}w ${sday}d.`;
+        }
+
+        // Gestational age today
+        const daysSinceLmp = daysBetween(lmp, today);
+        const gaWeeks = Math.floor(daysSinceLmp / 7);
+        const gaDays  = ((daysSinceLmp % 7) + 7) % 7;
+
+        // Pregnancy progress (0..280)
+        const totalDays = 280;
+        const prog = Math.max(0, Math.min(1, (daysBetween(lmp, today) / totalDays)));
+        bar.style.width = (prog * 100).toFixed(1) + '%';
+        bar.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+
+        const tri = trimesterFromWeeks(gaWeeks);
+        const triTxt = triLabel(tri);
+
+        // Milestones (simple planning view)
+        const wk12 = addDays(lmp, 12*7);
+        const wk20 = addDays(lmp, 20*7);
+        const wk28 = addDays(lmp, 28*7);
+        const wk37 = addDays(lmp, 37*7);
+        const wk40 = addDays(lmp, 40*7);
+
+        const daysToEdd = daysBetween(today, edd);
+        const leftTxt = (daysToEdd >= 0) ? `${daysToEdd} days remaining` : `${Math.abs(daysToEdd)} days past EDD`;
+
+        outEdd.textContent = formatDate(edd);
+        outEddNote.textContent = `${basisNote} • ${leftTxt}`;
+
+        outGa.textContent = `${gaWeeks}w ${gaDays}d`;
+        outGaNote.textContent = (daysSinceLmp < 0)
+          ? 'Your entered date is in the future. Please verify.'
+          : `Today is counted from the selected pregnancy start date.`;
+
+        outTri.textContent = triTxt;
+        outTriNote.textContent = `Pregnancy progress ≈ ${(prog*100).toFixed(1)}%`;
+
+        outMil.innerHTML =
+          `• 12 weeks: <strong>${formatDate(wk12)}</strong><br>` +
+          `• 20 weeks: <strong>${formatDate(wk20)}</strong><br>` +
+          `• 28 weeks (3rd trimester start): <strong>${formatDate(wk28)}</strong><br>` +
+          `• 37 weeks (term): <strong>${formatDate(wk37)}</strong><br>` +
+          `• 40 weeks (EDD): <strong>${formatDate(wk40)}</strong>`;
+
+        outSummary.textContent =
+          `Method: ${method.toUpperCase()} • Start date: ${formatDate(lmp)} • EDD: ${formatDate(edd)} • GA: ${gaWeeks}w ${gaDays}d • ${triTxt}.`;
+
+        // Calendar rows
+        // If user chose "Full pregnancy", show 40 weeks from LMP, else show next N weeks from current week.
+        const rows = [];
+        const currentWeekIndex = Math.max(0, gaWeeks); // 0-based in calculation, but display 1-based weeks
+        const modeFull = (showWeeks >= 40);
+
+        const startWeek = modeFull ? 0 : currentWeekIndex;
+        const endWeek = modeFull ? 39 : Math.min(39, startWeek + showWeeks - 1);
+
+        for(let w=startWeek; w<=endWeek; w++){
+          const ws = addDays(lmp, w*7);
+          const we = addDays(ws, 6);
+          const t = trimesterFromWeeks(w);
+          const notes =
+            (w === 11) ? 'Common timing for early screening (varies).' :
+            (w === 19) ? 'Anatomy scan timing often around 18–22w (varies).' :
+            (w === 27) ? '3rd trimester begins around week 28.' :
+            (w === 36) ? 'Term begins at 37 completed weeks.' :
+            (w === 39) ? 'Estimated due date week.' : '—';
+
+          rows.push(`
+            <tr>
+              <td>${w+1}</td>
+              <td>${formatDate(ws)}</td>
+              <td>${formatDate(we)}</td>
+              <td>${triLabel(t)}</td>
+              <td>${notes}</td>
+            </tr>
+          `);
+        }
+
+        tbody.innerHTML = rows.join('') || '<tr><td colspan="5" class="mini">No rows to display.</td></tr>';
+      }
+
+      $('pg_calc_btn').addEventListener('click', compute);
+
+      $('pg_example_btn').addEventListener('click', ()=>{
+        methodEl.value = 'lmp';
+        cycleEl.value = '28';
+
+        // Example: LMP 8 weeks ago from today (roughly)
+        const d = new Date();
+        d.setHours(0,0,0,0);
+        d.setDate(d.getDate() - 56);
+        const y = d.getFullYear();
+        const m = String(d.getMonth()+1).padStart(2,'0');
+        const da = String(d.getDate()).padStart(2,'0');
+        lmpEl.value = `${y}-${m}-${da}`;
+
+        conEl.value = '';
+        scanDateEl.value = '';
+        scanWeeksEl.value = '';
+        scanDaysEl.value = '';
+
+        showEl.value = '12';
+        fmtEl.value = 'auto';
+
+        toggleMethod();
+        compute();
+      });
+
+      $('pg_reset_btn').addEventListener('click', ()=>{
+        methodEl.value='lmp';
+        cycleEl.value='';
+        lmpEl.value='';
+        conEl.value='';
+        scanDateEl.value='';
+        scanWeeksEl.value='';
+        scanDaysEl.value='';
+        showEl.value='12';
+        fmtEl.value='auto';
+
+        outEdd.textContent='—';
+        outEddNote.textContent='—';
+        outGa.textContent='—';
+        outGaNote.textContent='—';
+        outTri.textContent='—';
+        outTriNote.textContent='—';
+        outMil.textContent='Enter details to see milestones.';
+        outSummary.textContent='Enter details to see a clean summary.';
+        bar.style.width='0%';
+        tbody.innerHTML = '<tr><td colspan="5" class="mini">Click <strong>Calculate</strong> to generate the calendar.</td></tr>';
+
+        toggleMethod();
+      });
+
+      methodEl.addEventListener('change', ()=>{ toggleMethod(); });
+      [methodEl,cycleEl,lmpEl,conEl,scanDateEl,scanWeeksEl,scanDaysEl,showEl,fmtEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ /* optional live calc if you want: */ });
+        el.addEventListener('change', ()=>{ /* optional */ });
+      });
+
+      toggleMethod();
+    })();
+  </script>
+</body>
+</html>

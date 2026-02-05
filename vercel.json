@@ -1,0 +1,27 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "destination": "/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/articles/:slug-0.html",
+      "destination": "/articles/:slug.html",
+      "permanent": true
+    },
+    {
+      "source": "/articles/:slug-1.html",
+      "destination": "/articles/:slug.html",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/articles/index.html",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, follow" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,471 @@
+{
+  "site": {
+    "name": "CalculatorSolution",
+    "baseUrl": "https://calculatorsolution.com",
+    "lastModified": "2025-12-30"
+  },
+  "articles": [
+    {
+      "slug": "age-calculator",
+      "file": "age-calculator.html",
+      "url": "/articles/age-calculator.html",
+      "title": "Age Calculator"
+    },
+    {
+      "slug": "area-calculator",
+      "file": "area-calculator.html",
+      "url": "/articles/area-calculator.html",
+      "title": "Area Calculator"
+    },
+    {
+      "slug": "aspect-ratio-calculator",
+      "file": "aspect-ratio-calculator.html",
+      "url": "/articles/aspect-ratio-calculator.html",
+      "title": "Aspect Ratio Calculator"
+    },
+    {
+      "slug": "bandwidth-calculator",
+      "file": "bandwidth-calculator.html",
+      "url": "/articles/bandwidth-calculator.html",
+      "title": "Bandwidth Calculator"
+    },
+    {
+      "slug": "bmr-calculator",
+      "file": "bmr-calculator.html",
+      "url": "/articles/bmr-calculator.html",
+      "title": "BMR Calculator"
+    },
+    {
+      "slug": "body-fat-percentage-calculator",
+      "file": "body-fat-percentage-calculator.html",
+      "url": "/articles/body-fat-percentage-calculator.html",
+      "title": "Body Fat Percentage Calculator"
+    },
+    {
+      "slug": "break-even-calculator",
+      "file": "break-even-calculator.html",
+      "url": "/articles/break-even-calculator.html",
+      "title": "Break-even Calculator"
+    },
+    {
+      "slug": "budget-calculator",
+      "file": "budget-calculator.html",
+      "url": "/articles/budget-calculator.html",
+      "title": "Budget Calculator"
+    },
+    {
+      "slug": "calories-burned-running-walking",
+      "file": "calories-burned-running-walking.html",
+      "url": "/articles/calories-burned-running-walking.html",
+      "title": "Calories Burned (Running/Walking)"
+    },
+    {
+      "slug": "calories-deficit-weight-loss-calculator",
+      "file": "calories-deficit-weight-loss-calculator.html",
+      "url": "/articles/calories-deficit-weight-loss-calculator.html",
+      "title": "Calories Deficit / Weight Loss Target"
+    },
+    {
+      "slug": "car-loan-emi-calculator",
+      "file": "car-loan-emi-calculator.html",
+      "url": "/articles/car-loan-emi-calculator.html",
+      "title": "Car Loan EMI Calculator"
+    },
+    {
+      "slug": "car-loan-vs-cash-calculator",
+      "file": "car-loan-vs-cash-calculator.html",
+      "url": "/articles/car-loan-vs-cash-calculator.html",
+      "title": "Car Loan vs Cash"
+    },
+    {
+      "slug": "cgpa-calculator",
+      "file": "cgpa-calculator.html",
+      "url": "/articles/cgpa-calculator.html",
+      "title": "CGPA Calculator"
+    },
+    {
+      "slug": "child-growth-percentile-calculator",
+      "file": "child-growth-percentile-calculator.html",
+      "url": "/articles/child-growth-percentile-calculator.html",
+      "title": "Child Growth Percentile"
+    },
+    {
+      "slug": "compound-interest-calculator",
+      "file": "compound-interest-calculator.html",
+      "url": "/articles/compound-interest-calculator.html",
+      "title": "Compound Interest Calculator"
+    },
+    {
+      "slug": "credit-card-interest-calculator",
+      "file": "credit-card-interest-calculator.html",
+      "url": "/articles/credit-card-interest-calculator.html",
+      "title": "Credit Card Interest Calculator"
+    },
+    {
+      "slug": "credit-score-estimator",
+      "file": "credit-score-estimator.html",
+      "url": "/articles/credit-score-estimator.html",
+      "title": "Credit Score Estimator"
+    },
+    {
+      "slug": "crypto-percentage-profit-calculator",
+      "file": "crypto-percentage-profit-calculator.html",
+      "url": "/articles/crypto-percentage-profit-calculator.html",
+      "title": "Crypto Percentage Profit"
+    },
+    {
+      "slug": "currency-converter",
+      "file": "currency-converter.html",
+      "url": "/articles/currency-converter.html",
+      "title": "Currency Converter"
+    },
+    {
+      "slug": "daily-calorie-needs-calculator",
+      "file": "daily-calorie-needs-calculator.html",
+      "url": "/articles/daily-calorie-needs-calculator.html",
+      "title": "Daily Calorie Needs"
+    },
+    {
+      "slug": "date-difference-calculator",
+      "file": "date-difference-calculator.html",
+      "url": "/articles/date-difference-calculator.html",
+      "title": "Date Difference Calculator"
+    },
+    {
+      "slug": "debt-payoff-calculator",
+      "file": "debt-payoff-calculator.html",
+      "url": "/articles/debt-payoff-calculator.html",
+      "title": "Debt Payoff Calculator"
+    },
+    {
+      "slug": "diabetes-sugar-converter",
+      "file": "diabetes-sugar-converter.html",
+      "url": "/articles/diabetes-sugar-converter.html",
+      "title": "Diabetes Sugar Converter"
+    },
+    {
+      "slug": "discount-calculator",
+      "file": "discount-calculator.html",
+      "url": "/articles/discount-calculator.html",
+      "title": "Discount Calculator"
+    },
+    {
+      "slug": "download-time-calculator",
+      "file": "download-time-calculator.html",
+      "url": "/articles/download-time-calculator.html",
+      "title": "Download Time Calculator"
+    },
+    {
+      "slug": "emi-prepayment-calculator",
+      "file": "emi-prepayment-calculator.html",
+      "url": "/articles/emi-prepayment-calculator.html",
+      "title": "EMI Prepayment Calculator"
+    },
+    {
+      "slug": "emi-vs-rent-calculator",
+      "file": "emi-vs-rent-calculator.html",
+      "url": "/articles/emi-vs-rent-calculator.html",
+      "title": "EMI vs Rent Calculator"
+    },
+    {
+      "slug": "epf-contribution-calculator",
+      "file": "epf-contribution-calculator.html",
+      "url": "/articles/epf-contribution-calculator.html",
+      "title": "EPF Contribution Calculator"
+    },
+    {
+      "slug": "fd-calculator",
+      "file": "fd-calculator.html",
+      "url": "/articles/fd-calculator.html",
+      "title": "FD Calculator"
+    },
+    {
+      "slug": "forex-profit-calculator",
+      "file": "forex-profit-calculator.html",
+      "url": "/articles/forex-profit-calculator.html",
+      "title": "Forex Profit Calculator"
+    },
+    {
+      "slug": "freelancer-earnings-calculator",
+      "file": "freelancer-earnings-calculator.html",
+      "url": "/articles/freelancer-earnings-calculator.html",
+      "title": "Freelancer Earnings"
+    },
+    {
+      "slug": "fuel-cost-calculator",
+      "file": "fuel-cost-calculator.html",
+      "url": "/articles/fuel-cost-calculator.html",
+      "title": "Fuel Cost Calculator"
+    },
+    {
+      "slug": "gpa-calculator",
+      "file": "gpa-calculator.html",
+      "url": "/articles/gpa-calculator.html",
+      "title": "GPA Calculator"
+    },
+    {
+      "slug": "grade-calculator",
+      "file": "grade-calculator.html",
+      "url": "/articles/grade-calculator.html",
+      "title": "Grade Calculator"
+    },
+    {
+      "slug": "gratuity-calculator",
+      "file": "gratuity-calculator.html",
+      "url": "/articles/gratuity-calculator.html",
+      "title": "Gratuity Calculator"
+    },
+    {
+      "slug": "gst-calculator-india",
+      "file": "gst-calculator-india.html",
+      "url": "/articles/gst-calculator-india.html",
+      "title": "GST Calculator (India)"
+    },
+    {
+      "slug": "home-loan-emi-calculator",
+      "file": "home-loan-emi-calculator.html",
+      "url": "/articles/home-loan-emi-calculator.html",
+      "title": "Home Loan EMI Calculator"
+    },
+    {
+      "slug": "how-emi-works",
+      "file": "how-emi-works.html",
+      "url": "/articles/how-emi-works.html",
+      "title": "How EMI Works"
+    },
+    {
+      "slug": "hra-calculator",
+      "file": "hra-calculator.html",
+      "url": "/articles/hra-calculator.html",
+      "title": "HRA Calculator"
+    },
+    {
+      "slug": "ideal-weight-calculator",
+      "file": "ideal-weight-calculator.html",
+      "url": "/articles/ideal-weight-calculator.html",
+      "title": "Ideal Weight Calculator"
+    },
+    {
+      "slug": "income-tax-india-calculator",
+      "file": "income-tax-india-calculator.html",
+      "url": "/articles/income-tax-india-calculator.html",
+      "title": "Income Tax (India)"
+    },
+    {
+      "slug": "index",
+      "file": "index.html",
+      "url": "/articles/",
+      "title": "Articles Index"
+    },
+    {
+      "slug": "inflation-calculator",
+      "file": "inflation-calculator.html",
+      "url": "/articles/inflation-calculator.html",
+      "title": "Inflation Calculator"
+    },
+    {
+      "slug": "invoice-total-calculator",
+      "file": "invoice-total-calculator.html",
+      "url": "/articles/invoice-total-calculator.html",
+      "title": "Invoice Total Calculator"
+    },
+    {
+      "slug": "loan-emi-calculator",
+      "file": "loan-emi-calculator.html",
+      "url": "/articles/loan-emi-calculator.html",
+      "title": "Loan EMI Calculator"
+    },
+    {
+      "slug": "loss-calculator",
+      "file": "loss-calculator.html",
+      "url": "/articles/loss-calculator.html",
+      "title": "Loss Calculator"
+    },
+    {
+      "slug": "margin-markup-calculator",
+      "file": "margin-markup-calculator.html",
+      "url": "/articles/margin-markup-calculator.html",
+      "title": "Margin / Markup Calculator"
+    },
+    {
+      "slug": "mortgage-amortization-calculator",
+      "file": "mortgage-amortization-calculator.html",
+      "url": "/articles/mortgage-amortization-calculator.html",
+      "title": "Mortgage Amortization"
+    },
+    {
+      "slug": "net-worth-calculator",
+      "file": "net-worth-calculator.html",
+      "url": "/articles/net-worth-calculator.html",
+      "title": "Net Worth Calculator"
+    },
+    {
+      "slug": "nps-calculator",
+      "file": "nps-calculator.html",
+      "url": "/articles/nps-calculator.html",
+      "title": "NPS Calculator"
+    },
+    {
+      "slug": "ovulation-calculator",
+      "file": "ovulation-calculator.html",
+      "url": "/articles/ovulation-calculator.html",
+      "title": "Ovulation Calculator"
+    },
+    {
+      "slug": "percentage-calculator",
+      "file": "percentage-calculator.html",
+      "url": "/articles/percentage-calculator.html",
+      "title": "Percentage Calculator"
+    },
+    {
+      "slug": "percentage-change-calculator",
+      "file": "percentage-change-calculator.html",
+      "url": "/articles/percentage-change-calculator.html",
+      "title": "Percentage Increase/Decrease"
+    },
+    {
+      "slug": "percentage-needed-final-exam",
+      "file": "percentage-needed-final-exam.html",
+      "url": "/articles/percentage-needed-final-exam.html",
+      "title": "Percentage Needed in Final Exam"
+    },
+    {
+      "slug": "personal-loan-emi-calculator",
+      "file": "personal-loan-emi-calculator.html",
+      "url": "/articles/personal-loan-emi-calculator.html",
+      "title": "Personal Loan EMI Calculator"
+    },
+    {
+      "slug": "pregnancy-due-date-calculator",
+      "file": "pregnancy-due-date-calculator.html",
+      "url": "/articles/pregnancy-due-date-calculator.html",
+      "title": "Pregnancy Due Date"
+    },
+    {
+      "slug": "profit-calculator",
+      "file": "profit-calculator.html",
+      "url": "/articles/profit-calculator.html",
+      "title": "Profit Calculator"
+    },
+    {
+      "slug": "rd-calculator",
+      "file": "rd-calculator.html",
+      "url": "/articles/rd-calculator.html",
+      "title": "RD Calculator"
+    },
+    {
+      "slug": "reading-time-calculator",
+      "file": "reading-time-calculator.html",
+      "url": "/articles/reading-time-calculator.html",
+      "title": "Reading Time Calculator"
+    },
+    {
+      "slug": "roi-calculator",
+      "file": "roi-calculator.html",
+      "url": "/articles/roi-calculator.html",
+      "title": "ROI Calculator"
+    },
+    {
+      "slug": "salary-inhand-calculator",
+      "file": "salary-inhand-calculator.html",
+      "url": "/articles/salary-inhand-calculator.html",
+      "title": "Salary In-Hand Calculator"
+    },
+    {
+      "slug": "savings-goal-calculator",
+      "file": "savings-goal-calculator.html",
+      "url": "/articles/savings-goal-calculator.html",
+      "title": "Savings Goal Calculator"
+    },
+    {
+      "slug": "simple-interest-calculator",
+      "file": "simple-interest-calculator.html",
+      "url": "/articles/simple-interest-calculator.html",
+      "title": "Simple Interest Calculator"
+    },
+    {
+      "slug": "sip-calculator",
+      "file": "sip-calculator.html",
+      "url": "/articles/sip-calculator.html",
+      "title": "SIP Calculator"
+    },
+    {
+      "slug": "steps-to-calories-calculator",
+      "file": "steps-to-calories-calculator.html",
+      "url": "/articles/steps-to-calories-calculator.html",
+      "title": "Steps to Calories"
+    },
+    {
+      "slug": "subscription-pricing-calculator",
+      "file": "subscription-pricing-calculator.html",
+      "url": "/articles/subscription-pricing-calculator.html",
+      "title": "Subscription Pricing"
+    },
+    {
+      "slug": "swp-calculator",
+      "file": "swp-calculator.html",
+      "url": "/articles/swp-calculator.html",
+      "title": "SWP Calculator"
+    },
+    {
+      "slug": "target-heart-rate-calculator",
+      "file": "target-heart-rate-calculator.html",
+      "url": "/articles/target-heart-rate-calculator.html",
+      "title": "Target Heart Rate"
+    },
+    {
+      "slug": "time-duration-calculator",
+      "file": "time-duration-calculator.html",
+      "url": "/articles/time-duration-calculator.html",
+      "title": "Time Duration Calculator"
+    },
+    {
+      "slug": "tip-calculator",
+      "file": "tip-calculator.html",
+      "url": "/articles/tip-calculator.html",
+      "title": "Tip Calculator"
+    },
+    {
+      "slug": "travel-distance-cost-split",
+      "file": "travel-distance-cost-split.html",
+      "url": "/articles/travel-distance-cost-split.html",
+      "title": "Travel Distance Cost Split"
+    },
+    {
+      "slug": "understanding-bmi",
+      "file": "understanding-bmi.html",
+      "url": "/articles/understanding-bmi.html",
+      "title": "Understanding BMI"
+    },
+    {
+      "slug": "unit-converter",
+      "file": "unit-converter.html",
+      "url": "/articles/unit-converter.html",
+      "title": "Unit Converter"
+    },
+    {
+      "slug": "unit-price-calculator",
+      "file": "unit-price-calculator.html",
+      "url": "/articles/unit-price-calculator.html",
+      "title": "Unit Price Calculator"
+    },
+    {
+      "slug": "vat-calculator",
+      "file": "vat-calculator.html",
+      "url": "/articles/vat-calculator.html",
+      "title": "VAT Calculator"
+    },
+    {
+      "slug": "waist-to-hip-ratio-calculator",
+      "file": "waist-to-hip-ratio-calculator.html",
+      "url": "/articles/waist-to-hip-ratio-calculator.html",
+      "title": "Waist-to-Hip Ratio"
+    },
+    {
+      "slug": "water-intake-calculator",
+      "file": "water-intake-calculator.html",
+      "url": "/articles/water-intake-calculator.html",
+      "title": "Water Intake Calculator"
+    }
+  ]
+}

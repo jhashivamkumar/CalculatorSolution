@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Profit Calculator (Profit, Margin, Markup) | CalculatorSolution</title>
+  <meta name="description" content="Free Profit Calculator: enter cost price and selling price to calculate profit/loss, profit %, margin %, and markup %. Includes quick examples and clear formulas.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/profit-calculator.html">
+
+  <meta property="og:title" content="Profit Calculator">
+  <meta property="og:description" content="Calculate profit or loss, profit percentage, margin, and markup instantly.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- ✅ UI/UX + Responsive improvements ONLY (no JS logic changed) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto;display:block}
+    a{color:inherit}
+    :focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:2px;border-radius:10px}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10;
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;white-space:nowrap}
+    .brand-logo{border-radius:10px;flex:0 0 auto}
+
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em;line-height:1.15}
+    .hero p{margin:0;opacity:.95}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+    }
+
+    .calc-shell{
+      display:grid;grid-template-columns:1.1fr .9fr;
+      gap:14px;align-items:start;margin-top:14px;
+    }
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      overflow:hidden;
+    }
+    .panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem;white-space:nowrap}
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      width:100%;
+      min-height:44px; /* better mobile tap */
+      -webkit-appearance:none;
+    }
+    select.input{padding-right:36px;background-image:
+      linear-gradient(45deg, transparent 50%, #64748b 50%),
+      linear-gradient(135deg, #64748b 50%, transparent 50%),
+      linear-gradient(to right, transparent, transparent);
+      background-position:
+        calc(100% - 16px) calc(50% - 3px),
+        calc(100% - 11px) calc(50% - 3px),
+        calc(100% - 2.25rem) 0.5rem;
+      background-size:5px 5px, 5px 5px, 1px 1.8rem;
+      background-repeat:no-repeat;
+    }
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    .actions{
+      display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;
+    }
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px;
+      flex:0 0 auto;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .btn-ghost:hover,.btn-dark:hover{box-shadow:0 12px 26px rgba(2,6,23,.12)}
+
+    .sticky{position:sticky;top:82px}
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{
+      margin:4px 0 0;
+      font-size:1.55rem;
+      font-weight:1000;
+      letter-spacing:-.02em;
+      line-height:1.15;
+      word-break:break-word;
+    }
+    .mini{font-size:.86rem;color:#64748b}
+
+    .bar{
+      height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px
+    }
+    .bar > span{display:block;height:100%;width:0%}
+
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{width:100%;border-collapse:collapse;min-width:760px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem}
+    th{background:#f8fafc;font-weight:1000}
+    tr:last-child td{border-bottom:0}
+
+    .card{
+      background:#fff;border:1px solid #e2e8f0;border-radius:14px;
+      box-shadow:0 10px 24px rgba(8,13,26,.05);padding:12px
+    }
+    details.card{padding:0;overflow:hidden}
+    details.card summary{cursor:pointer;padding:12px;list-style:none}
+    details.card summary::-webkit-details-marker{display:none}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+    details.card[open] summary{border-bottom:1px solid #e2e8f0;background:#f8fafc}
+
+    /* Better spacing for content sections */
+    article > section{margin-top:18px}
+    pre{
+      white-space:pre-wrap;
+      word-break:break-word;
+      overflow:auto;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid #e2e8f0;
+      background:#fff;
+      box-shadow:0 10px 24px rgba(8,13,26,.05);
+      line-height:1.5;
+      font-size:.95rem;
+    }
+    ul{padding-left:18px}
+    li{margin:6px 0}
+
+    /* ✅ Related cards: responsive grid safety (does NOT change links/content) */
+    .related .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:12px;
+      align-items:stretch;
+    }
+    .related .cards-grid .card{height:100%}
+    .related .cards-grid a.card h4{margin:0 0 6px}
+    .related .cards-grid a.card p{margin:0;color:#475569}
+
+    /* ✅ Responsive breakpoints */
+    @media (max-width: 1100px){
+      .wrap{padding:0 16px}
+      table{min-width:720px}
+    }
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static}
+      table{min-width:680px}
+      .hero{padding:22px 16px}
+    }
+    @media (max-width: 640px){
+      .hero h1{font-size:1.55rem}
+      .hero{border-radius:16px}
+      .grid-2{grid-template-columns:1fr}
+      .actions{gap:10px}
+      .btn{flex:1 1 100%}
+      table{min-width:560px}
+      .related .cards-grid{grid-template-columns:1fr}
+      .brand-text{font-size:1.05rem}
+    }
+    @media (max-width: 420px){
+      .wrap{padding:0 14px}
+      .metric .v{font-size:1.35rem}
+      table{min-width:520px}
+    }
+
+    /* ✅ Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto !important}
+      .btn,.card{transition:none !important}
+      .btn:hover{transform:none !important}
+      .card:hover{transform:none !important}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Profit Calculator",
+      "url":"https://calculatorsolution.com/profit-calculator.html",
+      "description":"Calculate profit or loss, profit percentage, margin and markup instantly."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Profit Calculator","item":"https://calculatorsolution.com/profit-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate profit and margin",
+      "step":[
+        {"@type":"HowToStep","name":"Enter cost price","text":"Add your cost price (CP). Include purchase cost and optionally overheads to compute net profit."},
+        {"@type":"HowToStep","name":"Enter selling price","text":"Add your selling price (SP). Use the same currency for both CP and SP."},
+        {"@type":"HowToStep","name":"Calculate","text":"See profit/loss, profit %, margin %, and markup % instantly."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Markup vs margin?","acceptedAnswer":{"@type":"Answer","text":"Markup is calculated on cost price (CP). Margin is calculated on selling price (SP)."}},
+        {"@type":"Question","name":"Include overheads?","acceptedAnswer":{"@type":"Answer","text":"For net profit, add all overheads (shipping, packaging, ads, salaries, rent) into cost price."}},
+        {"@type":"Question","name":"Negative profit?","acceptedAnswer":{"@type":"Answer","text":"If selling price is lower than cost price, the result is a loss (negative profit)."}},
+        {"@type":"Question","name":"Taxes?","acceptedAnswer":{"@type":"Answer","text":"Tax changes profit. This calculator shows pre-tax profit unless you add tax into cost."}},
+        {"@type":"Question","name":"Units?","acceptedAnswer":{"@type":"Answer","text":"Use the same currency/units for cost and selling price for correct results."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Profit Calculator</h1>
+        <p>Compute profit or loss, profit percentage, margin %, and markup % — instantly and clearly.</p>
+        <div class="chips">
+          <span class="chip">💹 Profit / Loss</span>
+          <span class="chip">📈 Margin % & Markup %</span>
+          <span class="chip">⚡ Live calculation</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-profit">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Profit calculator inputs">
+              <div class="panel-title">
+                <h2>Price details</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="p_cost">Cost price (CP)</label>
+                  <input id="p_cost" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 120">
+                  <p class="help">Your total cost (include overheads if you want net profit).</p>
+                </div>
+
+                <div class="field">
+                  <label for="p_sell">Selling price (SP)</label>
+                  <input id="p_sell" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 180">
+                  <p class="help">The price you sell at (same currency as cost price).</p>
+                </div>
+
+                <div class="field">
+                  <label for="p_qty">Quantity (optional)</label>
+                  <input id="p_qty" class="input" type="number" inputmode="numeric" min="1" step="1" placeholder="e.g., 10">
+                  <p class="help">If entered, shows totals for multiple units.</p>
+                </div>
+
+                <div class="field">
+                  <label for="p_currency">Currency symbol</label>
+                  <select id="p_currency" class="input">
+                    <option value="₹" selected>₹ INR</option>
+                    <option value="$">$ USD</option>
+                    <option value="€">€ EUR</option>
+                    <option value="£">£ GBP</option>
+                    <option value="">(none)</option>
+                  </select>
+                  <p class="help">Only affects display formatting.</p>
+                </div>
+
+                <div class="field">
+                  <label for="p_round">Round values</label>
+                  <select id="p_round" class="input">
+                    <option value="2" selected>2 decimals</option>
+                    <option value="0">0 decimals</option>
+                    <option value="1">1 decimal</option>
+                    <option value="3">3 decimals</option>
+                  </select>
+                  <p class="help">Round output for clean display.</p>
+                </div>
+
+                <div class="field">
+                  <label for="p_mode">Result focus</label>
+                  <select id="p_mode" class="input">
+                    <option value="both" selected>Show all (profit, margin, markup)</option>
+                    <option value="margin">Focus on margin</option>
+                    <option value="markup">Focus on markup</option>
+                  </select>
+                  <p class="help">Useful for pricing decisions.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="p_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="p_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="p_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="mini" style="margin-top:10px;">
+                Formulas:
+                <strong>Profit = SP − CP</strong>,
+                <strong>Profit% = (Profit / CP) × 100</strong>,
+                <strong>Margin% = (Profit / SP) × 100</strong>,
+                <strong>Markup% = (Profit / CP) × 100</strong>.
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Profit calculator results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Profit / Loss (per unit)</p>
+                <p class="v" id="p_out_profit">—</p>
+                <p class="mini" id="p_out_profit_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Profit % (on cost)</p>
+                <p class="v" id="p_out_profit_pct">—</p>
+                <p class="mini">Profit% = Profit ÷ Cost × 100</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Margin % (on selling)</p>
+                <p class="v" id="p_out_margin_pct">—</p>
+                <div class="bar"><span id="p_bar_margin"></span></div>
+                <p class="mini" id="p_out_margin_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Markup % (on cost)</p>
+                <p class="v" id="p_out_markup_pct">—</p>
+                <div class="bar"><span id="p_bar_markup"></span></div>
+                <p class="mini" id="p_out_markup_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Totals (if quantity is set)</p>
+                <p class="v" id="p_out_total_profit">—</p>
+                <p class="mini" id="p_out_total_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="p_out_summary">Enter values to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Breakdown</h2>
+          <p class="mini" style="margin:0 0 10px;">A quick breakdown of the numbers you entered and the calculated outputs.</p>
+
+          <div class="table-wrap">
+            <table aria-label="Profit breakdown table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody id="p_table">
+                <tr><td colspan="2" class="mini">Click <strong>Calculate</strong> to generate the breakdown.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          This <strong>Profit Calculator</strong> helps you measure profitability by comparing
+          <strong>cost price (CP)</strong> and <strong>selling price (SP)</strong>.
+          It shows <strong>profit or loss</strong>, plus two commonly-used percentages:
+        </p>
+        <ul>
+          <li><strong>Profit % (on cost)</strong>: profit relative to your cost</li>
+          <li><strong>Margin % (on selling)</strong>: profit relative to your selling price</li>
+          <li><strong>Markup % (on cost)</strong>: same base as profit%, often used in pricing</li>
+        </ul>
+        <p class="mini">
+          Tip: If you are running ads/shipping/packaging, add those costs into CP to get a realistic net profit.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>Profit = SP − CP
+Profit% (on cost) = (Profit / CP) × 100
+Margin% (on selling) = (Profit / SP) × 100
+Markup% (on cost) = (Profit / CP) × 100</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Markup vs margin?</strong></summary><p>Markup is calculated on cost (CP). Margin is calculated on selling price (SP).</p></details>
+        <details class="card"><summary><strong>Include overheads?</strong></summary><p>Yes for net profit: include shipping, packaging, ads, rent, salaries, etc. in cost.</p></details>
+        <details class="card"><summary><strong>Negative profit?</strong></summary><p>It means a loss (SP is lower than CP).</p></details>
+        <details class="card"><summary><strong>Taxes?</strong></summary><p>Profit after tax can differ. This calculator shows pre-tax profit unless tax is included in costs.</p></details>
+        <details class="card"><summary><strong>Units?</strong></summary><p>Use the same currency for CP and SP. The calculator only formats output.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="percentage-calculator.html"><h4>Percentage Calculator</h4><p>Compute percentages and simple percent changes.</p></a>
+          <a class="card" href="percentage-change-calculator.html"><h4>Percentage Increase/Decrease Calculator</h4><p>Calculate percent increase or decrease between two values.</p></a>
+          <a class="card" href="discount-calculator.html"><h4>Discount Calculator</h4><p>Compute price after discount and the amount saved.</p></a>
+          <a class="card" href="gst-calculator-india.html"><h4>GST Calculator (India)</h4><p>Calculate GST amount and final price for Indian GST rates.</p></a>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const costEl = $('p_cost');
+      const sellEl = $('p_sell');
+      const qtyEl  = $('p_qty');
+      const curEl  = $('p_currency');
+      const roundEl= $('p_round');
+      const modeEl = $('p_mode');
+
+      const outProfit = $('p_out_profit');
+      const outProfitNote = $('p_out_profit_note');
+      const outProfitPct = $('p_out_profit_pct');
+      const outMarginPct = $('p_out_margin_pct');
+      const outMarkupPct = $('p_out_markup_pct');
+      const outTotalProfit = $('p_out_total_profit');
+      const outTotalNote = $('p_out_total_note');
+      const outSummary = $('p_out_summary');
+
+      const barMargin = $('p_bar_margin');
+      const barMarkup = $('p_bar_markup');
+
+      const tbody = $('p_table');
+
+      function fmt(n, dp){
+        if(!isFinite(n)) return '—';
+        return new Intl.NumberFormat(undefined,{minimumFractionDigits:dp, maximumFractionDigits:dp}).format(n);
+      }
+      function money(n){
+        const dp = parseInt(roundEl.value,10);
+        const sym = curEl.value || '';
+        return (sym ? (sym+' ') : '') + fmt(n, dp);
+      }
+      function pct(n){
+        const dp = 2;
+        return (isFinite(n) ? n.toFixed(dp) : '—') + '%';
+      }
+
+      function paintBars(marginPct, markupPct){
+        const clamp = (x)=>Math.max(0, Math.min(100, x));
+        barMargin.style.width = clamp(marginPct).toFixed(1) + '%';
+        barMarkup.style.width = clamp(markupPct).toFixed(1) + '%';
+        barMargin.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+        barMarkup.style.background = 'linear-gradient(90deg, rgba(59,130,246,.9), rgba(16,185,129,.9))';
+      }
+
+      function setModeVisibility(){
+        const m = modeEl.value;
+        // We keep all cards visible but adjust the notes if user selects focus.
+        // (If you want true hide/show, tell me and I’ll change.)
+        if(m === 'margin'){
+          outSummary.textContent = 'Focus: Margin% (profit on selling price).';
+        } else if(m === 'markup'){
+          outSummary.textContent = 'Focus: Markup% (profit on cost price).';
+        } else {
+          outSummary.textContent = 'Enter values to see a clean summary.';
+        }
+      }
+
+      function calc(){
+        const cp = parseFloat(costEl.value);
+        const sp = parseFloat(sellEl.value);
+        const qty = parseInt(qtyEl.value || '1', 10);
+
+        if(!isFinite(cp) || cp < 0){
+          outProfit.textContent='—';
+          outProfitNote.textContent='Enter a valid cost price.';
+          tbody.innerHTML = '<tr><td colspan="2" class="mini">Fix inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+        if(!isFinite(sp) || sp < 0){
+          outProfit.textContent='—';
+          outProfitNote.textContent='Enter a valid selling price.';
+          tbody.innerHTML = '<tr><td colspan="2" class="mini">Fix inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+
+        const profit = sp - cp;
+        const isLoss = profit < 0;
+
+        const profitPct = (cp > 0) ? (profit / cp) * 100 : (profit === 0 ? 0 : NaN);
+        const marginPct = (sp > 0) ? (profit / sp) * 100 : (profit === 0 ? 0 : NaN);
+        const markupPct = profitPct; // same base as CP
+
+        outProfit.textContent = money(profit);
+        outProfitNote.textContent = isLoss ? 'This is a loss (SP < CP).' : 'This is profit (SP ≥ CP).';
+
+        outProfitPct.textContent = (isFinite(profitPct) ? pct(profitPct) : '—');
+        outMarginPct.textContent = (isFinite(marginPct) ? pct(marginPct) : '—');
+        outMarkupPct.textContent = (isFinite(markupPct) ? pct(markupPct) : '—');
+
+        paintBars(isFinite(marginPct)?Math.abs(marginPct):0, isFinite(markupPct)?Math.abs(markupPct):0);
+
+        const q = (isFinite(qty) && qty > 0) ? qty : 1;
+        const totalProfit = profit * q;
+        outTotalProfit.textContent = money(totalProfit);
+        outTotalNote.textContent = `Quantity: ${q} • Total profit/loss = per-unit × quantity`;
+
+        outSummary.textContent =
+          `CP ${money(cp)} • SP ${money(sp)} • Profit ${money(profit)} • Profit% ${isFinite(profitPct)?pct(profitPct):'—'} • Margin% ${isFinite(marginPct)?pct(marginPct):'—'}.`;
+
+        tbody.innerHTML = `
+          <tr><td>Cost price (CP)</td><td>${money(cp)}</td></tr>
+          <tr><td>Selling price (SP)</td><td>${money(sp)}</td></tr>
+          <tr><td>Profit / Loss</td><td>${money(profit)}</td></tr>
+          <tr><td>Profit % (on cost)</td><td>${isFinite(profitPct)?pct(profitPct):'—'}</td></tr>
+          <tr><td>Margin % (on selling)</td><td>${isFinite(marginPct)?pct(marginPct):'—'}</td></tr>
+          <tr><td>Markup % (on cost)</td><td>${isFinite(markupPct)?pct(markupPct):'—'}</td></tr>
+          <tr><td>Quantity</td><td>${(isFinite(qty) && qty>0)?qty:1}</td></tr>
+          <tr><td>Total profit/loss</td><td>${money(totalProfit)}</td></tr>
+        `;
+      }
+
+      $('p_calc_btn').addEventListener('click', calc);
+
+      $('p_example_btn').addEventListener('click', ()=>{
+        costEl.value='120';
+        sellEl.value='180';
+        qtyEl.value='10';
+        curEl.value='₹';
+        roundEl.value='2';
+        modeEl.value='both';
+        calc();
+      });
+
+      $('p_reset_btn').addEventListener('click', ()=>{
+        [costEl,sellEl,qtyEl].forEach(el=>el.value='');
+        curEl.value='₹';
+        roundEl.value='2';
+        modeEl.value='both';
+
+        outProfit.textContent='—';
+        outProfitNote.textContent='—';
+        outProfitPct.textContent='—';
+        outMarginPct.textContent='—';
+        outMarkupPct.textContent='—';
+        outTotalProfit.textContent='—';
+        outTotalNote.textContent='—';
+        outSummary.textContent='Enter values to see a clean summary.';
+        barMargin.style.width='0%';
+        barMarkup.style.width='0%';
+        tbody.innerHTML = '<tr><td colspan="2" class="mini">Click <strong>Calculate</strong> to generate the breakdown.</td></tr>';
+      });
+
+      [costEl,sellEl,qtyEl,curEl,roundEl,modeEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(costEl.value || sellEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(costEl.value || sellEl.value) calc(); });
+      });
+
+      modeEl.addEventListener('change', setModeVisibility);
+      setModeVisibility();
+    })();
+  </script>
+</body>
+</html>

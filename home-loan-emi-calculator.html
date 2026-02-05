@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Home Loan EMI Calculator + Amortization Schedule | CalculatorSolution</title>
+  <meta name="description" content="Free Home Loan EMI Calculator: enter loan amount, interest rate and tenure to calculate EMI, total interest, total payable and a complete amortization schedule.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/home-loan-emi-calculator.html">
+
+  <meta property="og:title" content="Home Loan EMI Calculator">
+  <meta property="og:description" content="Calculate home loan EMI, total interest, total payable & amortization schedule for long tenures.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (RESPONSIVE UPGRADE ONLY — logic untouched) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    /* Header */
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;white-space:nowrap}
+    .brand-logo{border-radius:10px}
+
+    /* Hero */
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em}
+    .hero p{margin:0;opacity:.95;max-width:72ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+    }
+
+    /* Layout */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+
+    /* Panels */
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      min-width:0; /* prevents overflow in grid */
+    }
+    .panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem}
+
+    /* Form grid */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      width:100%;
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      min-width:0;
+    }
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    /* Action buttons */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .btn:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:2px}
+
+    /* Sticky results */
+    .sticky{position:sticky;top:82px}
+
+    /* Metrics */
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{margin:4px 0 0;font-size:1.55rem;font-weight:1000;letter-spacing:-.02em;word-break:break-word}
+    .mini{font-size:.86rem;color:#64748b}
+
+    /* Progress bar */
+    .bar{
+      height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px
+    }
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* Table */
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{width:100%;border-collapse:collapse;min-width:860px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem;white-space:nowrap}
+    th{background:#f8fafc;font-weight:1000;position:sticky;top:0;z-index:1}
+    tr:last-child td{border-bottom:0}
+
+    /* Details cards */
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 10px 24px rgba(8,13,26,.05);padding:12px}
+    details.card{padding:0;overflow:hidden}
+    details.card summary{cursor:pointer;padding:12px;list-style:none}
+    details.card summary::-webkit-details-marker{display:none}
+    details.card summary:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:2px}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Better spacing for content sections */
+    article > section{margin-top:18px}
+    pre{
+      margin:10px 0 0;
+      padding:12px;
+      border-radius:12px;
+      border:1px solid #e2e8f0;
+      background:#fff;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      font-size:.95rem;
+      line-height:1.5;
+    }
+
+    /* Related grid fallback (in case global CSS is missing) */
+    .cards-grid{display:grid;gap:12px}
+    .related-grid{grid-template-columns:repeat(4, minmax(0,1fr))}
+    .related-grid .card{display:block;text-decoration:none;color:inherit}
+    .related-grid h4{margin:0 0 6px;font-size:1rem}
+    .related-grid p{margin:0;color:#475569;font-size:.92rem}
+
+    /* =========================
+       Responsive breakpoints
+       ========================= */
+    @media (max-width: 1024px){
+      .wrap{padding:0 16px}
+      .hero{padding:22px 16px}
+      .hero h1{font-size:1.7rem}
+      table{min-width:760px}
+      .related-grid{grid-template-columns:repeat(2, minmax(0,1fr))}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static}
+      table{min-width:680px}
+    }
+
+    @media (max-width: 640px){
+      .wrap{padding:0 14px}
+      .hero{margin:14px 0 12px;border-radius:16px}
+      .hero h1{font-size:1.45rem}
+      .hero p{font-size:.98rem}
+      .grid-2{grid-template-columns:1fr}
+      .actions{gap:8px}
+      .btn{width:100%}
+      table{min-width:620px}
+      .metric .v{font-size:1.35rem}
+      .related-grid{grid-template-columns:1fr}
+      .brand-text{font-size:1.05rem}
+    }
+
+    @media (max-width: 380px){
+      .hero{padding:18px 14px}
+      .chip{font-size:.84rem}
+      table{min-width:560px}
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto}
+      .btn,.card{transition:none}
+      .btn:hover{transform:none}
+      .card:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Home Loan EMI Calculator",
+      "url":"https://calculatorsolution.com/home-loan-emi-calculator.html",
+      "description":"Calculate home loan EMI, total interest and amortization schedule for long tenures."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Home Loan EMI Calculator","item":"https://calculatorsolution.com/home-loan-emi-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate home loan EMI",
+      "step":[
+        {"@type":"HowToStep","name":"Enter loan amount","text":"Input the principal amount you want to borrow for your home loan."},
+        {"@type":"HowToStep","name":"Enter interest rate and tenure","text":"Add annual interest rate and tenure in years. Longer tenure reduces EMI but increases total interest."},
+        {"@type":"HowToStep","name":"Calculate EMI","text":"See monthly EMI, total interest, total payable and amortization schedule."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Is pre-EMI possible?","acceptedAnswer":{"@type":"Answer","text":"Some lenders allow pre-EMI during construction. Terms vary by lender and project stage."}},
+        {"@type":"Question","name":"Are home loans tax-deductible?","acceptedAnswer":{"@type":"Answer","text":"In many jurisdictions, interest (and sometimes principal) may be eligible for tax benefits. Consult a tax advisor."}},
+        {"@type":"Question","name":"Does tenure normally exceed car loans?","acceptedAnswer":{"@type":"Answer","text":"Yes. Home loans often run 10–30 years, while car loans are typically shorter."}},
+        {"@type":"Question","name":"Can I switch lender?","acceptedAnswer":{"@type":"Answer","text":"Yes, via home loan balance transfer, subject to eligibility and charges."}},
+        {"@type":"Question","name":"Floating vs fixed rate?","acceptedAnswer":{"@type":"Answer","text":"Fixed offers predictable EMI, floating can change with market rates. Choose based on risk preference and rate outlook."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Home Loan EMI Calculator</h1>
+        <p>Calculate EMI, total interest, total payable, and a full amortization schedule — designed for long tenures.</p>
+        <div class="chips">
+          <span class="chip">🏠 Long tenure support</span>
+          <span class="chip">📊 Interest split (Principal vs Interest)</span>
+          <span class="chip">🧾 Amortization schedule</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-home-loan-emi">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Home loan inputs">
+              <div class="panel-title">
+                <h2>Loan details</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="hl_amount">Loan amount (Principal)</label>
+                  <input id="hl_amount" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 3500000">
+                  <p class="help">Total principal amount borrowed.</p>
+                </div>
+
+                <div class="field">
+                  <label for="hl_rate">Interest rate (annual)</label>
+                  <input id="hl_rate" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 8.75">
+                  <p class="help">Example: 8.75 means 8.75% per year.</p>
+                </div>
+
+                <div class="field">
+                  <label for="hl_tenure_years">Tenure</label>
+                  <div style="display:flex;gap:10px;align-items:center;min-width:0;">
+                    <input id="hl_tenure_years" class="input" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 20">
+                    <span class="mini" style="white-space:nowrap;">years</span>
+                  </div>
+                  <p class="help">Home loans are commonly 10–30 years.</p>
+                </div>
+
+                <div class="field">
+                  <label for="hl_start_month">Start month (optional)</label>
+                  <input id="hl_start_month" class="input" type="month">
+                  <p class="help">Used only for labeling the schedule months.</p>
+                </div>
+
+                <div class="field">
+                  <label for="hl_round">Round EMI</label>
+                  <select id="hl_round" class="input">
+                    <option value="0" selected>No rounding</option>
+                    <option value="10">Nearest 10</option>
+                    <option value="100">Nearest 100</option>
+                  </select>
+                  <p class="help">Useful to match bank EMI rounding.</p>
+                </div>
+
+                <div class="field">
+                  <label for="hl_show_months">Show schedule</label>
+                  <select id="hl_show_months" class="input">
+                    <option value="120" selected>First 120 months</option>
+                    <option value="240">First 240 months</option>
+                    <option value="9999">Full schedule (may be large)</option>
+                  </select>
+                  <p class="help">Large schedules can slow mobile devices.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="hl_calc_btn" type="button">Calculate EMI</button>
+                <button class="btn btn-dark" id="hl_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="hl_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="mini" style="margin-top:10px;">
+                EMI Formula: <strong>EMI = P × r × (1+r)^n / ((1+r)^n − 1)</strong>
+                where r = monthly rate, n = months.
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Home loan results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Monthly EMI</p>
+                <p class="v" id="hl_out_emi">—</p>
+                <p class="mini" id="hl_out_emi_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Principal</p>
+                <p class="v" id="hl_out_principal">—</p>
+                <p class="mini">Your loan amount.</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Total interest</p>
+                <p class="v" id="hl_out_interest">—</p>
+                <div class="bar"><span id="hl_bar_interest"></span></div>
+                <p class="mini" id="hl_out_split">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Total payable (EMI × months)</p>
+                <p class="v" id="hl_out_total">—</p>
+                <p class="mini" id="hl_out_years">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="hl_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Amortization Schedule</h2>
+          <p class="mini" style="margin:0 0 10px;">Month-by-month split of EMI into interest and principal.</p>
+
+          <div class="table-wrap">
+            <table aria-label="Home loan amortization table">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Date</th>
+                  <th>EMI</th>
+                  <th>Interest</th>
+                  <th>Principal</th>
+                  <th>Balance</th>
+                </tr>
+              </thead>
+              <tbody id="hl_table">
+                <tr><td colspan="6" class="mini">Click <strong>Calculate EMI</strong> to generate the schedule.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          This <strong>Home Loan EMI Calculator</strong> estimates your monthly EMI based on loan principal, annual interest rate,
+          and tenure. It also shows <strong>total interest</strong>, <strong>total payable</strong>,
+          and a detailed <strong>amortization schedule</strong> for long tenures like 10–30 years.
+        </p>
+        <p class="mini">
+          Tip: A longer tenure reduces EMI but increases total interest. If affordable, choose a shorter tenure or use prepayments to reduce interest burden.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>EMI = P × r × (1+r)^n / ((1+r)^n − 1)</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Is pre-EMI possible?</strong></summary><p>Some lenders allow pre-EMI during construction. Terms vary by lender and project stage.</p></details>
+        <details class="card"><summary><strong>Are home loans tax-deductible?</strong></summary><p>Many countries allow tax benefits on interest/principal under conditions. Consult a tax advisor.</p></details>
+        <details class="card"><summary><strong>Does tenure normally exceed car loans?</strong></summary><p>Yes. Home loans are often 10–30 years, while car loans are usually 1–7 years.</p></details>
+        <details class="card"><summary><strong>Can I switch lender?</strong></summary><p>Yes, via balance transfer, subject to eligibility, valuation, and processing charges.</p></details>
+        <details class="card"><summary><strong>Floating vs fixed?</strong></summary><p>Fixed rate gives predictable EMI; floating can change with market rates. Choose based on risk comfort.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="car-loan-emi-calculator.html"><h4>Car Loan EMI Calculator</h4><p>Calculate EMI and amortization for car loans.</p></a>
+          <a class="card" href="personal-loan-emi-calculator.html"><h4>Personal Loan EMI Calculator</h4><p>Estimate EMI and total interest.</p></a>
+          <a class="card" href="emi-prepayment-calculator.html"><h4>EMI Prepayment Calculator</h4><p>See savings from extra loan payments.</p></a>
+          <a class="card" href="gst-calculator-india.html"><h4>GST Calculator (India)</h4><p>Calculate GST amount and final price.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+      const fmt = (n)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:0}).format(n) : '—');
+      const money = (n)=> '₹ ' + fmt(n);
+
+      const amountEl = $('hl_amount');
+      const rateEl   = $('hl_rate');
+      const yearsEl  = $('hl_tenure_years');
+      const startEl  = $('hl_start_month');
+      const roundEl  = $('hl_round');
+      const showEl   = $('hl_show_months');
+
+      const outEmi = $('hl_out_emi');
+      const outEmiNote = $('hl_out_emi_note');
+      const outP = $('hl_out_principal');
+      const outI = $('hl_out_interest');
+      const outT = $('hl_out_total');
+      const outYears = $('hl_out_years');
+      const outSplit = $('hl_out_split');
+      const outSummary = $('hl_out_summary');
+      const barI = $('hl_bar_interest');
+      const tbody = $('hl_table');
+
+      function roundTo(x, step){
+        step = parseInt(step,10) || 0;
+        if(!step) return x;
+        return Math.round(x/step)*step;
+      }
+
+      function addMonths(ym, add){
+        // ym = "YYYY-MM"
+        if(!ym) return '';
+        const parts = ym.split('-');
+        if(parts.length!==2) return '';
+        let y = parseInt(parts[0],10);
+        let m = parseInt(parts[1],10); // 1-12
+        if(!isFinite(y) || !isFinite(m)) return '';
+        m = m - 1 + add;
+        y += Math.floor(m/12);
+        m = m % 12;
+        if(m<0){ m += 12; y -= 1; }
+        const mm = String(m+1).padStart(2,'0');
+        return `${y}-${mm}`;
+      }
+
+      function calc(){
+        const P = parseFloat(amountEl.value);
+        const rateA = parseFloat(rateEl.value);
+        const years = parseFloat(yearsEl.value);
+        const startYM = startEl.value || '';
+        const n = Math.round((isFinite(years)?years:0)*12);
+        const r = (isFinite(rateA)?(rateA/100)/12:NaN);
+        const step = roundEl.value;
+
+        if(!isFinite(P) || P<=0){
+          outEmi.textContent='—'; outEmiNote.textContent='Enter valid loan amount.';
+          tbody.innerHTML = '<tr><td colspan="6" class="mini">Click <strong>Calculate EMI</strong> to generate the schedule.</td></tr>';
+          return;
+        }
+        if(!isFinite(rateA) || rateA<=0){
+          outEmi.textContent='—'; outEmiNote.textContent='Enter valid interest rate.';
+          tbody.innerHTML = '<tr><td colspan="6" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+        if(!isFinite(years) || years<=0 || n<=0){
+          outEmi.textContent='—'; outEmiNote.textContent='Enter valid tenure in years.';
+          tbody.innerHTML = '<tr><td colspan="6" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+
+        const pow = Math.pow(1+r, n);
+        let emi = (P * r * pow) / (pow - 1);
+        emi = roundTo(emi, step);
+
+        const totalPay = emi * n;
+        const totalInterest = totalPay - P;
+
+        outEmi.textContent = money(emi);
+        outEmiNote.textContent = `Tenure: ${n} months • Rate: ${rateA}% p.a.`;
+        outP.textContent = money(P);
+        outI.textContent = money(totalInterest);
+        outT.textContent = money(totalPay);
+        outYears.textContent = `${years} years (${n} months)`;
+
+        const interestPct = totalPay>0 ? (totalInterest/totalPay)*100 : 0;
+        barI.style.width = Math.max(0, Math.min(100, interestPct)).toFixed(1) + '%';
+        barI.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+        outSplit.textContent = `Interest share ≈ ${interestPct.toFixed(1)}% of total payable`;
+
+        outSummary.textContent =
+          `Loan ₹${fmt(P)} • EMI ₹${fmt(emi)} • Total interest ₹${fmt(totalInterest)} • Total payable ₹${fmt(totalPay)} • Tenure ${years}y.`;
+
+        // Amortization
+        let balance = P;
+        const maxRows = parseInt(showEl.value,10) || 120;
+        const rows = [];
+
+        for(let m=1; m<=n; m++){
+          const interest = balance * r;
+          let principal = emi - interest;
+
+          // Last month adjust for rounding to close balance
+          if(m === n){
+            principal = balance;
+          }
+          balance = Math.max(0, balance - principal);
+
+          const ym = startYM ? addMonths(startYM, m-1) : '';
+          const dateLabel = ym ? ym : '—';
+
+          rows.push(`
+            <tr>
+              <td>${m}</td>
+              <td>${dateLabel}</td>
+              <td>${money(emi)}</td>
+              <td>${money(interest)}</td>
+              <td>${money(principal)}</td>
+              <td>${money(balance)}</td>
+            </tr>
+          `);
+
+          if(maxRows !== 9999 && m === maxRows && n > maxRows){
+            rows.push(`<tr><td colspan="6" class="mini">Schedule truncated for performance (showing first ${maxRows} months). Select “Full schedule” to view all.</td></tr>`);
+            break;
+          }
+
+          if(balance <= 0){
+            break;
+          }
+        }
+
+        tbody.innerHTML = rows.join('');
+      }
+
+      $('hl_calc_btn').addEventListener('click', calc);
+
+      $('hl_example_btn').addEventListener('click', ()=>{
+        amountEl.value = '3500000';
+        rateEl.value   = '8.75';
+        yearsEl.value  = '20';
+        startEl.value  = '';
+        roundEl.value  = '0';
+        showEl.value   = '120';
+        calc();
+      });
+
+      $('hl_reset_btn').addEventListener('click', ()=>{
+        [amountEl,rateEl,yearsEl,startEl].forEach(el=>el.value='');
+        roundEl.value='0';
+        showEl.value='120';
+        outEmi.textContent='—';
+        outEmiNote.textContent='—';
+        outP.textContent='—';
+        outI.textContent='—';
+        outT.textContent='—';
+        outYears.textContent='—';
+        outSplit.textContent='—';
+        outSummary.textContent='Enter details to see a clean summary.';
+        barI.style.width='0%';
+        tbody.innerHTML = '<tr><td colspan="6" class="mini">Click <strong>Calculate EMI</strong> to generate the schedule.</td></tr>';
+      });
+
+      [amountEl,rateEl,yearsEl,startEl,roundEl,showEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(amountEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(amountEl.value) calc(); });
+      });
+    })();
+  </script>
+</body>
+</html>

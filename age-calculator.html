@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>
+      Age Calculator – Exact Age in Years, Months & Days | CalculatorSolution
+    </title>
+    <meta
+      name="description"
+      content="Free Age Calculator to find exact age in years, months, and days. Calculate age from date of birth to today or any target date. Includes next birthday countdown, total days, weeks, and more."
+    />
+
+    <!-- Preload critical CSS -->
+    <link
+      rel="preload"
+      href="/assets/style.css"
+      as="style"
+      onload="this.rel='stylesheet'"
+    />
+    <noscript><link rel="stylesheet" href="/assets/style.css" /></noscript>
+    <link rel="preload" href="/assets/og-image.svg" as="image" />
+
+    <meta
+      property="og:title"
+      content="Age Calculator – Exact Age in Years, Months & Days"
+    />
+    <meta
+      property="og:description"
+      content="Calculate your exact age from date of birth to today or a target date. Includes next birthday countdown and total days/weeks."
+    />
+    <meta
+      property="og:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://calculatorsolution.com/age-calculator.html"
+    />
+
+    <meta name="twitter:title" content="Age Calculator – Exact Age Finder" />
+    <meta
+      name="twitter:description"
+      content="Find exact age in years, months, days + next birthday countdown. Free, fast, mobile-friendly."
+    />
+    <meta
+      name="twitter:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/logo.png" />
+    <link rel="manifest" href="/assets/site.webmanifest" />
+
+    <style>
+      /* Base Styles - Enhanced for Mobile First */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape */
+      }
+      
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(135deg, #f8fafc 0%, #f0f4f8 100%);
+        color: #0f172a;
+        line-height: 1.6;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+      
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+      }
+      
+      /* Improved touch targets for mobile */
+      input,
+      button {
+        font-size: 16px; /* Prevent iOS zoom on focus */
+      }
+      
+      .wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 16px;
+        width: 100%;
+      }
+      
+      /* Header - Responsive */
+      .site-header {
+        padding: 12px 0;
+        border-bottom: 1px solid #e2e8f0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 800;
+        color: #3b82f6;
+        text-decoration: none;
+        font-size: 1.1rem;
+      }
+      
+      .brand-logo {
+        border-radius: 8px;
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+      }
+      
+      /* Hero Section - Responsive Typography */
+      .calculator-hero {
+        margin: 24px 0 20px;
+      }
+      
+      .calculator-hero h1 {
+        font-size: clamp(1.75rem, 5vw, 2.25rem); /* Fluid typography */
+        margin: 0 0 12px;
+        font-weight: 900;
+        line-height: 1.2;
+      }
+      
+      .calculator-hero .lead {
+        margin: 0 0 12px;
+        color: #475569;
+        font-size: clamp(1rem, 2vw, 1.1rem);
+        line-height: 1.5;
+      }
+      
+      .badge-line {
+        margin-top: 16px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      
+      .badge-line span {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: #e0f2fe;
+        color: #0369a1;
+        font-size: 0.85rem;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      
+      /* Main Calculator Card */
+      .calculator-main {
+        margin-bottom: 32px;
+      }
+      
+      .card {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+        width: 100%;
+        margin: 0 auto;
+      }
+      
+      /* Form Grid - Responsive Layout */
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        align-items: end;
+      }
+      
+      label {
+        display: block;
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: #0f172a;
+        margin-bottom: 8px;
+      }
+      
+      input[type="date"] {
+        width: 100%;
+        padding: 14px 16px;
+        border-radius: 12px;
+        border: 1px solid #cbd5e1;
+        font-size: 1rem;
+        background: #fff;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      
+      input[type="date"]:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+      
+      /* Button Row - Responsive */
+      .btn-row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+      }
+      
+      .btn {
+        border: none;
+        cursor: pointer;
+        font-weight: 800;
+        padding: 14px 20px;
+        border-radius: 12px;
+        background: linear-gradient(90deg, #3b82f6, #6366f1);
+        color: #fff;
+        box-shadow: 0 10px 28px rgba(37, 99, 235, 0.18);
+        transition: transform 0.18s, box-shadow 0.18s, opacity 0.18s;
+        font-size: 1rem;
+        min-height: 48px; /* Better touch target */
+        flex: 1;
+        min-width: 140px;
+      }
+      
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 40px rgba(37, 99, 235, 0.22);
+      }
+      
+      .btn:active {
+        transform: translateY(0);
+      }
+      
+      .btn.secondary {
+        background: #0f172a;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
+      }
+      
+      /* Results Grid - Responsive */
+      .results {
+        margin-top: 24px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+      }
+      
+      .stat {
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 20px;
+        background: linear-gradient(180deg, #ffffff, #f8fafc);
+        text-align: center;
+        transition: transform 0.2s;
+      }
+      
+      .stat:hover {
+        transform: translateY(-4px);
+      }
+      
+      .stat .k {
+        font-size: 0.9rem;
+        color: #64748b;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      
+      .stat .v {
+        font-size: clamp(1.25rem, 3vw, 1.5rem);
+        font-weight: 900;
+        margin-top: 4px;
+        color: #0f172a;
+      }
+      
+      .note {
+        margin-top: 20px;
+        color: #475569;
+        font-size: 0.95rem;
+        border-left: 4px solid #93c5fd;
+        padding-left: 16px;
+        line-height: 1.6;
+      }
+      
+      /* Content Sections */
+      .section-block {
+        margin: 32px 0;
+      }
+      
+      .section-block h2 {
+        font-size: clamp(1.5rem, 4vw, 1.875rem);
+        margin: 0 0 16px;
+        font-weight: 800;
+      }
+      
+      .section-block h3 {
+        font-size: clamp(1.25rem, 3vw, 1.5rem);
+        margin: 0 0 12px;
+        font-weight: 700;
+      }
+      
+      .section-block p {
+        margin: 0 0 16px;
+        color: #475569;
+        line-height: 1.7;
+      }
+      
+      pre {
+        background: #0f172a;
+        color: #e5e7eb;
+        padding: 16px 20px;
+        border-radius: 12px;
+        overflow-x: auto;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin: 16px 0;
+      }
+      
+      /* FAQ Section - Responsive */
+      .faqs details {
+        margin-bottom: 12px;
+      }
+      
+      .faqs summary {
+        cursor: pointer;
+        padding: 16px;
+        font-weight: 700;
+        font-size: 1.05rem;
+        border-radius: 12px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        transition: background-color 0.2s;
+      }
+      
+      .faqs summary:hover {
+        background: #f1f5f9;
+      }
+      
+      .faqs details[open] summary {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      
+      .faqs details .card {
+        border-top: none;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        margin-top: 0;
+      }
+      
+      /* Related Calculators Grid - Responsive */
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+      
+      a.card-link {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.2s;
+      }
+      
+      a.card-link:hover {
+        transform: translateY(-4px);
+      }
+      
+      a.card-link h4 {
+        margin: 0 0 8px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #0f172a;
+      }
+      
+      /* Footer */
+      .site-footer {
+        margin-top: 48px;
+        padding: 24px 0;
+        border-top: 1px solid #e2e8f0;
+        color: #64748b;
+        font-size: 0.95rem;
+        background: #f8fafc;
+      }
+      
+      .site-footer p {
+        margin: 8px 0;
+      }
+      
+      .site-footer a {
+        color: #3b82f6;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      
+      .site-footer a:hover {
+        color: #2563eb;
+        text-decoration: underline;
+      }
+      
+      /* Responsive Breakpoints */
+      
+      /* Tablet Devices (768px and below) */
+      @media (max-width: 768px) {
+        .wrap {
+          padding: 0 16px;
+        }
+        
+        .calculator-hero {
+          margin: 20px 0 16px;
+        }
+        
+        .card {
+          padding: 16px;
+          border-radius: 14px;
+        }
+        
+        .form-grid {
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+        
+        .btn-row {
+          flex-direction: column;
+          gap: 12px;
+        }
+        
+        .btn {
+          width: 100%;
+          min-width: 100%;
+        }
+        
+        .results {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .cards-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      
+      /* Mobile Devices (480px and below) */
+      @media (max-width: 480px) {
+        .wrap {
+          padding: 0 12px;
+        }
+        
+        .site-header {
+          padding: 10px 0;
+        }
+        
+        .brand {
+          font-size: 1rem;
+        }
+        
+        .brand-logo {
+          width: 32px;
+          height: 32px;
+        }
+        
+        .calculator-hero h1 {
+          font-size: 1.5rem;
+        }
+        
+        .badge-line {
+          margin-top: 12px;
+        }
+        
+        .badge-line span {
+          font-size: 0.8rem;
+          padding: 5px 10px;
+        }
+        
+        .card {
+          padding: 16px;
+          border-radius: 12px;
+        }
+        
+        input[type="date"] {
+          padding: 12px 14px;
+          border-radius: 10px;
+        }
+        
+        .btn {
+          padding: 12px 16px;
+          min-height: 44px;
+        }
+        
+        .results {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+        
+        .stat {
+          padding: 16px;
+        }
+        
+        .stat .v {
+          font-size: 1.25rem;
+        }
+        
+        .cards-grid {
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+        
+        .site-footer {
+          padding: 20px 0;
+          text-align: center;
+        }
+      }
+      
+      /* Small Mobile Devices (360px and below) */
+      @media (max-width: 360px) {
+        .wrap {
+          padding: 0 10px;
+        }
+        
+        .calculator-hero h1 {
+          font-size: 1.4rem;
+        }
+        
+        .calculator-hero .lead {
+          font-size: 0.95rem;
+        }
+        
+        input[type="date"] {
+          padding: 10px 12px;
+        }
+        
+        .btn {
+          font-size: 0.95rem;
+          padding: 10px 14px;
+        }
+      }
+      
+      /* Large Desktop Screens (1200px and above) */
+      @media (min-width: 1200px) {
+        .wrap {
+          max-width: 1200px;
+        }
+        
+        .calculator-hero h1 {
+          font-size: 2.5rem;
+        }
+        
+        .results {
+          grid-template-columns: repeat(6, 1fr);
+        }
+      }
+      
+      /* Print Styles */
+      @media print {
+        body {
+          background: #fff;
+          color: #000;
+        }
+        
+        .card {
+          border: 1px solid #ccc;
+          box-shadow: none;
+        }
+        
+        .btn-row,
+        .site-footer,
+        .badge-line {
+          display: none;
+        }
+        
+        a {
+          color: #000;
+          text-decoration: none;
+        }
+        
+        .site-header {
+          background: #fff;
+          border-bottom: 1px solid #ccc;
+        }
+      }
+    </style>
+
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://calculatorsolution.com/age-calculator.html"
+    />
+
+    <!-- ✅ JSON-LD: WebPage + Breadcrumb + FAQ -->
+    <script type="application/ld+json">
+      [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Age Calculator",
+          "url": "https://calculatorsolution.com/age-calculator.html",
+          "description": "Calculate exact age in years, months and days from date of birth to today or a target date."
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "CalculatorSolution",
+              "item": "https://calculatorsolution.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Age Calculator",
+              "item": "https://calculatorsolution.com/age-calculator.html"
+            }
+          ]
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How do I calculate my exact age?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Enter your date of birth, and the calculator compares it with today (or a target date) to return years, months, and days along with total days and next birthday countdown."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I calculate age on a future date?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Select a target date to calculate your age on that specific day—useful for eligibility, forms, and planning."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How are leap years handled?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Leap years are handled automatically by date math. If you were born on Feb 29, your birthday calculations adapt to the nearest valid date in non-leap years."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Why can age differ by 1 day sometimes?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Differences can happen due to timezone, time-of-day assumptions, and whether you count inclusive/exclusive days. This tool uses local date boundaries for consistency."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is this Age Calculator accurate for documents?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "It is accurate for general use. For legal or official rules, follow the specific definition your authority uses (some use completed years only)."
+              }
+            }
+          ]
+        }
+      ]
+    </script>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/" aria-label="CalculatorSolution Home">
+          <img
+            src="/assets/logo.png"
+            alt="CalculatorSolution logo"
+            class="brand-logo"
+            width="36"
+            height="36"
+            loading="lazy"
+          />
+          <span>CalculatorSolution</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <article>
+        <div class="calculator-hero">
+          <h1>Age Calculator</h1>
+          <p class="lead">
+            Find your exact age in <strong>years, months, and days</strong> —
+            plus total days and next birthday countdown.
+          </p>
+          <div class="badge-line">
+            <span>✅ Exact age</span>
+            <span>✅ Next birthday</span>
+            <span>✅ Target date</span>
+          </div>
+        </div>
+
+        <section class="calculator-main">
+          <div
+            id="calc-age-calculator"
+            class="card"
+            aria-label="Age calculator"
+          >
+            <div class="form-grid">
+              <div>
+                <label for="dob">Date of Birth</label>
+                <input id="dob" type="date" aria-label="Date of Birth" />
+              </div>
+              <div>
+                <label for="asOf">Calculate Age On (optional)</label>
+                <input id="asOf" type="date" aria-label="Target date" />
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <button id="age-calc" class="btn" type="button">
+                Calculate Age
+              </button>
+              <button id="age-reset" class="btn secondary" type="button">
+                Reset
+              </button>
+            </div>
+
+            <div
+              id="age-error"
+              class="note"
+              style="display: none; border-left-color: #fb7185"
+            ></div>
+
+            <div id="age-results" class="results" style="display: none">
+              <div class="stat">
+                <div class="k">Exact Age</div>
+                <div class="v" id="age-ymd">—</div>
+              </div>
+              <div class="stat">
+                <div class="k">Total Days</div>
+                <div class="v" id="age-days">—</div>
+              </div>
+              <div class="stat">
+                <div class="k">Next Birthday</div>
+                <div class="v" id="age-nextbday">—</div>
+              </div>
+
+              <div class="stat">
+                <div class="k">Total Weeks</div>
+                <div class="v" id="age-weeks">—</div>
+              </div>
+              <div class="stat">
+                <div class="k">Total Hours</div>
+                <div class="v" id="age-hours">—</div>
+              </div>
+              <div class="stat">
+                <div class="k">Total Minutes</div>
+                <div class="v" id="age-mins">—</div>
+              </div>
+            </div>
+
+            <div id="age-note" class="note" style="display: none"></div>
+          </div>
+        </section>
+
+        <section class="section-block related">
+          <h2>Related Calculators</h2>
+          <div class="cards-grid">
+            <a class="card card-link" href="date-difference-calculator.html">
+              <h4>Date Difference Calculator</h4>
+              <p>Find difference between two dates in days, months, and years.</p>
+            </a>
+            <a class="card card-link" href="time-duration-calculator.html">
+              <h4>Time Duration Calculator</h4>
+              <p>Add/subtract time and compute total duration.</p>
+            </a>
+            <a class="card card-link" href="unit-converter.html">
+              <h4>Unit Converter</h4>
+              <p>Convert length, weight, temperature and more.</p>
+            </a>
+            <a class="card card-link" href="percentage-calculator.html">
+              <h4>Percentage Calculator</h4>
+              <p>Calculate percentages quickly for daily use.</p>
+            </a>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <h2>How This Age Calculator Works</h2>
+          <p>
+            This free Age Calculator finds the exact time between your
+            <strong>date of birth</strong> and today (or any target date), then
+            converts that difference into
+            <strong>years, months, and days</strong>. It also shows total days,
+            weeks, and a next-birthday countdown—useful for forms, eligibility
+            checks, school admissions, job requirements, and travel documents.
+          </p>
+          <p>
+            Because month lengths vary (28–31 days), calculating age is not the
+            same as dividing total days by 365. This calculator follows
+            calendar-based counting: it first counts full years, then full
+            months, then remaining days.
+          </p>
+        </section>
+
+        <section class="section-block">
+          <h3>Age Calculation Formula</h3>
+          <p>Conceptually:</p>
+          <pre>
+Age = Target Date − Date of Birth
+Breakdown = Years + Months + Days (calendar-based)</pre
+          >
+          <p>
+            For total days, the tool measures the day difference between the two
+            dates. Leap years are automatically handled by the date system.
+          </p>
+        </section>
+
+        <section class="section-block faqs">
+          <h2>Age Calculator – FAQs</h2>
+
+          <details class="card">
+            <summary><strong>How do I calculate my exact age?</strong></summary>
+            <p>
+              Enter your date of birth and click Calculate. Optionally choose a
+              target date to calculate your age on a specific day.
+            </p>
+          </details>
+
+          <details class="card">
+            <summary>
+              <strong>Can I calculate age on a future date?</strong>
+            </summary>
+            <p>
+              Yes. Select a target date (for example, your next birthday or an
+              eligibility cutoff date) and the calculator will use that date.
+            </p>
+          </details>
+
+          <details class="card">
+            <summary>
+              <strong>How does it handle leap year birthdays (Feb 29)?</strong>
+            </summary>
+            <p>
+              The calculator handles leap years automatically. For Feb 29
+              births, the next birthday is computed on the nearest valid date in
+              non-leap years.
+            </p>
+          </details>
+
+          <details class="card">
+            <summary>
+              <strong
+                >Is this calculator accurate for legal eligibility?</strong
+              >
+            </summary>
+            <p>
+              It's accurate for standard use. For official rules, always follow
+              the definition used by the authority (some count "completed years"
+              only).
+            </p>
+          </details>
+
+          <details class="card">
+            <summary>
+              <strong>Why does age sometimes differ by a day?</strong>
+            </summary>
+            <p>
+              Timezone and "inclusive vs exclusive" counting can change results.
+              This tool uses local calendar dates to stay consistent.
+            </p>
+          </details>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>&copy; 2025 CalculatorSolution — Free Online Calculators</p>
+        <p>
+          <a href="/sitemap.xml">Sitemap</a> | <a href="/">Home</a> |
+          <a href="/privacy-policy.html">Privacy Policy</a> |
+          <a href="/terms-of-service.html">Terms</a> |
+          <a href="/contact.html">Contact</a> |
+          <a href="/about.html">About</a>
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        const $ = (id) => document.getElementById(id);
+
+        function toLocalDate(d) {
+          // Normalize to local midnight to avoid timezone edge cases
+          return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        }
+
+        function daysBetween(a, b) {
+          const ms = 24 * 60 * 60 * 1000;
+          return Math.round((b - a) / ms);
+        }
+
+        function addYears(date, years) {
+          const d = new Date(date);
+          d.setFullYear(d.getFullYear() + years);
+          return d;
+        }
+
+        function addMonths(date, months) {
+          const d = new Date(date);
+          d.setMonth(d.getMonth() + months);
+          return d;
+        }
+
+        function computeYMD(dob, target) {
+          // Calendar-based Y/M/D difference
+          let years = target.getFullYear() - dob.getFullYear();
+
+          // Candidate date after adding years
+          let yDate = addYears(dob, years);
+          if (yDate > target) {
+            years--;
+            yDate = addYears(dob, years);
+          }
+
+          let months =
+            (target.getFullYear() - yDate.getFullYear()) * 12 +
+            (target.getMonth() - yDate.getMonth());
+          let mDate = addMonths(yDate, months);
+          if (mDate > target) {
+            months--;
+            mDate = addMonths(yDate, months);
+          }
+
+          const days = daysBetween(mDate, target);
+
+          return { years, months, days, anchor: mDate };
+        }
+
+        function nextBirthday(dob, today) {
+          const y = today.getFullYear();
+          let nb = new Date(y, dob.getMonth(), dob.getDate());
+
+          // Handle Feb 29 on non-leap years: JS will roll into March; we clamp to Feb 28
+          if (
+            dob.getMonth() === 1 &&
+            dob.getDate() === 29 &&
+            nb.getMonth() !== 1
+          ) {
+            nb = new Date(y, 1, 28);
+          }
+
+          if (toLocalDate(nb) < toLocalDate(today)) {
+            nb = new Date(y + 1, dob.getMonth(), dob.getDate());
+            if (
+              dob.getMonth() === 1 &&
+              dob.getDate() === 29 &&
+              nb.getMonth() !== 1
+            ) {
+              nb = new Date(y + 1, 1, 28);
+            }
+          }
+          return toLocalDate(nb);
+        }
+
+        function fmt(n) {
+          try {
+            return new Intl.NumberFormat().format(n);
+          } catch (e) {
+            return String(n);
+          }
+        }
+
+        function showError(msg) {
+          const box = $("age-error");
+          box.style.display = "block";
+          box.textContent = msg;
+          $("age-results").style.display = "none";
+          $("age-note").style.display = "none";
+        }
+
+        function clearError() {
+          $("age-error").style.display = "none";
+          $("age-error").textContent = "";
+        }
+
+        function run() {
+          clearError();
+
+          const dobVal = $("dob").value;
+          if (!dobVal) return showError("Please select your Date of Birth.");
+
+          const dob = toLocalDate(new Date(dobVal));
+          if (isNaN(dob.getTime())) return showError("Invalid Date of Birth.");
+
+          const asOfVal = $("asOf").value;
+          const target = asOfVal
+            ? toLocalDate(new Date(asOfVal))
+            : toLocalDate(new Date());
+
+          if (isNaN(target.getTime())) return showError("Invalid target date.");
+          if (target < dob)
+            return showError("Target date must be after Date of Birth.");
+
+          const diff = computeYMD(dob, target);
+          const totalDays = daysBetween(dob, target);
+          const totalWeeks = totalDays / 7;
+          const totalHours = totalDays * 24;
+          const totalMins = totalHours * 60;
+
+          // Next birthday countdown (based on "today", not target)
+          const today = toLocalDate(new Date());
+          const nb = nextBirthday(dob, today);
+          const left = daysBetween(today, nb);
+
+          $(
+            "age-ymd"
+          ).textContent = `${diff.years}y ${diff.months}m ${diff.days}d`;
+          $("age-days").textContent = fmt(totalDays);
+          $("age-nextbday").textContent = `${left} days`;
+
+          $("age-weeks").textContent = fmt(totalWeeks.toFixed(2));
+          $("age-hours").textContent = fmt(totalHours);
+          $("age-mins").textContent = fmt(totalMins);
+
+          $("age-results").style.display = "grid";
+
+          const note = $("age-note");
+          note.style.display = "block";
+          const targetLabel = asOfVal
+            ? `on ${target.toLocaleDateString()}`
+            : "as of today";
+          note.innerHTML = `<strong>Tip:</strong> Your exact age ${targetLabel} is calculated using calendar years/months (not by dividing days by 365).`;
+        }
+
+        function reset() {
+          $("dob").value = "";
+          $("asOf").value = "";
+          clearError();
+          $("age-results").style.display = "none";
+          $("age-note").style.display = "none";
+        }
+
+        $("age-calc").addEventListener("click", run);
+        $("age-reset").addEventListener("click", reset);
+
+        // Optional: calculate on Enter
+        ["dob", "asOf"].forEach((id) => {
+          $(id).addEventListener("keydown", (e) => {
+            if (e.key === "Enter") run();
+          });
+        });
+
+        // Set max date for date inputs to today
+        const today = new Date().toISOString().split('T')[0];
+        $("dob").max = today;
+        $("asOf").max = today;
+        
+        // Optional: Set default values for better UX on mobile
+        // Uncomment if you want to set default dates
+        // $("dob").value = "1990-01-01";
+        // $("asOf").value = today;
+      })();
+    </script>
+  </body>
+</html>

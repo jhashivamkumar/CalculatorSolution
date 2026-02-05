@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Reading Time Calculator (Words to Minutes) | CalculatorSolution</title>
+  <meta name="description" content="Free Reading Time Calculator: paste text or enter word count and reading speed (WPM) to estimate minutes, seconds, and total time. Includes skimming & deep reading presets.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/reading-time-calculator.html">
+
+  <meta property="og:title" content="Reading Time Calculator">
+  <meta property="og:description" content="Estimate how long it takes to read text based on word count and WPM. Paste text, get minutes/seconds instantly.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (responsive + UI/UX polish) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+
+    :root{
+      --wrap:1100px;
+      --gutter:18px;
+      --radius-lg:18px;
+      --radius-md:16px;
+      --radius-sm:12px;
+      --shadow-1:0 14px 40px rgba(8,13,26,.06);
+      --border:#e2e8f0;
+      --muted:#64748b;
+      --focus:0 0 0 4px rgba(59,130,246,.12);
+    }
+
+    .wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--gutter)}
+    a{color:inherit}
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible{
+      outline:none;
+      box-shadow:var(--focus);
+      border-radius:10px;
+    }
+
+    /* Header */
+    .site-header{
+      padding:14px 0;border-bottom:1px solid var(--border);
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10;
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;white-space:nowrap}
+    .brand-logo{border-radius:10px}
+
+    /* Hero */
+    .hero{
+      margin:18px 0 14px 0;border-radius:var(--radius-lg);padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em}
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+    }
+
+    /* Layout */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+
+    /* Panels */
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--border);
+      border-radius:var(--radius-md);
+      box-shadow:var(--shadow-1);
+      padding:14px;
+      min-width:0; /* important for grid overflow */
+    }
+    .panel-title{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:10px;margin-bottom:10px;flex-wrap:wrap
+    }
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(37,99,235,.10);color:#1d4ed8;
+      font-weight:900;font-size:.85rem;
+      white-space:nowrap;
+    }
+
+    /* Form */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      width:100%;
+      padding:10px 12px;border:1px solid var(--border);border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      appearance:none;
+    }
+    .input:focus{border-color:#93c5fd;box-shadow:var(--focus)}
+    .help{margin:0;font-size:.86rem;color:var(--muted)}
+    textarea.input{
+      min-height:170px;
+      resize:vertical;
+      line-height:1.5;
+    }
+
+    /* Buttons */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:42px;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid var(--border);box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+
+    /* Sticky results */
+    .sticky{position:sticky;top:82px}
+
+    /* Metrics */
+    .metric{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+      overflow:hidden;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{
+      margin:4px 0 0;
+      font-size:1.55rem;font-weight:1000;letter-spacing:-.02em;
+      word-break:break-word;
+    }
+    .mini{font-size:.86rem;color:var(--muted)}
+
+    .bar{
+      height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px
+    }
+    .bar > span{display:block;height:100%;width:0%}
+
+    .note{
+      border:1px dashed #cbd5e1;border-radius:14px;padding:12px;background:rgba(255,255,255,.7);
+      margin-top:10px
+    }
+
+    /* Content sections */
+    article{min-width:0}
+    section{margin-top:18px}
+    h2,h3{line-height:1.25}
+    pre{
+      white-space:pre-wrap;
+      word-break:break-word;
+      background:rgba(255,255,255,.75);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:12px;
+      overflow:auto;
+    }
+
+    /* FAQ cards */
+    .card{
+      background:#fff;border:1px solid var(--border);
+      border-radius:14px;
+      box-shadow:0 10px 24px rgba(8,13,26,.05);
+      padding:12px;
+    }
+    details.card{padding:0}
+    details.card summary{
+      cursor:pointer;padding:12px;
+      list-style:none;
+    }
+    details.card summary::-webkit-details-marker{display:none}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Related grid (safe even if global css missing) */
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:12px;
+      margin-top:10px;
+    }
+    .cards-grid a.card h4{margin:0 0 6px 0}
+    .cards-grid a.card p{margin:0;color:#334155}
+
+    /* Footer links wrap nicely */
+    .site-footer a{color:inherit}
+    .site-footer p{margin:0}
+    .site-footer .wrap{word-break:break-word}
+
+    /* Breakpoints */
+    @media (max-width: 1024px){
+      :root{--gutter:16px}
+      .hero{padding:22px 16px}
+      .hero h1{font-size:1.7rem}
+      .cards-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static}
+      .panel{padding:14px}
+    }
+
+    @media (max-width: 640px){
+      :root{--gutter:14px}
+      .hero{margin:14px 0 12px 0;border-radius:16px}
+      .hero h1{font-size:1.55rem}
+      .grid-2{grid-template-columns:1fr}
+      .actions .btn{flex:1 1 auto}
+      .cards-grid{grid-template-columns:1fr}
+      textarea.input{min-height:150px}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto !important}
+      .btn, .card{transition:none !important}
+      .btn:hover{transform:none !important}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Reading Time Calculator",
+      "url":"https://calculatorsolution.com/reading-time-calculator.html",
+      "description":"Estimate reading time from word count or pasted text using words-per-minute and reading presets."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Reading Time Calculator","item":"https://calculatorsolution.com/reading-time-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to estimate reading time",
+      "step":[
+        {"@type":"HowToStep","name":"Paste text or enter word count","text":"Paste your article text or type the total words."},
+        {"@type":"HowToStep","name":"Choose reading speed","text":"Select a preset (skimming/average/deep) or enter your own WPM."},
+        {"@type":"HowToStep","name":"Get the estimate","text":"View time in minutes and seconds plus a quick summary."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Average reading speed?","acceptedAnswer":{"@type":"Answer","text":"Many adults read prose around 200–300 words per minute (WPM)."}},
+        {"@type":"Question","name":"What about skimming?","acceptedAnswer":{"@type":"Answer","text":"Skimming is faster than deep reading. Use the skimming preset or a higher WPM."}},
+        {"@type":"Question","name":"Does technical content take longer?","acceptedAnswer":{"@type":"Answer","text":"Yes. Technical or complex material usually reduces WPM and increases reading time."}},
+        {"@type":"Question","name":"How is word count calculated?","acceptedAnswer":{"@type":"Answer","text":"We count word-like tokens in your pasted text. You can also enter word count manually."}},
+        {"@type":"Question","name":"How to use reading time in UX?","acceptedAnswer":{"@type":"Answer","text":"Showing reading time helps set expectations and improves engagement and accessibility."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Reading Time Calculator</h1>
+        <p>Paste text (or enter word count) and estimate how long it takes to read — in minutes and seconds.</p>
+        <div class="chips">
+          <span class="chip">🧠 WPM presets</span>
+          <span class="chip">📝 Paste text</span>
+          <span class="chip">⏱️ Minutes + seconds</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-reading-time">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Reading time inputs">
+              <div class="panel-title">
+                <h2>Text & speed</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="field">
+                <label for="rt_text">Paste your text (optional)</label>
+                <textarea id="rt_text" class="input" placeholder="Paste article / content here..."></textarea>
+                <p class="help">We’ll auto-count words from your text. Or you can enter word count manually below.</p>
+              </div>
+
+              <div class="grid-2" style="margin-top:12px;">
+                <div class="field">
+                  <label for="rt_words">Word count (manual)</label>
+                  <input id="rt_words" class="input" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 1200">
+                  <p class="help">If text is pasted, this auto-updates (you can override).</p>
+                </div>
+
+                <div class="field">
+                  <label for="rt_preset">Reading preset</label>
+                  <select id="rt_preset" class="input">
+                    <option value="300">Skimming (300 WPM)</option>
+                    <option value="250" selected>Average (250 WPM)</option>
+                    <option value="200">Deep reading (200 WPM)</option>
+                    <option value="custom">Custom</option>
+                  </select>
+                  <p class="help">Choose a typical speed, or set your own.</p>
+                </div>
+
+                <div class="field" id="rt_wpm_wrap">
+                  <label for="rt_wpm">Words per minute (WPM)</label>
+                  <input id="rt_wpm" class="input" type="number" inputmode="numeric" min="1" step="1" placeholder="e.g., 250" value="250">
+                  <p class="help">Higher WPM = faster estimate.</p>
+                </div>
+
+                <div class="field">
+                  <label for="rt_round">Rounding</label>
+                  <select id="rt_round" class="input">
+                    <option value="sec" selected>Show minutes + seconds</option>
+                    <option value="min">Round up to next minute</option>
+                    <option value="half">Round to nearest 30 seconds</option>
+                  </select>
+                  <p class="help">Useful for UX badges (e.g., “3 min read”).</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="rt_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="rt_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="rt_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note mini">
+                Formula: <strong>Time (minutes) = word_count / WPM</strong> (then converted to seconds for display).
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Reading time results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Estimated reading time</p>
+                <p class="v" id="rt_out_time">—</p>
+                <p class="mini" id="rt_out_time_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Word count used</p>
+                <p class="v" id="rt_out_words">—</p>
+                <p class="mini" id="rt_out_words_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Speed (WPM)</p>
+                <p class="v" id="rt_out_wpm">—</p>
+                <div class="bar"><span id="rt_bar"></span></div>
+                <p class="mini" id="rt_out_wpm_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Summary</p>
+                <p class="mini" id="rt_out_summary">Paste text or enter words to see a summary.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          This <strong>Reading Time Calculator</strong> estimates how long it takes to read content by using your
+          <strong>word count</strong> and a reading speed in <strong>words per minute (WPM)</strong>.
+          It’s commonly used in blogs and news sites to show labels like “3 min read”.
+        </p>
+        <p class="mini">
+          Tip: Use <strong>Skimming</strong> for scanning headings, and <strong>Deep reading</strong> for technical or dense content.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>Time (minutes) = word_count / words_per_minute</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Average speed?</strong></summary><p>Many adults read prose around 200–300 WPM. Choose a preset or enter your own.</p></details>
+        <details class="card"><summary><strong>Skimming?</strong></summary><p>Skimming is faster than deep reading. Use a higher WPM (e.g., 300+).</p></details>
+        <details class="card"><summary><strong>Complex content?</strong></summary><p>Technical material usually reduces WPM. Use 150–220 WPM for dense topics.</p></details>
+        <details class="card"><summary><strong>Use for UX?</strong></summary><p>Showing reading time sets expectations and can improve engagement.</p></details>
+        <details class="card"><summary><strong>Accessibility?</strong></summary><p>Offer audio, readable fonts, and adjustable pace. Reading time helps users plan.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="age-calculator.html"><h4>Age Calculator</h4><p>Calculate age from date of birth to today or a target date.</p></a>
+          <a class="card" href="date-difference-calculator.html"><h4>Date Difference Calculator</h4><p>Find difference between two dates in days, months, years.</p></a>
+          <a class="card" href="time-duration-calculator.html"><h4>Time Duration Calculator</h4><p>Add/subtract times and compute durations.</p></a>
+          <a class="card" href="unit-converter.html"><h4>Unit Converter</h4><p>Convert between length, mass, volume, temperature and more.</p></a>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const textEl = $('rt_text');
+      const wordsEl = $('rt_words');
+      const presetEl = $('rt_preset');
+      const wpmWrap = $('rt_wpm_wrap');
+      const wpmEl = $('rt_wpm');
+      const roundEl = $('rt_round');
+
+      const outTime = $('rt_out_time');
+      const outTimeNote = $('rt_out_time_note');
+      const outWords = $('rt_out_words');
+      const outWordsNote = $('rt_out_words_note');
+      const outWpm = $('rt_out_wpm');
+      const outWpmNote = $('rt_out_wpm_note');
+      const outSummary = $('rt_out_summary');
+      const bar = $('rt_bar');
+
+      function countWords(s){
+        s = (s || '').trim();
+        if(!s) return 0;
+        // Count word-like tokens (letters/numbers with optional apostrophes)
+        const m = s.match(/[A-Za-z0-9]+(?:'[A-Za-z0-9]+)?/g);
+        return m ? m.length : 0;
+      }
+
+      function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+      function formatTime(seconds, roundingMode){
+        if(!isFinite(seconds) || seconds <= 0) return '—';
+
+        if(roundingMode === 'min'){
+          const mins = Math.ceil(seconds / 60);
+          return `${mins} min`;
+        }
+
+        if(roundingMode === 'half'){
+          const rounded = Math.round(seconds / 30) * 30;
+          const m = Math.floor(rounded / 60);
+          const s = rounded % 60;
+          if(m <= 0) return `${s} sec`;
+          return s ? `${m} min ${s} sec` : `${m} min`;
+        }
+
+        // default: minutes + seconds (rounded up to next second)
+        const sec = Math.ceil(seconds);
+        const m = Math.floor(sec / 60);
+        const s = sec % 60;
+        if(m <= 0) return `${s} sec`;
+        return s ? `${m} min ${s} sec` : `${m} min`;
+      }
+
+      function getWpm(){
+        const preset = presetEl.value;
+        if(preset === 'custom'){
+          const v = parseInt(wpmEl.value, 10);
+          return isFinite(v) && v > 0 ? v : NaN;
+        }
+        return parseInt(preset, 10);
+      }
+
+      function syncPresetUI(){
+        const isCustom = presetEl.value === 'custom';
+        wpmWrap.style.display = isCustom ? 'block' : 'none';
+        if(!isCustom){
+          wpmEl.value = presetEl.value;
+        }
+      }
+
+      function calc(){
+        syncPresetUI();
+
+        const pasted = textEl.value || '';
+        const autoWords = countWords(pasted);
+
+        // Use manual if provided, else auto
+        let words = parseInt(wordsEl.value, 10);
+        if(!isFinite(words) || words <= 0){
+          words = autoWords;
+        }
+
+        const wpm = getWpm();
+        if(!isFinite(words) || words <= 0){
+          outTime.textContent = '—';
+          outTimeNote.textContent = 'Paste text or enter a valid word count.';
+          outWords.textContent = '—';
+          outWordsNote.textContent = '—';
+          outWpm.textContent = '—';
+          outWpmNote.textContent = '—';
+          outSummary.textContent = 'Paste text or enter words to see a summary.';
+          bar.style.width = '0%';
+          return;
+        }
+        if(!isFinite(wpm) || wpm <= 0){
+          outTime.textContent = '—';
+          outTimeNote.textContent = 'Enter a valid reading speed (WPM).';
+          outWords.textContent = words.toString();
+          outWordsNote.textContent = autoWords ? `Auto-detected from text: ${autoWords} words.` : 'Word count entered manually.';
+          outWpm.textContent = '—';
+          outWpmNote.textContent = '—';
+          outSummary.textContent = 'Fix WPM to see time estimate.';
+          bar.style.width = '0%';
+          return;
+        }
+
+        const minutes = words / wpm;
+        const seconds = minutes * 60;
+
+        outTime.textContent = formatTime(seconds, roundEl.value);
+        outTimeNote.textContent = `${(minutes).toFixed(minutes < 10 ? 2 : 1)} minutes (raw)`;
+
+        outWords.textContent = new Intl.NumberFormat().format(words);
+        outWordsNote.textContent = autoWords ? `Auto-detected from pasted text: ${new Intl.NumberFormat().format(autoWords)} words.` : 'Word count entered manually.';
+
+        outWpm.textContent = `${wpm} WPM`;
+        outWpmNote.textContent = presetEl.value === 'custom' ? 'Custom speed' : 'Preset speed';
+
+        // Visual bar: map WPM 120..450 to 0..100 for UX (not a “score”, just a visual)
+        const pct = ((clamp(wpm, 120, 450) - 120) / (450 - 120)) * 100;
+        bar.style.width = pct.toFixed(1) + '%';
+        bar.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+
+        outSummary.textContent =
+          `${new Intl.NumberFormat().format(words)} words • ${wpm} WPM • Estimated: ${formatTime(seconds, roundEl.value)}.`;
+      }
+
+      $('rt_calc_btn').addEventListener('click', calc);
+
+      $('rt_example_btn').addEventListener('click', ()=>{
+        textEl.value =
+`Reading time helps users plan. It sets expectations and improves engagement.
+Paste any text here and this calculator will estimate minutes and seconds based on WPM.`;
+        presetEl.value = '250';
+        roundEl.value = 'sec';
+        wordsEl.value = '';
+        wpmEl.value = '250';
+        calc();
+      });
+
+      $('rt_reset_btn').addEventListener('click', ()=>{
+        textEl.value = '';
+        wordsEl.value = '';
+        presetEl.value = '250';
+        roundEl.value = 'sec';
+        wpmEl.value = '250';
+        syncPresetUI();
+        outTime.textContent = '—';
+        outTimeNote.textContent = '—';
+        outWords.textContent = '—';
+        outWordsNote.textContent = '—';
+        outWpm.textContent = '—';
+        outWpmNote.textContent = '—';
+        outSummary.textContent = 'Paste text or enter words to see a summary.';
+        bar.style.width = '0%';
+      });
+
+      // Auto-update word count from paste
+      let manualOverride = false;
+      wordsEl.addEventListener('input', ()=>{
+        manualOverride = !!(wordsEl.value && parseInt(wordsEl.value,10) > 0);
+        if(wordsEl.value) calc();
+      });
+
+      textEl.addEventListener('input', ()=>{
+        const w = countWords(textEl.value);
+        if(!manualOverride){
+          wordsEl.value = w ? String(w) : '';
+        }
+        if(wpmEl.value || presetEl.value) calc();
+      });
+
+      presetEl.addEventListener('change', ()=>{ manualOverride = !!(wordsEl.value); syncPresetUI(); calc(); });
+      wpmEl.addEventListener('input', ()=>{ calc(); });
+      roundEl.addEventListener('change', ()=>{ calc(); });
+
+      syncPresetUI();
+    })();
+  </script>
+</body>
+</html>

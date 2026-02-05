@@ -1,0 +1,1071 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <title>Income Tax Calculator India | New vs Old Regime + Cess | CalculatorSolution</title>
+  <meta name="description" content="Free Income Tax Calculator (India): estimate tax payable under New or Old regime, including standard deduction and 4% cess. Get taxable income, slab-wise breakup, effective tax rate, and monthly tax." />
+
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://calculatorsolution.com/income-tax-india-calculator.html" />
+
+  <meta property="og:title" content="Income Tax Calculator (India)" />
+  <meta property="og:description" content="Estimate Indian income tax under New/Old regime with slab-wise breakup and cess." />
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg" />
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/assets/logo.png" />
+  <link rel="manifest" href="/assets/site.webmanifest" />
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <style>
+    /* ---------------------------
+      UI/UX + RESPONSIVE UPGRADE
+      ✅ No JS logic changed
+      ✅ Only layout, spacing, typography, responsiveness, accessibility
+    --------------------------- */
+
+    :root{
+      --bg1:#f8fafc;
+      --bg2:#f1f5f9;
+      --text:#0f172a;
+      --muted:#64748b;
+      --border:#e2e8f0;
+      --card:#ffffff;
+      --shadow:0 14px 40px rgba(8,13,26,.06);
+      --radius:16px;
+      --radius-lg:18px;
+      --focus:0 0 0 4px rgba(59,130,246,.14);
+    }
+
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:
+        radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+        radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+        linear-gradient(135deg,var(--bg1),var(--bg2));
+      color:var(--text);
+      line-height:1.6;
+      min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto;display:block}
+    a{color:inherit}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    /* Sticky header polish */
+    .site-header{
+      padding:12px 0;
+      border-bottom:1px solid var(--border);
+      background:rgba(255,255,255,.72);
+      backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:50;
+    }
+    .brand{
+      display:flex;align-items:center;gap:10px;text-decoration:none;
+      min-height:44px; /* touch target */
+    }
+    .brand-text{
+      font-weight:900;color:#2563eb;
+      font-size:1.05rem;
+      letter-spacing:-.01em;
+      line-height:1.1;
+    }
+    .brand-logo{border-radius:10px}
+
+    /* Hero: better type scaling */
+    .hero{
+      margin:18px 0 14px 0;
+      border-radius:var(--radius-lg);
+      padding:26px 18px;
+      color:#fff;
+      background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+      isolation:isolate;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      z-index:-1;
+    }
+    .hero h1{
+      margin:0 0 6px 0;
+      font-size:clamp(1.45rem, 1.2rem + 1.2vw, 2.1rem);
+      letter-spacing:-.02em;
+      line-height:1.18;
+    }
+    .hero p{margin:0;opacity:.96;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      white-space:nowrap;
+    }
+
+    /* Main calculator grid */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px;
+    }
+
+    .panel{
+      background:rgba(255,255,255,.94);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:14px;
+    }
+
+    .panel-title{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+    .panel-title h2{margin:0;font-size:1.05rem;line-height:1.2}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(37,99,235,.10);
+      color:#1d4ed8;font-weight:900;font-size:.85rem;
+      white-space:nowrap;
+    }
+
+    /* Form layout */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      font-size:1rem;
+      background:#fff;
+      outline:none;
+      min-height:44px; /* touch */
+      width:100%;
+    }
+    select.input{appearance:auto}
+    textarea.input{min-height:120px;resize:vertical}
+    .input:focus{border-color:#93c5fd;box-shadow:var(--focus)}
+    .help{margin:0;font-size:.86rem;color:var(--muted);max-width:80ch}
+    .row-span{grid-column:1 / -1}
+
+    /* Toggle: more robust alignment */
+    .toggle{
+      display:flex;align-items:flex-start;gap:12px;
+      padding:12px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:#fff;
+    }
+    .toggle input{transform:scale(1.15);margin-top:2px;flex:0 0 auto}
+    .toggle strong{font-weight:1000;display:block;line-height:1.2}
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(168,85,247,.10);
+      color:#6d28d9;font-weight:1000;font-size:.85rem;
+      white-space:nowrap;
+      margin-left:auto;
+      align-self:flex-start;
+    }
+
+    /* Buttons: full width on mobile */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:900;
+      border:0;
+      cursor:pointer;
+      min-height:44px;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff;
+      box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      user-select:none;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .btn:focus{outline:none;box-shadow:var(--focus), 0 12px 26px rgba(37,99,235,.18)}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn-ghost{
+      background:#fff;color:var(--text);
+      border:1px solid var(--border);
+      box-shadow:none
+    }
+    .btn-dark{
+      background:#0f172a;
+      box-shadow:0 14px 30px rgba(2,6,23,.18)
+    }
+
+    /* Results column (sticky on desktop) */
+    .sticky{position:sticky;top:82px}
+    .metric{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.94));
+      margin-bottom:10px;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.94));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{
+      margin:4px 0 0;
+      font-size:clamp(1.35rem, 1.1rem + 1vw, 1.7rem);
+      font-weight:1000;
+      letter-spacing:-.02em;
+      line-height:1.15;
+      word-break:break-word;
+    }
+    .mini{font-size:.86rem;color:var(--muted)}
+    .bar{height:10px;border-radius:999px;background:var(--border);overflow:hidden;margin-top:10px}
+    .bar > span{display:block;height:100%;width:0%;background:linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))}
+
+    /* Table: better mobile ergonomics */
+    .table-wrap{
+      overflow:auto;
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05);
+      -webkit-overflow-scrolling:touch;
+    }
+    table{width:100%;border-collapse:collapse;min-width:860px}
+    th,td{
+      padding:10px 12px;
+      border-bottom:1px solid var(--border);
+      text-align:left;
+      font-size:.95rem;
+      white-space:nowrap;
+    }
+    th{
+      background:#f8fafc;
+      font-weight:1000;
+      position:sticky;
+      top:0;
+      z-index:1;
+    }
+    tr:last-child td{border-bottom:0}
+    .right{text-align:right}
+    .muted{color:var(--muted)}
+
+    /* Details / FAQ cards */
+    .card{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:14px;
+      box-shadow:0 10px 24px rgba(8,13,26,.05);
+      padding:12px
+    }
+    details.card{padding:0;overflow:hidden}
+    details.card summary{
+      cursor:pointer;
+      padding:12px;
+      list-style:none;
+      outline:none;
+    }
+    details.card summary::-webkit-details-marker{display:none}
+    details.card summary:focus{box-shadow:var(--focus)}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Related grid */
+    .related-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:12px
+    }
+    a.card{display:block;text-decoration:none;color:inherit}
+    a.card:focus{outline:none;box-shadow:var(--focus)}
+    a.card h4{margin:0 0 6px;font-size:1rem;line-height:1.25}
+    a.card p{margin:0;color:var(--muted);font-size:.92rem}
+
+    /* Readability for code block */
+    pre{
+      overflow:auto;
+      padding:12px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:rgba(255,255,255,.9);
+      box-shadow:0 10px 24px rgba(8,13,26,.04);
+      -webkit-overflow-scrolling:touch;
+      font-size:.95rem;
+      line-height:1.5;
+    }
+
+    /* Section spacing */
+    section{scroll-margin-top:96px}
+    h2,h3{line-height:1.25}
+    h2{font-size:1.25rem}
+    h3{font-size:1.08rem}
+
+    /* Footer links: better wrapping */
+    .site-footer a{display:inline-block;padding:6px 4px;border-radius:10px}
+    .site-footer a:focus{outline:none;box-shadow:var(--focus)}
+
+    /* ---------------------------
+       RESPONSIVE BREAKPOINTS
+    --------------------------- */
+
+    /* Tablets / small laptops */
+    @media (max-width: 1024px){
+      .wrap{padding:0 16px}
+      .hero{padding:22px 16px}
+      table{min-width:760px}
+    }
+
+    /* Under 920px: single column layout (existing behavior kept + improved spacing) */
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static;top:auto}
+      table{min-width:680px}
+    }
+
+    /* Mobile */
+    @media (max-width: 640px){
+      .wrap{padding:0 14px}
+      .hero{padding:18px 14px;border-radius:16px}
+      .chips{gap:8px}
+      .chip{font-size:.85rem}
+      .grid-2{grid-template-columns:1fr}
+      .actions{gap:10px}
+      .btn{flex:1 1 100%}
+      th,td{padding:10px}
+      table{min-width:620px}
+      .panel{padding:12px}
+    }
+
+    /* Very small devices */
+    @media (max-width: 380px){
+      .brand-text{font-size:1rem}
+      .chip{white-space:normal}
+      table{min-width:560px}
+    }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      .btn, .card{transition:none}
+      .btn:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + FAQ + HowTo -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Income Tax Calculator (India)",
+      "url":"https://calculatorsolution.com/income-tax-india-calculator.html",
+      "description":"Estimate income tax payable in India under New or Old tax regime including standard deduction and cess."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Income Tax Calculator (India)","item":"https://calculatorsolution.com/income-tax-india-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate income tax in India",
+      "step":[
+        {"@type":"HowToStep","name":"Select regime and year","text":"Choose New or Old regime and the financial year you want to estimate for."},
+        {"@type":"HowToStep","name":"Enter income and deductions","text":"Add annual income, choose income type, and enter eligible deductions if applicable."},
+        {"@type":"HowToStep","name":"Calculate tax","text":"Get tax payable, cess, slab-wise breakup, effective rate and monthly equivalent."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Which financial year should I choose?","acceptedAnswer":{"@type":"Answer","text":"Choose the financial year for which you want an estimate. Tax rules may change across years."}},
+        {"@type":"Question","name":"Is TDS the same as tax payable?","acceptedAnswer":{"@type":"Answer","text":"TDS is tax deducted at source. Final liability can be higher or lower after considering total income and deductions."}},
+        {"@type":"Question","name":"Does this include surcharge and cess?","acceptedAnswer":{"@type":"Answer","text":"This calculator includes 4% cess by default. Surcharge can be toggled on for a rough estimate on high incomes."}},
+        {"@type":"Question","name":"New regime vs old regime—what should I choose?","acceptedAnswer":{"@type":"Answer","text":"New regime generally has lower slab rates with fewer deductions. Old regime may benefit those with significant deductions/exemptions."}},
+        {"@type":"Question","name":"Is this final filing advice?","acceptedAnswer":{"@type":"Answer","text":"No. This is an estimate for planning. For filing and complex cases, consult a tax professional."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36" />
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Income Tax Calculator (India)</h1>
+        <p>Estimate your income tax under <strong>New</strong> or <strong>Old</strong> regime with slab-wise breakup, cess, effective rate, and monthly equivalent.</p>
+        <div class="chips">
+          <span class="chip">🇮🇳 New vs Old regime</span>
+          <span class="chip">📊 Slab-wise tax breakup</span>
+          <span class="chip">🧾 Includes 4% cess</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-income-tax-india">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Income tax inputs">
+              <div class="panel-title">
+                <h2>Income details</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="it_year">Financial year</label>
+                  <select id="it_year" class="input">
+                    <option value="FY_2024_25" selected>FY 2024–25 (Estimate)</option>
+                    <option value="CUSTOM">Custom (edit slabs below)</option>
+                  </select>
+                  <p class="help">If slabs change, use “Custom” and update the slab table shown below.</p>
+                </div>
+
+                <div class="field">
+                  <label for="it_regime">Tax regime</label>
+                  <select id="it_regime" class="input">
+                    <option value="NEW" selected>New Regime (default)</option>
+                    <option value="OLD">Old Regime</option>
+                  </select>
+                  <p class="help">Old regime may benefit if you have higher deductions/exemptions.</p>
+                </div>
+
+                <div class="field">
+                  <label for="it_income_type">Income type</label>
+                  <select id="it_income_type" class="input">
+                    <option value="SALARY" selected>Salary</option>
+                    <option value="OTHER">Business/Other</option>
+                  </select>
+                  <p class="help">Standard deduction is common for salary; toggle it below.</p>
+                </div>
+
+                <div class="field">
+                  <label for="it_age">Age category (for Old regime exemption)</label>
+                  <select id="it_age" class="input">
+                    <option value="LT60" selected>Below 60</option>
+                    <option value="60_80">60 to 80</option>
+                    <option value="GT80">80+</option>
+                  </select>
+                  <p class="help">Used only when Old regime is selected.</p>
+                </div>
+
+                <div class="field row-span">
+                  <label for="it_income">Annual gross income (₹)</label>
+                  <input id="it_income" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 1200000" />
+                  <p class="help">Enter your total annual income before deductions.</p>
+                </div>
+
+                <div class="field">
+                  <label for="it_std_ded">Standard deduction (₹)</label>
+                  <input id="it_std_ded" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 50000" />
+                  <p class="help">Common salary standard deduction is ₹50,000. Set 0 if not applicable.</p>
+                </div>
+
+                <div class="field">
+                  <label for="it_ded_80c">80C (₹)</label>
+                  <input id="it_ded_80c" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 150000" />
+                  <p class="help">PPF/ELSS/LIC/etc. (Old regime typically).</p>
+                </div>
+
+                <div class="field">
+                  <label for="it_ded_80d">80D (₹)</label>
+                  <input id="it_ded_80d" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 25000" />
+                  <p class="help">Health insurance premium (limits apply).</p>
+                </div>
+
+                <div class="field">
+                  <label for="it_other_ded">Other deductions (₹)</label>
+                  <input id="it_other_ded" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 20000" />
+                  <p class="help">Add eligible deductions you want to consider.</p>
+                </div>
+
+                <div class="field row-span">
+                  <div class="toggle">
+                    <input id="it_apply_surcharge" type="checkbox" />
+                    <div>
+                      <strong>Include surcharge estimate (high income)</strong>
+                      <div class="mini">Optional. Surcharge rules are complex; this is a simplified estimate for planning.</div>
+                    </div>
+                    <span class="badge">Optional</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="it_calc_btn" type="button">Calculate Tax</button>
+                <button class="btn btn-dark" id="it_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="it_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="mini" style="margin-top:10px;">
+                <strong>Note:</strong> This is an estimator. Slabs/deductions can change across years and based on your case.
+              </div>
+
+              <!-- Slab editor (Custom) -->
+              <div class="panel" style="margin-top:12px;" aria-label="Slab table editor">
+                <div class="panel-title">
+                  <h2>Slab table (for transparency)</h2>
+                  <span class="pill">🧩 Slabs</span>
+                </div>
+                <p class="mini" style="margin:0 0 10px;">
+                  By default, the calculator uses commonly-known <strong>New Regime</strong> slabs (0–3–6–9–12–15–15+) and
+                  <strong>Old Regime</strong> slabs (age-based 0–2.5–5–10–10+). If you choose <strong>Custom</strong>,
+                  edit the slabs below in JSON format and re-calculate.
+                </p>
+                <div class="field">
+                  <label for="it_custom_slabs">Custom slabs JSON</label>
+                  <textarea id="it_custom_slabs" class="input" rows="6" style="font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size:.92rem;"></textarea>
+                  <p class="help">
+                    Format: {"new":[[0,300000,0],[300000,600000,0.05],...], "old":[[0,250000,0],[250000,500000,0.05],...]}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Income tax results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Total tax payable (₹)</p>
+                <p class="v" id="it_out_total_tax">—</p>
+                <p class="mini" id="it_out_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Taxable income (₹)</p>
+                <p class="v" id="it_out_taxable">—</p>
+                <p class="mini" id="it_out_taxable_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Tax breakdown</p>
+                <p class="mini" id="it_out_breakup">Slab tax + surcharge (optional) + 4% cess.</p>
+                <div class="bar"><span id="it_bar_eff"></span></div>
+                <p class="mini" id="it_out_eff">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Monthly equivalent (₹/month)</p>
+                <p class="v" id="it_out_monthly">—</p>
+                <p class="mini">Annual tax divided by 12 (planning view).</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="it_out_summary">Enter income and calculate to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Slab-wise Tax Breakup</h2>
+          <p class="mini" style="margin:0 0 10px;">This table shows how tax is applied across slabs (before cess).</p>
+
+          <div class="table-wrap">
+            <table aria-label="Income tax slab breakup table">
+              <thead>
+                <tr>
+                  <th>Slab</th>
+                  <th class="right">Rate</th>
+                  <th class="right">Taxable in slab (₹)</th>
+                  <th class="right">Tax (₹)</th>
+                </tr>
+              </thead>
+              <tbody id="it_table">
+                <tr><td colspan="4" class="mini">Click <strong>Calculate Tax</strong> to generate slab-wise breakup.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          This <strong>Income Tax Calculator (India)</strong> gives a planning estimate using a slab-based approach.
+          You can compare <strong>New Regime vs Old Regime</strong>, apply a <strong>standard deduction</strong>,
+          and add common deductions like <strong>80C</strong> and <strong>80D</strong>.
+        </p>
+        <p class="mini">
+          Tip: If your deductions are low, New regime often looks better. If you have strong eligible deductions/exemptions,
+          Old regime may reduce tax. Always verify with official rules or a CA for filing.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula (concept)</h3>
+        <pre>Tax = Σ (income_in_slab × slab_rate)
+Total Tax Payable = (Slab Tax + Surcharge*) + 4% Cess
+* Surcharge is optional and simplified in this estimator.</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Which financial year should I choose?</strong></summary><p>Select the year you want to estimate for. Rules can change between years. If unsure, use “Custom” and update slab JSON.</p></details>
+        <details class="card"><summary><strong>Is TDS same as tax payable?</strong></summary><p>No. TDS is tax deducted during the year. Final tax payable/refund depends on your total income, deductions, and actual liability.</p></details>
+        <details class="card"><summary><strong>Does this include cess?</strong></summary><p>Yes, this includes 4% Health & Education Cess on computed tax (and surcharge if applied).</p></details>
+        <details class="card"><summary><strong>New vs Old regime—what should I choose?</strong></summary><p>New regime often has lower slab rates but fewer deductions. Old regime can be beneficial if you have significant eligible deductions/exemptions.</p></details>
+        <details class="card"><summary><strong>Should I consult a CA?</strong></summary><p>Yes for complex cases (multiple income sources, capital gains, business income, exemptions, foreign income, etc.). This tool is for quick estimation and planning.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="related-grid">
+          <a class="card" href="gst-calculator-india.html"><h4>GST Calculator (India)</h4><p>Calculate GST amount and final price for common GST rates.</p></a>
+          <a class="card" href="salary-calculator.html"><h4>Salary Calculator</h4><p>Estimate take-home salary and components.</p></a>
+          <a class="card" href="emi-prepayment-calculator.html"><h4>EMI Prepayment Calculator</h4><p>Estimate savings from making prepayments on your loan.</p></a>
+          <a class="card" href="percentage-calculator.html"><h4>Percentage Calculator</h4><p>Compute percentages and percent changes quickly.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const fmtINR0 = (n)=> isFinite(n)
+        ? new Intl.NumberFormat('en-IN',{maximumFractionDigits:0}).format(Math.round(n))
+        : '—';
+
+      const clamp0 = (x)=> (isFinite(x) && x>0 ? x : 0);
+
+      // Default slab sets (planning defaults; can be updated via Custom)
+      // Format: [lowerInclusive, upperExclusiveOrNull, rate]
+      // NEW (commonly used recent structure): 0-3L:0%, 3-6L:5%, 6-9L:10%, 9-12L:15%, 12-15L:20%, 15L+:30%
+      const DEFAULT_SLABS = {
+        new: [
+          [0,        300000, 0.00],
+          [300000,   600000, 0.05],
+          [600000,   900000, 0.10],
+          [900000,  1200000, 0.15],
+          [1200000, 1500000, 0.20],
+          [1500000, null,    0.30],
+        ],
+        // OLD (basic): 0-2.5L:0%, 2.5-5L:5%, 5-10L:20%, 10L+:30%
+        old_lt60: [
+          [0,       250000, 0.00],
+          [250000,  500000, 0.05],
+          [500000, 1000000, 0.20],
+          [1000000, null,   0.30],
+        ],
+        // OLD (senior 60-80): 0-3L:0%
+        old_60_80: [
+          [0,       300000, 0.00],
+          [300000,  500000, 0.05],
+          [500000, 1000000, 0.20],
+          [1000000, null,   0.30],
+        ],
+        // OLD (super senior 80+): 0-5L:0%
+        old_gt80: [
+          [0,       500000, 0.00],
+          [500000, 1000000, 0.20],
+          [1000000, null,   0.30],
+        ]
+      };
+
+      // Simplified rebate (planning)
+      // NOTE: Rebate limits can change. Keep conservative: only apply if user is clearly within commonly-known thresholds.
+      // Old regime: rebate up to ₹12,500 if taxable <= 5,00,000 (historical common).
+      // New regime: rebate historically up to ₹25,000 if taxable <= 7,00,000 (recent common).
+      // You can adjust these in code or via Custom flow as needed.
+      const REBATE_RULES = {
+        OLD: { threshold: 500000, maxRebate: 12500 },
+        NEW: { threshold: 700000, maxRebate: 25000 }
+      };
+
+      // Surcharge (simplified) for planning — may differ by regime and year (caps apply in some cases).
+      function calcSurcharge(taxableIncome, taxBeforeCess){
+        // thresholds on total income
+        // >50L 10%, >1Cr 15%, >2Cr 25%, >5Cr 37%
+        if(!(isFinite(taxableIncome) && taxableIncome>0 && isFinite(taxBeforeCess) && taxBeforeCess>0)) return 0;
+        const inc = taxableIncome;
+        let rate = 0;
+        if(inc > 50000000) rate = 0.37;
+        else if(inc > 20000000) rate = 0.25;
+        else if(inc > 10000000) rate = 0.15;
+        else if(inc > 5000000) rate = 0.10;
+        return taxBeforeCess * rate;
+      }
+
+      function parseCustomSlabs(jsonText){
+        try{
+          const obj = JSON.parse(jsonText || '{}');
+          if(!obj || typeof obj !== 'object') return null;
+          if(!Array.isArray(obj.new) || !Array.isArray(obj.old)) return null;
+
+          const ok = (arr)=> arr.every(x => Array.isArray(x) && x.length===3 &&
+            isFinite(x[0]) && (x[1]===null || isFinite(x[1])) && isFinite(x[2]) && x[2] >= 0 && x[2] <= 1);
+
+          if(!ok(obj.new) || !ok(obj.old)) return null;
+
+          // old should be universal in custom; we use it regardless of age for custom
+          return { new: obj.new, old_custom: obj.old };
+        }catch(e){
+          return null;
+        }
+      }
+
+      function calcSlabTax(income, slabs){
+        let remaining = Math.max(0, income);
+        let tax = 0;
+        const rows = [];
+
+        for(const [lo, hi, rate] of slabs){
+          if(remaining <= 0) break;
+          const upper = (hi===null ? Infinity : hi);
+          if(income <= lo) continue;
+          const slabStart = lo;
+          const slabEnd = Math.min(income, upper);
+          const slabAmount = Math.max(0, slabEnd - slabStart);
+          if(slabAmount <= 0) continue;
+          const slabTax = slabAmount * rate;
+          tax += slabTax;
+
+          const slabLabel = hi===null
+            ? `₹ ${fmtINR0(lo)}+`
+            : `₹ ${fmtINR0(lo)} – ₹ ${fmtINR0(hi)}`;
+
+          rows.push({
+            slab: slabLabel,
+            rate: (rate*100).toFixed(0) + '%',
+            amount: slabAmount,
+            tax: slabTax
+          });
+        }
+
+        return { tax, rows };
+      }
+
+      // DOM
+      const yearEl = $('it_year');
+      const regimeEl = $('it_regime');
+      const incomeTypeEl = $('it_income_type');
+      const ageEl = $('it_age');
+      const incomeEl = $('it_income');
+      const stdDedEl = $('it_std_ded');
+      const d80cEl = $('it_ded_80c');
+      const d80dEl = $('it_ded_80d');
+      const otherDedEl = $('it_other_ded');
+      const surchargeEl = $('it_apply_surcharge');
+      const customSlabsEl = $('it_custom_slabs');
+
+      const outTotalTax = $('it_out_total_tax');
+      const outTaxable = $('it_out_taxable');
+      const outNote = $('it_out_note');
+      const outTaxableNote = $('it_out_taxable_note');
+      const outBreakup = $('it_out_breakup');
+      const outEff = $('it_out_eff');
+      const outMonthly = $('it_out_monthly');
+      const outSummary = $('it_out_summary');
+      const barEff = $('it_bar_eff');
+      const tbody = $('it_table');
+
+      function setDefaultCustomJson(){
+        const template = {
+          new: DEFAULT_SLABS.new,
+          old: DEFAULT_SLABS.old_lt60
+        };
+        customSlabsEl.value = JSON.stringify(template, null, 2);
+      }
+
+      function getActiveSlabs(){
+        const year = yearEl.value;
+        const regime = regimeEl.value;
+        const age = ageEl.value;
+
+        if(year === 'CUSTOM'){
+          const parsed = parseCustomSlabs(customSlabsEl.value);
+          if(parsed){
+            if(regime === 'NEW') return parsed.new;
+            return parsed.old_custom;
+          }
+          // fallback
+        }
+
+        if(regime === 'NEW') return DEFAULT_SLABS.new;
+
+        if(age === '60_80') return DEFAULT_SLABS.old_60_80;
+        if(age === 'GT80') return DEFAULT_SLABS.old_gt80;
+        return DEFAULT_SLABS.old_lt60;
+      }
+
+      function compute(){
+        const income = clamp0(parseFloat(incomeEl.value));
+        const stdDed = clamp0(parseFloat(stdDedEl.value));
+        const d80c = clamp0(parseFloat(d80cEl.value));
+        const d80d = clamp0(parseFloat(d80dEl.value));
+        const otherDed = clamp0(parseFloat(otherDedEl.value));
+
+        if(!(isFinite(income) && income > 0)){
+          outTotalTax.textContent = '—';
+          outTaxable.textContent = '—';
+          outNote.textContent = 'Enter annual income to calculate.';
+          outTaxableNote.textContent = '—';
+          outEff.textContent = '—';
+          outMonthly.textContent = '—';
+          outSummary.textContent = 'Enter income and calculate to see a clean summary.';
+          barEff.style.width = '0%';
+          tbody.innerHTML = '<tr><td colspan="4" class="mini">Click <strong>Calculate Tax</strong> to generate slab-wise breakup.</td></tr>';
+          return;
+        }
+
+        const regime = regimeEl.value;
+
+        // Deductions: Keep simple estimator — apply all entered deductions to taxable.
+        // Note: In reality, New regime restricts many deductions. This page is a planner; user can set deductions to 0 for New regime.
+        let totalDeductions = stdDed + d80c + d80d + otherDed;
+
+        // If income type is OTHER, standard deduction often not applicable; keep as user-controlled.
+        // But we can auto-suggest:
+        if(incomeTypeEl.value === 'OTHER' && stdDedEl.value === ''){
+          // do nothing (user choice)
+        }
+
+        const taxable = Math.max(0, income - totalDeductions);
+
+        const slabs = getActiveSlabs();
+        const { tax: slabTaxRaw, rows } = calcSlabTax(taxable, slabs);
+
+        // Rebate (simple)
+        let rebate = 0;
+        const rebateRule = REBATE_RULES[regime];
+        if(rebateRule && taxable <= rebateRule.threshold){
+          rebate = Math.min(rebateRule.maxRebate, slabTaxRaw);
+        }
+
+        const taxAfterRebate = Math.max(0, slabTaxRaw - rebate);
+
+        // Surcharge (optional)
+        const surcharge = surchargeEl.checked ? calcSurcharge(taxable, taxAfterRebate) : 0;
+
+        // Cess (4%)
+        const cess = 0.04 * (taxAfterRebate + surcharge);
+
+        const totalTax = taxAfterRebate + surcharge + cess;
+        const monthly = totalTax / 12;
+
+        outTotalTax.textContent = '₹ ' + fmtINR0(totalTax);
+        outTaxable.textContent = '₹ ' + fmtINR0(taxable);
+
+        const dedNote = `Income ₹${fmtINR0(income)} − Deductions ₹${fmtINR0(totalDeductions)} = Taxable ₹${fmtINR0(taxable)}`;
+        outTaxableNote.textContent = dedNote;
+
+        const effRate = (income > 0) ? (totalTax / income) * 100 : 0;
+        barEff.style.width = Math.max(0, Math.min(100, effRate)).toFixed(1) + '%';
+        outEff.textContent = `Effective tax rate ≈ ${effRate.toFixed(2)}% of gross income`;
+
+        outMonthly.textContent = '₹ ' + fmtINR0(monthly);
+
+        const parts = [];
+        parts.push(`Slab tax: ₹${fmtINR0(slabTaxRaw)}`);
+        if(rebate > 0) parts.push(`Rebate applied: −₹${fmtINR0(rebate)}`);
+        if(surchargeEl.checked) parts.push(`Surcharge: ₹${fmtINR0(surcharge)}`);
+        parts.push(`Cess (4%): ₹${fmtINR0(cess)}`);
+        outBreakup.textContent = parts.join(' • ');
+
+        const yearLabel = yearEl.options[yearEl.selectedIndex].text;
+        const regimeLabel = (regime === 'NEW') ? 'New Regime' : 'Old Regime';
+        outNote.textContent = `${regimeLabel} • ${yearLabel} • Cess included`;
+
+        outSummary.textContent =
+          `${regimeLabel} • Gross ₹${fmtINR0(income)} • Deductions ₹${fmtINR0(totalDeductions)} • Taxable ₹${fmtINR0(taxable)} • Tax ₹${fmtINR0(totalTax)} (≈ ₹${fmtINR0(monthly)}/month).`;
+
+        // Render table
+        const rowHtml = [];
+        let shownAny = false;
+
+        rows.forEach(r=>{
+          shownAny = true;
+          rowHtml.push(`
+            <tr>
+              <td>${r.slab}</td>
+              <td class="right">${r.rate}</td>
+              <td class="right">₹ ${fmtINR0(r.amount)}</td>
+              <td class="right">₹ ${fmtINR0(r.tax)}</td>
+            </tr>
+          `);
+        });
+
+        // Totals footer rows
+        rowHtml.push(`
+          <tr>
+            <td class="muted"><strong>Subtotal (slab tax)</strong></td>
+            <td></td>
+            <td></td>
+            <td class="right"><strong>₹ ${fmtINR0(slabTaxRaw)}</strong></td>
+          </tr>
+        `);
+
+        if(rebate > 0){
+          rowHtml.push(`
+            <tr>
+              <td class="muted"><strong>Rebate</strong></td>
+              <td></td><td></td>
+              <td class="right"><strong>− ₹ ${fmtINR0(rebate)}</strong></td>
+            </tr>
+          `);
+        }
+
+        if(surchargeEl.checked){
+          rowHtml.push(`
+            <tr>
+              <td class="muted"><strong>Surcharge (estimate)</strong></td>
+              <td></td><td></td>
+              <td class="right"><strong>₹ ${fmtINR0(surcharge)}</strong></td>
+            </tr>
+          `);
+        }
+
+        rowHtml.push(`
+          <tr>
+            <td class="muted"><strong>Cess (4%)</strong></td>
+            <td></td><td></td>
+            <td class="right"><strong>₹ ${fmtINR0(cess)}</strong></td>
+          </tr>
+        `);
+
+        rowHtml.push(`
+          <tr>
+            <td class="muted"><strong>Total Tax Payable</strong></td>
+            <td></td><td></td>
+            <td class="right"><strong>₹ ${fmtINR0(totalTax)}</strong></td>
+          </tr>
+        `);
+
+        tbody.innerHTML = shownAny ? rowHtml.join('') :
+          '<tr><td colspan="4" class="mini">No slab breakup available. Check inputs/slabs.</td></tr>';
+      }
+
+      function syncStdDedSuggestion(){
+        // Friendly default: if salary and empty, set 50000; else keep as user-controlled
+        if(incomeTypeEl.value === 'SALARY' && (stdDedEl.value === '' || parseFloat(stdDedEl.value) === 0)){
+          stdDedEl.value = '50000';
+        }
+        if(incomeTypeEl.value === 'OTHER' && stdDedEl.value === ''){
+          stdDedEl.value = '0';
+        }
+      }
+
+      $('it_calc_btn').addEventListener('click', compute);
+
+      $('it_example_btn').addEventListener('click', ()=>{
+        yearEl.value = 'FY_2024_25';
+        regimeEl.value = 'NEW';
+        incomeTypeEl.value = 'SALARY';
+        ageEl.value = 'LT60';
+        incomeEl.value = '1200000';
+        stdDedEl.value = '50000';
+        d80cEl.value = '0';
+        d80dEl.value = '0';
+        otherDedEl.value = '0';
+        surchargeEl.checked = false;
+        setDefaultCustomJson();
+        compute();
+      });
+
+      $('it_reset_btn').addEventListener('click', ()=>{
+        [incomeEl,stdDedEl,d80cEl,d80dEl,otherDedEl].forEach(el=>el.value='');
+        yearEl.value = 'FY_2024_25';
+        regimeEl.value = 'NEW';
+        incomeTypeEl.value = 'SALARY';
+        ageEl.value = 'LT60';
+        surchargeEl.checked = false;
+        setDefaultCustomJson();
+
+        outTotalTax.textContent='—';
+        outTaxable.textContent='—';
+        outNote.textContent='—';
+        outTaxableNote.textContent='—';
+        outBreakup.textContent='Slab tax + surcharge (optional) + 4% cess.';
+        outEff.textContent='—';
+        outMonthly.textContent='—';
+        outSummary.textContent='Enter income and calculate to see a clean summary.';
+        barEff.style.width='0%';
+        tbody.innerHTML = '<tr><td colspan="4" class="mini">Click <strong>Calculate Tax</strong> to generate slab-wise breakup.</td></tr>';
+      });
+
+      // Auto compute on edits (once income exists)
+      const inputs = [yearEl,regimeEl,incomeTypeEl,ageEl,incomeEl,stdDedEl,d80cEl,d80dEl,otherDedEl,surchargeEl,customSlabsEl];
+      inputs.forEach(el=>{
+        el.addEventListener('input', ()=>{ if(incomeEl.value) compute(); });
+        el.addEventListener('change', ()=>{
+          if(el === incomeTypeEl) syncStdDedSuggestion();
+          if(el === yearEl && yearEl.value === 'CUSTOM'){
+            if(!customSlabsEl.value.trim()) setDefaultCustomJson();
+          }
+          if(incomeEl.value) compute();
+        });
+      });
+
+      // Init
+      setDefaultCustomJson();
+      syncStdDedSuggestion();
+    })();
+  </script>
+</body>
+</html>

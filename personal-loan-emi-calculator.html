@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- ✅ Responsive viewport (keep) -->
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Personal Loan EMI Calculator + Amortization Schedule | CalculatorSolution</title>
+  <meta name="description" content="Free Personal Loan EMI Calculator: enter loan amount, interest rate and tenure to calculate EMI, total interest, total payable and amortization schedule.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/personal-loan-emi-calculator.html">
+
+  <meta property="og:title" content="Personal Loan EMI Calculator">
+  <meta property="og:description" content="Calculate EMI, total interest, total payable & amortization schedule for a personal loan.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- ✅ Responsive + polished UI CSS (NO logic changes, only layout/UX improvements) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    a{color:inherit}
+    :focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:2px}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    /* Header */
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem}
+    .brand-logo{border-radius:10px;flex:0 0 auto}
+
+    /* Hero */
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em}
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      white-space:nowrap;
+    }
+
+    /* Calculator layout */
+    .calc-shell{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;align-items:start;margin-top:14px}
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      min-width:0; /* ✅ important for grid overflow */
+    }
+    .panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem;white-space:nowrap}
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      width:100%;
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      min-height:44px; /* ✅ better touch target */
+    }
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    /* Buttons */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-block;padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px; /* ✅ touch */
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+
+    /* Sticky results */
+    .sticky{position:sticky;top:82px}
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92))}
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{margin:4px 0 0;font-size:1.55rem;font-weight:1000;letter-spacing:-.02em}
+    .mini{font-size:.86rem;color:#64748b}
+
+    .bar{height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px}
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* Table */
+    .table-wrap{
+      overflow:auto;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05);
+      -webkit-overflow-scrolling:touch;
+    }
+    table{width:100%;border-collapse:collapse;min-width:860px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem;white-space:nowrap}
+    th{background:#f8fafc;font-weight:1000}
+    tr:last-child td{border-bottom:0}
+
+    /* Content cards / FAQ */
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 10px 24px rgba(8,13,26,.05);padding:12px}
+    details.card{padding:0}
+    details.card summary{cursor:pointer;padding:12px}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Code block / formula */
+    pre{
+      margin:10px 0 0;
+      padding:12px 14px;
+      border-radius:12px;
+      background:#0b1220;
+      color:#e2e8f0;
+      overflow:auto;
+      max-width:100%;
+      white-space:pre;
+    }
+
+    /* Related calculators grid (your HTML already uses these classes) */
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:12px;
+      align-items:stretch;
+    }
+    .cards-grid .card{padding:14px}
+    .cards-grid .card h4{margin:0 0 6px;font-size:1rem}
+    .cards-grid .card p{margin:0;color:#475569}
+
+    /* Section spacing */
+    article > section{scroll-margin-top:92px}
+    .faqs details.card + details.card{margin-top:10px}
+
+    /* ✅ Breakpoints */
+    @media (max-width: 1024px){
+      .wrap{max-width:980px}
+      .cards-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
+      table{min-width:760px}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static}
+      table{min-width:680px}
+      .hero{padding:22px 16px}
+      .hero h1{font-size:1.65rem}
+    }
+
+    @media (max-width: 720px){
+      .wrap{padding:0 14px}
+      .grid-2{grid-template-columns:1fr}
+      .actions{flex-direction:column}
+      .btn{width:100%}
+      .chips{gap:8px}
+      .chip{font-size:.85rem}
+      table{min-width:620px}
+      .metric .v{font-size:1.4rem}
+      .panel{padding:12px}
+      .panel-title{flex-wrap:wrap}
+    }
+
+    @media (max-width: 480px){
+      .hero{border-radius:16px}
+      .hero h1{font-size:1.45rem}
+      .brand-text{font-size:1.05rem}
+      .metric{padding:11px}
+      th,td{padding:9px 10px;font-size:.92rem}
+      table{min-width:560px}
+      pre{font-size:.92rem}
+      .cards-grid{grid-template-columns:1fr}
+    }
+
+    /* Footer links wrap nicely */
+    .site-footer a{color:inherit}
+    .site-footer p{margin:0}
+    .site-footer .wrap{display:flex;flex-direction:column;gap:8px}
+    .site-footer .wrap p:last-child{line-height:1.8}
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + FAQ + HowTo -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Personal Loan EMI Calculator",
+      "url":"https://calculatorsolution.com/personal-loan-emi-calculator.html",
+      "description":"Calculate personal loan EMI, total interest and amortization schedule."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Personal Loan EMI Calculator","item":"https://calculatorsolution.com/personal-loan-emi-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate personal loan EMI",
+      "step":[
+        {"@type":"HowToStep","name":"Enter loan amount","text":"Add the principal you want to borrow."},
+        {"@type":"HowToStep","name":"Enter interest rate and tenure","text":"EMI depends on annual interest rate and total months."},
+        {"@type":"HowToStep","name":"Calculate EMI","text":"See EMI, total interest, total payable and amortization table."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Are personal loans secured?","acceptedAnswer":{"@type":"Answer","text":"Most personal loans are unsecured, meaning no collateral is required."}},
+        {"@type":"Question","name":"Why are personal loan interest rates higher?","acceptedAnswer":{"@type":"Answer","text":"Because they are typically unsecured, lenders price in higher risk compared to secured loans."}},
+        {"@type":"Question","name":"Typical tenure for personal loans?","acceptedAnswer":{"@type":"Answer","text":"Often 1–5 years, though some lenders offer longer terms based on eligibility."}},
+        {"@type":"Question","name":"Can I prepay a personal loan?","acceptedAnswer":{"@type":"Answer","text":"Many lenders allow part-prepayment or foreclosure, but fees and lock-in periods may apply."}},
+        {"@type":"Question","name":"Are processing fees included in EMI?","acceptedAnswer":{"@type":"Answer","text":"Usually no. Processing fees are charged separately; EMI is calculated on the loan principal."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Personal Loan EMI Calculator</h1>
+        <p>Calculate EMI, total interest, total payable, and a full amortization schedule for an unsecured personal loan.</p>
+        <div class="chips">
+          <span class="chip">💳 Personal loan EMI</span>
+          <span class="chip">📊 Interest split</span>
+          <span class="chip">🧾 Amortization schedule</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-personal-loan-emi">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Personal loan inputs">
+              <div class="panel-title">
+                <h2>Loan details</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="pl_amount">Loan amount (Principal)</label>
+                  <input id="pl_amount" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 300000">
+                  <p class="help">Amount you plan to borrow.</p>
+                </div>
+
+                <div class="field">
+                  <label for="pl_rate">Interest rate (annual)</label>
+                  <input id="pl_rate" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 14.0">
+                  <p class="help">Example: 14 means 14% per year.</p>
+                </div>
+
+                <div class="field">
+                  <label for="pl_tenure_years">Tenure</label>
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                    <input id="pl_tenure_years" class="input" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 3">
+                    <span class="mini" style="align-self:center;">years</span>
+                  </div>
+                  <p class="help">Common range: 1–5 years.</p>
+                </div>
+
+                <div class="field">
+                  <label for="pl_fees">Processing/other fees (optional)</label>
+                  <input id="pl_fees" class="input" type="number" inputmode="numeric" min="0" step="500" placeholder="e.g., 2500">
+                  <p class="help">Shown separately; not included in EMI formula.</p>
+                </div>
+
+                <div class="field">
+                  <label for="pl_round">Round EMI</label>
+                  <select id="pl_round" class="input">
+                    <option value="0" selected>No rounding</option>
+                    <option value="10">Nearest 10</option>
+                    <option value="100">Nearest 100</option>
+                  </select>
+                  <p class="help">Some lenders round EMIs.</p>
+                </div>
+
+                <div class="field">
+                  <label for="pl_currency">Currency</label>
+                  <select id="pl_currency" class="input">
+                    <option value="INR" selected>₹ INR</option>
+                    <option value="USD">$ USD</option>
+                    <option value="EUR">€ EUR</option>
+                    <option value="GBP">£ GBP</option>
+                  </select>
+                  <p class="help">Affects display only.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="pl_calc_btn" type="button">Calculate EMI</button>
+                <button class="btn btn-dark" id="pl_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="pl_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="mini" style="margin-top:10px;">
+                EMI Formula: <strong>EMI = P × r × (1+r)^n / ((1+r)^n − 1)</strong>
+                where r = monthly rate, n = months.
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Personal loan results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Monthly EMI</p>
+                <p class="v" id="pl_out_emi">—</p>
+                <p class="mini" id="pl_out_emi_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Principal</p>
+                <p class="v" id="pl_out_principal">—</p>
+                <p class="mini">Loan amount you entered.</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Total interest</p>
+                <p class="v" id="pl_out_interest">—</p>
+                <div class="bar"><span id="pl_bar_interest"></span></div>
+                <p class="mini" id="pl_out_split">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Total payable (EMI × months)</p>
+                <p class="v" id="pl_out_total">—</p>
+                <p class="mini" id="pl_out_fees">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="pl_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Amortization Schedule</h2>
+          <p class="mini" style="margin:0 0 10px;">Month-by-month split of EMI into interest and principal.</p>
+
+          <div class="table-wrap">
+            <table aria-label="Personal loan amortization table">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>EMI</th>
+                  <th>Interest</th>
+                  <th>Principal</th>
+                  <th>Balance</th>
+                </tr>
+              </thead>
+              <tbody id="pl_table">
+                <tr><td colspan="5" class="mini">Click <strong>Calculate EMI</strong> to generate the schedule.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          This <strong>Personal Loan EMI Calculator</strong> estimates your monthly payment (EMI) using the loan amount, annual interest rate,
+          and tenure. It also shows <strong>total interest</strong>, <strong>total payable</strong>, and a detailed <strong>amortization schedule</strong>.
+        </p>
+        <p class="mini">
+          Tip: Shorter tenure usually increases EMI but reduces total interest. Compare multiple scenarios before choosing.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>EMI = P × r × (1+r)^n / ((1+r)^n − 1)</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Are personal loans secured?</strong></summary><p>Most personal loans are unsecured (no collateral required).</p></details>
+        <details class="card"><summary><strong>Interest rates?</strong></summary><p>Rates are usually higher than secured loans because lender risk is higher.</p></details>
+        <details class="card"><summary><strong>Can tenure be long?</strong></summary><p>Personal loan tenures are typically shorter than home loans (commonly 1–5 years).</p></details>
+        <details class="card"><summary><strong>Prepayment?</strong></summary><p>Many lenders allow prepayment, but check lock-in period and fees.</p></details>
+        <details class="card"><summary><strong>Processing fees?</strong></summary><p>Processing fees are usually charged separately and not included in EMI calculation.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="home-loan-emi-calculator.html"><h4>Home Loan EMI Calculator</h4><p>Calculate EMI for home loans.</p></a>
+          <a class="card" href="car-loan-emi-calculator.html"><h4>Car Loan EMI Calculator</h4><p>Calculate EMI and amortization for car loans.</p></a>
+          <a class="card" href="loan-interest-calculator.html"><h4>Loan Interest Calculator</h4><p>Compare interest across loans.</p></a>
+          <a class="card" href="emi-prepayment-calculator.html"><h4>EMI Prepayment Calculator</h4><p>Estimate savings from extra payments.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      function currencySymbol(code){
+        switch(code){
+          case 'USD': return '$';
+          case 'EUR': return '€';
+          case 'GBP': return '£';
+          default: return '₹';
+        }
+      }
+
+      function fmt0(n){
+        return (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:0}).format(n) : '—');
+      }
+
+      function roundTo(x, step){
+        step = parseInt(step,10) || 0;
+        if(!step) return x;
+        return Math.round(x/step)*step;
+      }
+
+      const amountEl = $('pl_amount');
+      const rateEl   = $('pl_rate');
+      const yearsEl  = $('pl_tenure_years');
+      const feesEl   = $('pl_fees');
+      const roundEl  = $('pl_round');
+      const curEl    = $('pl_currency');
+
+      const outEmi = $('pl_out_emi');
+      const outEmiNote = $('pl_out_emi_note');
+      const outP = $('pl_out_principal');
+      const outI = $('pl_out_interest');
+      const outT = $('pl_out_total');
+      const outFees = $('pl_out_fees');
+      const outSplit = $('pl_out_split');
+      const outSummary = $('pl_out_summary');
+      const barI = $('pl_bar_interest');
+      const tbody = $('pl_table');
+
+      function money(n){
+        const sym = currencySymbol(curEl.value);
+        return sym + ' ' + fmt0(n);
+      }
+
+      function calc(){
+        const P = parseFloat(amountEl.value);
+        const rateA = parseFloat(rateEl.value);
+        const years = parseFloat(yearsEl.value);
+        const fees  = parseFloat(feesEl.value) || 0;
+
+        if(!isFinite(P) || P<=0){
+          outEmi.textContent='—'; outEmiNote.textContent='Enter valid loan amount.';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Click <strong>Calculate EMI</strong> to generate the schedule.</td></tr>';
+          return;
+        }
+        if(!isFinite(rateA) || rateA<=0){
+          outEmi.textContent='—'; outEmiNote.textContent='Enter valid interest rate.';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+        if(!isFinite(years) || years<=0){
+          outEmi.textContent='—'; outEmiNote.textContent='Enter valid tenure in years.';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+
+        const n = Math.round(years * 12);
+        const r = (rateA/100)/12;
+
+        const pow = Math.pow(1+r, n);
+        let emi = (P * r * pow) / (pow - 1);
+        emi = roundTo(emi, roundEl.value);
+
+        const totalPay = emi * n;
+        const totalInterest = totalPay - P;
+
+        outEmi.textContent = money(emi);
+        outEmiNote.textContent = `Tenure: ${n} months • Rate: ${rateA}% p.a.`;
+        outP.textContent = money(P);
+        outI.textContent = money(totalInterest);
+        outT.textContent = money(totalPay);
+
+        outFees.textContent = fees>0 ? `Fees (separate): ${money(fees)}` : 'Fees not included';
+
+        const interestPct = totalPay>0 ? (totalInterest/totalPay)*100 : 0;
+        barI.style.width = Math.max(0, Math.min(100, interestPct)).toFixed(1) + '%';
+        barI.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+        outSplit.textContent = `Interest share ≈ ${interestPct.toFixed(1)}% of total payable`;
+
+        outSummary.textContent =
+          `Loan ${money(P)} • EMI ${money(emi)} • Total interest ${money(totalInterest)} • Total payable ${money(totalPay)} • Tenure ${years} years.`;
+
+        // Amortization
+        let balance = P;
+        const rows = [];
+        for(let m=1; m<=n; m++){
+          const interest = balance * r;
+          let principal = emi - interest;
+
+          // Last month adjust (rounding safety)
+          if(m === n){
+            principal = balance;
+          }
+          balance = Math.max(0, balance - principal);
+
+          rows.push(`
+            <tr>
+              <td>${m}</td>
+              <td>${money(emi)}</td>
+              <td>${money(interest)}</td>
+              <td>${money(principal)}</td>
+              <td>${money(balance)}</td>
+            </tr>
+          `);
+
+          // cap display for speed
+          if(m===120 && n>120){
+            rows.push(`<tr><td colspan="5" class="mini">Schedule truncated for performance (showing first 120 months). Reduce tenure or keep as is.</td></tr>`);
+            break;
+          }
+        }
+        tbody.innerHTML = rows.join('');
+      }
+
+      $('pl_calc_btn').addEventListener('click', calc);
+
+      $('pl_example_btn').addEventListener('click', ()=>{
+        amountEl.value = '300000';
+        rateEl.value   = '14';
+        yearsEl.value  = '3';
+        feesEl.value   = '2500';
+        roundEl.value  = '0';
+        curEl.value    = 'INR';
+        calc();
+      });
+
+      $('pl_reset_btn').addEventListener('click', ()=>{
+        [amountEl,rateEl,yearsEl,feesEl].forEach(el=>el.value='');
+        roundEl.value='0';
+        curEl.value='INR';
+        outEmi.textContent='—';
+        outEmiNote.textContent='—';
+        outP.textContent='—';
+        outI.textContent='—';
+        outT.textContent='—';
+        outFees.textContent='—';
+        outSplit.textContent='—';
+        outSummary.textContent='Enter details to see a clean summary.';
+        barI.style.width='0%';
+        tbody.innerHTML = '<tr><td colspan="5" class="mini">Click <strong>Calculate EMI</strong> to generate the schedule.</td></tr>';
+      });
+
+      [amountEl,rateEl,yearsEl,feesEl,roundEl,curEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(amountEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(amountEl.value) calc(); });
+      });
+    })();
+  </script>
+</body>
+</html>

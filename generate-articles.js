@@ -266,7 +266,7 @@ function generateArticleHTML(calc, templateIndex) {
   const relatedLinks = calculators
     .filter(c => c.category === calc.category && c.slug !== calc.slug)
     .slice(0, 3)
-    .map(c => `<a href="/dist/${c.slug}.html">${c.title}</a>`)
+    .map(c => `<a href="/${c.slug}.html">${c.title}</a>`)
     .join(' | ')
   
   const html = `<!doctype html>
@@ -310,14 +310,14 @@ function generateArticleHTML(calc, templateIndex) {
       <div class="article-header">
         <h1>${title}</h1>
         <p class="lead">${intro}</p>
-        <p style="font-size: 0.85rem; color: #64748b;">Category: <strong>${calc.category}</strong> | Related: <a href="/dist/${calc.slug}.html">${calc.title}</a></p>
+        <p style="font-size: 0.85rem; color: #64748b;">Category: <strong>${calc.category}</strong> | Related: <a href="/${calc.slug}.html">${calc.title}</a></p>
       </div>
 
       ${sections}
 
       <section>
         <h2>Try {{title}} Tool</h2>
-        <p>Ready to use {{title}}? <a href="/dist/${calc.slug}.html">Open the {{title}} calculator</a> to get started with practical calculations.</p>
+        <p>Ready to use {{title}}? <a href="/${calc.slug}.html">Open the {{title}} calculator</a> to get started with practical calculations.</p>
       </section>
 
       <section>
@@ -421,7 +421,7 @@ let articleIndexHTML = `<!doctype html>
 
   <footer class="site-footer">
     <div class="wrap">
-      <p>&copy; 2025 Calculator Solution | <a href="/">Home</a> | <a href="/sitemap.xml">Sitemap</a> | <a href="/dist/privacy-policy.html">Privacy</a></p>
+      <p>&copy; 2025 Calculator Solution | <a href="/">Home</a> | <a href="/sitemap.xml">Sitemap</a> | <a href="/privacy-policy.html">Privacy</a></p>
     </div>
   </footer>
 
@@ -442,7 +442,7 @@ let articleIndexHTML = `<!doctype html>
         card.innerHTML = \`
           <h3>\${article.title}</h3>
           <p>Category: <strong>\${article.category}</strong></p>
-          <p>Related: <a href="/dist/\${article.calculator}.html" onclick="event.stopPropagation();">View Calculator</a></p>
+          <p>Related: <a href="/\${article.calculator}.html" onclick="event.stopPropagation();">View Calculator</a></p>
         \`;
         articlesDiv.appendChild(card);
       });

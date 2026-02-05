@@ -256,7 +256,7 @@
 ## 🚀 Deployment Ready
 
 ### What's Included
-- ✅ Complete website in `/dist/` folder
+- ✅ Complete website in `/` folder
 - ✅ All HTML, CSS, JavaScript files
 - ✅ Sitemap and robots.txt
 - ✅ Ready to upload to any hosting
@@ -344,14 +344,14 @@ Expected Earnings:
 ## 🎯 What's Next?
 
 ### Immediate (Day 1)
-1. Review all files in `/dist/` folder
+1. Review all files in `/` folder
 2. Test site locally (open index.html in browser)
 3. Verify calculators work
 4. Check mobile responsiveness
 
 ### Deployment (Day 1-2)
 1. Choose hosting (Vercel recommended)
-2. Deploy `/dist/` folder
+2. Deploy `/` folder
 3. Configure custom domain
 4. Enable HTTPS
 5. Verify site loads on custom domain

@@ -62,7 +62,7 @@ d:\sam\cal\
 | `/robots.txt` | SEO | Crawl instructions, sitemap pointer |
 | `/calculators.json` | Data | Calculator metadata for frontend |
 | `/assets/*` | Frontend | CSS, JavaScript (style.css, app.js, etc.) |
-| `/dist/*` | Content | 74 calculator pages + 6 compliance pages |
+| `/*` | Content | 74 calculator pages + 6 compliance pages |
 | `/articles/*` | Content | 2 educational articles (EMI, BMI) |
 
 ### ❌ DO NOT DEPLOY
@@ -89,7 +89,7 @@ d:\sam\cal\
 ├── robots.txt          → /robots.txt
 ├── calculators.json    → /calculators.json
 ├── assets/             → /assets/
-├── dist/               → /dist/
+├── dist/               → /
 └── articles/           → /articles/
 ```
 
@@ -120,9 +120,9 @@ After deployment, verify:
 ✅ https://yourdomain.com/                    → Homepage loads
 ✅ https://yourdomain.com/sitemap.xml         → Sitemap accessible
 ✅ https://yourdomain.com/robots.txt          → Robots.txt accessible
-✅ https://yourdomain.com/dist/percentage-calculator.html → Sample calculator
+✅ https://yourdomain.com/percentage-calculator.html → Sample calculator
 ✅ https://yourdomain.com/articles/how-emi-works.html     → Article loads
-✅ https://yourdomain.com/dist/privacy-policy.html        → Compliance page
+✅ https://yourdomain.com/privacy-policy.html        → Compliance page
 ```
 
 ---
@@ -148,7 +148,7 @@ After deployment, verify:
 3. Preserve folder structure:
    - `/index.html` at root
    - `/assets/` folder with files
-   - `/dist/` folder with all pages
+   - `/` folder with all pages
    - `/articles/` folder with articles
 
 ### AWS S3 + CloudFront
@@ -295,11 +295,11 @@ If something goes wrong:
 1. Server returns `/index.html`
 2. Page loads CSS from `/assets/style.css`
 3. Page loads JS from `/assets/app.js`
-4. JS fetches calculator list from `/calculators.json` or `/dist/index.json`
+4. JS fetches calculator list from `/calculators.json` or `/index.json`
 5. User sees calculator cards and can search/filter
-6. Clicking a card navigates to `/dist/[calculator-slug].html`
+6. Clicking a card navigates to `/[calculator-slug].html`
 7. Clicking "Sitemap" in footer opens `/sitemap.xml`
-8. Clicking "Privacy" opens `/dist/privacy-policy.html`
+8. Clicking "Privacy" opens `/privacy-policy.html`
 
 **All URLs are relative to domain root**, so deployment structure is critical.
 

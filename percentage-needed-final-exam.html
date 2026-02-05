@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Percentage Needed in Final Exam Calculator | CalculatorSolution</title>
+  <meta name="description" content="Free Percentage Needed in Final Exam Calculator: enter current grade, final exam weight, target overall grade, and compute the required final exam percentage instantly.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/percentage-needed-final-exam.html">
+
+  <meta property="og:title" content="Percentage Needed in Final Exam Calculator">
+  <meta property="og:description" content="Calculate the required score on your final exam to reach your target overall grade — with weights and scenario tips.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (RESPONSIVE/UI-UX ONLY — NO LOGIC CHANGES) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    :root{
+      --wrap:1100px;
+      --px:18px;
+      --r-lg:18px;
+      --r-md:16px;
+      --r-sm:12px;
+      --b:#e2e8f0;
+      --muted:#64748b;
+      --shadow:0 14px 40px rgba(8,13,26,.06);
+      --focus:0 0 0 4px rgba(59,130,246,.14);
+    }
+    .wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--px)}
+    a{color:inherit}
+    img{max-width:100%;height:auto;display:block}
+    pre{overflow:auto;white-space:pre-wrap;word-break:break-word;background:rgba(255,255,255,.75);border:1px solid var(--b);border-radius:12px;padding:12px}
+
+    /* Header */
+    .site-header{
+      padding:14px 0;border-bottom:1px solid var(--b);
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{
+      display:flex;align-items:center;gap:10px;text-decoration:none;
+      min-height:44px; /* tap target */
+    }
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;letter-spacing:-.01em}
+    .brand-logo{border-radius:10px}
+
+    /* Hero */
+    .hero{
+      margin:18px 0 14px 0;border-radius:var(--r-lg);padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em;line-height:1.15}
+    .hero p{margin:0;opacity:.95;max-width:75ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      min-height:34px;
+    }
+
+    /* Layout */
+    .calc-shell{
+      display:grid;grid-template-columns:1.1fr .9fr;
+      gap:14px;align-items:start;margin-top:14px
+    }
+
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--b);border-radius:var(--r-md);
+      box-shadow:var(--shadow);
+      padding:14px;
+    }
+    .panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .panel-title h2{margin:0;font-size:1.05rem;line-height:1.25}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;
+      background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem;
+      white-space:nowrap;
+    }
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      width:100%;
+      padding:10px 12px;border:1px solid var(--b);border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      min-height:44px; /* tap target */
+    }
+    .input:focus{border-color:#93c5fd;box-shadow:var(--focus)}
+    select.input{appearance:none;-webkit-appearance:none}
+    .help{margin:0;font-size:.86rem;color:var(--muted)}
+
+    /* Inline input rows */
+    .inline{
+      display:flex;gap:10px;align-items:center;
+      min-width:0;
+    }
+    .inline > .input{flex:1;min-width:0}
+    .mini{font-size:.86rem;color:var(--muted)}
+    .mini.nowrap{white-space:nowrap}
+
+    /* Buttons */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px; /* tap target */
+      text-align:center;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn:focus-visible{outline:none;box-shadow:var(--focus),0 16px 34px rgba(37,99,235,.22)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid var(--b);box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+
+    /* Sticky results */
+    .sticky{position:sticky;top:82px}
+
+    .metric{
+      border:1px solid var(--b);border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{margin:4px 0 0;font-size:1.55rem;font-weight:1000;letter-spacing:-.02em;line-height:1.15}
+    .bar{
+      height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px
+    }
+    .bar > span{display:block;height:100%;width:0%}
+
+    .note{
+      border:1px dashed #cbd5e1;border-radius:14px;padding:12px;background:rgba(255,255,255,.7);
+      margin-top:10px
+    }
+
+    /* FAQ cards */
+    .card{
+      background:#fff;border:1px solid var(--b);
+      border-radius:14px;
+      box-shadow:0 10px 24px rgba(8,13,26,.05);
+      padding:12px
+    }
+    details.card{padding:0}
+    details.card summary{
+      cursor:pointer;
+      padding:12px;
+      list-style:none;
+      outline:none;
+    }
+    details.card summary::-webkit-details-marker{display:none}
+    details.card summary:focus-visible{box-shadow:var(--focus);border-radius:14px}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Related section grid safety (supports your existing global classes too) */
+    .related{margin-top:18px}
+    .related .cards-grid,
+    .related-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:12px;
+      margin-top:10px;
+    }
+    .related a.card h4{margin:0 0 6px 0;font-size:1rem}
+    .related a.card p{margin:0;color:#475569}
+
+    /* Typography spacing for content */
+    article > section{margin-top:18px}
+    h2,h3{line-height:1.25;margin:0 0 10px 0}
+    p{margin:0 0 10px 0}
+    .faqs details + details{margin-top:10px}
+
+    /* Footer */
+    .site-footer{
+      margin-top:26px;
+      border-top:1px solid var(--b);
+      background:rgba(255,255,255,.55);
+      backdrop-filter:blur(10px);
+      padding:18px 0;
+    }
+    .site-footer a{color:#0f172a;text-decoration:underline;text-underline-offset:3px}
+    .site-footer a:hover{opacity:.85}
+
+    /* ===== Responsive Breakpoints (UI ONLY) ===== */
+
+    /* Tablet */
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static}
+      .hero{padding:22px 16px}
+      .hero h1{font-size:1.65rem}
+      .related .cards-grid,
+      .related-grid{grid-template-columns:repeat(2, minmax(0,1fr))}
+    }
+
+    /* Large phones / small tablets */
+    @media (max-width: 640px){
+      :root{--px:14px}
+      .hero{padding:18px 14px;border-radius:16px}
+      .hero h1{font-size:1.45rem}
+      .chip{font-size:.84rem}
+      .grid-2{grid-template-columns:1fr}
+      .panel{padding:12px}
+      .panel-title{flex-direction:column;align-items:flex-start}
+      .pill{align-self:flex-start}
+      .actions{flex-direction:column}
+      .btn{width:100%}
+      .inline{flex-wrap:nowrap}
+      .related .cards-grid,
+      .related-grid{grid-template-columns:1fr}
+      pre{font-size:.95rem}
+    }
+
+    /* Small phones */
+    @media (max-width: 380px){
+      .hero h1{font-size:1.32rem}
+      .metric .v{font-size:1.35rem}
+      .brand-text{font-size:1.05rem}
+    }
+
+    /* Prefer-reduced-motion */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto!important}
+      .btn, .card{transition:none!important}
+      .btn:hover{transform:none}
+      .card:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Percentage Needed in Final Exam Calculator",
+      "url":"https://calculatorsolution.com/percentage-needed-final-exam.html",
+      "description":"Calculate the required final exam percentage to reach a target overall grade using weighted averages."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Percentage Needed in Final Exam","item":"https://calculatorsolution.com/percentage-needed-final-exam.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate what percentage you need on your final exam",
+      "step":[
+        {"@type":"HowToStep","name":"Enter your current grade","text":"Add your current course percentage before the final exam."},
+        {"@type":"HowToStep","name":"Enter the final exam weight","text":"Example: final exam is 40% of the total grade."},
+        {"@type":"HowToStep","name":"Enter your target overall grade","text":"We compute the required final exam percentage to reach your target."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Weights sum to 100?","acceptedAnswer":{"@type":"Answer","text":"Ensure weights are consistent (e.g., 60% final, 40% coursework)."}},
+        {"@type":"Question","name":"Can required exceed 100%?","acceptedAnswer":{"@type":"Answer","text":"Yes — it means the target isn't achievable without extra credit or curve."}},
+        {"@type":"Question","name":"Partial points?","acceptedAnswer":{"@type":"Answer","text":"Use decimals for precise required scores."}},
+        {"@type":"Question","name":"Curve?","acceptedAnswer":{"@type":"Answer","text":"If your course uses a curve, raw percent targets may change after adjustment."}},
+        {"@type":"Question","name":"Retakes?","acceptedAnswer":{"@type":"Answer","text":"Retake and replacement policies vary by institution."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Percentage Needed in Final Exam</h1>
+        <p>Find the exact final exam score you need to reach your target overall grade — using weighted averages.</p>
+        <div class="chips">
+          <span class="chip">🎯 Target grade</span>
+          <span class="chip">⚖️ Weight support</span>
+          <span class="chip">✅ Achievable check</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-percentage-needed-final">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Final exam inputs">
+              <div class="panel-title">
+                <h2>Enter your details</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="fn_current">Current grade (before final)</label>
+                  <input id="fn_current" class="input" type="number" inputmode="decimal" min="0" max="100" step="0.01" placeholder="e.g., 72.5">
+                  <p class="help">Your current course percentage without the final exam.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fn_target">Target overall grade</label>
+                  <input id="fn_target" class="input" type="number" inputmode="decimal" min="0" max="100" step="0.01" placeholder="e.g., 80">
+                  <p class="help">The final overall % you want after the exam.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fn_final_weight">Final exam weight</label>
+                  <div class="inline">
+                    <input id="fn_final_weight" class="input" type="number" inputmode="decimal" min="0" max="100" step="0.01" placeholder="e.g., 40">
+                    <span class="mini nowrap">%</span>
+                  </div>
+                  <p class="help">Example: 40 means final is 40% of total grade.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fn_round">Round result</label>
+                  <select id="fn_round" class="input">
+                    <option value="2" selected>2 decimals</option>
+                    <option value="1">1 decimal</option>
+                    <option value="0">Whole number</option>
+                  </select>
+                  <p class="help">Rounding is for display only.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fn_final_max">Final exam maximum</label>
+                  <div class="inline">
+                    <input id="fn_final_max" class="input" type="number" inputmode="decimal" min="1" step="1" placeholder="e.g., 100">
+                    <span class="mini nowrap">points</span>
+                  </div>
+                  <p class="help">Optional: shows required points (default 100).</p>
+                </div>
+
+                <div class="field">
+                  <label for="fn_extra_credit">Extra credit (optional)</label>
+                  <div class="inline">
+                    <input id="fn_extra_credit" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 2">
+                    <span class="mini nowrap">%</span>
+                  </div>
+                  <p class="help">If your course offers extra credit, add it here.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="fn_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="fn_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="fn_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note mini">
+                Formula: <strong>Target = (Current × CourseworkWeight) + (Final × FinalWeight)</strong><br>
+                Required Final = <strong>(Target − Current×CourseworkWeight) ÷ FinalWeight</strong>
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Final exam results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Required final exam percentage</p>
+                <p class="v" id="fn_out_required">—</p>
+                <p class="mini" id="fn_out_required_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Required points (based on max)</p>
+                <p class="v" id="fn_out_points">—</p>
+                <p class="mini" id="fn_out_points_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Achievability</p>
+                <p class="v" id="fn_out_status">—</p>
+                <div class="bar"><span id="fn_bar"></span></div>
+                <p class="mini" id="fn_out_status_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Summary</p>
+                <p class="mini" id="fn_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          The <strong>Percentage Needed in Final Exam</strong> calculator tells you what score you need on your final exam
+          to reach a target overall grade. Most courses use a <strong>weighted average</strong> where your current grade
+          (coursework) and your final exam each contribute a percentage of the total.
+        </p>
+        <p class="mini">
+          Tip: If the required score is above 100%, your target grade may be unreachable unless your course offers extra credit or grade curving.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>Required Final (%) = (Target − Current × (1 − FinalWeight)) / FinalWeight</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Weights sum to 100?</strong></summary><p>Ensure weights are consistent (e.g., 60% final, 40% coursework).</p></details>
+        <details class="card"><summary><strong>Can required exceed 100%?</strong></summary><p>Yes — indicates target not achievable without extra credit.</p></details>
+        <details class="card"><summary><strong>Partial points?</strong></summary><p>Use decimals for precise required scores.</p></details>
+        <details class="card"><summary><strong>Curve?</strong></summary><p>If course uses curve, raw percent targets may shift.</p></details>
+        <details class="card"><summary><strong>Retakes?</strong></summary><p>Policies vary by institution.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="gpa-calculator.html"><h4>GPA Calculator</h4><p>Compute GPA or CGPA from course grades and credits.</p></a>
+          <a class="card" href="cgpa-calculator.html"><h4>CGPA Calculator</h4><p>Compute cumulative GPA across multiple semesters.</p></a>
+          <a class="card" href="grade-calculator.html"><h4>Grade Calculator</h4><p>Convert scores to grades based on your grading scale.</p></a>
+          <a class="card" href="percentage-calculator.html"><h4>Percentage Calculator</h4><p>Quickly compute percentages and percent changes.</p></a>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- ✅ NO JS LOGIC CHANGES BELOW -->
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const currentEl = $('fn_current');
+      const targetEl  = $('fn_target');
+      const weightEl  = $('fn_final_weight');
+      const roundEl   = $('fn_round');
+      const maxEl     = $('fn_final_max');
+      const extraEl   = $('fn_extra_credit');
+
+      const outReq    = $('fn_out_required');
+      const outReqNote= $('fn_out_required_note');
+      const outPts    = $('fn_out_points');
+      const outPtsNote= $('fn_out_points_note');
+      const outStatus = $('fn_out_status');
+      const outStatusNote = $('fn_out_status_note');
+      const outSummary= $('fn_out_summary');
+      const bar       = $('fn_bar');
+
+      function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+      function isNum(x){ return Number.isFinite(x); }
+
+      function calc(){
+        const cur = parseFloat(currentEl.value);
+        const tgt = parseFloat(targetEl.value);
+        const wFinalPct = parseFloat(weightEl.value);
+        const decimals = parseInt(roundEl.value,10);
+        const maxPts = isNum(parseFloat(maxEl.value)) ? parseFloat(maxEl.value) : 100;
+        const extra = parseFloat(extraEl.value) || 0;
+
+        if(!isNum(cur) || cur<0 || cur>100){
+          outReq.textContent='—'; outReqNote.textContent='Enter a valid current grade (0–100).';
+          outPts.textContent='—'; outStatus.textContent='—';
+          bar.style.width='0%';
+          return;
+        }
+        if(!isNum(tgt) || tgt<0 || tgt>100){
+          outReq.textContent='—'; outReqNote.textContent='Enter a valid target grade (0–100).';
+          outPts.textContent='—'; outStatus.textContent='—';
+          bar.style.width='0%';
+          return;
+        }
+        if(!isNum(wFinalPct) || wFinalPct<=0 || wFinalPct>=100){
+          outReq.textContent='—'; outReqNote.textContent='Final weight must be between 0 and 100 (not 0 or 100).';
+          outPts.textContent='—'; outStatus.textContent='—';
+          bar.style.width='0%';
+          return;
+        }
+        if(!isNum(maxPts) || maxPts<=0){
+          outReq.textContent='—'; outReqNote.textContent='Final max points must be > 0.';
+          outPts.textContent='—'; outStatus.textContent='—';
+          bar.style.width='0%';
+          return;
+        }
+
+        const wFinal = wFinalPct / 100;
+        const wCourse = 1 - wFinal;
+
+        // include extra credit as +% to overall (simple model)
+        const adjustedTarget = clamp(tgt - extra, 0, 100);
+
+        // Required final %
+        const required = (adjustedTarget - (cur * wCourse)) / wFinal;
+
+        const reqRounded = (isNum(required) ? required.toFixed(decimals) : '—');
+        outReq.textContent = isNum(required) ? `${reqRounded}%` : '—';
+
+        const reqPoints = (required/100) * maxPts;
+        const ptsRounded = isNum(reqPoints) ? reqPoints.toFixed(decimals) : '—';
+        outPts.textContent = isNum(reqPoints) ? `${ptsRounded} / ${maxPts}` : '—';
+
+        outReqNote.textContent =
+          `Coursework weight: ${(wCourse*100).toFixed(0)}% • Final weight: ${wFinalPct.toFixed(2)}%` +
+          (extra>0 ? ` • Extra credit considered: ${extra.toFixed(2)}%` : '');
+
+        outPtsNote.textContent =
+          `If your final is out of ${maxPts}, you need about ${ptsRounded} points.`;
+
+        // Status
+        let status = 'Achievable ✅';
+        let note = 'Your target is within reach based on the weights.';
+        if(required > 100){
+          status = 'Not achievable ❌';
+          note = 'Required score is above 100%. Consider lowering target, using extra credit, or check if the course is curved.';
+        } else if(required < 0){
+          status = 'Already secured 🎉';
+          note = 'Your current grade is already enough to meet the target (even with 0% on the final).';
+        } else if(required >= 90){
+          status = 'Very hard ⚠️';
+          note = 'You need an A-range score on the final. Focus on high-impact topics and past papers.';
+        } else if(required >= 70){
+          status = 'Moderate 👍';
+          note = 'A solid score can get you there. Plan your revision schedule.';
+        }
+
+        outStatus.textContent = status;
+        outStatusNote.textContent = note;
+
+        const pctForBar = clamp(required, 0, 100);
+        bar.style.width = pctForBar.toFixed(1) + '%';
+        bar.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+
+        outSummary.textContent =
+          `Current ${cur}% • Target ${tgt}% • Final weight ${wFinalPct}% • Required final ≈ ${isNum(required)?required.toFixed(2):'—'}%` +
+          (extra>0 ? ` (after extra credit ${extra}%).` : '.');
+      }
+
+      $('fn_calc_btn').addEventListener('click', calc);
+
+      $('fn_example_btn').addEventListener('click', ()=>{
+        currentEl.value = '72.5';
+        targetEl.value  = '80';
+        weightEl.value  = '40';
+        roundEl.value   = '2';
+        maxEl.value     = '100';
+        extraEl.value   = '0';
+        calc();
+      });
+
+      $('fn_reset_btn').addEventListener('click', ()=>{
+        [currentEl,targetEl,weightEl,maxEl,extraEl].forEach(el=>el.value='');
+        roundEl.value='2';
+        outReq.textContent='—';
+        outReqNote.textContent='—';
+        outPts.textContent='—';
+        outPtsNote.textContent='—';
+        outStatus.textContent='—';
+        outStatusNote.textContent='—';
+        outSummary.textContent='Enter details to see a clean summary.';
+        bar.style.width='0%';
+      });
+
+      [currentEl,targetEl,weightEl,roundEl,maxEl,extraEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(targetEl.value || currentEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(targetEl.value || currentEl.value) calc(); });
+      });
+    })();
+  </script>
+</body>
+</html>

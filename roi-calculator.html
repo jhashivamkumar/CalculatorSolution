@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>ROI Calculator (Return on Investment) + Annualized ROI | CalculatorSolution</title>
+  <meta name="description" content="Free ROI Calculator: enter cost and final value to calculate ROI%, profit, breakeven and annualized ROI (CAGR-style) with clear summary.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/roi-calculator.html">
+
+  <meta property="og:title" content="ROI Calculator">
+  <meta property="og:description" content="Calculate ROI%, profit/loss, net ROI (fees), and annualized ROI with a clean summary.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (RESPONSIVE upgrade only; NO JS logic changed) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    /* Header */
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;line-height:1.1}
+    .brand-logo{border-radius:10px;flex:0 0 auto}
+
+    /* Hero */
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em;line-height:1.15}
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      white-space:nowrap;
+    }
+
+    /* Layout */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      min-width:0; /* prevents overflow on small screens */
+    }
+    .panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .panel-title h2{margin:0;font-size:1.05rem;line-height:1.2}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem;white-space:nowrap}
+
+    /* Inputs grid */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      width:100%;
+      max-width:100%;
+      min-width:0;
+    }
+    select.input{appearance:auto}
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    /* Buttons */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-block;padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      line-height:1;
+      touch-action:manipulation;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .btn:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:2px}
+
+    /* Sticky results */
+    .sticky{position:sticky;top:82px}
+
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+      overflow:hidden;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{
+      margin:4px 0 0;
+      font-size:1.55rem;
+      font-weight:1000;
+      letter-spacing:-.02em;
+      line-height:1.15;
+      word-break:break-word;
+    }
+    .mini{font-size:.86rem;color:#64748b}
+
+    .bar{height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px}
+    .bar > span{display:block;height:100%;width:0%}
+
+    .note{
+      border:1px dashed #cbd5e1;border-radius:14px;padding:12px;background:rgba(255,255,255,.7);
+      margin-top:10px;
+      overflow-wrap:anywhere;
+    }
+
+    /* Cards/FAQ */
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 10px 24px rgba(8,13,26,.05);padding:12px}
+    details.card{padding:0}
+    details.card summary{cursor:pointer;padding:12px;list-style:none}
+    details.card summary::-webkit-details-marker{display:none}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+    details.card summary:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:2px}
+
+    /* Content typography + code blocks */
+    article{min-width:0}
+    section{min-width:0}
+    h2,h3{line-height:1.25}
+    ul{padding-left:18px}
+    pre{
+      white-space:pre-wrap;
+      word-break:break-word;
+      overflow:auto;
+      border-radius:12px;
+      border:1px solid #e2e8f0;
+      background:rgba(255,255,255,.75);
+      padding:12px;
+    }
+
+    /* Related grid safety: works with your global .cards-grid/.related-grid too */
+    .cards-grid{display:grid;gap:12px}
+    .related-grid{grid-template-columns:repeat(4, minmax(0,1fr))}
+    .related .card h4{margin:0 0 6px 0;line-height:1.25}
+    .related .card p{margin:0;color:#475569}
+
+    /* Footer links wrap nicely */
+    .site-footer a{word-break:break-word}
+
+    /* ===== Responsive breakpoints ===== */
+    @media (max-width: 1024px){
+      .wrap{padding:0 16px}
+      .hero{padding:22px 16px}
+      .hero h1{font-size:1.7rem}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static;top:auto}
+      .hero p{max-width:unset}
+      .related-grid{grid-template-columns:repeat(2, minmax(0,1fr))}
+    }
+
+    @media (max-width: 640px){
+      .hero{margin:14px 0 12px;border-radius:16px;padding:18px 14px}
+      .hero h1{font-size:1.45rem}
+      .chip{font-size:.84rem;padding:6px 10px}
+      .grid-2{grid-template-columns:1fr}
+      .panel{padding:12px;border-radius:14px}
+      .metric .v{font-size:1.35rem}
+      .actions{gap:8px}
+      .btn{width:100%;justify-content:center;text-align:center}
+      .pill{font-size:.82rem}
+      .related-grid{grid-template-columns:1fr}
+    }
+
+    @media (max-width: 360px){
+      .brand-text{font-size:1.05rem}
+      .hero h1{font-size:1.32rem}
+      .metric .v{font-size:1.22rem}
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto}
+      .card,.btn{transition:none}
+      .btn:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"ROI Calculator",
+      "url":"https://calculatorsolution.com/roi-calculator.html",
+      "description":"Calculate return on investment (ROI), profit/loss, net ROI after fees and annualized ROI."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"ROI Calculator","item":"https://calculatorsolution.com/roi-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate ROI",
+      "step":[
+        {"@type":"HowToStep","name":"Enter investment cost","text":"Add your initial cost or total amount invested."},
+        {"@type":"HowToStep","name":"Enter final value","text":"Add the amount you received or current value of the investment."},
+        {"@type":"HowToStep","name":"Review ROI and profit","text":"See ROI%, profit/loss and annualized ROI if holding period is provided."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Does ROI include time?","acceptedAnswer":{"@type":"Answer","text":"Raw ROI does not include time. Use annualized ROI (CAGR-style) to include holding period."}},
+        {"@type":"Question","name":"Taxes?","acceptedAnswer":{"@type":"Answer","text":"ROI can be measured before or after tax. This calculator shows raw and net (fees) if you include costs."}},
+        {"@type":"Question","name":"Net vs gross ROI?","acceptedAnswer":{"@type":"Answer","text":"Gross ROI uses only cost and final value. Net ROI subtracts fees/extra costs from profit before calculating ROI."}},
+        {"@type":"Question","name":"Negative ROI?","acceptedAnswer":{"@type":"Answer","text":"Negative ROI indicates a loss (final value is less than cost)."}},
+        {"@type":"Question","name":"Can I compare ROI across assets?","acceptedAnswer":{"@type":"Answer","text":"Be cautious. Different assets have different risk, volatility and time horizons. Use annualized ROI for fairer comparison."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>ROI Calculator</h1>
+        <p>Calculate ROI%, profit/loss, net ROI (fees), and annualized ROI (time-adjusted return) in seconds.</p>
+        <div class="chips">
+          <span class="chip">📈 ROI %</span>
+          <span class="chip">💵 Profit / Loss</span>
+          <span class="chip">⏱️ Annualized ROI</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-roi">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="ROI inputs">
+              <div class="panel-title">
+                <h2>Investment details</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="roi_cost">Cost / Amount invested</label>
+                  <input id="roi_cost" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="e.g., 50000">
+                  <p class="help">Your initial investment or total cost.</p>
+                </div>
+
+                <div class="field">
+                  <label for="roi_final">Final value / Amount received</label>
+                  <input id="roi_final" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="e.g., 65000">
+                  <p class="help">Current value or sale value of investment.</p>
+                </div>
+
+                <div class="field">
+                  <label for="roi_fees">Fees / Extra costs (optional)</label>
+                  <input id="roi_fees" class="input" type="number" inputmode="numeric" min="0" step="10" placeholder="e.g., 250">
+                  <p class="help">Brokerage, platform fees, repairs, commissions, etc.</p>
+                </div>
+
+                <div class="field">
+                  <label for="roi_years">Holding period (years, optional)</label>
+                  <input id="roi_years" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 2.5">
+                  <p class="help">If provided, annualized ROI (CAGR-style) will be calculated.</p>
+                </div>
+
+                <div class="field">
+                  <label for="roi_currency">Currency symbol</label>
+                  <select id="roi_currency" class="input">
+                    <option value="₹" selected>₹ INR</option>
+                    <option value="$">$ USD</option>
+                    <option value="€">€ EUR</option>
+                    <option value="£">£ GBP</option>
+                    <option value="¥">¥ JPY</option>
+                  </select>
+                  <p class="help">Changes display only (math remains same).</p>
+                </div>
+
+                <div class="field">
+                  <label for="roi_round">Rounding</label>
+                  <select id="roi_round" class="input">
+                    <option value="0" selected>No rounding</option>
+                    <option value="1">1 decimal</option>
+                    <option value="2">2 decimals</option>
+                  </select>
+                  <p class="help">ROI% display precision.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="roi_calc_btn" type="button">Calculate ROI</button>
+                <button class="btn btn-dark" id="roi_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="roi_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note mini">
+                Formulas:
+                <strong>Profit = Final − Cost</strong> •
+                <strong>ROI% = (Profit / Cost) × 100</strong> •
+                <strong>Net Profit = (Final − Cost − Fees)</strong> •
+                <strong>Net ROI% = (Net Profit / Cost) × 100</strong> •
+                Annualized ROI (CAGR-style) = <strong>((Final/Cost)^(1/Years) − 1) × 100</strong>
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="ROI results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">ROI (gross)</p>
+                <p class="v" id="roi_out_roi">—</p>
+                <p class="mini" id="roi_out_roi_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Profit / Loss</p>
+                <p class="v" id="roi_out_profit">—</p>
+                <p class="mini" id="roi_out_profit_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Net ROI (after fees)</p>
+                <p class="v" id="roi_out_net_roi">—</p>
+                <div class="bar"><span id="roi_bar_net"></span></div>
+                <p class="mini" id="roi_out_net_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Annualized ROI (time-adjusted)</p>
+                <p class="v" id="roi_out_cagr">—</p>
+                <p class="mini" id="roi_out_cagr_note">Provide holding period to calculate.</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="roi_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          The <strong>ROI (Return on Investment)</strong> percentage tells you how much profit (or loss) you made
+          relative to the money you invested. It’s commonly used to compare outcomes across projects, business spends,
+          and investments.
+        </p>
+        <p>
+          This calculator shows:
+        </p>
+        <ul>
+          <li><strong>Gross ROI%</strong> (based only on cost and final value)</li>
+          <li><strong>Net ROI%</strong> (subtracts fees/costs so it’s more realistic)</li>
+          <li><strong>Profit/Loss</strong> in currency</li>
+          <li><strong>Annualized ROI</strong> (CAGR-style) when you provide a holding period</li>
+        </ul>
+        <p class="mini">
+          Tip: For fair comparison between two investments held for different time periods, use <strong>annualized ROI</strong>.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>Profit = Final - Cost
+ROI% = (Profit / Cost) * 100
+Net Profit = Final - Cost - Fees
+Net ROI% = (Net Profit / Cost) * 100
+Annualized ROI% = ((Final/Cost)^(1/Years) - 1) * 100</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Does ROI include time?</strong></summary><p>Raw ROI doesn’t — use annualized ROI (CAGR-style) to include time.</p></details>
+        <details class="card"><summary><strong>Taxes?</strong></summary><p>Taxes can change your effective ROI. This calculator does not compute tax; use pre-tax or after-tax values accordingly.</p></details>
+        <details class="card"><summary><strong>Net vs gross?</strong></summary><p>Net ROI subtracts fees/costs first, so it’s usually more accurate than gross ROI.</p></details>
+        <details class="card"><summary><strong>Negative ROI?</strong></summary><p>If final value is lower than cost, ROI becomes negative and indicates a loss.</p></details>
+        <details class="card"><summary><strong>Use across assets?</strong></summary><p>Compare carefully: risk, volatility, and time horizon matter. Annualized ROI helps comparisons.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="percentage-calculator.html"><h4>Percentage Calculator</h4><p>Compute percentages quickly.</p></a>
+          <a class="card" href="percentage-change-calculator.html"><h4>Percentage Increase/Decrease Calculator</h4><p>Find percent change between values.</p></a>
+          <a class="card" href="compound-interest-calculator.html"><h4>Compound Interest Calculator</h4><p>Estimate growth over time.</p></a>
+          <a class="card" href="gst-calculator-india.html"><h4>GST Calculator (India)</h4><p>Calculate GST amount and final price.</p></a>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;line-height:1.7;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const fmtMoney = (sym, n)=>
+        (isFinite(n) ? (sym + ' ' + new Intl.NumberFormat(undefined,{maximumFractionDigits:0}).format(n)) : '—');
+
+      const clampPct = (p)=> Math.max(0, Math.min(100, p));
+
+      const costEl = $('roi_cost');
+      const finalEl = $('roi_final');
+      const feesEl = $('roi_fees');
+      const yearsEl = $('roi_years');
+      const curEl = $('roi_currency');
+      const roundEl = $('roi_round');
+
+      const outROI = $('roi_out_roi');
+      const outROINote = $('roi_out_roi_note');
+      const outProfit = $('roi_out_profit');
+      const outProfitNote = $('roi_out_profit_note');
+      const outNetROI = $('roi_out_net_roi');
+      const outNetNote = $('roi_out_net_note');
+      const outCagr = $('roi_out_cagr');
+      const outCagrNote = $('roi_out_cagr_note');
+      const outSummary = $('roi_out_summary');
+      const barNet = $('roi_bar_net');
+
+      function roundPct(x, d){
+        const dec = parseInt(d,10) || 0;
+        if(!isFinite(x)) return NaN;
+        const m = Math.pow(10, dec);
+        return Math.round(x*m)/m;
+      }
+
+      function calc(){
+        const sym = curEl.value || '₹';
+        const cost = parseFloat(costEl.value);
+        const fin  = parseFloat(finalEl.value);
+        const fees = parseFloat(feesEl.value) || 0;
+        const yrs  = parseFloat(yearsEl.value);
+        const dec  = parseInt(roundEl.value,10) || 0;
+
+        if(!isFinite(cost) || cost<=0){
+          outROI.textContent='—';
+          outROINote.textContent='Enter a valid cost (must be > 0).';
+          outProfit.textContent='—';
+          outNetROI.textContent='—';
+          outCagr.textContent='—';
+          outCagrNote.textContent='Provide holding period to calculate.';
+          outSummary.textContent='Enter details to see a clean summary.';
+          barNet.style.width='0%';
+          return;
+        }
+        if(!isFinite(fin) || fin<0){
+          outROI.textContent='—';
+          outROINote.textContent='Enter a valid final value (>= 0).';
+          outProfit.textContent='—';
+          outNetROI.textContent='—';
+          outCagr.textContent='—';
+          outCagrNote.textContent='Provide holding period to calculate.';
+          outSummary.textContent='Enter details to see a clean summary.';
+          barNet.style.width='0%';
+          return;
+        }
+        if(fees < 0){
+          outROI.textContent='—';
+          outROINote.textContent='Fees cannot be negative.';
+          outProfit.textContent='—';
+          outNetROI.textContent='—';
+          outCagr.textContent='—';
+          outCagrNote.textContent='Provide holding period to calculate.';
+          outSummary.textContent='Enter details to see a clean summary.';
+          barNet.style.width='0%';
+          return;
+        }
+
+        const profit = fin - cost;
+        const roi = (profit / cost) * 100;
+
+        const netProfit = fin - cost - fees;
+        const netRoi = (netProfit / cost) * 100;
+
+        const roiDisp = roundPct(roi, dec);
+        const netDisp = roundPct(netRoi, dec);
+
+        outROI.textContent = isFinite(roiDisp) ? (roiDisp.toFixed(dec) + '%') : '—';
+        outROINote.textContent = `Profit: ${fmtMoney(sym, profit)} on cost ${fmtMoney(sym, cost)}.`;
+
+        outProfit.textContent = fmtMoney(sym, profit);
+        outProfitNote.textContent = profit >= 0 ? 'You made a profit.' : 'You made a loss.';
+
+        outNetROI.textContent = isFinite(netDisp) ? (netDisp.toFixed(dec) + '%') : '—';
+        outNetNote.textContent = fees>0 ? `Fees included: ${fmtMoney(sym, fees)} • Net profit: ${fmtMoney(sym, netProfit)}.` : 'No fees entered (net equals gross).';
+
+        // Bar: show magnitude of net ROI (cap 0–100 for UI)
+        const barPct = clampPct(Math.abs(netRoi));
+        barNet.style.width = barPct.toFixed(1) + '%';
+        barNet.style.background = netRoi >= 0
+          ? 'linear-gradient(90deg, rgba(59,130,246,.9), rgba(168,85,247,.9))'
+          : 'linear-gradient(90deg, rgba(239,68,68,.9), rgba(168,85,247,.55))';
+
+        // Annualized ROI (CAGR-style)
+        let cagr = NaN;
+        if(isFinite(yrs) && yrs > 0 && fin > 0){
+          cagr = (Math.pow(fin / cost, 1/yrs) - 1) * 100;
+          const cagrDisp = roundPct(cagr, dec);
+          outCagr.textContent = isFinite(cagrDisp) ? (cagrDisp.toFixed(dec) + '%') : '—';
+          outCagrNote.textContent = `Holding period: ${yrs} years (CAGR-style).`;
+        } else {
+          outCagr.textContent = '—';
+          outCagrNote.textContent = 'Provide holding period (years) and final value to calculate.';
+        }
+
+        const cagrText = (isFinite(cagr) ? ` • Annualized: ${roundPct(cagr,dec).toFixed(dec)}%` : '');
+        outSummary.textContent =
+          `Cost ${fmtMoney(sym, cost)} • Final ${fmtMoney(sym, fin)} • ROI ${roiDisp.toFixed(dec)}% • Net ROI ${netDisp.toFixed(dec)}%${cagrText}.`;
+      }
+
+      $('roi_calc_btn').addEventListener('click', calc);
+
+      $('roi_example_btn').addEventListener('click', ()=>{
+        costEl.value = '50000';
+        finalEl.value = '65000';
+        feesEl.value = '250';
+        yearsEl.value = '2';
+        curEl.value = '₹';
+        roundEl.value = '2';
+        calc();
+      });
+
+      $('roi_reset_btn').addEventListener('click', ()=>{
+        [costEl, finalEl, feesEl, yearsEl].forEach(el=>el.value='');
+        curEl.value='₹';
+        roundEl.value='0';
+        outROI.textContent='—';
+        outROINote.textContent='—';
+        outProfit.textContent='—';
+        outProfitNote.textContent='—';
+        outNetROI.textContent='—';
+        outNetNote.textContent='—';
+        outCagr.textContent='—';
+        outCagrNote.textContent='Provide holding period to calculate.';
+        outSummary.textContent='Enter details to see a clean summary.';
+        barNet.style.width='0%';
+      });
+
+      // Auto-calc on input (same behavior style as your reference)
+      [costEl, finalEl, feesEl, yearsEl, curEl, roundEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(costEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(costEl.value) calc(); });
+      });
+    })();
+  </script>
+</body>
+</html>

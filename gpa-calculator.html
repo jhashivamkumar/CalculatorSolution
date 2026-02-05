@@ -1,0 +1,874 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- ✅ responsive: safe-area + correct scaling -->
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+  <title>GPA Calculator (4.0 / 10.0) + Credits, Semester & CGPA | CalculatorSolution</title>
+  <meta name="description" content="Free GPA Calculator: add courses, credits and grades to calculate GPA/CGPA instantly on 4.0 or 10.0 scale. Includes grade-to-points mapping, weighted credits, and printable summary.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/gpa-calculator.html">
+
+  <meta property="og:title" content="GPA Calculator">
+  <meta property="og:description" content="Calculate GPA or CGPA from grades and credits with 4.0 or 10.0 scale mapping — fast and mobile friendly.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- ✅ UI/UX + Responsive upgrades (NO JS logic changes) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+      overflow-x:hidden;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    a{color:inherit}
+    .wrap{
+      max-width:1100px;margin:0 auto;
+      padding:0 18px;
+      padding-left:max(18px, env(safe-area-inset-left));
+      padding-right:max(18px, env(safe-area-inset-right));
+    }
+
+    /* Header */
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem}
+    .brand-logo{border-radius:10px}
+
+    /* Hero */
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em}
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      white-space:nowrap;
+    }
+
+    /* Layout */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      overflow:hidden;
+    }
+    .panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem;flex:0 0 auto}
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      width:100%;
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      min-height:44px;
+    }
+    select.input{appearance:none}
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px;
+      white-space:nowrap;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .btn-danger{background:linear-gradient(90deg,#ef4444,#fb7185);box-shadow:0 12px 26px rgba(239,68,68,.18)}
+    .btn:focus-visible,.input:focus-visible,summary:focus-visible,a:focus-visible{
+      outline:3px solid rgba(59,130,246,.35);
+      outline-offset:2px;
+      border-radius:12px;
+    }
+
+    /* Sticky results: safer on mobile (JS untouched) */
+    .sticky{position:sticky;top:82px}
+
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92))}
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{
+      margin:4px 0 0;
+      font-size:clamp(1.25rem, 2.6vw, 1.55rem);
+      font-weight:1000;letter-spacing:-.02em;
+      word-break:break-word;
+    }
+    .mini{font-size:.86rem;color:#64748b}
+
+    .bar{height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px}
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* Table: mobile friendly horizontal scroll + sticky header for usability */
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{width:100%;border-collapse:collapse;min-width:920px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem;vertical-align:top}
+    th{
+      background:#f8fafc;font-weight:1000;
+      position:sticky;top:0;z-index:1;
+    }
+    tr:last-child td{border-bottom:0}
+    td .input{border-radius:10px;padding:8px 10px;font-size:.98rem;min-height:40px}
+
+    .tag{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid #e2e8f0;background:#fff;
+      font-weight:900;font-size:.85rem;color:#0f172a
+    }
+    .note{
+      border:1px dashed #cbd5e1;border-radius:14px;padding:12px;background:rgba(255,255,255,.7);
+      margin-top:10px
+    }
+
+    /* FAQ cards */
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 10px 24px rgba(8,13,26,.05);padding:12px}
+    details.card{padding:0;overflow:hidden}
+    details.card summary{
+      cursor:pointer;padding:12px;
+      list-style:none;
+    }
+    details.card summary::-webkit-details-marker{display:none}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Related grid: ensure it works even if global CSS is missing */
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:12px;
+    }
+    .cards-grid a.card{display:block;text-decoration:none}
+    .cards-grid a.card h4{margin:0 0 6px}
+    .cards-grid a.card p{margin:0;color:#475569}
+
+    /* Readability for code/pre */
+    pre{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      background:rgba(255,255,255,.8);
+      border:1px solid #e2e8f0;
+      border-radius:14px;
+      padding:12px;
+    }
+
+    /* Footer links wrap nicely */
+    .site-footer a{white-space:nowrap}
+
+    /* ✅ Breakpoints */
+    @media (max-width: 1024px){
+      .hero{padding:24px 16px}
+      .wrap{padding:0 16px}
+      .cards-grid{grid-template-columns:repeat(2, minmax(0,1fr))}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      table{min-width:780px}
+      .sticky{position:static}
+    }
+
+    @media (max-width: 640px){
+      .hero h1{font-size:1.55rem}
+      .hero p{font-size:.98rem}
+      .grid-2{grid-template-columns:1fr}
+      .actions{gap:8px}
+      .btn{flex:1 1 calc(50% - 8px)}
+      .cards-grid{grid-template-columns:1fr}
+    }
+
+    @media (max-width: 380px){
+      .btn{flex:1 1 100%}
+      .chip{font-size:.82rem}
+    }
+
+    /* ✅ Print: clean output */
+    @media print{
+      .site-header,.actions,.chips{display:none !important}
+      body{background:#fff !important}
+      .panel,.metric,.table-wrap,.card{box-shadow:none !important}
+      table{min-width:0 !important}
+      th{position:static !important}
+    }
+
+    /* ✅ Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto !important;transition:none !important}
+      .btn:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"GPA Calculator",
+      "url":"https://calculatorsolution.com/gpa-calculator.html",
+      "description":"Calculate GPA/CGPA from course grades and credits on 4.0 or 10.0 scale."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"GPA Calculator","item":"https://calculatorsolution.com/gpa-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate GPA",
+      "step":[
+        {"@type":"HowToStep","name":"Choose a GPA scale","text":"Select 4.0 or 10.0 (or custom) based on your institution."},
+        {"@type":"HowToStep","name":"Add courses","text":"Enter each course name, credits and grade (letter or points)."},
+        {"@type":"HowToStep","name":"Calculate GPA","text":"GPA = sum(grade points × credits) / sum(credits)."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Different scales?","acceptedAnswer":{"@type":"Answer","text":"Use 4.0, 10.0 or your institutional scale. This calculator supports both and also allows custom points."}},
+        {"@type":"Question","name":"Incomplete grades?","acceptedAnswer":{"@type":"Answer","text":"Exclude incomplete grades until finalized, or follow your institution’s policy."}},
+        {"@type":"Question","name":"Rounding?","acceptedAnswer":{"@type":"Answer","text":"Many schools round to 2 decimals. Use your official policy for transcripts."}},
+        {"@type":"Question","name":"Honors?","acceptedAnswer":{"@type":"Answer","text":"Honors classification uses separate rules (e.g., GPA bands). This calculator only computes GPA."}},
+        {"@type":"Question","name":"Use for transcripts?","acceptedAnswer":{"@type":"Answer","text":"For official records, rely on your institution’s transcript calculation rules."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>GPA Calculator</h1>
+        <p>Calculate GPA/CGPA from grades and credits with 4.0 / 10.0 scale support — fast, accurate, and mobile-friendly.</p>
+        <div class="chips">
+          <span class="chip">📚 Multi-course table</span>
+          <span class="chip">🎯 4.0 / 10.0 scale</span>
+          <span class="chip">🧾 Weighted credits</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-gpa-calculator">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="GPA inputs">
+              <div class="panel-title">
+                <h2>Setup</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="gpa_scale">GPA scale</label>
+                  <select id="gpa_scale" class="input">
+                    <option value="4" selected>4.0 scale (A=4.0)</option>
+                    <option value="10">10.0 scale (O=10.0 / A+=10.0)</option>
+                    <option value="custom">Custom points (manual)</option>
+                  </select>
+                  <p class="help">Choose your institution’s scale. “Custom” lets you type points directly.</p>
+                </div>
+
+                <div class="field">
+                  <label for="gpa_round">Round result</label>
+                  <select id="gpa_round" class="input">
+                    <option value="2" selected>2 decimals</option>
+                    <option value="3">3 decimals</option>
+                    <option value="4">4 decimals</option>
+                    <option value="0">No decimals</option>
+                  </select>
+                  <p class="help">For reporting, schools often use 2 decimals.</p>
+                </div>
+
+                <div class="field">
+                  <label for="gpa_target">Target GPA (optional)</label>
+                  <input id="gpa_target" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 3.5">
+                  <p class="help">Shows how close you are to your target.</p>
+                </div>
+
+                <div class="field">
+                  <label for="gpa_rows">Quick add courses</label>
+                  <select id="gpa_rows" class="input">
+                    <option value="5" selected>5 courses</option>
+                    <option value="6">6 courses</option>
+                    <option value="8">8 courses</option>
+                    <option value="10">10 courses</option>
+                  </select>
+                  <p class="help">Adds blank rows to the table below.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="gpa_add_btn" type="button">Add Rows</button>
+                <button class="btn btn-dark" id="gpa_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="gpa_clear_btn" type="button">Clear</button>
+              </div>
+
+              <div class="note mini">
+                Formula: <strong>GPA = Σ(Grade Points × Credits) / Σ(Credits)</strong> (weighted average).
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="GPA results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">GPA</p>
+                <p class="v" id="gpa_out_gpa">—</p>
+                <p class="mini" id="gpa_out_note">Add courses to calculate.</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Total credits</p>
+                <p class="v" id="gpa_out_credits">—</p>
+                <p class="mini">Sum of all valid course credits.</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Quality points</p>
+                <p class="v" id="gpa_out_qp">—</p>
+                <p class="mini">Σ(points × credits)</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Target progress</p>
+                <p class="v" id="gpa_out_progress">—</p>
+                <div class="bar"><span id="gpa_bar"></span></div>
+                <p class="mini" id="gpa_out_progress_note">Set a target GPA (optional).</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="gpa_out_summary">Enter your courses to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Courses</h2>
+          <p class="mini" style="margin:0 0 10px;">Enter course credits and grade. Choose a scale above to auto-map letter grades to points.</p>
+
+          <div class="table-wrap">
+            <table aria-label="GPA course table">
+              <thead>
+                <tr>
+                  <th style="width:28%;">Course</th>
+                  <th style="width:14%;">Credits</th>
+                  <th style="width:18%;">Grade</th>
+                  <th style="width:18%;">Points</th>
+                  <th style="width:22%;">Quality Points</th>
+                </tr>
+              </thead>
+              <tbody id="gpa_tbody">
+                <tr><td colspan="5" class="mini">Click <strong>Add Rows</strong> or <strong>Try Example</strong> to begin.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="actions" style="margin-top:12px;">
+            <button class="btn" id="gpa_calc_btn" type="button">Calculate GPA</button>
+            <button class="btn btn-danger" id="gpa_remove_empty_btn" type="button">Remove Empty Rows</button>
+            <button class="btn btn-ghost" id="gpa_print_btn" type="button">Print</button>
+          </div>
+
+          <div class="note mini">
+            Tip: If your school uses a different mapping (e.g., A+=4.0, A=3.7), choose <strong>Custom points</strong> and type points manually.
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          This <strong>GPA Calculator</strong> computes your weighted GPA from multiple courses. Each course contributes according to its
+          <strong>credit value</strong>, so higher-credit subjects affect your GPA more.
+          Use it for semester GPA, or compute CGPA by entering courses across semesters (or use a separate CGPA calculator).
+        </p>
+        <p class="mini">
+          Always verify official GPA rules with your institution (grade repeats, incomplete grades, pass/fail, and honors may follow special policies).
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>GPA = Σ(grade_points × credits) / Σ(credits)</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Different scales?</strong></summary><p>Use 4.0, 10.0 or your institutional scale. This tool supports both and also allows custom points.</p></details>
+        <details class="card"><summary><strong>Incomplete grades?</strong></summary><p>Exclude incomplete grades until finalized, or follow your institution’s policy.</p></details>
+        <details class="card"><summary><strong>Rounding?</strong></summary><p>Many schools round to 2 decimals. Use your official policy for transcripts.</p></details>
+        <details class="card"><summary><strong>Honors?</strong></summary><p>Honors classification uses separate rules. This calculator only computes GPA.</p></details>
+        <details class="card"><summary><strong>Use for transcripts?</strong></summary><p>For formal records, rely on your institution’s official calculation.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="cgpa-calculator.html"><h4>CGPA Calculator</h4><p>Compute cumulative GPA across multiple semesters.</p></a>
+          <a class="card" href="grade-calculator.html"><h4>Grade Calculator</h4><p>Convert scores to grades based on your grading scale.</p></a>
+          <a class="card" href="percentage-needed-final-exam.html"><h4>Percentage Needed in Final Exam</h4><p>Required percentage to hit your target grade.</p></a>
+          <a class="card" href="area-calculator.html"><h4>Area Calculator</h4><p>Compute area for common shapes.</p></a>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;display:flex;flex-wrap:wrap;gap:10px;">
+        <a href="/sitemap.xml">Sitemap</a>
+        <span aria-hidden="true">|</span>
+        <a href="/">Home</a>
+        <span aria-hidden="true">|</span>
+        <a href="/privacy-policy.html">Privacy Policy</a>
+        <span aria-hidden="true">|</span>
+        <a href="/terms-of-service.html">Terms</a>
+        <span aria-hidden="true">|</span>
+        <a href="/contact.html">Contact</a>
+        <span aria-hidden="true">|</span>
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const scaleEl = $('gpa_scale');
+      const roundEl = $('gpa_round');
+      const targetEl = $('gpa_target');
+      const rowsEl = $('gpa_rows');
+
+      const tbody = $('gpa_tbody');
+
+      const outGpa = $('gpa_out_gpa');
+      const outNote = $('gpa_out_note');
+      const outCredits = $('gpa_out_credits');
+      const outQp = $('gpa_out_qp');
+      const outProgress = $('gpa_out_progress');
+      const outProgressNote = $('gpa_out_progress_note');
+      const outSummary = $('gpa_out_summary');
+      const bar = $('gpa_bar');
+
+      const fmt = (n, d)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{minimumFractionDigits:d, maximumFractionDigits:d}).format(n) : '—');
+      const fmt0 = (n)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:0}).format(n) : '—');
+
+      // Basic mappings (editable if you want later)
+      const MAP_4 = {
+        "A+":4.0,"A":4.0,"A-":3.7,
+        "B+":3.3,"B":3.0,"B-":2.7,
+        "C+":2.3,"C":2.0,"C-":1.7,
+        "D+":1.3,"D":1.0,"D-":0.7,
+        "F":0.0
+      };
+
+      // Common 10-point style used by many Indian universities (O/A+/A/B+/B/C/P/F)
+      const MAP_10 = {
+        "O":10.0,
+        "A+":10.0,
+        "A":9.0,
+        "B+":8.0,
+        "B":7.0,
+        "C":6.0,
+        "P":5.0,
+        "F":0.0
+      };
+
+      function parseCredits(x){
+        const v = parseFloat(String(x||"").trim());
+        return (isFinite(v) && v>0) ? v : 0;
+      }
+
+      function normalizeGrade(g){
+        return String(g||"").trim().toUpperCase();
+      }
+
+      function gradeToPoints(grade, scale){
+        const g = normalizeGrade(grade);
+        if(!g) return NaN;
+        if(scale === '4') return (g in MAP_4) ? MAP_4[g] : NaN;
+        if(scale === '10') return (g in MAP_10) ? MAP_10[g] : NaN;
+        return NaN; // custom handled elsewhere
+      }
+
+      function rowTemplate(){
+        return `
+          <tr class="gpa-row">
+            <td><input class="input gpa_course" type="text" placeholder="e.g., Mathematics"></td>
+            <td><input class="input gpa_credits" type="number" inputmode="decimal" min="0" step="0.5" placeholder="e.g., 4"></td>
+            <td>
+              <select class="input gpa_grade">
+                <option value="">Select</option>
+              </select>
+              <div class="mini" style="margin-top:6px;">
+                <span class="tag">Auto points</span>
+              </div>
+            </td>
+            <td><input class="input gpa_points" type="number" inputmode="decimal" min="0" step="0.1" placeholder="—"></td>
+            <td class="gpa_qp mini">—</td>
+          </tr>
+        `;
+      }
+
+      function buildGradeOptions(scale){
+        let keys = [];
+        if(scale === '4'){
+          keys = ["A+","A","A-","B+","B","B-","C+","C","C-","D+","D","D-","F"];
+        } else if(scale === '10'){
+          keys = ["O","A+","A","B+","B","C","P","F"];
+        } else {
+          keys = []; // custom: grade select still usable but user types points
+        }
+        const opts = ['<option value="">Select</option>'].concat(keys.map(k=>`<option value="${k}">${k}</option>`));
+        return opts.join('');
+      }
+
+      function refreshRowsUI(){
+        const scale = scaleEl.value;
+        const gradeOptions = buildGradeOptions(scale);
+
+        const rows = tbody.querySelectorAll('tr.gpa-row');
+        rows.forEach(tr=>{
+          const gradeSel = tr.querySelector('.gpa_grade');
+          const pointsEl = tr.querySelector('.gpa_points');
+          const tag = tr.querySelector('.tag');
+
+          // set grade options
+          if(gradeSel){
+            gradeSel.innerHTML = gradeOptions || '<option value="">Select</option><option value="CUSTOM">Custom</option>';
+          }
+
+          if(scale === 'custom'){
+            pointsEl.removeAttribute('disabled');
+            if(tag) tag.textContent = 'Manual points';
+          } else {
+            pointsEl.setAttribute('disabled','disabled');
+            if(tag) tag.textContent = 'Auto points';
+          }
+        });
+      }
+
+      function addRows(count){
+        // remove placeholder row
+        if(tbody.querySelector('tr') && !tbody.querySelector('tr.gpa-row')){
+          tbody.innerHTML = '';
+        }
+        const frag = document.createDocumentFragment();
+        for(let i=0; i<count; i++){
+          const tmp = document.createElement('tbody');
+          tmp.innerHTML = rowTemplate().trim();
+          frag.appendChild(tmp.firstChild);
+        }
+        tbody.appendChild(frag);
+        refreshRowsUI();
+        wireRowEvents();
+        calc(); // live update
+      }
+
+      function wireRowEvents(){
+        const rows = tbody.querySelectorAll('tr.gpa-row');
+        rows.forEach(tr=>{
+          if(tr.__wired) return;
+          tr.__wired = true;
+
+          const creditsEl = tr.querySelector('.gpa_credits');
+          const gradeEl = tr.querySelector('.gpa_grade');
+          const pointsEl = tr.querySelector('.gpa_points');
+
+          const onChange = ()=>{
+            // auto-fill points in non-custom scales
+            const scale = scaleEl.value;
+            if(scale !== 'custom'){
+              const gp = gradeToPoints(gradeEl.value, scale);
+              pointsEl.value = isFinite(gp) ? gp : '';
+            }
+            calc();
+          };
+
+          [creditsEl, gradeEl, pointsEl].forEach(el=>{
+            el.addEventListener('input', onChange);
+            el.addEventListener('change', onChange);
+          });
+        });
+      }
+
+      function calc(){
+        const scale = scaleEl.value;
+        const decimals = parseInt(roundEl.value, 10);
+        const target = parseFloat(targetEl.value);
+
+        const rows = tbody.querySelectorAll('tr.gpa-row');
+        if(!rows.length){
+          outGpa.textContent='—';
+          outNote.textContent='Add courses to calculate.';
+          outCredits.textContent='—';
+          outQp.textContent='—';
+          outProgress.textContent='—';
+          outProgressNote.textContent='Set a target GPA (optional).';
+          outSummary.textContent='Enter your courses to see a clean summary.';
+          bar.style.width='0%';
+          return;
+        }
+
+        let totalCredits = 0;
+        let totalQP = 0;
+        let validCourses = 0;
+
+        rows.forEach(tr=>{
+          const course = (tr.querySelector('.gpa_course').value || '').trim();
+          const credits = parseCredits(tr.querySelector('.gpa_credits').value);
+          const grade = tr.querySelector('.gpa_grade').value;
+          const pointsEl = tr.querySelector('.gpa_points');
+
+          let points = NaN;
+          if(scale === 'custom'){
+            points = parseFloat(pointsEl.value);
+          } else {
+            points = gradeToPoints(grade, scale);
+            pointsEl.value = isFinite(points) ? points : '';
+          }
+
+          const qpCell = tr.querySelector('.gpa_qp');
+
+          if(credits>0 && isFinite(points) && points>=0){
+            const qp = credits * points;
+            qpCell.textContent = fmt(qp, 2);
+            totalCredits += credits;
+            totalQP += qp;
+            validCourses += 1;
+          } else {
+            qpCell.textContent = '—';
+          }
+
+          // tiny UX: if course name empty but credits/grade filled, still counts (optional)
+          // keep as is
+        });
+
+        if(totalCredits <= 0){
+          outGpa.textContent='—';
+          outNote.textContent='Enter credits + grade/points for at least one course.';
+          outCredits.textContent='—';
+          outQp.textContent='—';
+          outProgress.textContent='—';
+          outProgressNote.textContent='Set a target GPA (optional).';
+          outSummary.textContent='Enter your courses to see a clean summary.';
+          bar.style.width='0%';
+          return;
+        }
+
+        const gpa = totalQP / totalCredits;
+
+        // Output format
+        const d = isFinite(decimals) ? Math.max(0, Math.min(6, decimals)) : 2;
+        outGpa.textContent = fmt(gpa, d);
+        outCredits.textContent = fmt0(totalCredits);
+        outQp.textContent = fmt(totalQP, 2);
+
+        const scaleMax = (scale === '10') ? 10 : (scale === '4') ? 4 : Math.max(4, (isFinite(target) ? target : 4));
+        outNote.textContent = `${validCourses} valid course(s) • Scale: ${scale === 'custom' ? 'Custom' : (scale + '.0')}`;
+
+        // Target progress
+        if(isFinite(target) && target>0){
+          const pct = Math.max(0, Math.min(100, (gpa/target)*100));
+          outProgress.textContent = `${pct.toFixed(0)}%`;
+          outProgressNote.textContent = (gpa>=target)
+            ? `Congrats! You are above target (${fmt(target, d)}).`
+            : `You need +${fmt(target-gpa, d)} to reach target (${fmt(target, d)}).`;
+          bar.style.width = pct.toFixed(1) + '%';
+          bar.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+        } else {
+          outProgress.textContent = '—';
+          outProgressNote.textContent = 'Set a target GPA (optional).';
+          const pct = Math.max(0, Math.min(100, (gpa/scaleMax)*100));
+          bar.style.width = pct.toFixed(1) + '%';
+          bar.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+        }
+
+        outSummary.textContent =
+          `GPA ${fmt(gpa,d)} on ${scale === 'custom' ? 'custom' : (scale + '.0')} scale with ${fmt0(totalCredits)} total credits.`;
+      }
+
+      function removeEmptyRows(){
+        const rows = Array.from(tbody.querySelectorAll('tr.gpa-row'));
+        const keep = rows.filter(tr=>{
+          const c = (tr.querySelector('.gpa_course').value || '').trim();
+          const cr = (tr.querySelector('.gpa_credits').value || '').trim();
+          const g = (tr.querySelector('.gpa_grade').value || '').trim();
+          const p = (tr.querySelector('.gpa_points').value || '').trim();
+          return (c || cr || g || p);
+        });
+
+        tbody.innerHTML = '';
+        if(!keep.length){
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">No rows left. Click <strong>Add Rows</strong> to begin.</td></tr>';
+        } else {
+          keep.forEach(tr=>tbody.appendChild(tr));
+        }
+        refreshRowsUI();
+        wireRowEvents();
+        calc();
+      }
+
+      $('gpa_add_btn').addEventListener('click', ()=>{
+        const count = parseInt(rowsEl.value, 10) || 5;
+        addRows(count);
+      });
+
+      $('gpa_calc_btn').addEventListener('click', calc);
+
+      $('gpa_example_btn').addEventListener('click', ()=>{
+        // Build 6 rows example
+        tbody.innerHTML = '';
+        addRows(6);
+
+        const rows = tbody.querySelectorAll('tr.gpa-row');
+        const scale = '4';
+        scaleEl.value = scale;
+        refreshRowsUI();
+
+        const sample = [
+          {course:'Mathematics', credits:4, grade:'A'},
+          {course:'Physics', credits:3, grade:'B+'},
+          {course:'Chemistry', credits:3, grade:'B'},
+          {course:'Computer Science', credits:4, grade:'A-'},
+          {course:'English', credits:2, grade:'B'},
+          {course:'Lab', credits:1, grade:'A'}
+        ];
+        sample.forEach((s, i)=>{
+          const tr = rows[i];
+          tr.querySelector('.gpa_course').value = s.course;
+          tr.querySelector('.gpa_credits').value = s.credits;
+          tr.querySelector('.gpa_grade').value = s.grade;
+        });
+        targetEl.value = '3.5';
+        calc();
+      });
+
+      $('gpa_clear_btn').addEventListener('click', ()=>{
+        tbody.innerHTML = '<tr><td colspan="5" class="mini">Click <strong>Add Rows</strong> or <strong>Try Example</strong> to begin.</td></tr>';
+        scaleEl.value = '4';
+        roundEl.value = '2';
+        targetEl.value = '';
+        rowsEl.value = '5';
+        outGpa.textContent='—';
+        outNote.textContent='Add courses to calculate.';
+        outCredits.textContent='—';
+        outQp.textContent='—';
+        outProgress.textContent='—';
+        outProgressNote.textContent='Set a target GPA (optional).';
+        outSummary.textContent='Enter your courses to see a clean summary.';
+        bar.style.width='0%';
+      });
+
+      $('gpa_remove_empty_btn').addEventListener('click', removeEmptyRows);
+
+      $('gpa_print_btn').addEventListener('click', ()=>window.print());
+
+      // Scale switch toggles points field behavior
+      scaleEl.addEventListener('change', ()=>{
+        refreshRowsUI();
+        calc();
+      });
+      roundEl.addEventListener('change', calc);
+      targetEl.addEventListener('input', calc);
+
+    })();
+  </script>
+</body>
+</html>

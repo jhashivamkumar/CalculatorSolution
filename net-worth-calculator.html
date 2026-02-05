@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Net Worth Calculator (Assets vs Liabilities) + Breakdown | CalculatorSolution</title>
+  <meta name="description" content="Free Net Worth Calculator: enter assets and liabilities to calculate net worth instantly, see category breakdown, and export/share results.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/net-worth-calculator.html">
+
+  <meta property="og:title" content="Net Worth Calculator">
+  <meta property="og:description" content="Calculate net worth (assets minus liabilities) with a clean category breakdown and instant totals.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (responsive + UI polish, NO JS logic changes) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    :root{
+      --wrap:1100px;
+      --pad:18px;
+      --radius-1:12px;
+      --radius-2:16px;
+      --radius-3:18px;
+      --border:#e2e8f0;
+      --muted:#64748b;
+      --shadow-1:0 10px 24px rgba(8,13,26,.05);
+      --shadow-2:0 14px 40px rgba(8,13,26,.06);
+      --focus:0 0 0 4px rgba(59,130,246,.16);
+    }
+
+    /* Layout container */
+    .wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--pad)}
+
+    /* Sticky header - better on mobile */
+    .site-header{
+      padding:12px 0;border-bottom:1px solid var(--border);
+      background:rgba(255,255,255,.72);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10;
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.12rem;letter-spacing:-.01em}
+    .brand-logo{border-radius:10px;display:block}
+
+    /* HERO */
+    .hero{
+      margin:18px 0 14px 0;border-radius:var(--radius-3);
+      padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+    }
+    .hero h1{margin:0 0 6px 0;font-size:clamp(1.45rem, 3.5vw, 1.95rem);letter-spacing:-.02em}
+    .hero p{margin:0;opacity:.95;max-width:60ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      white-space:nowrap;
+    }
+
+    /* Calculator shell */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+      gap:14px;align-items:start;margin-top:14px
+    }
+
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--border);
+      border-radius:var(--radius-2);
+      box-shadow:var(--shadow-2);
+      padding:14px;
+      min-width:0; /* prevents overflow in grid */
+    }
+
+    .panel-title{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:10px;margin-bottom:10px;flex-wrap:wrap
+    }
+    .panel-title h2{margin:0;font-size:1.05rem;letter-spacing:-.01em}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(37,99,235,.10);color:#1d4ed8;
+      font-weight:900;font-size:.85rem;
+      white-space:nowrap;
+    }
+
+    /* Tabs (keep same IDs/logic) */
+    .tabs{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 10px}
+    .tab{
+      border:1px solid var(--border);background:#fff;border-radius:999px;
+      padding:9px 12px;font-weight:1000;cursor:pointer;
+      min-height:40px;
+      transition:box-shadow .2s,border-color .2s,transform .2s;
+    }
+    .tab:focus-visible{outline:none;box-shadow:var(--focus)}
+    .tab.active{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.10)}
+    .tab:hover{transform:translateY(-1px)}
+
+    /* Form grid */
+    .grid-2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      padding:11px 12px;border:1px solid var(--border);border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      min-height:44px; /* mobile tap target */
+      width:100%;
+    }
+    .input:focus{border-color:#93c5fd;box-shadow:var(--focus)}
+    .help{margin:0;font-size:.86rem;color:var(--muted)}
+
+    /* Buttons */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:11px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:focus-visible{outline:none;box-shadow:var(--focus)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid var(--border);box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+
+    /* Sticky results: safe across devices */
+    .sticky{position:sticky;top:82px}
+
+    /* Metrics */
+    .metric{
+      border:1px solid var(--border);
+      border-radius:var(--radius-2);
+      padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+      overflow:hidden;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{margin:4px 0 0;font-size:clamp(1.25rem, 3vw, 1.55rem);font-weight:1000;letter-spacing:-.02em}
+    .mini{font-size:.86rem;color:var(--muted)}
+
+    /* Progress bar */
+    .bar{
+      height:10px;border-radius:999px;background:var(--border);overflow:hidden;margin-top:10px
+    }
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* Table: better mobile support */
+    .table-wrap{
+      overflow:auto;
+      border:1px solid var(--border);
+      border-radius:var(--radius-2);
+      background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05);
+      -webkit-overflow-scrolling:touch;
+    }
+    table{width:100%;border-collapse:collapse;min-width:860px}
+    th,td{padding:10px 12px;border-bottom:1px solid var(--border);text-align:left;font-size:.95rem}
+    th{background:#f8fafc;font-weight:1000;position:sticky;top:0} /* stays visible while scrolling */
+    tr:last-child td{border-bottom:0}
+
+    /* Notes / FAQ cards */
+    .note{
+      border:1px dashed #cbd5e1;border-radius:14px;padding:12px;background:rgba(255,255,255,.7);
+      margin-top:10px
+    }
+    .card{
+      background:#fff;border:1px solid var(--border);
+      border-radius:14px;box-shadow:var(--shadow-1);
+      padding:12px
+    }
+    details.card{padding:0;overflow:hidden}
+    details.card summary{cursor:pointer;padding:12px;list-style:none}
+    details.card summary::-webkit-details-marker{display:none}
+    details.card summary:focus-visible{outline:none;box-shadow:var(--focus)}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Related grid (your global CSS may define .cards-grid; this ensures responsive fallback) */
+    .related-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+    }
+    .related-grid .card{height:100%}
+    .related-grid h4{margin:0 0 6px;font-size:1rem}
+    .related-grid p{margin:0;color:#475569}
+
+    /* Better code block wrapping on mobile */
+    pre{
+      white-space:pre-wrap;
+      word-break:break-word;
+      overflow:auto;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.85);
+    }
+
+    /* Responsive breakpoints */
+    @media (max-width: 1024px){
+      .wrap{padding:0 16px}
+      table{min-width:760px}
+      .related-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static;top:auto}
+      table{min-width:680px}
+    }
+
+    @media (max-width: 640px){
+      .hero{padding:18px 14px}
+      .grid-2{grid-template-columns:1fr}
+      .tabs{gap:8px}
+      .tab{flex:1}
+      .actions{flex-direction:column}
+      .btn{width:100%}
+      .related-grid{grid-template-columns:1fr}
+      table{min-width:560px}
+    }
+
+    /* Reduce motion preference */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto !important}
+      .btn,.card,.tab{transition:none !important}
+      .btn:hover,.card:hover,.tab:hover{transform:none !important}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Net Worth Calculator",
+      "url":"https://calculatorsolution.com/net-worth-calculator.html",
+      "description":"Calculate net worth by subtracting liabilities from assets with category breakdown."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Net Worth Calculator","item":"https://calculatorsolution.com/net-worth-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate your net worth",
+      "step":[
+        {"@type":"HowToStep","name":"Add your assets","text":"Enter values for cash, investments, property, and other assets."},
+        {"@type":"HowToStep","name":"Add your liabilities","text":"Enter balances for loans, credit cards, and other debts."},
+        {"@type":"HowToStep","name":"Review your net worth","text":"Net worth is assets minus liabilities. Track it periodically to measure progress."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Include retirement accounts?","acceptedAnswer":{"@type":"Answer","text":"Yes—include retirement accounts as assets. Keep in mind they may have taxes/penalties if withdrawn early."}},
+        {"@type":"Question","name":"Should I use market value?","acceptedAnswer":{"@type":"Answer","text":"Use current market value for investments and estimated current value for property/vehicles."}},
+        {"@type":"Question","name":"What counts as liabilities?","acceptedAnswer":{"@type":"Answer","text":"Include mortgages, personal loans, education loans, credit card balances, and any other outstanding debt."}},
+        {"@type":"Question","name":"How often should I calculate net worth?","acceptedAnswer":{"@type":"Answer","text":"Monthly or quarterly is common. Use the same method each time to track your progress."}},
+        {"@type":"Question","name":"How do I set net worth goals?","acceptedAnswer":{"@type":"Answer","text":"Set targets based on your age, income, and financial goals (emergency fund, debt reduction, investing, retirement)."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Net Worth Calculator</h1>
+        <p>Know where you stand: add assets, subtract liabilities, and get an instant net worth breakdown.</p>
+        <div class="chips">
+          <span class="chip">📌 Assets vs Liabilities</span>
+          <span class="chip">🧮 Instant totals</span>
+          <span class="chip">📊 Category breakdown</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-net-worth">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Net worth inputs">
+              <div class="panel-title">
+                <h2>Enter values</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="tabs" role="tablist" aria-label="Assets and liabilities tabs">
+                <button class="tab active" id="tab_assets" type="button" aria-selected="true">Assets</button>
+                <button class="tab" id="tab_liab" type="button" aria-selected="false">Liabilities</button>
+              </div>
+
+              <!-- Assets -->
+              <div id="panel_assets">
+                <div class="grid-2">
+                  <div class="field">
+                    <label for="a_cash">Cash & bank balance</label>
+                    <input id="a_cash" class="input" type="number" inputmode="numeric" min="0" step="500" placeholder="e.g., 150000">
+                    <p class="help">Savings, current account, cash, FD (if you want).</p>
+                  </div>
+
+                  <div class="field">
+                    <label for="a_invest">Investments</label>
+                    <input id="a_invest" class="input" type="number" inputmode="numeric" min="0" step="500" placeholder="e.g., 400000">
+                    <p class="help">Stocks, mutual funds, bonds, gold (market value).</p>
+                  </div>
+
+                  <div class="field">
+                    <label for="a_retire">Retirement accounts</label>
+                    <input id="a_retire" class="input" type="number" inputmode="numeric" min="0" step="500" placeholder="e.g., 250000">
+                    <p class="help">EPF/PPF/NPS/401k etc. (use current value).</p>
+                  </div>
+
+                  <div class="field">
+                    <label for="a_property">Property (current value)</label>
+                    <input id="a_property" class="input" type="number" inputmode="numeric" min="0" step="10000" placeholder="e.g., 4500000">
+                    <p class="help">Home/land value (approx market value).</p>
+                  </div>
+
+                  <div class="field">
+                    <label for="a_vehicle">Vehicles</label>
+                    <input id="a_vehicle" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 500000">
+                    <p class="help">Car/bike resale value (conservative estimate).</p>
+                  </div>
+
+                  <div class="field">
+                    <label for="a_other">Other assets</label>
+                    <input id="a_other" class="input" type="number" inputmode="numeric" min="0" step="500" placeholder="e.g., 75000">
+                    <p class="help">Business value, valuables, receivables, etc.</p>
+                  </div>
+                </div>
+
+                <div class="note mini">
+                  Tip: Use conservative values. For illiquid assets like property, keep an estimate you can defend.
+                </div>
+              </div>
+
+              <!-- Liabilities -->
+              <div id="panel_liab" style="display:none;">
+                <div class="grid-2">
+                  <div class="field">
+                    <label for="l_home">Home loan / mortgage</label>
+                    <input id="l_home" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 3200000">
+                    <p class="help">Outstanding principal (not EMI total).</p>
+                  </div>
+
+                  <div class="field">
+                    <label for="l_car">Car/vehicle loan</label>
+                    <input id="l_car" class="input" type="number" inputmode="numeric" min="0" step="500" placeholder="e.g., 250000">
+                    <p class="help">Outstanding balance on vehicle loan.</p>
+                  </div>
+
+                  <div class="field">
+                    <label for="l_personal">Personal loans</label>
+                    <input id="l_personal" class="input" type="number" inputmode="numeric" min="0" step="500" placeholder="e.g., 150000">
+                    <p class="help">Personal/consumer loans.</p>
+                  </div>
+
+                  <div class="field">
+                    <label for="l_edu">Education loan</label>
+                    <input id="l_edu" class="input" type="number" inputmode="numeric" min="0" step="500" placeholder="e.g., 0">
+                    <p class="help">Outstanding education loan amount.</p>
+                  </div>
+
+                  <div class="field">
+                    <label for="l_cc">Credit card balances</label>
+                    <input id="l_cc" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="e.g., 25000">
+                    <p class="help">Total unpaid credit card balance.</p>
+                  </div>
+
+                  <div class="field">
+                    <label for="l_other">Other liabilities</label>
+                    <input id="l_other" class="input" type="number" inputmode="numeric" min="0" step="500" placeholder="e.g., 30000">
+                    <p class="help">Borrowed money, business debt, etc.</p>
+                  </div>
+                </div>
+
+                <div class="note mini">
+                  Tip: Always use current outstanding balances (not original loan amount).
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="nw_calc_btn" type="button">Calculate Net Worth</button>
+                <button class="btn btn-dark" id="nw_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="nw_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="mini" style="margin-top:10px;">
+                Formula: <strong>Net Worth = Total Assets − Total Liabilities</strong>
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Net worth results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Net worth</p>
+                <p class="v" id="nw_out_net">—</p>
+                <p class="mini" id="nw_out_net_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Total assets</p>
+                <p class="v" id="nw_out_assets">—</p>
+                <p class="mini">Sum of all asset categories.</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Total liabilities</p>
+                <p class="v" id="nw_out_liab">—</p>
+                <div class="bar"><span id="nw_bar_liab"></span></div>
+                <p class="mini" id="nw_out_liab_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Debt-to-assets ratio</p>
+                <p class="v" id="nw_out_dta">—</p>
+                <p class="mini">Lower is healthier for most households.</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="nw_out_summary">Enter values to see a clean summary.</p>
+              </div>
+
+              <div class="actions" style="margin-top:8px;">
+                <button class="btn btn-ghost" id="nw_copy_btn" type="button">Copy summary</button>
+                <button class="btn btn-ghost" id="nw_share_btn" type="button">Share</button>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Breakdown Table</h2>
+          <p class="mini" style="margin:0 0 10px;">A simple view of category totals.</p>
+
+          <div class="table-wrap">
+            <table aria-label="Net worth breakdown table">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody id="nw_table">
+                <tr><td colspan="3" class="mini">Click <strong>Calculate Net Worth</strong> to generate breakdown.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          Your <strong>net worth</strong> is a snapshot of your financial position:
+          <strong>assets</strong> (what you own) minus <strong>liabilities</strong> (what you owe).
+          Tracking net worth over time helps you understand whether your saving, investing, and debt reduction strategies are working.
+        </p>
+        <p class="mini">
+          Tip: Update this quarterly. Use the same valuation method each time for consistent tracking.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>Net Worth = Sum(Assets) - Sum(Liabilities)</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Include retirement accounts?</strong></summary><p>Yes. Include retirement accounts as assets, but remember withdrawal taxes/penalties may apply.</p></details>
+        <details class="card"><summary><strong>Market value?</strong></summary><p>Use current market value for investments and a reasonable estimate for property/vehicles.</p></details>
+        <details class="card"><summary><strong>Liabilities?</strong></summary><p>Include mortgages, loans, credit card balances, and any outstanding debt.</p></details>
+        <details class="card"><summary><strong>Frequency?</strong></summary><p>Monthly or quarterly updates are common to track progress and trends.</p></details>
+        <details class="card"><summary><strong>Goal setting?</strong></summary><p>Set targets based on your plans: debt-free goal, emergency fund, retirement, or major purchases.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="loan-emi-calculator.html"><h4>Loan EMI Calculator</h4><p>Calculate EMI and total interest.</p></a>
+          <a class="card" href="sip-calculator.html"><h4>SIP Calculator</h4><p>Estimate mutual fund SIP growth.</p></a>
+          <a class="card" href="compound-interest-calculator.html"><h4>Compound Interest Calculator</h4><p>Project growth with compounding.</p></a>
+          <a class="card" href="gst-calculator-india.html"><h4>GST Calculator (India)</h4><p>Calculate GST amount and final price.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+      const fmt0 = (n)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:0}).format(n) : '—');
+      const money = (n)=> '₹ ' + fmt0(n);
+
+      // Tabs
+      const tabAssets = $('tab_assets');
+      const tabLiab = $('tab_liab');
+      const panelAssets = $('panel_assets');
+      const panelLiab = $('panel_liab');
+
+      function showTab(which){
+        const assets = which === 'assets';
+        tabAssets.classList.toggle('active', assets);
+        tabLiab.classList.toggle('active', !assets);
+        tabAssets.setAttribute('aria-selected', assets ? 'true' : 'false');
+        tabLiab.setAttribute('aria-selected', !assets ? 'true' : 'false');
+        panelAssets.style.display = assets ? 'block' : 'none';
+        panelLiab.style.display = assets ? 'none' : 'block';
+      }
+      tabAssets.addEventListener('click', ()=>showTab('assets'));
+      tabLiab.addEventListener('click', ()=>showTab('liab'));
+
+      // Inputs
+      const inputsAssets = [
+        ['Cash & bank', $('a_cash')],
+        ['Investments', $('a_invest')],
+        ['Retirement', $('a_retire')],
+        ['Property', $('a_property')],
+        ['Vehicles', $('a_vehicle')],
+        ['Other assets', $('a_other')]
+      ];
+      const inputsLiab = [
+        ['Home loan', $('l_home')],
+        ['Car loan', $('l_car')],
+        ['Personal loans', $('l_personal')],
+        ['Education loan', $('l_edu')],
+        ['Credit cards', $('l_cc')],
+        ['Other liabilities', $('l_other')]
+      ];
+
+      // Outputs
+      const outNet = $('nw_out_net');
+      const outNetNote = $('nw_out_net_note');
+      const outAssets = $('nw_out_assets');
+      const outLiab = $('nw_out_liab');
+      const outLiabNote = $('nw_out_liab_note');
+      const outDta = $('nw_out_dta');
+      const outSummary = $('nw_out_summary');
+      const barLiab = $('nw_bar_liab');
+      const tbody = $('nw_table');
+
+      function sumPairs(list){
+        return list.reduce((acc, [_, el]) => {
+          const v = parseFloat(el.value);
+          return acc + (isFinite(v) && v>0 ? v : 0);
+        }, 0);
+      }
+
+      function buildTable(){
+        const rows = [];
+        inputsAssets.forEach(([name, el])=>{
+          const v = parseFloat(el.value);
+          if(isFinite(v) && v>0){
+            rows.push(`<tr><td>${name}</td><td>Asset</td><td>${money(v)}</td></tr>`);
+          }
+        });
+        inputsLiab.forEach(([name, el])=>{
+          const v = parseFloat(el.value);
+          if(isFinite(v) && v>0){
+            rows.push(`<tr><td>${name}</td><td>Liability</td><td>${money(v)}</td></tr>`);
+          }
+        });
+        if(rows.length===0){
+          return '<tr><td colspan="3" class="mini">No values entered yet.</td></tr>';
+        }
+        return rows.join('');
+      }
+
+      function calc(){
+        const totalAssets = sumPairs(inputsAssets);
+        const totalLiab = sumPairs(inputsLiab);
+        const net = totalAssets - totalLiab;
+
+        outAssets.textContent = money(totalAssets);
+        outLiab.textContent = money(totalLiab);
+        outNet.textContent = money(net);
+
+        const dta = totalAssets>0 ? (totalLiab/totalAssets) : 0;
+        outDta.textContent = totalAssets>0 ? (dta*100).toFixed(1) + '%' : '—';
+
+        const liabShare = (totalAssets + totalLiab) > 0 ? (totalLiab/(totalAssets+totalLiab))*100 : 0;
+        barLiab.style.width = Math.max(0, Math.min(100, liabShare)).toFixed(1) + '%';
+        barLiab.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+
+        outLiabNote.textContent = totalAssets>0 ? `Liabilities are ${(dta*100).toFixed(1)}% of your assets.` : 'Add assets to compute ratio.';
+        outNetNote.textContent = net>=0 ? 'Positive net worth means assets exceed liabilities.' : 'Negative net worth means liabilities exceed assets.';
+
+        outSummary.textContent =
+          `Assets ₹${fmt0(totalAssets)} • Liabilities ₹${fmt0(totalLiab)} • Net worth ₹${fmt0(net)} • Debt-to-assets ${(totalAssets>0 ? (dta*100).toFixed(1) : '—')}%.`;
+
+        tbody.innerHTML = buildTable();
+      }
+
+      $('nw_calc_btn').addEventListener('click', calc);
+
+      $('nw_example_btn').addEventListener('click', ()=>{
+        // Example (India-friendly)
+        $('a_cash').value = '150000';
+        $('a_invest').value = '400000';
+        $('a_retire').value = '250000';
+        $('a_property').value = '4500000';
+        $('a_vehicle').value = '500000';
+        $('a_other').value = '75000';
+
+        $('l_home').value = '3200000';
+        $('l_car').value = '250000';
+        $('l_personal').value = '150000';
+        $('l_edu').value = '0';
+        $('l_cc').value = '25000';
+        $('l_other').value = '30000';
+
+        calc();
+      });
+
+      $('nw_reset_btn').addEventListener('click', ()=>{
+        inputsAssets.forEach(([_, el])=>el.value='');
+        inputsLiab.forEach(([_, el])=>el.value='');
+
+        outNet.textContent='—';
+        outNetNote.textContent='—';
+        outAssets.textContent='—';
+        outLiab.textContent='—';
+        outLiabNote.textContent='—';
+        outDta.textContent='—';
+        outSummary.textContent='Enter values to see a clean summary.';
+        barLiab.style.width='0%';
+        tbody.innerHTML = '<tr><td colspan="3" class="mini">Click <strong>Calculate Net Worth</strong> to generate breakdown.</td></tr>';
+        showTab('assets');
+      });
+
+      // Copy summary
+      $('nw_copy_btn').addEventListener('click', async ()=>{
+        const text = outSummary.textContent || '';
+        try{
+          await navigator.clipboard.writeText(text);
+          $('nw_copy_btn').textContent = 'Copied ✅';
+          setTimeout(()=> $('nw_copy_btn').textContent = 'Copy summary', 1200);
+        }catch(e){
+          alert('Copy not supported in this browser. You can manually select and copy the summary.');
+        }
+      });
+
+      // Share
+      $('nw_share_btn').addEventListener('click', async ()=>{
+        const text = outSummary.textContent || '';
+        if(navigator.share){
+          try{
+            await navigator.share({ title: 'Net Worth Summary', text, url: location.href });
+          }catch(e){}
+        }else{
+          // fallback copy
+          try{
+            await navigator.clipboard.writeText(text + ' ' + location.href);
+            $('nw_share_btn').textContent = 'Copied link ✅';
+            setTimeout(()=> $('nw_share_btn').textContent = 'Share', 1200);
+          }catch(e){
+            alert('Sharing not supported. Copy the URL manually.');
+          }
+        }
+      });
+
+      // Live updates
+      [...inputsAssets.map(x=>x[1]), ...inputsLiab.map(x=>x[1])].forEach(el=>{
+        el.addEventListener('input', ()=>{ calc(); });
+        el.addEventListener('change', ()=>{ calc(); });
+      });
+
+      showTab('assets');
+    })();
+  </script>
+</body>
+</html>

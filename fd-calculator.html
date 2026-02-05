@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>FD Calculator (Fixed Deposit) – Maturity Amount, Interest & Schedule | CalculatorSolution</title>
+  <meta name="description" content="Free FD Calculator: calculate fixed deposit maturity amount, total interest earned, and returns based on tenure, rate, and compounding frequency (monthly/quarterly/half-yearly/annual).">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/fd-calculator.html">
+
+  <meta property="og:title" content="FD Calculator (Fixed Deposit)">
+  <meta property="og:description" content="Calculate FD maturity amount, interest earned, and compounding-based returns — with a clear breakdown.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- ✅ UI/UX + Responsive upgrades ONLY (NO JS logic changed) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;white-space:nowrap}
+    .brand-logo{border-radius:10px;flex:0 0 auto}
+
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{margin:0 0 6px 0;font-size:clamp(1.4rem, 2.4vw, 1.95rem);letter-spacing:-.02em}
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      backdrop-filter:blur(6px);
+    }
+
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      min-width:0; /* prevents overflow on small screens */
+    }
+    .panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem}
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      width:100%;
+    }
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    /* ✅ Better touch targets + consistent button widths on mobile */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .btn:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:2px}
+
+    .sticky{position:sticky;top:82px}
+
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{
+      margin:4px 0 0;
+      font-size:clamp(1.25rem, 3.2vw, 1.55rem);
+      font-weight:1000;letter-spacing:-.02em;
+      word-break:break-word;
+    }
+    .mini{font-size:.86rem;color:#64748b}
+
+    .bar{
+      height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px
+    }
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* ✅ Table: keep logic same; improve mobile usability */
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{width:100%;border-collapse:collapse;min-width:860px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem;white-space:nowrap}
+    th{background:#f8fafc;font-weight:1000}
+    tr:last-child td{border-bottom:0}
+
+    .note{
+      border:1px dashed #cbd5e1;border-radius:14px;padding:12px;background:rgba(255,255,255,.7);
+      margin-top:10px
+    }
+
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 10px 24px rgba(8,13,26,.05);padding:12px}
+    details.card{padding:0;overflow:hidden}
+    details.card summary{cursor:pointer;padding:12px;list-style:none}
+    details.card summary::-webkit-details-marker{display:none}
+    details.card summary:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:2px}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* ✅ Related grid if global CSS doesn't handle it */
+    .related-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:12px;
+    }
+    .related-grid .card h4{margin:0 0 6px}
+    .related-grid .card p{margin:0;color:#475569}
+
+    /* ✅ Pre blocks: prevent overflow on small screens */
+    pre{
+      white-space:pre-wrap;
+      word-break:break-word;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      background:rgba(255,255,255,.7);
+      border:1px solid #e2e8f0;
+      border-radius:12px;
+      padding:12px;
+    }
+
+    /* ✅ Accessibility: reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto !important}
+      .btn,.card{transition:none !important}
+      .btn:hover{transform:none !important}
+      .card:hover{transform:none !important}
+    }
+
+    /* ✅ Tablet */
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      table{min-width:680px}
+      .sticky{position:static;top:auto}
+      .hero{padding:22px 16px}
+      .wrap{padding:0 16px}
+    }
+
+    /* ✅ Mobile */
+    @media (max-width: 640px){
+      .grid-2{grid-template-columns:1fr}
+      .actions .btn{flex:1 1 100%}
+      .hero{margin-top:14px}
+      .chips{gap:8px}
+      .chip{font-size:.84rem}
+      table{min-width:620px}
+    }
+
+    /* ✅ Very small phones */
+    @media (max-width: 360px){
+      .wrap{padding:0 12px}
+      .brand-text{font-size:1.05rem}
+      .panel{padding:12px}
+      .hero{padding:18px 14px}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"FD Calculator",
+      "url":"https://calculatorsolution.com/fd-calculator.html",
+      "description":"Calculate fixed deposit maturity amount and interest earned using compounding frequency and tenure."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"FD Calculator","item":"https://calculatorsolution.com/fd-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate FD maturity amount",
+      "step":[
+        {"@type":"HowToStep","name":"Enter deposit amount","text":"Add the principal amount you want to invest in the fixed deposit."},
+        {"@type":"HowToStep","name":"Enter interest rate and tenure","text":"Add annual interest rate and the deposit tenure (years or months)."},
+        {"@type":"HowToStep","name":"Select compounding frequency","text":"Choose monthly, quarterly, half-yearly or annual compounding based on your FD terms."},
+        {"@type":"HowToStep","name":"Calculate maturity","text":"See maturity amount, interest earned, and a growth schedule."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Interest payout options?","acceptedAnswer":{"@type":"Answer","text":"FDs are usually cumulative (interest reinvested) or non-cumulative (monthly/quarterly payout). This calculator focuses on cumulative maturity; you can also view periodic interest payout."}},
+        {"@type":"Question","name":"Compounding frequency?","acceptedAnswer":{"@type":"Answer","text":"Banks often compound quarterly for cumulative FDs, but it varies. Choose what your bank applies."}},
+        {"@type":"Question","name":"Premature withdrawal?","acceptedAnswer":{"@type":"Answer","text":"Premature withdrawal can reduce the interest rate and may include a penalty. Use this calculator as an estimate."}},
+        {"@type":"Question","name":"TDS rules?","acceptedAnswer":{"@type":"Answer","text":"TDS may apply if interest exceeds a threshold under your local tax rules. Confirm with your bank/tax advisor."}},
+        {"@type":"Question","name":"NRI FDs?","acceptedAnswer":{"@type":"Answer","text":"NRE/NRO FD rules and taxation can differ. Returns depend on the product type and residency status."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>FD Calculator (Fixed Deposit)</h1>
+        <p>Calculate maturity amount, total interest earned, and FD growth based on compounding frequency.</p>
+        <div class="chips">
+          <span class="chip">🏦 Compounding options</span>
+          <span class="chip">💰 Maturity amount</span>
+          <span class="chip">📈 Interest earned</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-fd-calculator">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="FD inputs">
+              <div class="panel-title">
+                <h2>FD details</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="fd_principal">Deposit amount (Principal)</label>
+                  <input id="fd_principal" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 100000">
+                  <p class="help">Amount you invest in the FD.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fd_rate">Interest rate (annual)</label>
+                  <input id="fd_rate" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 7.25">
+                  <p class="help">Example: 7.25 means 7.25% per year.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fd_tenure">Tenure</label>
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                    <input id="fd_tenure" class="input" type="number" inputmode="decimal" min="0" step="0.25" placeholder="e.g., 3" style="flex:1 1 180px;min-width:0;">
+                    <select id="fd_tenure_unit" class="input" style="flex:0 0 160px;max-width:160px;">
+                      <option value="years" selected>Years</option>
+                      <option value="months">Months</option>
+                      <option value="days">Days</option>
+                    </select>
+                  </div>
+                  <p class="help">Use the unit that matches your FD term.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fd_compound">Compounding frequency</label>
+                  <select id="fd_compound" class="input">
+                    <option value="12">Monthly</option>
+                    <option value="4" selected>Quarterly</option>
+                    <option value="2">Half-yearly</option>
+                    <option value="1">Annually</option>
+                    <option value="0">Simple interest (no compounding)</option>
+                  </select>
+                  <p class="help">Cumulative FDs often compound quarterly.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fd_payout">Interest option</label>
+                  <select id="fd_payout" class="input">
+                    <option value="cumulative" selected>Cumulative (reinvest interest)</option>
+                    <option value="payout">Periodic payout (interest only)</option>
+                  </select>
+                  <p class="help">Periodic payout shows interest per period (principal stays same).</p>
+                </div>
+
+                <div class="field">
+                  <label for="fd_round">Round output</label>
+                  <select id="fd_round" class="input">
+                    <option value="0" selected>No rounding</option>
+                    <option value="1">Round to ₹1</option>
+                    <option value="10">Nearest ₹10</option>
+                    <option value="100">Nearest ₹100</option>
+                  </select>
+                  <p class="help">Optional rounding for presentation.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fd_show">Show schedule</label>
+                  <select id="fd_show" class="input">
+                    <option value="60" selected>Up to 60 rows</option>
+                    <option value="120">Up to 120 rows</option>
+                    <option value="9999">Full schedule</option>
+                  </select>
+                  <p class="help">Long schedules can slow mobile.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fd_inflation">Inflation (optional)</label>
+                  <input id="fd_inflation" class="input" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g., 6">
+                  <p class="help">Used to show estimated real return (approx).</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="fd_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="fd_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="fd_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note mini">
+                Compound formula: <strong>A = P × (1 + r/n)^(n×t)</strong> (t in years, r annual rate).
+                Simple interest: <strong>A = P × (1 + r×t)</strong>.
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="FD results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Maturity amount</p>
+                <p class="v" id="fd_out_maturity">—</p>
+                <p class="mini" id="fd_out_maturity_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Interest earned</p>
+                <p class="v" id="fd_out_interest">—</p>
+                <div class="bar"><span id="fd_bar_interest"></span></div>
+                <p class="mini" id="fd_out_split">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Periodic interest (if payout)</p>
+                <p class="v" id="fd_out_periodic">—</p>
+                <p class="mini" id="fd_out_periodic_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Real return (approx)</p>
+                <p class="v" id="fd_out_real">—</p>
+                <p class="mini" id="fd_out_real_note">Add inflation to estimate “today’s value”.</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="fd_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Growth Schedule</h2>
+          <p class="mini" style="margin:0 0 10px;">Shows value growth each compounding period (or each year for simple interest).</p>
+
+          <div class="table-wrap">
+            <table aria-label="FD growth schedule table">
+              <thead>
+                <tr>
+                  <th>Period</th>
+                  <th>Start Amount</th>
+                  <th>Interest</th>
+                  <th>End Amount</th>
+                </tr>
+              </thead>
+              <tbody id="fd_table">
+                <tr><td colspan="4" class="mini">Click <strong>Calculate</strong> to generate schedule.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          A <strong>Fixed Deposit (FD)</strong> is a low-risk investment where you deposit a lump sum for a fixed tenure
+          at a fixed interest rate. Your final amount depends on the <strong>rate</strong>, <strong>tenure</strong>,
+          and how often interest is <strong>compounded</strong>.
+        </p>
+        <p class="mini">
+          Tip: For cumulative FDs, compounding frequency matters. For non-cumulative FDs, you may receive interest monthly/quarterly while principal remains unchanged.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>A = P × (1 + r/n)^(n×t)
+Simple interest: A = P × (1 + r×t)</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Interest payout options?</strong></summary><p>Cumulative (reinvest) or periodic payouts (monthly/quarterly interest).</p></details>
+        <details class="card"><summary><strong>TDS rules?</strong></summary><p>TDS may apply based on local tax laws and your annual interest amount.</p></details>
+        <details class="card"><summary><strong>Premature withdrawal?</strong></summary><p>Premature withdrawal can reduce interest rate and may include penalties.</p></details>
+        <details class="card"><summary><strong>Compounding frequency?</strong></summary><p>Often quarterly for cumulative FDs, but depends on bank product terms.</p></details>
+        <details class="card"><summary><strong>NRI FDs?</strong></summary><p>NRE/NRO products may have different taxation/withdrawal rules.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="sip-calculator.html"><h4>SIP Calculator</h4><p>Estimate SIP investment growth.</p></a>
+          <a class="card" href="rd-calculator.html"><h4>RD Calculator</h4><p>Recurring deposit maturity estimation.</p></a>
+          <a class="card" href="compound-interest-calculator.html"><h4>Compound Interest Calculator</h4><p>Calculate compounding growth.</p></a>
+          <a class="card" href="simple-interest-calculator.html"><h4>Simple Interest Calculator</h4><p>Compute simple interest quickly.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const fmt0 = (n)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:0}).format(n) : '—');
+      const money = (n)=> '₹ ' + fmt0(n);
+
+      const PEl = $('fd_principal');
+      const rateEl = $('fd_rate');
+      const tenureEl = $('fd_tenure');
+      const unitEl = $('fd_tenure_unit');
+      const nEl = $('fd_compound'); // 12/4/2/1 or 0 for simple
+      const payoutEl = $('fd_payout');
+      const roundEl = $('fd_round');
+      const showEl = $('fd_show');
+      const inflEl = $('fd_inflation');
+
+      const outM = $('fd_out_maturity');
+      const outMNote = $('fd_out_maturity_note');
+      const outI = $('fd_out_interest');
+      const outSplit = $('fd_out_split');
+      const barI = $('fd_bar_interest');
+      const outPer = $('fd_out_periodic');
+      const outPerNote = $('fd_out_periodic_note');
+      const outReal = $('fd_out_real');
+      const outRealNote = $('fd_out_real_note');
+      const outSummary = $('fd_out_summary');
+      const tbody = $('fd_table');
+
+      function roundTo(x, step){
+        step = parseInt(step,10) || 0;
+        if(step === 0) return x;
+        return Math.round(x/step)*step;
+      }
+
+      function toYears(value, unit){
+        const v = parseFloat(value);
+        if(!isFinite(v) || v<=0) return NaN;
+        if(unit === 'years') return v;
+        if(unit === 'months') return v/12;
+        if(unit === 'days') return v/365; // approximation
+        return v;
+      }
+
+      function calc(){
+        const P = parseFloat(PEl.value);
+        const rateA = parseFloat(rateEl.value);
+        const tYears = toYears(tenureEl.value, unitEl.value);
+        const comp = parseInt(nEl.value, 10); // 12/4/2/1 or 0
+        const payout = payoutEl.value; // cumulative/payout
+        const roundStep = parseInt(roundEl.value, 10) || 0;
+        const showMax = parseInt(showEl.value, 10) || 60;
+        const inflation = parseFloat(inflEl.value);
+
+        if(!isFinite(P) || P<=0){
+          outM.textContent='—'; outMNote.textContent='Enter valid deposit amount.';
+          tbody.innerHTML = '<tr><td colspan="4" class="mini">Enter valid inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+        if(!isFinite(rateA) || rateA<0){
+          outM.textContent='—'; outMNote.textContent='Enter valid interest rate.';
+          tbody.innerHTML = '<tr><td colspan="4" class="mini">Enter valid inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+        if(!isFinite(tYears) || tYears<=0){
+          outM.textContent='—'; outMNote.textContent='Enter valid tenure.';
+          tbody.innerHTML = '<tr><td colspan="4" class="mini">Enter valid inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+
+        const r = rateA/100;
+
+        // Compute maturity
+        let A;
+        if(comp === 0){
+          // simple interest
+          A = P * (1 + r * tYears);
+        } else {
+          A = P * Math.pow(1 + r/comp, comp * tYears);
+        }
+
+        A = roundTo(A, roundStep);
+        const interest = roundTo((A - P), roundStep);
+
+        outM.textContent = money(A);
+        outMNote.textContent = `Principal: ₹ ${fmt0(P)} • Rate: ${rateA}% p.a. • Tenure: ${tYears.toFixed(3)} years`;
+
+        outI.textContent = money(interest);
+        const interestPct = A>0 ? (interest/A)*100 : 0;
+        barI.style.width = Math.max(0, Math.min(100, interestPct)).toFixed(1) + '%';
+        barI.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+        outSplit.textContent = `Interest share ≈ ${interestPct.toFixed(1)}% of maturity`;
+
+        // Periodic payout: interest per period on principal (approx, common display)
+        if(payout === 'payout'){
+          if(comp === 0){
+            const yearly = P * r;
+            outPer.textContent = money(roundTo(yearly, roundStep));
+            outPerNote.textContent = 'Simple interest: approx interest per year (principal unchanged).';
+          } else {
+            const per = P * (r/comp);
+            outPer.textContent = money(roundTo(per, roundStep));
+            const label = comp===12?'month':(comp===4?'quarter':(comp===2?'half-year':'year'));
+            outPerNote.textContent = `Approx interest per ${label} (principal unchanged).`;
+          }
+        } else {
+          outPer.textContent = '—';
+          outPerNote.textContent = 'Cumulative FD reinvests interest into the deposit.';
+        }
+
+        // Real return approx (deflate maturity using inflation)
+        if(isFinite(inflation) && inflation>=0){
+          const inf = inflation/100;
+          const realFactor = Math.pow(1+inf, tYears);
+          const realValue = roundTo(A / (realFactor || 1), roundStep);
+          outReal.textContent = money(realValue);
+          outRealNote.textContent = `Approx “today’s value” at ${inflation}% inflation.`;
+        } else {
+          outReal.textContent = '—';
+          outRealNote.textContent = 'Add inflation to estimate “today’s value”.';
+        }
+
+        // Schedule build
+        const rows = [];
+        if(comp === 0){
+          // yearly schedule
+          const years = Math.max(1, Math.ceil(tYears));
+          let amount = P;
+          for(let y=1; y<=years; y++){
+            const start = amount;
+            const yrLen = (y<years) ? 1 : (tYears - (years-1)); // last partial year
+            const intr = start * r * (yrLen>0?yrLen:0);
+            const end = start + intr;
+            amount = end;
+
+            rows.push(`
+              <tr>
+                <td>Year ${y}${(y===years && yrLen!==1)?` (${(yrLen*12).toFixed(1)} months)`:''}</td>
+                <td>${money(roundTo(start, roundStep))}</td>
+                <td>${money(roundTo(intr, roundStep))}</td>
+                <td>${money(roundTo(end, roundStep))}</td>
+              </tr>
+            `);
+
+            if(y===showMax && years>showMax){
+              rows.push(`<tr><td colspan="4" class="mini">Schedule truncated for performance (showing first ${showMax} rows).</td></tr>`);
+              break;
+            }
+          }
+        } else {
+          const totalPeriods = Math.max(1, Math.round(comp * tYears));
+          let amount = P;
+          for(let p=1; p<=totalPeriods; p++){
+            const start = amount;
+            const intr = start * (r/comp);
+            let end = start + intr;
+
+            // For periodic payout option, principal stays same (we show payout)
+            if(payout === 'payout'){
+              end = start; // balance unchanged
+            } else {
+              amount = end;
+            }
+
+            const label = comp===12?'Month':(comp===4?'Quarter':(comp===2?'Half-year':'Year'));
+            rows.push(`
+              <tr>
+                <td>${label} ${p}</td>
+                <td>${money(roundTo(start, roundStep))}</td>
+                <td>${money(roundTo(intr, roundStep))}</td>
+                <td>${money(roundTo(end, roundStep))}</td>
+              </tr>
+            `);
+
+            if(p===showMax && totalPeriods>showMax){
+              rows.push(`<tr><td colspan="4" class="mini">Schedule truncated for performance (showing first ${showMax} rows).</td></tr>`);
+              break;
+            }
+          }
+        }
+
+        tbody.innerHTML = rows.join('') || '<tr><td colspan="4" class="mini">No schedule generated.</td></tr>';
+
+        const compLabel =
+          (comp===0?'Simple interest':
+            comp===12?'Monthly':
+            comp===4?'Quarterly':
+            comp===2?'Half-yearly':'Annual');
+
+        const tenureLabel =
+          unitEl.value === 'years' ? `${parseFloat(tenureEl.value)} years` :
+          unitEl.value === 'months' ? `${parseFloat(tenureEl.value)} months` :
+          `${parseFloat(tenureEl.value)} days`;
+
+        outSummary.textContent =
+          `FD ₹${fmt0(P)} • Rate ${rateA}% • Tenure ${tenureLabel} • ${compLabel} • Maturity ₹${fmt0(A)} • Interest ₹${fmt0(interest)}.`;
+      }
+
+      $('fd_calc_btn').addEventListener('click', calc);
+
+      $('fd_example_btn').addEventListener('click', ()=>{
+        PEl.value = '100000';
+        rateEl.value = '7.25';
+        tenureEl.value = '3';
+        unitEl.value = 'years';
+        nEl.value = '4';
+        payoutEl.value = 'cumulative';
+        roundEl.value = '0';
+        showEl.value = '60';
+        inflEl.value = '6';
+        calc();
+      });
+
+      $('fd_reset_btn').addEventListener('click', ()=>{
+        [PEl,rateEl,tenureEl,inflEl].forEach(el=>el.value='');
+        unitEl.value='years';
+        nEl.value='4';
+        payoutEl.value='cumulative';
+        roundEl.value='0';
+        showEl.value='60';
+
+        outM.textContent='—';
+        outMNote.textContent='—';
+        outI.textContent='—';
+        outSplit.textContent='—';
+        outPer.textContent='—';
+        outPerNote.textContent='—';
+        outReal.textContent='—';
+        outRealNote.textContent='Add inflation to estimate “today’s value”.';
+        outSummary.textContent='Enter details to see a clean summary.';
+        barI.style.width='0%';
+        tbody.innerHTML = '<tr><td colspan="4" class="mini">Click <strong>Calculate</strong> to generate schedule.</td></tr>';
+      });
+
+      [PEl,rateEl,tenureEl,unitEl,nEl,payoutEl,roundEl,showEl,inflEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(PEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(PEl.value) calc(); });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Recurring Deposit (RD) Calculator + Interest & Maturity | CalculatorSolution</title>
+  <meta name="description" content="Free RD Calculator: enter monthly deposit, interest rate and tenure to calculate total investment, interest earned and maturity amount — with month-wise schedule.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/rd-calculator.html">
+
+  <meta property="og:title" content="Recurring Deposit (RD) Calculator">
+  <meta property="og:description" content="Calculate RD maturity amount, total deposits and interest earned with a month-wise schedule.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (UI/UX responsive upgrade ONLY — no JS logic changed) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    a{color:inherit}
+    :focus-visible{outline:3px solid rgba(59,130,246,.45);outline-offset:2px;border-radius:10px}
+
+    /* Layout */
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+    main.wrap{padding-bottom:18px}
+    article{padding-bottom:10px}
+
+    /* Header */
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;letter-spacing:-.01em}
+    .brand-logo{border-radius:10px}
+
+    /* Hero */
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{margin:0 0 6px 0;font-size:clamp(1.35rem,2.4vw,1.85rem);letter-spacing:-.02em;line-height:1.15}
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      white-space:nowrap;
+    }
+
+    /* Calculator shell */
+    .calc-shell{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;align-items:start;margin-top:14px}
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+    }
+    .panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem}
+
+    /* Forms */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      width:100%;
+      min-height:44px; /* touch target */
+    }
+    select.input{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#64748b 50%),linear-gradient(135deg,#64748b 50%,transparent 50%),linear-gradient(to right,transparent,transparent);
+      background-position:calc(100% - 18px) calc(1em + 2px),calc(100% - 13px) calc(1em + 2px),calc(100% - 2.5em) .5em;
+      background-size:5px 5px,5px 5px,1px 1.8em;
+      background-repeat:no-repeat;
+      padding-right:38px;
+    }
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    /* Buttons */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .btn-ghost:hover{box-shadow:0 10px 22px rgba(2,6,23,.06)}
+
+    /* Sticky results */
+    .sticky{position:sticky;top:82px}
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92))}
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{
+      margin:4px 0 0;
+      font-size:clamp(1.25rem,2.4vw,1.55rem);
+      font-weight:1000;letter-spacing:-.02em;
+      overflow-wrap:anywhere;
+    }
+    .mini{font-size:.86rem;color:#64748b}
+
+    .bar{height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px}
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* Table */
+    .table-wrap{
+      overflow:auto;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05);
+      -webkit-overflow-scrolling:touch;
+    }
+    table{width:100%;border-collapse:collapse;min-width:920px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem;white-space:nowrap}
+    th{background:#f8fafc;font-weight:1000;position:sticky;top:0;z-index:1}
+    tr:last-child td{border-bottom:0}
+
+    /* Note + FAQ cards */
+    .note{
+      border:1px dashed #cbd5e1;border-radius:14px;padding:12px;background:rgba(255,255,255,.7);
+      margin-top:10px
+    }
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 10px 24px rgba(8,13,26,.05);padding:12px}
+    details.card{padding:0;overflow:hidden}
+    details.card summary{cursor:pointer;padding:12px;list-style:none}
+    details.card summary::-webkit-details-marker{display:none}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Related grid safety (works even if global CSS missing) */
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+      margin-top:10px;
+    }
+    .cards-grid .card{display:block;text-decoration:none}
+    .cards-grid h4{margin:0 0 6px;font-size:1rem}
+    .cards-grid p{margin:0;color:#475569}
+
+    /* Code blocks / pre */
+    pre{
+      margin:10px 0 0;
+      padding:12px;
+      background:rgba(255,255,255,.85);
+      border:1px solid #e2e8f0;
+      border-radius:14px;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+
+    /* Footer */
+    .site-footer .wrap{padding:18px 0;color:#64748b}
+    .site-footer a{color:#475569;text-decoration:none}
+    .site-footer a:hover{text-decoration:underline}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static}
+      table{min-width:760px}
+      .cards-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media (max-width: 640px){
+      .wrap{padding:0 14px}
+      .hero{padding:18px 14px;border-radius:16px}
+      .grid-2{grid-template-columns:1fr}
+      .actions{gap:8px}
+      .btn{flex:1}
+      .chip{font-size:.84rem}
+      table{min-width:680px}
+      .cards-grid{grid-template-columns:1fr}
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto !important}
+      .btn,.card{transition:none !important}
+      .btn:hover,.card:hover{transform:none !important}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Recurring Deposit (RD) Calculator",
+      "url":"https://calculatorsolution.com/rd-calculator.html",
+      "description":"Calculate RD maturity amount, total deposits and interest earned."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Recurring Deposit (RD) Calculator","item":"https://calculatorsolution.com/rd-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate RD maturity amount",
+      "step":[
+        {"@type":"HowToStep","name":"Enter monthly deposit","text":"Add how much you deposit every month in your RD."},
+        {"@type":"HowToStep","name":"Enter interest rate and tenure","text":"RD interest rate is annual; tenure can be in months or years."},
+        {"@type":"HowToStep","name":"Calculate maturity","text":"See maturity amount, total deposits, interest earned and the month-wise growth table."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Minimum tenure?","acceptedAnswer":{"@type":"Answer","text":"It depends on the bank, but many RDs start from 6 months and go up to 10 years."}},
+        {"@type":"Question","name":"Tax implications?","acceptedAnswer":{"@type":"Answer","text":"RD interest may be taxable as per your slab. Banks may deduct TDS if applicable."}},
+        {"@type":"Question","name":"Premature withdrawal?","acceptedAnswer":{"@type":"Answer","text":"Many banks allow premature closure with a penalty or reduced interest rate."}},
+        {"@type":"Question","name":"Interest rate changes?","acceptedAnswer":{"@type":"Answer","text":"Your RD is generally locked at the booked rate. New RDs opened later may have different rates."}},
+        {"@type":"Question","name":"NRI eligibility?","acceptedAnswer":{"@type":"Answer","text":"Some banks allow NRIs to open RDs; eligibility depends on bank policy and account type."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Recurring Deposit (RD) Calculator</h1>
+        <p>Calculate RD maturity amount, total deposits and interest earned — with a month-wise growth schedule.</p>
+        <div class="chips">
+          <span class="chip">🏦 Monthly RD deposits</span>
+          <span class="chip">📈 Interest earned</span>
+          <span class="chip">🧾 Month-wise schedule</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-rd-calculator">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="RD inputs">
+              <div class="panel-title">
+                <h2>RD details</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="rd_monthly">Monthly deposit</label>
+                  <input id="rd_monthly" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="e.g., 5000">
+                  <p class="help">Deposit made every month (installment).</p>
+                </div>
+
+                <div class="field">
+                  <label for="rd_rate">Interest rate (annual)</label>
+                  <input id="rd_rate" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 6.75">
+                  <p class="help">Example: 6.75 means 6.75% per year.</p>
+                </div>
+
+                <div class="field">
+                  <label for="rd_tenure">Tenure</label>
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                    <input id="rd_tenure" class="input" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 24" style="flex:1;min-width:160px;">
+                    <select id="rd_tenure_unit" class="input" style="flex:0 0 160px;min-width:160px;">
+                      <option value="months" selected>months</option>
+                      <option value="years">years</option>
+                    </select>
+                  </div>
+                  <p class="help">Most RDs are 6–120 months depending on bank.</p>
+                </div>
+
+                <div class="field">
+                  <label for="rd_compound">Compounding</label>
+                  <select id="rd_compound" class="input">
+                    <option value="quarterly" selected>Quarterly (common)</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="yearly">Yearly</option>
+                  </select>
+                  <p class="help">Banks often compound quarterly; confirm your scheme.</p>
+                </div>
+
+                <div class="field">
+                  <label for="rd_round">Round maturity</label>
+                  <select id="rd_round" class="input">
+                    <option value="0" selected>No rounding</option>
+                    <option value="1">Nearest ₹1</option>
+                    <option value="10">Nearest ₹10</option>
+                    <option value="100">Nearest ₹100</option>
+                  </select>
+                  <p class="help">Optional rounding for easy reading.</p>
+                </div>
+
+                <div class="field">
+                  <label for="rd_show">Show schedule</label>
+                  <select id="rd_show" class="input">
+                    <option value="120" selected>First 120 months</option>
+                    <option value="240">First 240 months</option>
+                    <option value="9999">Full schedule</option>
+                  </select>
+                  <p class="help">Big schedules may slow mobile devices.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="rd_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="rd_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="rd_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note mini">
+                We compute maturity by simulating month-by-month deposits and applying compounding at the selected frequency.
+                This matches how RD value builds over time more accurately than a single “closed form” approximation.
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="RD results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Maturity amount</p>
+                <p class="v" id="rd_out_maturity">—</p>
+                <p class="mini" id="rd_out_maturity_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Total deposits</p>
+                <p class="v" id="rd_out_deposits">—</p>
+                <p class="mini">Monthly deposit × number of months</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Interest earned</p>
+                <p class="v" id="rd_out_interest">—</p>
+                <div class="bar"><span id="rd_bar_interest"></span></div>
+                <p class="mini" id="rd_out_split">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Effective return (approx)</p>
+                <p class="v" id="rd_out_xirr">—</p>
+                <p class="mini" id="rd_out_xirr_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="rd_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Month-wise Schedule</h2>
+          <p class="mini" style="margin:0 0 10px;">Deposit every month and watch balance grow with interest compounding.</p>
+
+          <div class="table-wrap">
+            <table aria-label="RD month-wise table">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Deposit</th>
+                  <th>Interest</th>
+                  <th>Total Deposits</th>
+                  <th>Balance</th>
+                </tr>
+              </thead>
+              <tbody id="rd_table">
+                <tr><td colspan="5" class="mini">Click <strong>Calculate</strong> to generate the schedule.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          A <strong>Recurring Deposit (RD)</strong> is a savings option where you deposit a fixed amount every month for a fixed tenure.
+          The bank pays interest on each deposit from the date it is deposited until maturity. Your final
+          <strong>maturity amount</strong> equals <strong>total deposits + interest earned</strong>.
+        </p>
+        <p class="mini">
+          Tip: Longer tenure and higher interest rate increase maturity. If your bank compounds quarterly, keep compounding as <strong>Quarterly</strong> for best accuracy.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula (concept)</h3>
+        <pre>Balance grows with each monthly deposit.
+At compounding points, interest is added to balance:
+Interest = Balance × (annual_rate/100) × (days/365)  (simplified)
+This calculator simulates month-by-month with chosen compounding frequency.</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Minimum tenure?</strong></summary><p>Depends on bank, commonly 6 months to 10 years.</p></details>
+        <details class="card"><summary><strong>Tax implications?</strong></summary><p>RD interest may be taxable; TDS rules may apply.</p></details>
+        <details class="card"><summary><strong>Premature withdrawal?</strong></summary><p>Many banks allow closure early with reduced interest or penalty.</p></details>
+        <details class="card"><summary><strong>Interest rate changes?</strong></summary><p>Your RD usually continues at the booked rate; new RDs may have different rates.</p></details>
+        <details class="card"><summary><strong>NRI eligibility?</strong></summary><p>Depends on bank policy and NRE/NRO account rules.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="fd-calculator.html"><h4>FD Calculator</h4><p>Calculate fixed deposit maturity amount.</p></a>
+          <a class="card" href="sip-calculator.html"><h4>SIP Calculator</h4><p>Estimate mutual fund SIP returns.</p></a>
+          <a class="card" href="compound-interest-calculator.html"><h4>Compound Interest Calculator</h4><p>Compute compound growth over time.</p></a>
+          <a class="card" href="gst-calculator-india.html"><h4>GST Calculator (India)</h4><p>Calculate GST amount and final price.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;line-height:1.6;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- ✅ JS LOGIC UNCHANGED BELOW -->
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const fmt0 = (n)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:0}).format(n) : '—');
+      const fmt2 = (n)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:2}).format(n) : '—');
+      const money = (n)=> '₹ ' + fmt0(n);
+
+      const monthlyEl = $('rd_monthly');
+      const rateEl = $('rd_rate');
+      const tenureEl = $('rd_tenure');
+      const unitEl = $('rd_tenure_unit');
+      const compEl = $('rd_compound');
+      const roundEl = $('rd_round');
+      const showEl = $('rd_show');
+
+      const outM = $('rd_out_maturity');
+      const outMNote = $('rd_out_maturity_note');
+      const outD = $('rd_out_deposits');
+      const outI = $('rd_out_interest');
+      const outSplit = $('rd_out_split');
+      const outXirr = $('rd_out_xirr');
+      const outXirrNote = $('rd_out_xirr_note');
+      const outSummary = $('rd_out_summary');
+      const barI = $('rd_bar_interest');
+      const tbody = $('rd_table');
+
+      function roundTo(x, step){
+        step = parseInt(step,10) || 0;
+        if(!step) return x;
+        return Math.round(x/step)*step;
+      }
+
+      // Approx XIRR (monthly cashflows) using Newton-Raphson
+      // cashflows: array of {tYears, amount} with deposits negative, maturity positive
+      function xirr(cashflows){
+        if(!cashflows || cashflows.length < 2) return NaN;
+
+        const f = (rate)=>{
+          let s = 0;
+          for(const c of cashflows){
+            s += c.amount / Math.pow(1+rate, c.tYears);
+          }
+          return s;
+        };
+        const df = (rate)=>{
+          let s = 0;
+          for(const c of cashflows){
+            s += (-c.tYears) * c.amount / Math.pow(1+rate, c.tYears + 1);
+          }
+          return s;
+        };
+
+        let r = 0.08; // initial guess 8%
+        for(let i=0;i<50;i++){
+          const y = f(r);
+          const dy = df(r);
+          if(!isFinite(y) || !isFinite(dy) || Math.abs(dy) < 1e-12) break;
+          const nr = r - (y/dy);
+          if(!isFinite(nr)) break;
+          if(Math.abs(nr - r) < 1e-10) { r = nr; break; }
+          r = nr;
+          if(r <= -0.9999) { r = 0.0001; }
+        }
+        return r;
+      }
+
+      function calc(){
+        const monthly = parseFloat(monthlyEl.value);
+        const rateA = parseFloat(rateEl.value);
+        const t = parseFloat(tenureEl.value);
+        const unit = unitEl.value;
+        const comp = compEl.value;
+        const roundStep = parseInt(roundEl.value,10) || 0;
+        const showMax = parseInt(showEl.value,10) || 120;
+
+        if(!isFinite(monthly) || monthly<=0){
+          outM.textContent='—'; outMNote.textContent='Enter valid monthly deposit.';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Enter valid inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+        if(!isFinite(rateA) || rateA<=0){
+          outM.textContent='—'; outMNote.textContent='Enter valid interest rate.';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Enter valid inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+        if(!isFinite(t) || t<=0){
+          outM.textContent='—'; outMNote.textContent='Enter valid tenure.';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Enter valid inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+
+        const months = Math.max(1, Math.round(unit === 'years' ? (t*12) : t));
+        const annualRate = rateA/100;
+
+        // Compounding frequency per year
+        const compPerYear = (comp === 'monthly') ? 12 : (comp === 'quarterly') ? 4 : 1;
+        const compEveryMonths = 12 / compPerYear;
+
+        // We simulate monthly deposits. Interest is accumulated and credited on compounding months.
+        let balance = 0;
+        let totalDeposits = 0;
+        let totalInterest = 0;
+
+        let accruedInterest = 0;
+
+        const rows = [];
+
+        // For XIRR: deposits are negative cashflows, maturity positive
+        const cashflows = [];
+
+        for(let m=1; m<=months; m++){
+          // deposit at start of month (common assumption)
+          balance += monthly;
+          totalDeposits += monthly;
+
+          // monthly interest accrual on current balance (simplified monthly accrual)
+          const monthlyRate = annualRate / 12;
+          const interestThisMonth = balance * monthlyRate;
+
+          accruedInterest += interestThisMonth;
+
+          // credit interest at compounding points
+          let credited = 0;
+          if(m % compEveryMonths === 0 || m === months){
+            credited = accruedInterest;
+            balance += accruedInterest;
+            totalInterest += accruedInterest;
+            accruedInterest = 0;
+          }
+
+          // table row: show interest accrued this month (not only credited)
+          rows.push({
+            month: m,
+            deposit: monthly,
+            interest: interestThisMonth,
+            totalDeposits,
+            balance
+          });
+
+          // cashflow time in years (approx)
+          cashflows.push({ tYears: (m-1)/12, amount: -monthly });
+
+          // cap schedule for performance
+          if(m === showMax && months > showMax && showMax !== 9999){
+            rows.push({ truncated: true, month: m });
+            break;
+          }
+        }
+
+        // maturity cashflow at end
+        cashflows.push({ tYears: months/12, amount: balance });
+
+        const maturity = roundTo(balance, roundStep);
+        const depositsRounded = roundTo(totalDeposits, 0);
+        const interestEarned = roundTo(maturity - depositsRounded, 0);
+
+        outM.textContent = money(maturity);
+        outMNote.textContent = `Tenure: ${months} months • Rate: ${rateA}% p.a. • Compounding: ${comp}`;
+        outD.textContent = money(depositsRounded);
+        outI.textContent = money(interestEarned);
+
+        const interestPct = maturity>0 ? (interestEarned/maturity)*100 : 0;
+        barI.style.width = Math.max(0, Math.min(100, interestPct)).toFixed(1) + '%';
+        barI.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+        outSplit.textContent = `Interest share ≈ ${interestPct.toFixed(1)}% of maturity`;
+
+        // XIRR approximation
+        const irr = xirr(cashflows);
+        if(isFinite(irr)){
+          outXirr.textContent = (irr*100).toFixed(2) + '%';
+          outXirrNote.textContent = 'Approx effective annual return based on cashflows.';
+        } else {
+          outXirr.textContent = '—';
+          outXirrNote.textContent = 'Could not compute effective return.';
+        }
+
+        outSummary.textContent =
+          `Monthly ₹${fmt0(monthly)} for ${months} months → Deposits ₹${fmt0(depositsRounded)} • Interest ₹${fmt0(interestEarned)} • Maturity ₹${fmt0(maturity)}.`;
+
+        // Render schedule
+        const html = [];
+        for(const r of rows){
+          if(r.truncated){
+            html.push(`<tr><td colspan="5" class="mini">Schedule truncated for performance (showing first ${showMax} months). Choose “Full schedule” if needed.</td></tr>`);
+            break;
+          }
+          html.push(`
+            <tr>
+              <td>${r.month}</td>
+              <td>${money(r.deposit)}</td>
+              <td>${money(r.interest)}</td>
+              <td>${money(r.totalDeposits)}</td>
+              <td>${money(r.balance)}</td>
+            </tr>
+          `);
+        }
+        tbody.innerHTML = html.join('');
+      }
+
+      $('rd_calc_btn').addEventListener('click', calc);
+
+      $('rd_example_btn').addEventListener('click', ()=>{
+        monthlyEl.value = '5000';
+        rateEl.value = '6.75';
+        tenureEl.value = '24';
+        unitEl.value = 'months';
+        compEl.value = 'quarterly';
+        roundEl.value = '0';
+        showEl.value = '120';
+        calc();
+      });
+
+      $('rd_reset_btn').addEventListener('click', ()=>{
+        [monthlyEl, rateEl, tenureEl].forEach(el=>el.value='');
+        unitEl.value='months';
+        compEl.value='quarterly';
+        roundEl.value='0';
+        showEl.value='120';
+        outM.textContent='—';
+        outMNote.textContent='—';
+        outD.textContent='—';
+        outI.textContent='—';
+        outSplit.textContent='—';
+        outXirr.textContent='—';
+        outXirrNote.textContent='—';
+        outSummary.textContent='Enter details to see a clean summary.';
+        barI.style.width='0%';
+        tbody.innerHTML = '<tr><td colspan="5" class="mini">Click <strong>Calculate</strong> to generate the schedule.</td></tr>';
+      });
+
+      [monthlyEl, rateEl, tenureEl, unitEl, compEl, roundEl, showEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(monthlyEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(monthlyEl.value) calc(); });
+      });
+    })();
+  </script>
+</body>
+</html>

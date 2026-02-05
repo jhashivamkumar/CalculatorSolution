@@ -1,0 +1,891 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Savings Goal Calculator (Monthly Savings + Lump Sum) | CalculatorSolution</title>
+  <meta name="description" content="Free Savings Goal Calculator: enter target amount, timeline, current savings and expected return to calculate monthly contribution, lump sum needed, and growth schedule.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/savings-goal-calculator.html">
+
+  <meta property="og:title" content="Savings Goal Calculator">
+  <meta property="og:description" content="Plan monthly savings to reach a goal using expected returns. Calculate monthly contribution, lump sum, and a growth schedule.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (RESPONSIVE IMPROVEMENTS ONLY — no JS logic changed) -->
+  <style>
+    :root{
+      --wrap:1100px;
+      --pad:18px;
+      --radius-1:12px;
+      --radius-2:16px;
+      --radius-3:18px;
+      --border:#e2e8f0;
+      --muted:#64748b;
+      --text:#0f172a;
+      --bg:#f8fafc;
+      --focus:rgba(59,130,246,.12);
+    }
+
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:var(--text);
+      line-height:1.6;
+      min-height:100vh;
+
+      /* ✅ Better mobile behavior (prevents horizontal scroll due to tables, long pre text etc.) */
+      overflow-x:hidden;
+      text-rendering:optimizeLegibility;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    *{box-sizing:border-box}
+
+    .wrap{
+      max-width:var(--wrap);
+      margin:0 auto;
+      padding:0 var(--pad);
+    }
+
+    /* ✅ Header: better alignment + safe area + tap targets */
+    .site-header{
+      padding:14px 0;
+      border-bottom:1px solid var(--border);
+      background:rgba(255,255,255,.65);
+      backdrop-filter:blur(10px);
+      position:sticky;
+      top:0;
+      z-index:10;
+    }
+    .site-header .wrap{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      min-height:52px;
+      padding-top:env(safe-area-inset-top);
+      padding-bottom:env(safe-area-inset-bottom);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+      min-width:0;
+    }
+    .brand-text{
+      font-weight:900;
+      color:#2563eb;
+      font-size:1.15rem;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .brand-logo{border-radius:10px;flex:0 0 auto}
+
+    /* ✅ Hero: fluid spacing & typography */
+    .hero{
+      margin:18px 0 14px 0;
+      border-radius:var(--radius-3);
+      padding:26px 18px;
+      color:#fff;
+      background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero:before{
+      content:"";
+      position:absolute;
+      inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{
+      margin:0 0 6px 0;
+      font-size:clamp(1.4rem, 2.2vw + 1rem, 2rem);
+      letter-spacing:-.02em;
+      line-height:1.15;
+    }
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+
+    .chips{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;
+      font-size:.88rem;
+      white-space:nowrap;
+    }
+
+    /* ✅ Calculator layout: stronger responsive grid */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px;
+    }
+
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--border);
+      border-radius:var(--radius-2);
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      min-width:0; /* ✅ prevents overflow in grid */
+    }
+
+    .panel-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(37,99,235,.10);
+      color:#1d4ed8;
+      font-weight:900;
+      font-size:.85rem;
+      white-space:nowrap;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      min-width:0;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:0;
+    }
+    .field label{font-weight:900;font-size:.92rem}
+
+    .input{
+      width:100%;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      font-size:1rem;
+      background:#fff;
+      outline:none;
+
+      /* ✅ Better mobile */
+      min-height:44px;
+      -webkit-appearance:none;
+      appearance:none;
+    }
+    select.input{background-image:linear-gradient(45deg, transparent 50%, #64748b 50%),linear-gradient(135deg, #64748b 50%, transparent 50%);background-position:calc(100% - 18px) calc(50% - 2px),calc(100% - 12px) calc(50% - 2px);background-size:6px 6px,6px 6px;background-repeat:no-repeat;padding-right:36px}
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px var(--focus)}
+    .help{margin:0;font-size:.86rem;color:var(--muted)}
+
+    /* ✅ Buttons: consistent sizing + full width on small screens */
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:900;
+      border:0;
+      cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff;
+      box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px;
+      white-space:nowrap;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid var(--border);box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .btn:focus-visible,.brand:focus-visible, a:focus-visible, summary:focus-visible{
+      outline:3px solid rgba(59,130,246,.6);
+      outline-offset:3px;
+      border-radius:12px;
+    }
+
+    /* ✅ Sticky results: safer offset with header */
+    .sticky{position:sticky;top:82px}
+
+    /* ✅ Metrics: prevent overflow, better scaling */
+    .metric{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+      min-width:0;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{
+      margin:4px 0 0;
+      font-size:clamp(1.2rem, 2.2vw, 1.55rem);
+      font-weight:1000;
+      letter-spacing:-.02em;
+      word-break:break-word;
+    }
+    .mini{font-size:.86rem;color:var(--muted)}
+    .bar{
+      height:10px;border-radius:999px;background:var(--border);
+      overflow:hidden;margin-top:10px
+    }
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* ✅ Table: improved mobile + less min-width; keep logic intact */
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:920px;
+    }
+    th,td{
+      padding:10px 12px;
+      border-bottom:1px solid var(--border);
+      text-align:left;
+      font-size:.95rem;
+      white-space:nowrap;
+    }
+    th{background:#f8fafc;font-weight:1000;position:sticky;top:0;z-index:1}
+    tr:last-child td{border-bottom:0}
+
+    .note{
+      border:1px dashed #cbd5e1;
+      border-radius:14px;
+      padding:12px;
+      background:rgba(255,255,255,.7);
+      margin-top:10px
+    }
+
+    /* ✅ FAQ cards: nicer spacing on mobile */
+    .card{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:14px;
+      box-shadow:0 10px 24px rgba(8,13,26,.05);
+      padding:12px;
+    }
+    details.card{padding:0;overflow:hidden}
+    details.card summary{
+      cursor:pointer;
+      padding:12px;
+      list-style:none;
+    }
+    details.card summary::-webkit-details-marker{display:none}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* ✅ Content sections: readable spacing */
+    article > section{margin-top:18px}
+    pre{
+      white-space:pre-wrap;
+      word-break:break-word;
+      overflow:auto;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:#fff;
+      padding:12px;
+      box-shadow:0 10px 24px rgba(8,13,26,.04);
+    }
+
+    /* ✅ Footer: better wrapping */
+    .site-footer{
+      margin-top:28px;
+      border-top:1px solid var(--border);
+      background:rgba(255,255,255,.6);
+      backdrop-filter:blur(8px);
+    }
+    .site-footer .wrap{
+      padding-top:18px;
+      padding-bottom:22px;
+      text-align:center;
+    }
+    .site-footer a{white-space:nowrap}
+
+    /* ✅ Breakpoints: tablets */
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static}
+      table{min-width:760px}
+    }
+
+    /* ✅ Breakpoints: mobile */
+    @media (max-width: 640px){
+      :root{--pad:14px}
+      .hero{padding:18px 14px;border-radius:16px}
+      .grid-2{grid-template-columns:1fr}
+      .actions .btn{flex:1 1 auto}
+      .chip{font-size:.84rem}
+      table{min-width:680px}
+    }
+
+    /* ✅ Very small devices */
+    @media (max-width: 380px){
+      .brand-text{font-size:1.05rem}
+      .pill{font-size:.8rem}
+      .btn{padding:10px 12px}
+    }
+
+    /* ✅ Reduced motion accessibility */
+    @media (prefers-reduced-motion: reduce){
+      .btn, .card{transition:none}
+      .btn:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Savings Goal Calculator",
+      "url":"https://calculatorsolution.com/savings-goal-calculator.html",
+      "description":"Calculate monthly savings needed to reach a target amount based on time horizon and expected return."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Savings Goal Calculator","item":"https://calculatorsolution.com/savings-goal-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to plan a savings goal",
+      "step":[
+        {"@type":"HowToStep","name":"Enter your target amount","text":"Add the goal you want to reach in the future."},
+        {"@type":"HowToStep","name":"Set timeline and expected return","text":"Choose how many years/months you have and expected annual return."},
+        {"@type":"HowToStep","name":"Calculate monthly saving","text":"See monthly contribution, lump sum required, and a growth schedule."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Inflation?","acceptedAnswer":{"@type":"Answer","text":"If your goal is years away, inflation can reduce purchasing power. Consider increasing the target amount accordingly."}},
+        {"@type":"Question","name":"Rate assumptions?","acceptedAnswer":{"@type":"Answer","text":"Be conservative. Use a realistic return estimate after fees and taxes."}},
+        {"@type":"Question","name":"Lump sum?","acceptedAnswer":{"@type":"Answer","text":"If you invest once today, the calculator can estimate the lump sum needed to reach your goal."}},
+        {"@type":"Question","name":"Tax-efficient accounts?","acceptedAnswer":{"@type":"Answer","text":"If available, tax-advantaged accounts can improve net returns and help you reach the goal sooner."}},
+        {"@type":"Question","name":"Automate?","acceptedAnswer":{"@type":"Answer","text":"Automating transfers (SIP/standing instruction) improves consistency and makes goals easier to achieve."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Savings Goal Calculator</h1>
+        <p>Calculate monthly savings needed to hit your target — with expected returns, lump sum option, and a clean growth schedule.</p>
+        <div class="chips">
+          <span class="chip">🎯 Target-based planning</span>
+          <span class="chip">📅 Timeline (months/years)</span>
+          <span class="chip">📈 Return-based growth</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-savings-goal">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Savings goal inputs">
+              <div class="panel-title">
+                <h2>Goal details</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="sg_target">Target amount</label>
+                  <input id="sg_target" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 500000">
+                  <p class="help">Your goal value in the future.</p>
+                </div>
+
+                <div class="field">
+                  <label for="sg_current">Current savings (optional)</label>
+                  <input id="sg_current" class="input" type="number" inputmode="numeric" min="0" step="1000" placeholder="e.g., 50000">
+                  <p class="help">Already saved amount (starts compounding too).</p>
+                </div>
+
+                <div class="field">
+                  <label for="sg_years">Time to goal</label>
+                  <div style="display:flex;gap:10px;min-width:0;align-items:center">
+                    <input id="sg_years" class="input" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 3">
+                    <span class="mini" style="flex:0 0 auto;">years</span>
+                  </div>
+                  <p class="help">Converted to months for calculations.</p>
+                </div>
+
+                <div class="field">
+                  <label for="sg_return">Expected return (annual)</label>
+                  <input id="sg_return" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 8">
+                  <p class="help">Example: 8 means 8% per year.</p>
+                </div>
+
+                <div class="field">
+                  <label for="sg_inflation">Inflation (optional)</label>
+                  <input id="sg_inflation" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 6">
+                  <p class="help">If set, shows inflation-adjusted target.</p>
+                </div>
+
+                <div class="field">
+                  <label for="sg_contrib_timing">Contribution timing</label>
+                  <select id="sg_contrib_timing" class="input">
+                    <option value="end" selected>End of month (default)</option>
+                    <option value="start">Start of month (slightly better)</option>
+                  </select>
+                  <p class="help">Start-of-month deposits earn one extra month of growth.</p>
+                </div>
+
+                <div class="field">
+                  <label for="sg_round">Round monthly saving</label>
+                  <select id="sg_round" class="input">
+                    <option value="0" selected>No rounding</option>
+                    <option value="10">Nearest 10</option>
+                    <option value="100">Nearest 100</option>
+                    <option value="500">Nearest 500</option>
+                  </select>
+                  <p class="help">Useful to set a clean monthly target.</p>
+                </div>
+
+                <div class="field">
+                  <label for="sg_show_months">Show schedule</label>
+                  <select id="sg_show_months" class="input">
+                    <option value="60" selected>First 60 months</option>
+                    <option value="120">First 120 months</option>
+                    <option value="9999">Full schedule</option>
+                  </select>
+                  <p class="help">Large tables can slow mobile devices.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="sg_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="sg_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="sg_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note mini">
+                Monthly contribution (PMT) is computed using the future value of an annuity:
+                <strong>FV = PV×(1+r)^n + PMT×[( (1+r)^n − 1 ) / r ]</strong>.
+                This calculator solves for <strong>PMT</strong>.
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Savings goal results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Monthly saving needed</p>
+                <p class="v" id="sg_out_pmt">—</p>
+                <p class="mini" id="sg_out_pmt_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Lump sum needed today (optional)</p>
+                <p class="v" id="sg_out_lumpsum">—</p>
+                <p class="mini">If you invest once today instead of monthly deposits.</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Total contributed</p>
+                <p class="v" id="sg_out_contrib">—</p>
+                <div class="bar"><span id="sg_bar_growth"></span></div>
+                <p class="mini" id="sg_out_growth_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Final value (estimate)</p>
+                <p class="v" id="sg_out_fv">—</p>
+                <p class="mini" id="sg_out_target_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="sg_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Growth Schedule</h2>
+          <p class="mini" style="margin:0 0 10px;">Month-by-month balance growth based on your inputs (assumes constant monthly return).</p>
+
+          <div class="table-wrap">
+            <table aria-label="Savings goal schedule table">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Start Balance</th>
+                  <th>Contribution</th>
+                  <th>Interest Earned</th>
+                  <th>End Balance</th>
+                </tr>
+              </thead>
+              <tbody id="sg_table">
+                <tr><td colspan="5" class="mini">Click <strong>Calculate</strong> to generate the schedule.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          This <strong>Savings Goal Calculator</strong> estimates how much you need to save every month to reach a future target.
+          It considers your <strong>current savings</strong>, <strong>time horizon</strong>, and an <strong>expected rate of return</strong>.
+          It also estimates a <strong>lump sum needed today</strong> if you prefer one-time investing instead of monthly contributions.
+        </p>
+        <p class="mini">
+          Tip: If your goal is long-term, consider adding inflation to see a more realistic target. Use conservative return assumptions after fees/taxes.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>FV = PV×(1+r)^n + PMT×[( (1+r)^n − 1 ) / r]
+PMT = (FV − PV×(1+r)^n) × r / ( (1+r)^n − 1 )
+Lump sum today (PV) = FV / (1+r)^n</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Inflation?</strong></summary><p>If your goal is far away, adjust the target upward for inflation to maintain purchasing power.</p></details>
+        <details class="card"><summary><strong>Rate assumptions?</strong></summary><p>Be conservative. Use realistic net returns after fees and taxes.</p></details>
+        <details class="card"><summary><strong>Lump sum?</strong></summary><p>This page shows the lump sum required today if you invest once instead of monthly.</p></details>
+        <details class="card"><summary><strong>Tax-efficient accounts?</strong></summary><p>Where possible, use tax-advantaged accounts to improve net returns.</p></details>
+        <details class="card"><summary><strong>Automate?</strong></summary><p>Automate transfers (SIP/standing instruction) to stay consistent and reach goals faster.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="sip-calculator.html"><h4>SIP Calculator</h4><p>Estimate future value of monthly SIP investments.</p></a>
+          <a class="card" href="compound-interest-calculator.html"><h4>Compound Interest Calculator</h4><p>Compute compound growth over time.</p></a>
+          <a class="card" href="fd-calculator.html"><h4>FD Calculator</h4><p>Calculate fixed deposit maturity value.</p></a>
+          <a class="card" href="gst-calculator-india.html"><h4>GST Calculator (India)</h4><p>Calculate GST amount and final price.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+      const fmt0 = (n)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:0}).format(n) : '—');
+      const money = (n)=> '₹ ' + fmt0(n);
+
+      const targetEl = $('sg_target');
+      const currentEl = $('sg_current');
+      const yearsEl = $('sg_years');
+      const retEl = $('sg_return');
+      const inflEl = $('sg_inflation');
+      const timingEl = $('sg_contrib_timing');
+      const roundEl = $('sg_round');
+      const showEl = $('sg_show_months');
+
+      const outPmt = $('sg_out_pmt');
+      const outPmtNote = $('sg_out_pmt_note');
+      const outLump = $('sg_out_lumpsum');
+      const outContrib = $('sg_out_contrib');
+      const outGrowthNote = $('sg_out_growth_note');
+      const outFv = $('sg_out_fv');
+      const outTargetNote = $('sg_out_target_note');
+      const outSummary = $('sg_out_summary');
+      const barGrowth = $('sg_bar_growth');
+      const tbody = $('sg_table');
+
+      function roundTo(x, step){
+        step = parseInt(step,10) || 0;
+        if(!step) return x;
+        return Math.round(x/step)*step;
+      }
+
+      function calc(){
+        const FV = parseFloat(targetEl.value);
+        const PV = parseFloat(currentEl.value) || 0;
+        const years = parseFloat(yearsEl.value);
+        const rateA = parseFloat(retEl.value);
+        const inflA = parseFloat(inflEl.value) || 0;
+
+        if(!isFinite(FV) || FV<=0){
+          outPmt.textContent='—';
+          outPmtNote.textContent='Enter a valid target amount.';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Enter valid inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+        if(PV<0 || !isFinite(PV)){
+          outPmt.textContent='—';
+          outPmtNote.textContent='Current savings must be 0 or more.';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+        if(!isFinite(years) || years<=0){
+          outPmt.textContent='—';
+          outPmtNote.textContent='Enter a valid time to goal (years).';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+        if(!isFinite(rateA) || rateA<0){
+          outPmt.textContent='—';
+          outPmtNote.textContent='Enter a valid expected return (0 or higher).';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+
+        const n = Math.max(1, Math.round(years * 12));
+        const r = (rateA/100)/12; // monthly return
+
+        // Inflation-adjusted target (optional display)
+        let targetAdj = FV;
+        if(inflA > 0){
+          const ri = (inflA/100)/12;
+          targetAdj = FV * Math.pow(1+ri, n);
+        }
+
+        // Solve PMT for FV:
+        // FV = PV*(1+r)^n + PMT*[( (1+r)^n - 1)/r]
+        // If r=0, PMT = (FV - PV)/n
+        const pow = Math.pow(1+r, n);
+        let pmt;
+        if(r === 0){
+          pmt = (FV - PV) / n;
+        } else {
+          const ann = (pow - 1) / r;
+          pmt = (FV - PV*pow) / ann;
+        }
+        pmt = Math.max(0, pmt);
+
+        // Contribution timing adjustment:
+        // Start-of-month deposits behave like PMT*(1+r) compared to end-of-month.
+        const timing = timingEl.value;
+        if(timing === 'start' && r > 0){
+          pmt = pmt / (1+r);
+        }
+
+        pmt = roundTo(pmt, roundEl.value);
+
+        // If PV already reaches FV with growth, PMT may be 0
+        const fvFromPvOnly = PV * pow;
+        const needsMonthly = fvFromPvOnly < FV;
+
+        // Lump sum needed today to reach FV
+        const lump = (r === 0) ? FV : (FV / pow);
+
+        // Build schedule
+        let bal = PV;
+        let totalContrib = 0;
+        let rows = [];
+        const maxShow = parseInt(showEl.value,10) || 60;
+
+        for(let m=1; m<=n; m++){
+          const startBal = bal;
+
+          let contrib = needsMonthly ? pmt : 0;
+          if(timing === 'start'){
+            // Deposit at start, then interest
+            bal += contrib;
+            totalContrib += contrib;
+            const interest = bal * r;
+            bal += interest;
+            rows.push({m, startBal, contrib, interest, endBal: bal});
+          } else {
+            // Interest first, then deposit at end
+            const interest = bal * r;
+            bal += interest;
+            bal += contrib;
+            totalContrib += contrib;
+            rows.push({m, startBal, contrib, interest, endBal: bal});
+          }
+
+          if(m === maxShow && n > maxShow){
+            rows.push({truncate:true, m});
+            break;
+          }
+        }
+
+        const finalBal = (rows.length && !rows[rows.length-1].truncate) ? rows[rows.length-1].endBal : bal;
+
+        // Outputs
+        outPmt.textContent = money(pmt);
+        outPmtNote.textContent = `Timeline: ${n} months • Return: ${rateA}% p.a. • Timing: ${timing==='start'?'Start':'End'} of month`;
+
+        outLump.textContent = money(lump);
+
+        outContrib.textContent = money(totalContrib);
+
+        const growth = Math.max(0, finalBal - (PV + totalContrib));
+        const growthPct = finalBal>0 ? (growth/finalBal)*100 : 0;
+        barGrowth.style.width = Math.max(0, Math.min(100, growthPct)).toFixed(1) + '%';
+        barGrowth.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+        outGrowthNote.textContent = `Estimated growth (interest) ≈ ${money(growth)} • ≈ ${growthPct.toFixed(1)}% of final value`;
+
+        outFv.textContent = money(finalBal);
+        outTargetNote.textContent = inflA>0
+          ? `Original target: ₹ ${fmt0(FV)} • Inflation-adjusted target (display): ₹ ${fmt0(targetAdj)}`
+          : `Target: ₹ ${fmt0(FV)} (inflation not applied)`;
+
+        outSummary.textContent =
+          `Target ₹${fmt0(FV)} • Current ₹${fmt0(PV)} • ${years}y (${n}m) • Return ${rateA}% • Monthly ₹${fmt0(pmt)} • Lump sum today ₹${fmt0(lump)} • Final ≈ ₹${fmt0(finalBal)}.`;
+
+        // Table render
+        const html = [];
+        for(const row of rows){
+          if(row.truncate){
+            html.push(`<tr><td colspan="5" class="mini">Schedule truncated for performance (showing first ${maxShow} months). Increase “Show schedule” to view more.</td></tr>`);
+            break;
+          }
+          html.push(`
+            <tr>
+              <td>${row.m}</td>
+              <td>${money(row.startBal)}</td>
+              <td>${money(row.contrib)}</td>
+              <td>${money(row.interest)}</td>
+              <td>${money(row.endBal)}</td>
+            </tr>
+          `);
+        }
+        tbody.innerHTML = html.join('');
+      }
+
+      $('sg_calc_btn').addEventListener('click', calc);
+
+      $('sg_example_btn').addEventListener('click', ()=>{
+        targetEl.value = '500000';
+        currentEl.value = '50000';
+        yearsEl.value = '3';
+        retEl.value = '8';
+        inflEl.value = '6';
+        timingEl.value = 'end';
+        roundEl.value = '100';
+        showEl.value = '60';
+        calc();
+      });
+
+      $('sg_reset_btn').addEventListener('click', ()=>{
+        [targetEl,currentEl,yearsEl,retEl,inflEl].forEach(el=>el.value='');
+        timingEl.value='end';
+        roundEl.value='0';
+        showEl.value='60';
+
+        outPmt.textContent='—';
+        outPmtNote.textContent='—';
+        outLump.textContent='—';
+        outContrib.textContent='—';
+        outGrowthNote.textContent='—';
+        outFv.textContent='—';
+        outTargetNote.textContent='—';
+        outSummary.textContent='Enter details to see a clean summary.';
+        barGrowth.style.width='0%';
+
+        tbody.innerHTML = '<tr><td colspan="5" class="mini">Click <strong>Calculate</strong> to generate the schedule.</td></tr>';
+      });
+
+      // Live updates
+      [targetEl,currentEl,yearsEl,retEl,inflEl,timingEl,roundEl,showEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(targetEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(targetEl.value) calc(); });
+      });
+    })();
+  </script>
+</body>
+</html>

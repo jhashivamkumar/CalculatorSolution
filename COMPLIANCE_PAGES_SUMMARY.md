@@ -11,7 +11,7 @@ Created comprehensive legal and compliance pages required for Google AdSense app
 ## 🔒 Compliance Pages Created
 
 ### 1. **Privacy Policy** (`privacy-policy.html`)
-**Location:** `/dist/privacy-policy.html`
+**Location:** `/privacy-policy.html`
 
 **Sections (16 Total):**
 1. Information We Collect
@@ -45,7 +45,7 @@ Created comprehensive legal and compliance pages required for Google AdSense app
 ---
 
 ### 2. **Terms of Service** (`terms-of-service.html`)
-**Location:** `/dist/terms-of-service.html`
+**Location:** `/terms-of-service.html`
 
 **Sections (20 Total):**
 1. Acceptance of Terms
@@ -83,7 +83,7 @@ Created comprehensive legal and compliance pages required for Google AdSense app
 ---
 
 ### 3. **Disclaimer** (`disclaimer.html`)
-**Location:** `/dist/disclaimer.html`
+**Location:** `/disclaimer.html`
 
 **Sections (20 Total):**
 1. General Disclaimer
@@ -121,7 +121,7 @@ Created comprehensive legal and compliance pages required for Google AdSense app
 ---
 
 ### 4. **Refund Policy** (`refund-policy.html`)
-**Location:** `/dist/refund-policy.html`
+**Location:** `/refund-policy.html`
 
 **Sections (20 Total):**
 1. Overview
@@ -160,7 +160,7 @@ Created comprehensive legal and compliance pages required for Google AdSense app
 ---
 
 ### 5. **About Us** (`about.html`)
-**Location:** `/dist/about.html`
+**Location:** `/about.html`
 
 **Sections (15+ Total):**
 1. Welcome & Mission
@@ -190,7 +190,7 @@ Created comprehensive legal and compliance pages required for Google AdSense app
 ---
 
 ### 6. **Contact Us** (`contact.html`)
-**Location:** `/dist/contact.html`
+**Location:** `/contact.html`
 
 **Sections (15+ Total):**
 1. Contact Information
@@ -307,7 +307,7 @@ All compliance pages include:
 ## 📁 File Structure
 
 ```
-/dist/
+/
 ├── index.html                    (Homepage - hero + search)
 ├── percentage-calculator.html     (and 73 more calculators)
 ├── privacy-policy.html           ✅ NEW

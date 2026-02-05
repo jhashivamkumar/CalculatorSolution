@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>
+      Daily Calorie Needs Calculator (TDEE + Weight Loss/Gain) |
+      CalculatorSolution
+    </title>
+    <meta
+      name="description"
+      content="Daily Calorie Needs Calculator — calculate BMR and TDEE using Mifflin-St Jeor. Get maintenance calories, weight loss/gain targets, and macro suggestions."
+    />
+
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://calculatorsolution.com/daily-calorie-needs-calculator.html"
+    />
+
+    <meta property="og:title" content="Daily Calorie Needs Calculator" />
+    <meta
+      property="og:description"
+      content="Calculate BMR, TDEE, weight loss/gain targets, and macro suggestions."
+    />
+    <meta
+      property="og:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+
+    <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/logo.png" />
+    <link rel="manifest" href="/assets/site.webmanifest" />
+
+    <link
+      rel="preload"
+      href="/assets/style.css"
+      as="style"
+      onload="this.rel='stylesheet'"
+    />
+    <noscript><link rel="stylesheet" href="/assets/style.css" /></noscript>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Arial;
+        background: linear-gradient(135deg, #f8fafc, #eef2ff);
+        color: #0f172a;
+        line-height: 1.6;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      .wrap {
+        max-width: 1100px;
+        margin: auto;
+        padding: 0 18px;
+      }
+      .site-header {
+        padding: 14px 0;
+        border-bottom: 1px solid #e2e8f0;
+        background: #fff;
+      }
+      .brand {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        text-decoration: none;
+      }
+      .brand-text {
+        font-weight: 900;
+        color: #2563eb;
+      }
+
+      .breadcrumbs {
+        font-size: 0.9rem;
+        color: #64748b;
+        margin: 14px 0;
+      }
+      .breadcrumbs a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .breadcrumbs a:hover {
+        text-decoration: underline;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: #fff;
+        border-radius: 18px;
+        padding: 26px;
+        margin: 10px 0 20px;
+      }
+      .hero h1 {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 1000;
+        letter-spacing: -0.02em;
+      }
+      .hero p {
+        margin: 8px 0 0;
+        opacity: 0.95;
+      }
+      .chips {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        font-weight: 900;
+        font-size: 0.85rem;
+      }
+
+      .panel {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 18px;
+        box-shadow: 0 10px 30px rgba(2, 6, 23, 0.06);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .row2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      @media (max-width: 520px) {
+        .row2 {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+      label {
+        font-weight: 900;
+      }
+      .help {
+        font-size: 0.88rem;
+        color: #64748b;
+        margin: 0;
+      }
+      .input,
+      .select {
+        padding: 10px 12px;
+        border: 1px solid #cbd5f5;
+        border-radius: 12px;
+        font-size: 1rem;
+      }
+      .input:focus,
+      .select:focus {
+        border-color: #6366f1;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 6px;
+      }
+      .btn {
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 0;
+        background: linear-gradient(90deg, #2563eb, #6366f1);
+        color: #fff;
+        font-weight: 1000;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        box-shadow: 0 12px 28px rgba(37, 99, 235, 0.18);
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 34px rgba(37, 99, 235, 0.22);
+      }
+      .btn.secondary {
+        background: #0f172a;
+        box-shadow: 0 12px 28px rgba(2, 6, 23, 0.16);
+      }
+
+      .result {
+        padding: 14px;
+        border-radius: 14px;
+        background: linear-gradient(180deg, #eef2ff, #fff);
+        border: 1px solid #c7d2fe;
+      }
+      .big {
+        font-size: 1.35rem;
+        font-weight: 1000;
+        margin: 0;
+      }
+      .sub {
+        margin: 8px 0 0;
+        color: #334155;
+      }
+
+      .kpis {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .kpi {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 10px;
+      }
+      .kpi small {
+        display: block;
+        color: #64748b;
+        font-weight: 900;
+      }
+      .kpi strong {
+        font-size: 1.05rem;
+      }
+
+      .table {
+        margin-top: 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #fff;
+      }
+      .trow {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        padding: 10px 12px;
+        border-top: 1px solid #e2e8f0;
+      }
+      .trow:first-child {
+        border-top: 0;
+      }
+      .trow b {
+        font-weight: 1000;
+      }
+      .muted {
+        color: #475569;
+      }
+
+      .note {
+        margin-top: 12px;
+        font-size: 0.92rem;
+        color: #475569;
+        border-left: 4px solid #6366f1;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+      }
+
+      details.card {
+        margin-top: 10px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        padding: 10px;
+      }
+
+      pre {
+        background: #0b1220;
+        color: #e5e7eb;
+        padding: 12px;
+        border-radius: 12px;
+        overflow: auto;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+        margin-top: 12px;
+      }
+      .cardLink {
+        display: block;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 14px;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: 0 10px 24px rgba(2, 6, 23, 0.05);
+        transition: transform 0.2s;
+      }
+      .cardLink:hover {
+        transform: translateY(-3px);
+      }
+      .cardLink h4 {
+        margin: 0 0 6px;
+        font-weight: 1000;
+      }
+      .cardLink p {
+        margin: 0;
+        color: #475569;
+      }
+
+      .site-footer {
+        margin-top: 40px;
+        padding: 20px 0;
+        border-top: 1px solid #e2e8f0;
+        /* color: #64748b;
+        background: #fff; */
+      }
+      /* .site-footer a {
+        color: inherit;
+      } */
+    </style>
+
+    <!-- GA4 -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-Y5YHCPQPFS");
+    </script>
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+      [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Daily Calorie Needs Calculator"
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "url": "https://calculatorsolution.com/",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://calculatorsolution.com/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "CalculatorSolution",
+              "item": "https://calculatorsolution.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Daily Calorie Needs Calculator",
+              "item": "https://calculatorsolution.com/daily-calorie-needs-calculator.html"
+            }
+          ]
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is activity factor?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "It multiplies your BMR to estimate Total Daily Energy Expenditure (TDEE) from sedentary to very active lifestyles."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Use for weight loss?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. A common starting point is a 10–20% calorie deficit from TDEE, adjusted based on progress."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Adjust for age?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This calculator uses age in the BMR formula. Needs can still vary by muscle mass and health status."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Pregnant or nursing?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Calorie needs can be higher. Consult a healthcare professional for personalized guidance."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Athletes?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Training volume changes needs. Consider performance goals, recovery, and professional advice."
+              }
+            }
+          ]
+        }
+      ]
+    </script>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">
+          <img
+            src="/assets/logo.png"
+            alt="CalculatorSolution logo"
+            width="36"
+            height="36"
+          />
+          <span class="brand-text">CalculatorSolution</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <article>
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a> › <span>Daily Calorie Needs Calculator</span>
+        </nav>
+
+        <div class="hero">
+          <h1>Daily Calorie Needs Calculator</h1>
+          <p>
+            Calculate BMR + TDEE and get calorie targets for weight loss,
+            maintenance, or gain.
+          </p>
+          <div class="chips">
+            <span class="chip">🔥 BMR</span>
+            <span class="chip">🏃 TDEE</span>
+            <span class="chip">🎯 Goal calories</span>
+            <span class="chip">🥗 Macros</span>
+            <span class="chip">📏 BMI</span>
+          </div>
+        </div>
+
+        <section class="panel" aria-label="Daily calorie calculator">
+          <div class="grid">
+            <div>
+              <div class="row2">
+                <div class="field">
+                  <label for="sex">Sex</label>
+                  <select id="sex" class="select">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="age">Age (years)</label>
+                  <input
+                    id="age"
+                    class="input"
+                    type="number"
+                    min="10"
+                    max="100"
+                    step="1"
+                    placeholder="e.g. 28"
+                  />
+                </div>
+              </div>
+
+              <div class="row2">
+                <div class="field">
+                  <label for="height">Height (cm)</label>
+                  <input
+                    id="height"
+                    class="input"
+                    type="number"
+                    min="80"
+                    max="250"
+                    step="0.1"
+                    placeholder="e.g. 175"
+                  />
+                </div>
+                <div class="field">
+                  <label for="weight">Weight (kg)</label>
+                  <input
+                    id="weight"
+                    class="input"
+                    type="number"
+                    min="20"
+                    max="300"
+                    step="0.1"
+                    placeholder="e.g. 72"
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="activity">Activity Level</label>
+                <select id="activity" class="select">
+                  <option value="1.2">
+                    Sedentary (little/no exercise) — 1.2
+                  </option>
+                  <option value="1.375">Light (1–3 days/week) — 1.375</option>
+                  <option value="1.55" selected>
+                    Moderate (3–5 days/week) — 1.55
+                  </option>
+                  <option value="1.725">
+                    Very Active (6–7 days/week) — 1.725
+                  </option>
+                  <option value="1.9">
+                    Athlete (hard training + active job) — 1.9
+                  </option>
+                </select>
+                <p class="help">
+                  This multiplier turns BMR into TDEE (maintenance calories).
+                </p>
+              </div>
+
+              <div class="row2">
+                <div class="field">
+                  <label for="goal">Goal</label>
+                  <select id="goal" class="select">
+                    <option value="loss">Weight Loss (deficit)</option>
+                    <option value="maintain" selected>Maintain (TDEE)</option>
+                    <option value="gain">Weight Gain (surplus)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="pace">Deficit/Surplus (%)</label>
+                  <select id="pace" class="select">
+                    <option value="10">10% (mild)</option>
+                    <option value="15" selected>15% (balanced)</option>
+                    <option value="20">20% (aggressive)</option>
+                  </select>
+                  <p class="help">Used for loss/gain targets.</p>
+                </div>
+              </div>
+
+              <div class="row2">
+                <div class="field">
+                  <label for="protein">Protein (g/kg)</label>
+                  <select id="protein" class="select">
+                    <option value="1.6" selected>1.6 (general fitness)</option>
+                    <option value="2.0">2.0 (fat loss / training)</option>
+                    <option value="2.2">2.2 (advanced)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="fatPct">Fat (%) of calories</label>
+                  <select id="fatPct" class="select">
+                    <option value="25">25%</option>
+                    <option value="30" selected>30%</option>
+                    <option value="35">35%</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="btnCalc" type="button">
+                  Calculate Calories
+                </button>
+                <button class="btn secondary" id="btnExample" type="button">
+                  Try Example
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <div class="result" role="status" aria-live="polite">
+                <p class="big" id="out">—</p>
+                <p class="sub" id="sub">
+                  Enter your details to calculate BMR & TDEE.
+                </p>
+
+                <div class="kpis" id="kpis" style="display: none">
+                  <div class="kpi">
+                    <small>BMR</small><strong id="kBmr">—</strong>
+                  </div>
+                  <div class="kpi">
+                    <small>TDEE (maintenance)</small
+                    ><strong id="kTdee">—</strong>
+                  </div>
+                  <div class="kpi">
+                    <small>Goal calories</small><strong id="kGoal">—</strong>
+                  </div>
+                  <div class="kpi">
+                    <small>BMI</small><strong id="kBmi">—</strong>
+                  </div>
+                </div>
+
+                <div class="table" id="macroBox" style="display: none">
+                  <div class="trow">
+                    <b>Macro Targets (approx.)</b
+                    ><span class="muted">per day</span>
+                  </div>
+                  <div class="trow">
+                    <span>Protein</span><b id="mProtein">—</b>
+                  </div>
+                  <div class="trow"><span>Fat</span><b id="mFat">—</b></div>
+                  <div class="trow"><span>Carbs</span><b id="mCarbs">—</b></div>
+                </div>
+              </div>
+
+              <div class="note">
+                Educational estimate only. Real needs vary by muscle mass,
+                sleep, stress, and health. For medical situations (pregnancy,
+                nursing, chronic conditions), consult a professional.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section style="margin-top: 20px">
+          <h2>Explanation</h2>
+          <p>
+            Your daily calorie needs are commonly estimated using two steps:
+            <strong>BMR</strong> (Basal Metabolic Rate) and
+            <strong>TDEE</strong> (Total Daily Energy Expenditure). BMR
+            estimates calories your body burns at rest. TDEE multiplies BMR by
+            an <strong>activity factor</strong>
+            to reflect your lifestyle and exercise.
+          </p>
+          <p>
+            For goals: a small deficit (10–20%) is often used for weight loss,
+            and a small surplus (10–15%) for lean gain. Macros here are optional
+            estimates: protein based on body weight, fat as a % of calories, and
+            remaining calories as carbs.
+          </p>
+        </section>
+
+        <section style="margin-top: 14px">
+          <h3>Formula</h3>
+          <pre>
+Mifflin-St Jeor (BMR)
+Male:   BMR = 10W + 6.25H - 5A + 5
+Female: BMR = 10W + 6.25H - 5A - 161
+
+TDEE = BMR × activity_factor
+
+Goal calories:
+Loss:     TDEE × (1 - deficit%)
+Gain:     TDEE × (1 + surplus%)
+Maintain: TDEE</pre
+          >
+        </section>
+
+        <section style="margin-top: 14px">
+          <h3>FAQs</h3>
+          <details class="card">
+            <summary><strong>What is activity factor?</strong></summary>
+            <p>
+              It’s a multiplier that estimates total daily burn based on
+              lifestyle (sedentary → athlete).
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Use for weight loss?</strong></summary>
+            <p>
+              Start with a 10–20% deficit from TDEE and adjust weekly based on
+              progress.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Adjust for age?</strong></summary>
+            <p>
+              Age is included in the BMR formula, but muscle mass changes also
+              impact needs.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Pregnant/nursing?</strong></summary>
+            <p>
+              Needs vary and can be higher. Consult a healthcare provider for
+              safe targets.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Athletes?</strong></summary>
+            <p>
+              Training volume and recovery can significantly increase needs;
+              consider sports nutrition guidance.
+            </p>
+          </details>
+        </section>
+
+        <section style="margin-top: 18px">
+          <h3>Related calculators</h3>
+          <div class="cards-grid">
+            <a class="cardLink" href="bmr-calculator.html"
+              ><h4>BMR Calculator</h4>
+              <p>Estimate basal metabolic rate.</p></a
+            >
+            <a class="cardLink" href="body-fat-percentage-calculator.html"
+              ><h4>Body Fat Percentage Calculator</h4>
+              <p>Estimate body fat using measurements.</p></a
+            >
+            <a class="cardLink" href="ideal-weight-calculator.html"
+              ><h4>Ideal Weight Calculator</h4>
+              <p>Estimate healthy weight ranges.</p></a
+            >
+            <a class="cardLink" href="calories-burned-running-walking.html"
+              ><h4>Calories Burned (Run/Walk)</h4>
+              <p>Estimate calories burned by activity.</p></a
+            >
+          </div>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>&copy; CalculatorSolution</p>
+        <p style="margin-top: 8px; font-size: 0.9rem">
+          <a href="/sitemap.xml">Sitemap</a> | <a href="/">Home</a> |
+          <a href="/privacy-policy.html">Privacy Policy</a> |
+          <a href="/terms-of-service.html">Terms</a> |
+          <a href="/contact.html">Contact</a> |
+          <a href="/about.html">About</a>
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        const $ = (id) => document.getElementById(id);
+        const round = (n) => Math.round(n);
+
+        const sex = $("sex");
+        const age = $("age");
+        const height = $("height");
+        const weight = $("weight");
+        const activity = $("activity");
+        const goal = $("goal");
+        const pace = $("pace");
+        const protein = $("protein");
+        const fatPct = $("fatPct");
+
+        const out = $("out");
+        const sub = $("sub");
+
+        const kpis = $("kpis");
+        const kBmr = $("kBmr");
+        const kTdee = $("kTdee");
+        const kGoal = $("kGoal");
+        const kBmi = $("kBmi");
+
+        const macroBox = $("macroBox");
+        const mProtein = $("mProtein");
+        const mFat = $("mFat");
+        const mCarbs = $("mCarbs");
+
+        function calc() {
+          const s = sex.value;
+          const A = +age.value;
+          const H = +height.value;
+          const W = +weight.value;
+
+          if (!(A > 0) || !(H > 0) || !(W > 0)) {
+            out.textContent = "Please enter age, height, and weight.";
+            sub.textContent = "";
+            kpis.style.display = "none";
+            macroBox.style.display = "none";
+            return;
+          }
+
+          // Mifflin-St Jeor
+          let bmr = 10 * W + 6.25 * H - 5 * A + (s === "male" ? 5 : -161);
+          if (bmr < 0) bmr = 0;
+
+          const act = +activity.value || 1.2;
+          const tdee = bmr * act;
+
+          const pct = (+pace.value || 15) / 100;
+          let goalCals = tdee;
+
+          if (goal.value === "loss") goalCals = tdee * (1 - pct);
+          if (goal.value === "gain") goalCals = tdee * (1 + pct);
+
+          // BMI
+          const hM = H / 100;
+          const bmi = W / (hM * hM);
+
+          // Macros (approx)
+          const protG = W * (+protein.value || 1.6);
+          const protCals = protG * 4;
+
+          const fatCals = goalCals * ((+fatPct.value || 30) / 100);
+          const fatG = fatCals / 9;
+
+          const remainingCals = Math.max(0, goalCals - protCals - fatCals);
+          const carbG = remainingCals / 4;
+
+          out.textContent = `Goal calories: ${round(goalCals)} kcal/day`;
+          sub.textContent = `Maintenance (TDEE): ${round(
+            tdee
+          )} kcal/day • BMR: ${round(bmr)} kcal/day`;
+
+          kpis.style.display = "grid";
+          kBmr.textContent = `${round(bmr)} kcal`;
+          kTdee.textContent = `${round(tdee)} kcal`;
+          kGoal.textContent = `${round(goalCals)} kcal`;
+          kBmi.textContent = `${bmi.toFixed(1)}`;
+
+          macroBox.style.display = "block";
+          mProtein.textContent = `${round(protG)} g`;
+          mFat.textContent = `${round(fatG)} g`;
+          mCarbs.textContent = `${round(carbG)} g`;
+        }
+
+        $("btnCalc").addEventListener("click", calc);
+
+        $("btnExample").addEventListener("click", function () {
+          sex.value = "male";
+          age.value = "28";
+          height.value = "175";
+          weight.value = "72";
+          activity.value = "1.55";
+          goal.value = "loss";
+          pace.value = "15";
+          protein.value = "1.6";
+          fatPct.value = "30";
+          calc();
+        });
+
+        [
+          sex,
+          age,
+          height,
+          weight,
+          activity,
+          goal,
+          pace,
+          protein,
+          fatPct,
+        ].forEach((el) => {
+          el.addEventListener("input", () => {
+            if (age.value && height.value && weight.value) calc();
+          });
+          el.addEventListener("change", () => {
+            if (age.value && height.value && weight.value) calc();
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

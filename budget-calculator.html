@@ -1,0 +1,1141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <!-- ✅ SEO: stronger title -->
+  <title>Budget Calculator (Monthly Plan + Savings) | CalculatorSolution</title>
+
+  <!-- ✅ SEO: clearer intent + keywords -->
+  <meta name="description" content="Free Budget Calculator: plan monthly income, expenses, and savings. Build a 50/30/20 budget, track categories, and view month + year summary tables.">
+
+  <!-- Preload critical CSS and fonts to reduce render-blocking -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <link rel="preload" href="/assets/og-image.svg" as="image">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <style>
+    /* CSS Reset & Base */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    /* Typography & Base Styles */
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #f0f4f8 100%);
+      color: #0f172a;
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Container & Layout */
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+      width: 100%;
+    }
+    
+    /* Header */
+    .site-header {
+      padding: 12px 0;
+      border-bottom: 1px solid #e2e8f0;
+      background: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .brand {
+      font-weight: 700;
+      color: #3b82f6;
+      text-decoration: none;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+    }
+    
+    /* Hero Section */
+    .calculator-hero {
+      margin: 24px 0 16px 0;
+    }
+    
+    .calculator-hero h1 {
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      margin: 0 0 10px 0;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+    
+    .lead {
+      color: #334155;
+      margin: 0 0 16px 0;
+      font-size: clamp(1rem, 2vw, 1.1rem);
+    }
+    
+    /* Calculator Shell - Responsive Grid */
+    .calc-shell {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    @media (min-width: 768px) {
+      .calc-shell {
+        grid-template-columns: 1.15fr 0.85fr;
+      }
+    }
+    
+    /* Calculator Panels */
+    .calc-panel {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      box-shadow: 0 10px 26px rgba(8, 13, 26, 0.06);
+      padding: 20px;
+      width: 100%;
+    }
+    
+    .calc-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .calc-title h2 {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+    
+    .pill {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(59, 130, 246, 0.10);
+      color: #1d4ed8;
+      font-weight: 700;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+    
+    /* Input Grid */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    
+    @media (min-width: 480px) {
+      .grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .field label {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    
+    .input {
+      padding: 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 1rem;
+      outline: none;
+      background: #fff;
+      width: 100%;
+      transition: all 0.2s ease;
+    }
+    
+    .input:focus {
+      border-color: #93c5fd;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.10);
+    }
+    
+    .help {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin: 0;
+      line-height: 1.4;
+    }
+    
+    /* Buttons */
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      background: linear-gradient(90deg, #3b82f6, #6c9cff);
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.12);
+      border: 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 120px;
+      flex: 1;
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 40px rgba(59, 130, 246, 0.12);
+    }
+    
+    @media (min-width: 480px) {
+      .btn {
+        flex: 0 1 auto;
+      }
+    }
+    
+    .btn-secondary {
+      background: #0f172a;
+      box-shadow: 0 10px 22px rgba(2, 6, 23, 0.15);
+    }
+    
+    .btn-ghost {
+      background: #fff;
+      color: #0f172a;
+      border: 1px solid #e2e8f0;
+      box-shadow: none;
+    }
+    
+    /* Results Section */
+    .result {
+      display: grid;
+      gap: 16px;
+    }
+    
+    .metric {
+      background: linear-gradient(180deg, rgba(59, 130, 246, 0.08), transparent);
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    
+    .metric .k {
+      font-size: 0.9rem;
+      color: #475569;
+      margin: 0;
+      font-weight: 600;
+    }
+    
+    .metric .v {
+      font-size: clamp(1.2rem, 4vw, 1.5rem);
+      font-weight: 900;
+      margin: 8px 0 0 0;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    
+    .metric .s {
+      font-size: 0.9rem;
+      color: #334155;
+      margin: 8px 0 0 0;
+      line-height: 1.4;
+    }
+    
+    /* Progress Bar */
+    .bar {
+      height: 12px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+      margin: 12px 0;
+      display: flex;
+    }
+    
+    .bar > i {
+      display: block;
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+    
+    /* Legend */
+    .legend {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+      font-size: 0.9rem;
+      color: #475569;
+    }
+    
+    .dot {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    
+    /* Note */
+    .note {
+      border-left: 4px solid #3b82f6;
+      padding: 16px;
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      margin-top: 20px;
+    }
+    
+    .note p {
+      margin: 0;
+      color: #334155;
+      line-height: 1.5;
+    }
+    
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      background: #fff;
+      margin: 20px 0;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+    
+    th, td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+    
+    th {
+      background: #f8fafc;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    
+    tr:last-child td {
+      border-bottom: 0;
+    }
+    
+    /* Tags */
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      background: rgba(16, 185, 129, 0.10);
+      color: #065f46;
+      white-space: nowrap;
+    }
+    
+    .tag.warn {
+      background: rgba(245, 158, 11, 0.12);
+      color: #92400e;
+    }
+    
+    .tag.bad {
+      background: rgba(239, 68, 68, 0.10);
+      color: #991b1b;
+    }
+    
+    /* Mini Text */
+    .mini {
+      font-size: 0.85rem;
+      color: #64748b;
+      line-height: 1.4;
+    }
+    
+    /* Content Sections */
+    section {
+      margin: 32px 0;
+    }
+    
+    h2, h3 {
+      margin: 0 0 16px 0;
+      line-height: 1.2;
+    }
+    
+    h2 {
+      font-size: clamp(1.5rem, 4vw, 1.8rem);
+    }
+    
+    h3 {
+      font-size: clamp(1.3rem, 3vw, 1.5rem);
+    }
+    
+    /* Explanation & Formula */
+    .explanation p {
+      margin: 0 0 16px 0;
+      line-height: 1.6;
+    }
+    
+    .formula pre {
+      background: #0f172a;
+      color: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+    
+    /* FAQ */
+    .faqs {
+      display: grid;
+      gap: 12px;
+    }
+    
+    .faqs details.card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 0;
+      overflow: hidden;
+    }
+    
+    .faqs summary {
+      padding: 16px;
+      cursor: pointer;
+      font-weight: 700;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .faqs summary::-webkit-details-marker {
+      display: none;
+    }
+    
+    .faqs summary::after {
+      content: '▼';
+      font-size: 0.8rem;
+      transition: transform 0.3s ease;
+    }
+    
+    .faqs details[open] summary::after {
+      transform: rotate(180deg);
+    }
+    
+    .faqs details p {
+      padding: 0 16px 16px 16px;
+      margin: 0;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 16px;
+      line-height: 1.6;
+    }
+    
+    /* Related Calculators */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .card {
+      display: block;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(8, 13, 26, 0.06);
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(8, 13, 26, 0.1);
+    }
+    
+    .card h4 {
+      margin: 0 0 8px 0;
+      font-size: 1.1rem;
+      color: #1e293b;
+    }
+    
+    .card p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #64748b;
+      line-height: 1.5;
+    }
+    
+    /* Footer */
+    .site-footer {
+      padding: 30px 0;
+      border-top: 1px solid #e2e8f0;
+      background: #fff;
+      margin-top: 40px;
+    }
+    
+    .site-footer p {
+      margin: 0 0 8px 0;
+      color: #64748b;
+    }
+    
+    .site-footer a {
+      color: #3b82f6;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    
+    .site-footer a:hover {
+      color: #1d4ed8;
+      text-decoration: underline;
+    }
+    
+    /* Utility Classes */
+    .inline-link {
+      color: #1d4ed8;
+      text-decoration: underline;
+    }
+    
+    /* Mobile Optimizations */
+    @media (max-width: 767px) {
+      .wrap {
+        padding: 0 16px;
+      }
+      
+      .calc-panel {
+        padding: 16px;
+      }
+      
+      .actions {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+      }
+      
+      th, td {
+        padding: 12px;
+      }
+      
+      .legend {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .wrap {
+        padding: 0 12px;
+      }
+      
+      .calculator-hero {
+        margin: 16px 0;
+      }
+      
+      .calc-title {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .pill {
+        align-self: flex-start;
+      }
+      
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Dark Mode Support */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: #f1f5f9;
+      }
+      
+      .calc-panel,
+      .card,
+      .faqs details.card,
+      .table-wrap {
+        background: #1e293b;
+        border-color: #334155;
+      }
+      
+      .input {
+        background: #0f172a;
+        border-color: #334155;
+        color: #f1f5f9;
+      }
+      
+      .input:focus {
+        border-color: #3b82f6;
+      }
+      
+      .btn-ghost {
+        background: #1e293b;
+        color: #f1f5f9;
+        border-color: #475569;
+      }
+      
+      .metric {
+        background: linear-gradient(180deg, rgba(59, 130, 246, 0.15), transparent);
+        border-color: #334155;
+      }
+      
+      th {
+        background: #0f172a;
+      }
+      
+      .note {
+        background: #1e293b;
+        border-color: #334155;
+      }
+      
+      .site-header,
+      .site-footer {
+        background: #0f172a;
+        border-color: #334155;
+      }
+    }
+    
+    /* Print Styles */
+    @media print {
+      .btn,
+      .actions,
+      .faqs summary::after {
+        display: none;
+      }
+      
+      .card {
+        break-inside: avoid;
+      }
+      
+      .calc-shell {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <!-- GA4 Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/budget-calculator.html">
+
+  <!-- ✅ SEO: upgraded structured data -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Budget Calculator",
+      "url":"https://calculatorsolution.com/budget-calculator.html",
+      "description":"Plan monthly income, expenses, and savings. Includes category breakdown, 50/30/20 guidance, and year summary table."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"WebSite",
+      "url":"https://calculatorsolution.com/",
+      "name":"CalculatorSolution",
+      "potentialAction":{
+        "@type":"SearchAction",
+        "target":"https://calculatorsolution.com/?q={search_term_string}",
+        "query-input":"required name=search_term_string"
+      }
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"Calculator Solution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Budget Calculator","item":"https://calculatorsolution.com/budget-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"How do I start a budget?","acceptedAnswer":{"@type":"Answer","text":"Start by tracking your spending for a month. Then set realistic category limits based on your actual habits."}},
+        {"@type":"Question","name":"How big should an emergency fund be?","acceptedAnswer":{"@type":"Answer","text":"Many people aim for 3–6 months of essential expenses as an emergency fund."}},
+        {"@type":"Question","name":"Should I pay debt or save first?","acceptedAnswer":{"@type":"Answer","text":"Keep a small emergency buffer, then prioritize high-interest debt while continuing consistent savings."}},
+        {"@type":"Question","name":"What is the 50/30/20 rule?","acceptedAnswer":{"@type":"Answer","text":"A simple guideline: 50% needs, 30% wants, 20% savings & debt. Adjust based on income, location, and goals."}},
+        {"@type":"Question","name":"How often should I adjust my budget?","acceptedAnswer":{"@type":"Answer","text":"Review monthly or whenever your income or expenses change. Small adjustments keep it realistic and sustainable."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/" aria-label="CalculatorSolution Home">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="calculator-hero">
+        <h1>Budget Calculator</h1>
+        <p class="lead">Plan your monthly budget, track categories, and set a savings target (50/30/20 style).</p>
+      </div>
+
+      <section class="calculator-main">
+        <!-- ✅ Interactive budget calculator -->
+        <div id="calc-budget-calculator">
+          <div class="calc-shell">
+            <!-- Inputs -->
+            <div class="calc-panel" aria-label="Budget inputs">
+              <div class="calc-title">
+                <h2>Enter income & expenses</h2>
+                <span class="pill">🧾 Monthly Planner</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field" style="grid-column:1/-1;">
+                  <label for="bud_income">Monthly Income</label>
+                  <input id="bud_income" class="input" inputmode="decimal" type="number" min="0" step="0.01" placeholder="e.g., 60000" aria-describedby="income-help">
+                  <p class="help" id="income-help">Use your take-home income (after taxes). Add side income if consistent.</p>
+                </div>
+
+                <div class="field">
+                  <label for="bud_need">Needs (Rent, groceries, bills)</label>
+                  <input id="bud_need" class="input" inputmode="decimal" type="number" min="0" step="0.01" placeholder="e.g., 30000">
+                  <p class="help">Essential spending you must pay.</p>
+                </div>
+
+                <div class="field">
+                  <label for="bud_want">Wants (Dining, shopping, fun)</label>
+                  <input id="bud_want" class="input" inputmode="decimal" type="number" min="0" step="0.01" placeholder="e.g., 12000">
+                  <p class="help">Optional lifestyle spending.</p>
+                </div>
+
+                <div class="field">
+                  <label for="bud_debt">Debt Payments (EMI, credit card)</label>
+                  <input id="bud_debt" class="input" inputmode="decimal" type="number" min="0" step="0.01" placeholder="e.g., 8000">
+                  <p class="help">Minimum + extra payments if possible.</p>
+                </div>
+
+                <div class="field">
+                  <label for="bud_saving_goal">Savings Goal (optional)</label>
+                  <input id="bud_saving_goal" class="input" inputmode="decimal" type="number" min="0" step="0.01" placeholder="e.g., 10000">
+                  <p class="help">Goal for investments, emergency fund, or future plans.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="bud_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-secondary" id="bud_fill_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="bud_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note" style="margin-top:20px;">
+                <p><strong>50/30/20 tip:</strong> If you don't know your numbers yet, start with 50% needs, 30% wants, 20% savings+debt — then adjust based on reality.</p>
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="calc-panel" aria-label="Budget results">
+              <div class="calc-title">
+                <h2>Results</h2>
+                <span class="pill">📊 Breakdown</span>
+              </div>
+
+              <div class="result" id="bud_results">
+                <div class="metric">
+                  <p class="k">Total Expenses</p>
+                  <p class="v" id="bud_total_exp">—</p>
+                  <p class="s mini">Needs + Wants + Debt</p>
+                </div>
+
+                <div class="metric">
+                  <p class="k">Leftover (Income − Expenses)</p>
+                  <p class="v" id="bud_leftover">—</p>
+                  <p class="s mini">This can go to savings, investing, or extra debt payoff.</p>
+                </div>
+
+                <div class="metric">
+                  <p class="k">Savings Feasibility</p>
+                  <p class="v" id="bud_goal_ok">—</p>
+                  <p class="s mini" id="bud_goal_hint">—</p>
+                </div>
+
+                <div class="metric">
+                  <p class="k">50/30/20 Check</p>
+                  <p class="v" id="bud_rule_status">—</p>
+                  <p class="s mini" id="bud_rule_hint">—</p>
+                </div>
+
+                <div class="metric">
+                  <p class="k">Spending Split</p>
+                  <div class="bar" aria-label="Spending split bar" role="progressbar">
+                    <i id="bud_bar_need" aria-hidden="true"></i>
+                    <i id="bud_bar_want" aria-hidden="true"></i>
+                    <i id="bud_bar_debt" aria-hidden="true"></i>
+                  </div>
+                  <div class="legend">
+                    <span><span class="dot" id="dot_need" aria-hidden="true"></span>Needs <strong id="pct_need">—</strong></span>
+                    <span><span class="dot" id="dot_want" aria-hidden="true"></span>Wants <strong id="pct_want">—</strong></span>
+                    <span><span class="dot" id="dot_debt" aria-hidden="true"></span>Debt <strong id="pct_debt">—</strong></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ✅ Year summary table (SEO + user value) -->
+          <h2 style="margin-top:32px;">Monthly & Year Summary</h2>
+          <p class="lead">See how your budget looks monthly and over 12 months. This helps you plan savings, debt payoff, and long-term goals.</p>
+
+          <div class="table-wrap" style="margin-top:20px;">
+            <table aria-label="Budget monthly and yearly summary table">
+              <thead>
+                <tr>
+                  <th>Period</th>
+                  <th>Income</th>
+                  <th>Expenses</th>
+                  <th>Leftover</th>
+                  <th>Savings Goal</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="bud_table">
+                <tr>
+                  <td colspan="6" class="mini">Enter values and click <strong>Calculate</strong> to generate the summary.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="mini" style="margin-top:16px;">
+            Want to plan savings growth? Try an investment calculator and compare monthly contributions.
+          </p>
+        </div>
+      </section>
+
+      <section class="related">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="percentage-calculator.html"><h4>Percentage Calculator</h4><p>Compute percentages and simple percent changes.</p></a>
+          <a class="card" href="percentage-change-calculator.html"><h4>Percentage Increase/Decrease Calculator</h4><p>Calculate percent increase or decrease between two values.</p></a>
+          <a class="card" href="discount-calculator.html"><h4>Discount Calculator</h4><p>Compute price after discount and the amount saved.</p></a>
+          <a class="card" href="gst-calculator-india.html"><h4>GST Calculator (India)</h4><p>Calculate GST amount and final price for Indian GST rates.</p></a>
+        </div>
+      </section>
+
+      <!-- ✅ SEO-first explanation: specific to budgeting -->
+      <section class="explanation">
+        <h2>Explanation</h2>
+        <p>
+          A <strong>budget</strong> is a simple plan for your money: how much comes in (income), how much goes out (expenses), and how much you keep (savings).
+          This Budget Calculator helps you quickly estimate your <strong>monthly leftover</strong> and check whether your plan supports a savings goal.
+          It also shows a <strong>year summary</strong> so you can see the long-term impact of small monthly changes.
+        </p>
+        <p>
+          A popular budgeting approach is the <strong>50/30/20 rule</strong>:
+          allocate about 50% to needs (rent, bills, groceries), 30% to wants (lifestyle), and 20% to savings and debt.
+          This is not a strict rule—if rent is high, your "needs" may be higher. Use it as a guideline and adjust.
+        </p>
+        <p>
+          If your expenses exceed income, focus on the biggest levers first:
+          reduce "wants", renegotiate recurring bills, and create a realistic debt plan.
+          If you have a savings goal, automate it right after salary day so it becomes consistent.
+        </p>
+      </section>
+
+      <section class="formula">
+        <h3>Formula</h3>
+        <pre>Total Expenses = Needs + Wants + Debt
+Leftover (Savings Potential) = Income − Total Expenses
+Yearly Values = Monthly × 12</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Start small?</strong></summary><p>Track expenses for a month to create a realistic budget. Then set limits category-wise.</p></details>
+        <details class="card"><summary><strong>Emergency fund?</strong></summary><p>Many people target 3–6 months of essential expenses as an emergency fund.</p></details>
+        <details class="card"><summary><strong>Debt payments?</strong></summary><p>Prioritize high-interest debt. Keep a small buffer, then pay more than the minimum when possible.</p></details>
+        <details class="card"><summary><strong>Automate savings?</strong></summary><p>Automate transfers on payday so savings happens before discretionary spending.</p></details>
+        <details class="card"><summary><strong>Adjust monthly?</strong></summary><p>Review monthly or whenever income/expenses change. Budgeting is a living plan.</p></details>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- ✅ Budget calculator logic -->
+  <script>
+    (function(){
+      const $ = (id) => document.getElementById(id);
+
+      const incomeEl = $('bud_income');
+      const needEl = $('bud_need');
+      const wantEl = $('bud_want');
+      const debtEl = $('bud_debt');
+      const goalEl = $('bud_saving_goal');
+
+      const totalExpEl = $('bud_total_exp');
+      const leftoverEl = $('bud_leftover');
+      const goalOkEl = $('bud_goal_ok');
+      const goalHintEl = $('bud_goal_hint');
+      const ruleStatusEl = $('bud_rule_status');
+      const ruleHintEl = $('bud_rule_hint');
+
+      const barNeed = $('bud_bar_need');
+      const barWant = $('bud_bar_want');
+      const barDebt = $('bud_bar_debt');
+
+      const pctNeedEl = $('pct_need');
+      const pctWantEl = $('pct_want');
+      const pctDebtEl = $('pct_debt');
+
+      const dotNeed = $('dot_need');
+      const dotWant = $('dot_want');
+      const dotDebt = $('dot_debt');
+
+      const tableBody = $('bud_table');
+
+      // set bar colors
+      barNeed.style.background = 'linear-gradient(90deg,#3b82f6,#60a5fa)';
+      barWant.style.background = 'linear-gradient(90deg,#8b5cf6,#a78bfa)';
+      barDebt.style.background = 'linear-gradient(90deg,#0f172a,#334155)';
+      dotNeed.style.background = '#3b82f6';
+      dotWant.style.background = '#8b5cf6';
+      dotDebt.style.background = '#0f172a';
+
+      const fmtMoney = (n) => {
+        if (!isFinite(n)) return '—';
+        return new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(n);
+      };
+      
+      const fmtPct = (n) => {
+        if (!isFinite(n)) return '—';
+        return new Intl.NumberFormat(undefined, { style:'percent', maximumFractionDigits: 1 }).format(n);
+      };
+
+      function statusTag(leftover, income){
+        if (!isFinite(leftover) || !isFinite(income) || income <= 0) return {txt:'—', cls:'tag warn'};
+        if (leftover < 0) return {txt:'Overspending', cls:'tag bad'};
+        if (leftover === 0) return {txt:'Break-even', cls:'tag warn'};
+        return {txt:'Healthy', cls:'tag'};
+      }
+
+      function calcAndRender(){
+        const income = parseFloat(incomeEl.value);
+        const needs = parseFloat(needEl.value);
+        const wants = parseFloat(wantEl.value);
+        const debt = parseFloat(debtEl.value);
+        const goal = parseFloat(goalEl.value || '0');
+
+        if (![income, needs, wants, debt].every(x => isFinite(x) && x >= 0)) {
+          totalExpEl.textContent = '—';
+          leftoverEl.textContent = '—';
+          goalOkEl.textContent = '—';
+          goalHintEl.textContent = 'Enter valid non-negative numbers.';
+          ruleStatusEl.textContent = '—';
+          ruleHintEl.textContent = '—';
+          barNeed.style.width = '0%';
+          barWant.style.width = '0%';
+          barDebt.style.width = '0%';
+          pctNeedEl.textContent = '—';
+          pctWantEl.textContent = '—';
+          pctDebtEl.textContent = '—';
+          tableBody.innerHTML = '<tr><td colspan="6" class="mini">Enter values and click <strong>Calculate</strong> to generate the summary.</td></tr>';
+          return;
+        }
+
+        const totalExp = needs + wants + debt;
+        const leftover = income - totalExp;
+
+        totalExpEl.textContent = fmtMoney(totalExp);
+        leftoverEl.textContent = fmtMoney(leftover);
+
+        // Savings goal check
+        if (isFinite(goal) && goal > 0) {
+          if (leftover >= goal) {
+            goalOkEl.textContent = 'On track';
+            goalHintEl.textContent = 'Your leftover can meet the savings goal.';
+          } else if (leftover >= 0) {
+            goalOkEl.textContent = 'Shortfall';
+            goalHintEl.textContent = 'Reduce expenses or increase income to hit the goal.';
+          } else {
+            goalOkEl.textContent = 'Not feasible';
+            goalHintEl.textContent = 'Expenses exceed income. Fix overspending first.';
+          }
+        } else {
+          goalOkEl.textContent = (leftover >= 0 ? 'OK' : 'Overspending');
+          goalHintEl.textContent = 'Add a savings goal for a clearer target.';
+        }
+
+        // 50/30/20 check (Needs, Wants, Savings+Debt)
+        const needsPct = income > 0 ? (needs / income) : NaN;
+        const wantsPct = income > 0 ? (wants / income) : NaN;
+        const debtPct  = income > 0 ? (debt / income)  : NaN;
+
+        pctNeedEl.textContent = fmtPct(needsPct);
+        pctWantEl.textContent = fmtPct(wantsPct);
+        pctDebtEl.textContent = fmtPct(debtPct);
+
+        // spending split bar (based on expenses)
+        const expBase = totalExp > 0 ? totalExp : 1;
+        const wNeed = (needs / expBase) * 100;
+        const wWant = (wants / expBase) * 100;
+        const wDebt = (debt / expBase) * 100;
+
+        barNeed.style.width = Math.max(0, Math.min(100, wNeed)) + '%';
+        barWant.style.width = Math.max(0, Math.min(100, wWant)) + '%';
+        barDebt.style.width = Math.max(0, Math.min(100, wDebt)) + '%';
+
+        // Rule evaluation (simple guidance, not strict)
+        if (income === 0) {
+          ruleStatusEl.textContent = '—';
+          ruleHintEl.textContent = 'Add your monthly income to evaluate budget rules.';
+        } else {
+          const savingsPlusDebtPct = (leftover > 0 ? leftover : 0) / income + debtPct;
+          const okNeeds = needsPct <= 0.55;
+          const okWants = wantsPct <= 0.35;
+          const okSavDebt = savingsPlusDebtPct >= 0.20;
+
+          if (leftover < 0) {
+            ruleStatusEl.textContent = 'Fix overspending';
+            ruleHintEl.textContent = 'Reduce wants first, then optimize needs and debt payments.';
+          } else if (okNeeds && okWants && okSavDebt) {
+            ruleStatusEl.textContent = 'Good balance';
+            ruleHintEl.textContent = 'Your spending is close to a 50/30/20 style plan.';
+          } else {
+            ruleStatusEl.textContent = 'Adjust categories';
+            ruleHintEl.textContent = 'Try lowering wants or increasing savings/debt allocation for faster progress.';
+          }
+        }
+
+        // Monthly + Yearly summary
+        const m = { income, totalExp, leftover, goal };
+        const y = { income: income*12, totalExp: totalExp*12, leftover: leftover*12, goal: goal*12 };
+
+        function row(period, o){
+          const st = statusTag(o.leftover, o.income);
+          const canGoal = (o.goal > 0 ? (o.leftover >= o.goal) : (o.leftover >= 0));
+          const goalText = o.goal > 0 ? fmtMoney(o.goal) : '—';
+          const goalTag = o.goal > 0 ? (canGoal ? '<span class="tag">Goal ok</span>' : '<span class="tag warn">Goal short</span>') : '<span class="tag warn">No goal</span>';
+          return `
+            <tr>
+              <td><strong>${period}</strong></td>
+              <td>${fmtMoney(o.income)}</td>
+              <td>${fmtMoney(o.totalExp)}</td>
+              <td>${fmtMoney(o.leftover)}</td>
+              <td>${goalText} <span class="mini">${goalTag}</span></td>
+              <td><span class="${st.cls}">${st.txt}</span></td>
+            </tr>
+          `;
+        }
+
+        tableBody.innerHTML = row('Monthly', m) + row('Yearly (12 months)', y);
+      }
+
+      $('bud_calc_btn').addEventListener('click', calcAndRender);
+
+      $('bud_fill_btn').addEventListener('click', function(){
+        incomeEl.value = '60000';
+        needEl.value = '30000';
+        wantEl.value = '12000';
+        debtEl.value = '8000';
+        goalEl.value = '10000';
+        calcAndRender();
+      });
+
+      $('bud_reset_btn').addEventListener('click', function(){
+        incomeEl.value = '';
+        needEl.value = '';
+        wantEl.value = '';
+        debtEl.value = '';
+        goalEl.value = '';
+        tableBody.innerHTML = '<tr><td colspan="6" class="mini">Enter values and click <strong>Calculate</strong> to generate the summary.</td></tr>';
+        totalExpEl.textContent = '—';
+        leftoverEl.textContent = '—';
+        goalOkEl.textContent = '—';
+        goalHintEl.textContent = '—';
+        ruleStatusEl.textContent = '—';
+        ruleHintEl.textContent = '—';
+        barNeed.style.width = '0%';
+        barWant.style.width = '0%';
+        barDebt.style.width = '0%';
+        pctNeedEl.textContent = '—';
+        pctWantEl.textContent = '—';
+        pctDebtEl.textContent = '—';
+      });
+
+      [incomeEl, needEl, wantEl, debtEl, goalEl].forEach(el => {
+        el.addEventListener('input', function(){
+          if (incomeEl.value || needEl.value || wantEl.value || debtEl.value) calcAndRender();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

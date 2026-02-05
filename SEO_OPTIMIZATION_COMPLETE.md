@@ -9,13 +9,13 @@
 ### Sitemap.xml
 - **Status**: ✅ Auto-generated and complete
 - **URL Count**: 75 URLs (1 homepage + 74 calculators)
-- **Location**: `/dist/sitemap.xml`
+- **Location**: `/sitemap.xml`
 - **Format**: XML 1.0, W3C compliant
 - **Coverage**: ALL calculators included
 
 ### Robots.txt
 - **Status**: ✅ Present
-- **Location**: `/dist/robots.txt`
+- **Location**: `/robots.txt`
 - **Optimization**: Allows all crawlers, links to sitemap
 
 ---

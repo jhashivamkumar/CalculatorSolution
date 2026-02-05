@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>NPS Calculator (Net Promoter Score) + Promoters/Detractors % | CalculatorSolution</title>
+  <meta name="description" content="Free NPS Calculator: enter promoters, passives and detractors to calculate Net Promoter Score (NPS), percentages, total responses and a clean summary for reports.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/nps-calculator.html">
+
+  <meta property="og:title" content="NPS Calculator">
+  <meta property="og:description" content="Calculate Net Promoter Score (NPS) from promoters, passives and detractors — includes % breakdown and summary for reporting.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (logic untouched; responsive + UI polish only) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    a{color:inherit}
+    :focus-visible{outline:3px solid rgba(37,99,235,.35);outline-offset:2px;border-radius:10px}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;line-height:1}
+    .brand-logo{border-radius:10px}
+
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em}
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      white-space:nowrap;
+    }
+
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      min-width:0; /* prevent overflow in grid */
+    }
+    .panel-title{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px
+    }
+    .panel-title h2{margin:0;font-size:1.05rem;line-height:1.2}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(37,99,235,.10);color:#1d4ed8;
+      font-weight:900;font-size:.85rem;
+      white-space:nowrap;
+    }
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      width:100%;
+      min-width:0;
+      appearance:none;
+    }
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    select.input{background-image:linear-gradient(45deg, transparent 50%, #64748b 50%),linear-gradient(135deg, #64748b 50%, transparent 50%);
+      background-position:calc(100% - 18px) calc(50% - 2px), calc(100% - 12px) calc(50% - 2px);
+      background-size:6px 6px, 6px 6px;
+      background-repeat:no-repeat;
+      padding-right:36px;
+    }
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-block;padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px;
+      white-space:nowrap;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+
+    .sticky{position:sticky;top:82px}
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+      min-width:0;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{
+      margin:4px 0 0;font-size:1.55rem;font-weight:1000;letter-spacing:-.02em;
+      overflow-wrap:anywhere;
+    }
+    .mini{font-size:.86rem;color:#64748b}
+
+    .bar{
+      height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px
+    }
+    .bar > span{display:block;height:100%;width:0%}
+
+    .split{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px}
+
+    .card{
+      background:#fff;border:1px solid #e2e8f0;border-radius:14px;
+      box-shadow:0 10px 24px rgba(8,13,26,.05);
+      padding:12px;
+      min-width:0;
+    }
+    details.card{padding:0;overflow:hidden}
+    details.card summary{
+      cursor:pointer;padding:12px;
+      list-style:none;
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+    }
+    details.card summary::-webkit-details-marker{display:none}
+    details.card summary:after{
+      content:"▾";
+      margin-left:auto;
+      font-weight:900;
+      color:#334155;
+      transform:translateY(1px);
+    }
+    details[open].card summary:after{content:"▴"}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Content sections readability */
+    article > section{margin-top:18px}
+    pre{
+      white-space:pre-wrap;
+      word-break:break-word;
+      background:rgba(255,255,255,.9);
+      border:1px solid #e2e8f0;
+      border-radius:14px;
+      padding:12px;
+      overflow:auto;
+    }
+
+    /* Related grid: ensure responsive even if global CSS missing */
+    .related-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:12px;
+      margin-top:10px;
+    }
+    .related-grid .card h4{margin:0 0 6px 0}
+    .related-grid .card p{margin:0;color:#475569}
+
+    /* --- Responsive breakpoints (NO JS changes) --- */
+    @media (max-width: 1024px){
+      .wrap{padding:0 16px}
+      .hero{padding:22px 16px}
+      .hero h1{font-size:1.65rem}
+      .related-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static}
+      .panel{padding:14px}
+      .related-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
+    }
+
+    @media (max-width: 640px){
+      .wrap{padding:0 14px}
+      .site-header{padding:12px 0}
+      .brand-text{font-size:1.05rem}
+      .hero{margin:14px 0 12px;border-radius:16px}
+      .hero h1{font-size:1.45rem}
+      .chip{font-size:.84rem}
+      .grid-2{grid-template-columns:1fr}
+      .actions{gap:8px}
+      .btn{flex:1 1 auto}
+      .metric .v{font-size:1.35rem}
+      .related-grid{grid-template-columns:1fr}
+    }
+
+    /* Small phones */
+    @media (max-width: 380px){
+      .wrap{padding:0 12px}
+      .btn{width:100%}
+      .pill{font-size:.8rem}
+    }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      .btn,.card{transition:none}
+      .btn:hover{transform:none}
+      .card:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"NPS Calculator",
+      "url":"https://calculatorsolution.com/nps-calculator.html",
+      "description":"Calculate Net Promoter Score (NPS) using promoters, passives and detractors."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"NPS Calculator","item":"https://calculatorsolution.com/nps-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate NPS",
+      "step":[
+        {"@type":"HowToStep","name":"Collect responses","text":"Ask: How likely are you to recommend us (0–10)? Count promoters (9–10), passives (7–8), and detractors (0–6)."},
+        {"@type":"HowToStep","name":"Compute percentages","text":"Promoter% = promoters/total × 100. Detractor% = detractors/total × 100."},
+        {"@type":"HowToStep","name":"Calculate NPS","text":"NPS = Promoter% − Detractor%. NPS ranges from −100 to +100."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Promoter score range?","acceptedAnswer":{"@type":"Answer","text":"Scores 9–10 are Promoters, 7–8 are Passives, and 0–6 are Detractors."}},
+        {"@type":"Question","name":"What is a good NPS?","acceptedAnswer":{"@type":"Answer","text":"It depends on the industry. Compare your NPS to past periods and peers to judge performance."}},
+        {"@type":"Question","name":"Does sample size matter?","acceptedAnswer":{"@type":"Answer","text":"Yes. Larger samples reduce variance and make trends more reliable."}},
+        {"@type":"Question","name":"Should I include passives in the formula?","acceptedAnswer":{"@type":"Answer","text":"Passives are included in the total response count but not directly in the NPS subtraction."}},
+        {"@type":"Question","name":"Is NPS absolute?","acceptedAnswer":{"@type":"Answer","text":"NPS needs context. Track it over time and combine with qualitative feedback for best decisions."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>NPS Calculator</h1>
+        <p>Compute Net Promoter Score (NPS) instantly — plus promoter/detractor/passive percentages for reports.</p>
+        <div class="chips">
+          <span class="chip">📈 NPS (−100 to +100)</span>
+          <span class="chip">🧮 % breakdown</span>
+          <span class="chip">📝 Report-ready summary</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-nps">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="NPS inputs">
+              <div class="panel-title">
+                <h2>Survey counts</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="nps_promoters">Promoters (9–10)</label>
+                  <input id="nps_promoters" class="input" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 72">
+                  <p class="help">Respondents who love you & recommend you.</p>
+                </div>
+
+                <div class="field">
+                  <label for="nps_passives">Passives (7–8)</label>
+                  <input id="nps_passives" class="input" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 18">
+                  <p class="help">Neutral / satisfied but not loyal.</p>
+                </div>
+
+                <div class="field">
+                  <label for="nps_detractors">Detractors (0–6)</label>
+                  <input id="nps_detractors" class="input" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 10">
+                  <p class="help">Unhappy customers who may discourage others.</p>
+                </div>
+
+                <div class="field">
+                  <label for="nps_round">Round result</label>
+                  <select id="nps_round" class="input">
+                    <option value="1" selected>1 decimal</option>
+                    <option value="0">0 decimals</option>
+                    <option value="2">2 decimals</option>
+                  </select>
+                  <p class="help">Choose rounding for reporting.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="nps_calc_btn" type="button">Calculate NPS</button>
+                <button class="btn btn-dark" id="nps_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="nps_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="mini" style="margin-top:10px;">
+                Formula: <strong>NPS = %Promoters − %Detractors</strong> (Passives affect the total count).
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="NPS results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Net Promoter Score (NPS)</p>
+                <p class="v" id="nps_out_score">—</p>
+                <p class="mini" id="nps_out_score_note">NPS ranges from −100 to +100.</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Total responses</p>
+                <p class="v" id="nps_out_total">—</p>
+                <p class="mini" id="nps_out_total_note">Promoters + Passives + Detractors.</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Promoters vs Detractors (share)</p>
+                <div class="bar"><span id="nps_bar_promoters"></span></div>
+                <p class="mini" id="nps_out_split">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Summary</p>
+                <p class="mini" id="nps_out_summary">Enter values to see a clean summary.</p>
+              </div>
+
+              <div class="split">
+                <div class="metric">
+                  <p class="k">Promoters %</p>
+                  <p class="v" id="nps_out_p_pct">—</p>
+                  <p class="mini" id="nps_out_p_cnt">—</p>
+                </div>
+                <div class="metric alt">
+                  <p class="k">Passives %</p>
+                  <p class="v" id="nps_out_pa_pct">—</p>
+                  <p class="mini" id="nps_out_pa_cnt">—</p>
+                </div>
+                <div class="metric">
+                  <p class="k">Detractors %</p>
+                  <p class="v" id="nps_out_d_pct">—</p>
+                  <p class="mini" id="nps_out_d_cnt">—</p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          <strong>Net Promoter Score (NPS)</strong> is a simple loyalty metric based on one question:
+          “How likely are you to recommend us to a friend or colleague?” (0–10).
+          Responses are grouped into <strong>Promoters</strong> (9–10), <strong>Passives</strong> (7–8), and <strong>Detractors</strong> (0–6).
+        </p>
+        <p>
+          The score is calculated as:
+          <strong>NPS = %Promoters − %Detractors</strong>.
+          NPS ranges from <strong>−100</strong> (everyone is a detractor) to <strong>+100</strong> (everyone is a promoter).
+        </p>
+        <p class="mini">
+          Tip: NPS is best used as a <strong>trend metric</strong>. Track it monthly/quarterly and pair it with follow-up feedback (“Why did you give this score?”).
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>NPS = (Promoters / Total × 100) − (Detractors / Total × 100)</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Promoter score range?</strong></summary><p>9–10 are promoters, 7–8 are passives, and 0–6 are detractors.</p></details>
+        <details class="card"><summary><strong>Sample size?</strong></summary><p>Larger samples reduce variance. Compare periods with similar sample sizes.</p></details>
+        <details class="card"><summary><strong>Use for trends?</strong></summary><p>Yes. NPS is most useful when tracked consistently over time.</p></details>
+        <details class="card"><summary><strong>Benchmarks?</strong></summary><p>Benchmarks vary by industry; use your past NPS as your best baseline.</p></details>
+        <details class="card"><summary><strong>Is NPS absolute?</strong></summary><p>No. Interpret NPS with context and add qualitative feedback for clarity.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="percentage-calculator.html"><h4>Percentage Calculator</h4><p>Compute percentages and simple percent changes.</p></a>
+          <a class="card" href="percentage-change-calculator.html"><h4>Percentage Increase/Decrease Calculator</h4><p>Calculate percent increase or decrease between two values.</p></a>
+          <a class="card" href="average-calculator.html"><h4>Average Calculator</h4><p>Compute average, mean, and basic stats.</p></a>
+          <a class="card" href="margin-calculator.html"><h4>Profit Margin Calculator</h4><p>Calculate margin, markup and profit.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const promotersEl = $('nps_promoters');
+      const passivesEl  = $('nps_passives');
+      const detractorsEl= $('nps_detractors');
+      const roundEl     = $('nps_round');
+
+      const outScore = $('nps_out_score');
+      const outScoreNote = $('nps_out_score_note');
+      const outTotal = $('nps_out_total');
+      const outSplit = $('nps_out_split');
+      const outSummary = $('nps_out_summary');
+
+      const outPPct = $('nps_out_p_pct');
+      const outPaPct = $('nps_out_pa_pct');
+      const outDPct = $('nps_out_d_pct');
+
+      const outPCnt = $('nps_out_p_cnt');
+      const outPaCnt = $('nps_out_pa_cnt');
+      const outDCnt = $('nps_out_d_cnt');
+
+      const barP = $('nps_bar_promoters');
+
+      function clamp(x, a, b){ return Math.max(a, Math.min(b, x)); }
+
+      function calc(){
+        const promoters = parseFloat(promotersEl.value) || 0;
+        const passives  = parseFloat(passivesEl.value) || 0;
+        const detractors= parseFloat(detractorsEl.value) || 0;
+
+        if(promoters < 0 || passives < 0 || detractors < 0){
+          outScore.textContent = '—';
+          outScoreNote.textContent = 'Counts cannot be negative.';
+          return;
+        }
+
+        const total = promoters + passives + detractors;
+        if(total <= 0){
+          outScore.textContent = '—';
+          outScoreNote.textContent = 'Enter at least one response.';
+          outTotal.textContent = '—';
+          outSplit.textContent = '—';
+          outSummary.textContent = 'Enter values to see a clean summary.';
+          outPPct.textContent = '—';
+          outPaPct.textContent = '—';
+          outDPct.textContent = '—';
+          outPCnt.textContent = '—';
+          outPaCnt.textContent = '—';
+          outDCnt.textContent = '—';
+          barP.style.width = '0%';
+          return;
+        }
+
+        const pPct = (promoters/total)*100;
+        const paPct= (passives/total)*100;
+        const dPct = (detractors/total)*100;
+
+        const nps = pPct - dPct;
+
+        const dec = parseInt(roundEl.value, 10);
+        const roundTo = (x)=> Number.isFinite(x) ? x.toFixed(dec) : '—';
+
+        outScore.textContent = roundTo(nps);
+        outScoreNote.textContent = `NPS range −100 to +100 • Promoters% − Detractors%`;
+
+        outTotal.textContent = total.toLocaleString();
+
+        outPPct.textContent = roundTo(pPct) + '%';
+        outPaPct.textContent = roundTo(paPct) + '%';
+        outDPct.textContent = roundTo(dPct) + '%';
+
+        outPCnt.textContent = `${promoters.toLocaleString()} promoters`;
+        outPaCnt.textContent = `${passives.toLocaleString()} passives`;
+        outDCnt.textContent = `${detractors.toLocaleString()} detractors`;
+
+        // Bar shows promoter share out of (promoters + detractors) for quick visual
+        const pdTotal = promoters + detractors;
+        const pShare = pdTotal > 0 ? (promoters/pdTotal)*100 : 0;
+        barP.style.width = clamp(pShare, 0, 100).toFixed(1) + '%';
+        barP.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+
+        outSplit.textContent = `Promoters: ${roundTo(pPct)}% • Passives: ${roundTo(paPct)}% • Detractors: ${roundTo(dPct)}%`;
+
+        let label = 'Neutral';
+        if(nps >= 50) label = 'Excellent';
+        else if(nps >= 30) label = 'Great';
+        else if(nps >= 0) label = 'Good';
+        else label = 'Needs improvement';
+
+        outSummary.textContent =
+          `Total ${total.toLocaleString()} responses • NPS ${roundTo(nps)} (${label}) • Promoters ${roundTo(pPct)}% • Detractors ${roundTo(dPct)}%.`;
+      }
+
+      $('nps_calc_btn').addEventListener('click', calc);
+
+      $('nps_example_btn').addEventListener('click', ()=>{
+        promotersEl.value = '72';
+        passivesEl.value  = '18';
+        detractorsEl.value= '10';
+        roundEl.value     = '1';
+        calc();
+      });
+
+      $('nps_reset_btn').addEventListener('click', ()=>{
+        [promotersEl, passivesEl, detractorsEl].forEach(el=>el.value='');
+        roundEl.value = '1';
+        outScore.textContent = '—';
+        outScoreNote.textContent = 'NPS ranges from −100 to +100.';
+        outTotal.textContent = '—';
+        outSplit.textContent = '—';
+        outSummary.textContent = 'Enter values to see a clean summary.';
+        outPPct.textContent = '—';
+        outPaPct.textContent = '—';
+        outDPct.textContent = '—';
+        outPCnt.textContent = '—';
+        outPaCnt.textContent = '—';
+        outDCnt.textContent = '—';
+        barP.style.width = '0%';
+      });
+
+      [promotersEl, passivesEl, detractorsEl, roundEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(promotersEl.value || passivesEl.value || detractorsEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(promotersEl.value || passivesEl.value || detractorsEl.value) calc(); });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Forex Profit Calculator (Pips, Lots, Spread) | CalculatorSolution</title>
+  <meta name="description" content="Free Forex Profit Calculator: calculate profit/loss in pips and money using pair, buy/sell, lot size, entry/exit price, spread and commission. Includes pip value estimate and margin calculator.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/forex-profit-calculator.html">
+
+  <meta property="og:title" content="Forex Profit Calculator">
+  <meta property="og:description" content="Calculate forex profit/loss with pips, lots, spread and commission. Estimate pip value and margin requirement.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (Responsive UI/UX improvements ONLY - logic untouched) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    /* ✅ Better sticky behavior on all devices */
+    :root{
+      --headerH: 68px;       /* approximate header height */
+      --stickyTop: 82px;     /* default sticky offset (desktop) */
+      --gap: 14px;
+      --radius: 16px;
+    }
+
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem}
+    .brand-logo{border-radius:10px}
+
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em}
+    .hero p{margin:0;opacity:.95}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      white-space:nowrap;
+    }
+
+    /* ✅ Main layout - responsive without changing structure */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:var(--gap);
+      align-items:start;
+      margin-top:14px
+    }
+
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:var(--radius);
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      min-width:0; /* ✅ prevent grid overflow */
+    }
+    .panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .panel-title h2{margin:0;font-size:1.05rem;line-height:1.25}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem;white-space:nowrap}
+
+    /* ✅ Form grid scales nicely */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      width:100%;
+      min-width:0;
+    }
+    select.input{appearance:auto}
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    /* ✅ Buttons: full-width on small screens, same logic */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px; /* ✅ better touch target */
+      touch-action:manipulation;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .btn:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:2px}
+
+    /* ✅ Sticky results: works on desktop/tablet; disables on small screens automatically */
+    .sticky{position:sticky;top:var(--stickyTop)}
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+      min-width:0;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{margin:4px 0 0;font-size:1.55rem;font-weight:1000;letter-spacing:-.02em;word-break:break-word}
+    .mini{font-size:.86rem;color:#64748b;word-break:break-word}
+
+    .bar{height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px}
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* ✅ Table: smooth horizontal scroll on mobiles */
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid #e2e8f0;border-radius:16px;
+      background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{width:100%;border-collapse:collapse;min-width:680px} /* ✅ lower min-width so fewer scrolls */
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem;vertical-align:top}
+    th{background:#f8fafc;font-weight:1000}
+    tr:last-child td{border-bottom:0}
+
+    .note{
+      border:1px dashed #cbd5e1;border-radius:14px;padding:12px;background:rgba(255,255,255,.7);
+      margin-top:10px
+    }
+
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 10px 24px rgba(8,13,26,.05);padding:12px}
+    details.card{padding:0}
+    details.card summary{cursor:pointer;padding:12px;list-style:none}
+    details.card summary::-webkit-details-marker{display:none}
+    details.card summary:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:2px;border-radius:12px}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* ✅ Typography spacing for content blocks */
+    article > section{scroll-margin-top:90px}
+    pre{
+      white-space:pre-wrap;
+      word-break:break-word;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid #e2e8f0;border-radius:14px;
+      background:rgba(255,255,255,.85);
+      padding:12px;
+      margin:10px 0 0;
+      font-size:.95rem;
+      line-height:1.5;
+    }
+
+    /* ✅ Related cards grid: ensure good behavior even if global css missing */
+    .related-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:12px;
+      margin-top:10px;
+    }
+    .related-grid .card h4{margin:0 0 6px;font-size:1rem;line-height:1.3}
+    .related-grid .card p{margin:0;color:#475569;font-size:.92rem}
+
+    /* =======================
+       Responsive Breakpoints
+       ======================= */
+
+    /* Large tablets / small laptops */
+    @media (max-width: 1024px){
+      .wrap{padding:0 16px}
+      .hero{padding:22px 16px}
+      .hero h1{font-size:1.65rem}
+      .calc-shell{grid-template-columns:1fr;gap:12px}
+      .sticky{position:static}
+      :root{--stickyTop: 0px}
+      .related-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
+    }
+
+    /* Phones */
+    @media (max-width: 640px){
+      .wrap{padding:0 14px}
+      .site-header{padding:12px 0}
+      .brand-text{font-size:1.05rem}
+      .hero{margin:14px 0 12px;border-radius:16px;padding:18px 14px}
+      .hero h1{font-size:1.35rem}
+      .chip{font-size:.82rem;padding:6px 9px}
+      .grid-2{grid-template-columns:1fr;gap:10px}
+      .panel{padding:12px}
+      .metric .v{font-size:1.35rem}
+      .actions{gap:8px}
+      .actions .btn{flex:1 1 100%;width:100%} /* ✅ full width buttons */
+      table{min-width:560px}
+      .related-grid{grid-template-columns:1fr}
+      pre{font-size:.92rem}
+    }
+
+    /* Very small phones */
+    @media (max-width: 360px){
+      .hero h1{font-size:1.25rem}
+      .brand-text{font-size:1rem}
+      .input{font-size:.98rem}
+    }
+
+    /* Reduced motion accessibility */
+    @media (prefers-reduced-motion: reduce){
+      .btn, .card{transition:none}
+      .btn:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Forex Profit Calculator",
+      "url":"https://calculatorsolution.com/forex-profit-calculator.html",
+      "description":"Calculate forex profit/loss with pips, lots, spread and commission. Estimate pip value and margin requirement."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Forex Profit Calculator","item":"https://calculatorsolution.com/forex-profit-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate forex profit",
+      "step":[
+        {"@type":"HowToStep","name":"Choose pair and direction","text":"Select currency pair (e.g., EUR/USD) and choose Buy or Sell."},
+        {"@type":"HowToStep","name":"Enter lot size and prices","text":"Enter lot size and your entry/exit price. Add spread and commission if needed."},
+        {"@type":"HowToStep","name":"Calculate profit/loss","text":"See pips gained/lost, estimated pip value, profit/loss and margin required."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Include spread?","acceptedAnswer":{"@type":"Answer","text":"Yes. Spread and commissions reduce profit. Enter spread (pips) and commission to see net P/L."}},
+        {"@type":"Question","name":"Leverage?","acceptedAnswer":{"@type":"Answer","text":"Leverage magnifies gains and losses and also reduces margin required. Use responsibly."}},
+        {"@type":"Question","name":"Margin calls?","acceptedAnswer":{"@type":"Answer","text":"With leverage, adverse moves can trigger margin requirements. Keep risk controls and stop-loss."}},
+        {"@type":"Question","name":"Pip value?","acceptedAnswer":{"@type":"Answer","text":"Pip value depends on currency pair, quote currency and lot size. This calculator estimates pip value for common cases."}},
+        {"@type":"Question","name":"Taxes?","acceptedAnswer":{"@type":"Answer","text":"Rules differ by jurisdiction. Consult a tax professional for reporting and deductions."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Forex Profit Calculator</h1>
+        <p>Calculate profit/loss in pips and money — with lot size, spread, commission and margin estimate.</p>
+        <div class="chips">
+          <span class="chip">📍 Pips</span>
+          <span class="chip">💵 Net P/L</span>
+          <span class="chip">🧾 Spread + commission</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-forex-profit">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Forex profit inputs">
+              <div class="panel-title">
+                <h2>Trade details</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="fx_pair">Currency pair</label>
+                  <input id="fx_pair" class="input" type="text" value="EURUSD" placeholder="e.g., EURUSD">
+                  <p class="help">Enter like EURUSD, GBPUSD, USDJPY, XAUUSD (metal) etc.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fx_dir">Direction</label>
+                  <select id="fx_dir" class="input">
+                    <option value="buy" selected>Buy (Long)</option>
+                    <option value="sell">Sell (Short)</option>
+                  </select>
+                  <p class="help">Buy profits when price rises; Sell profits when price falls.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fx_lot_type">Lot type</label>
+                  <select id="fx_lot_type" class="input">
+                    <option value="standard" selected>Standard (100,000)</option>
+                    <option value="mini">Mini (10,000)</option>
+                    <option value="micro">Micro (1,000)</option>
+                    <option value="units">Units (custom)</option>
+                  </select>
+                  <p class="help">Choose standard/mini/micro or enter custom units.</p>
+                </div>
+
+                <div class="field" id="fx_units_wrap" style="display:none;">
+                  <label for="fx_units">Units (if custom)</label>
+                  <input id="fx_units" class="input" type="number" inputmode="numeric" min="1" step="1" placeholder="e.g., 25000">
+                  <p class="help">Used only when lot type is “Units (custom)”.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fx_entry">Entry price</label>
+                  <input id="fx_entry" class="input" type="number" inputmode="decimal" step="0.00001" placeholder="e.g., 1.08500">
+                  <p class="help">For JPY pairs use 0.001 precision (e.g., 156.250).</p>
+                </div>
+
+                <div class="field">
+                  <label for="fx_exit">Exit price</label>
+                  <input id="fx_exit" class="input" type="number" inputmode="decimal" step="0.00001" placeholder="e.g., 1.09050">
+                  <p class="help">Use the executed exit/close price.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fx_spread_pips">Spread (pips)</label>
+                  <input id="fx_spread_pips" class="input" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g., 1.2">
+                  <p class="help">Spread reduces P/L (applied once per trade).</p>
+                </div>
+
+                <div class="field">
+                  <label for="fx_commission">Commission (money)</label>
+                  <input id="fx_commission" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 4.50">
+                  <p class="help">Total commission for open+close (if applicable).</p>
+                </div>
+
+                <div class="field">
+                  <label for="fx_quote_ccy">Profit currency</label>
+                  <select id="fx_quote_ccy" class="input">
+                    <option value="USD" selected>USD</option>
+                    <option value="INR">INR</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="JPY">JPY</option>
+                  </select>
+                  <p class="help">This is display currency (conversion is optional).</p>
+                </div>
+
+                <div class="field">
+                  <label for="fx_usd_to_inr">USD → INR rate (optional)</label>
+                  <input id="fx_usd_to_inr" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 83.20">
+                  <p class="help">Only used when Profit currency is INR (simple estimate).</p>
+                </div>
+
+                <div class="field">
+                  <label for="fx_leverage">Leverage (for margin)</label>
+                  <select id="fx_leverage" class="input">
+                    <option value="1">1:1</option>
+                    <option value="10">1:10</option>
+                    <option value="20">1:20</option>
+                    <option value="50">1:50</option>
+                    <option value="100" selected>1:100</option>
+                    <option value="200">1:200</option>
+                    <option value="500">1:500</option>
+                  </select>
+                  <p class="help">Used to estimate margin requirement.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fx_round">Round result</label>
+                  <select id="fx_round" class="input">
+                    <option value="2" selected>2 decimals</option>
+                    <option value="0">0 decimals</option>
+                    <option value="4">4 decimals</option>
+                  </select>
+                  <p class="help">Controls display rounding for money values.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="fx_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="fx_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="fx_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note mini">
+                This tool estimates pip value for common retail FX cases.
+                If your broker uses different contract sizes (e.g., metals/indices) or account currency conversions,
+                treat results as an estimate.
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Forex profit results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Pips (gross)</p>
+                <p class="v" id="fx_out_pips">—</p>
+                <p class="mini" id="fx_out_pips_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Pip value (estimate)</p>
+                <p class="v" id="fx_out_pipv">—</p>
+                <p class="mini" id="fx_out_pipv_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Net Profit / Loss</p>
+                <p class="v" id="fx_out_net">—</p>
+                <div class="bar"><span id="fx_bar"></span></div>
+                <p class="mini" id="fx_out_net_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Estimated margin required</p>
+                <p class="v" id="fx_out_margin">—</p>
+                <p class="mini" id="fx_out_margin_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="fx_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Breakdown</h2>
+          <p class="mini" style="margin:0 0 10px;">How pips, spread and commission impact net P/L.</p>
+
+          <div class="table-wrap">
+            <table aria-label="Forex profit breakdown table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody id="fx_table">
+                <tr><td colspan="2" class="mini">Click <strong>Calculate</strong> to see the breakdown.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          This <strong>Forex Profit Calculator</strong> estimates your trade result using your entry and exit prices,
+          trade direction (buy/sell), and position size (lots). It also accounts for <strong>spread</strong> and optional
+          <strong>commission</strong> to show a more realistic net profit/loss.
+        </p>
+        <p class="mini">
+          Note: exact profit may differ slightly due to broker contract size, swaps/rollover, slippage, and account-currency conversion.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>Gross pips = (exit - entry) / pip_size   (Buy)
+Gross pips = (entry - exit) / pip_size   (Sell)
+
+Pip value (quote currency) ≈ units × pip_size
+Net P/L ≈ (gross pips − spread_pips) × pip_value − commission
+
+Margin ≈ (units × entry_price) / leverage</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Include spread?</strong></summary><p>Yes. Spread reduces profit. Enter the spread (in pips) for a net estimate.</p></details>
+        <details class="card"><summary><strong>Leverage?</strong></summary><p>Leverage magnifies gains and losses. This calculator uses leverage only for margin estimate.</p></details>
+        <details class="card"><summary><strong>Margin calls?</strong></summary><p>If equity drops below required margin, your broker may request funds or close positions.</p></details>
+        <details class="card"><summary><strong>Pip value?</strong></summary><p>Pip value depends on pair and lot size. For USD-quoted pairs it’s usually stable; otherwise it changes with price.</p></details>
+        <details class="card"><summary><strong>Taxes?</strong></summary><p>Tax rules differ by country. Consult a professional for your jurisdiction.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="position-size-calculator.html"><h4>Position Size Calculator</h4><p>Estimate lots based on risk and stop-loss.</p></a>
+          <a class="card" href="pip-value-calculator.html"><h4>Pip Value Calculator</h4><p>Compute pip value by pair and lot size.</p></a>
+          <a class="card" href="risk-reward-calculator.html"><h4>Risk Reward Calculator</h4><p>Analyze RR based on entry, stop and target.</p></a>
+          <a class="card" href="percentage-change-calculator.html"><h4>Percentage Change Calculator</h4><p>Compute percent change between prices.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const fmt = (n, d)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{minimumFractionDigits:d, maximumFractionDigits:d}).format(n) : '—');
+      const fmt0 = (n)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:0}).format(n) : '—');
+
+      function money(n, decimals, ccy){
+        if(!isFinite(n)) return '—';
+        const sign = (n<0) ? '-' : '';
+        return sign + (ccy ? (ccy + ' ') : '') + fmt(Math.abs(n), decimals);
+      }
+
+      const pairEl = $('fx_pair');
+      const dirEl = $('fx_dir');
+      const lotTypeEl = $('fx_lot_type');
+      const unitsWrap = $('fx_units_wrap');
+      const unitsEl = $('fx_units');
+      const entryEl = $('fx_entry');
+      const exitEl = $('fx_exit');
+      const spreadEl = $('fx_spread_pips');
+      const commEl = $('fx_commission');
+      const ccyEl = $('fx_quote_ccy');
+      const usdInrEl = $('fx_usd_to_inr');
+      const levEl = $('fx_leverage');
+      const roundEl = $('fx_round');
+
+      const outPips = $('fx_out_pips');
+      const outPipsNote = $('fx_out_pips_note');
+      const outPipv = $('fx_out_pipv');
+      const outPipvNote = $('fx_out_pipv_note');
+      const outNet = $('fx_out_net');
+      const outNetNote = $('fx_out_net_note');
+      const outMargin = $('fx_out_margin');
+      const outMarginNote = $('fx_out_margin_note');
+      const outSummary = $('fx_out_summary');
+      const bar = $('fx_bar');
+      const tbody = $('fx_table');
+
+      function getUnits(){
+        const t = lotTypeEl.value;
+        if(t === 'standard') return 100000;
+        if(t === 'mini') return 10000;
+        if(t === 'micro') return 1000;
+        const u = parseFloat(unitsEl.value);
+        return (isFinite(u) && u>0) ? u : NaN;
+      }
+
+      function pipSize(pair){
+        // JPY pairs typically 0.01 pip size; otherwise 0.0001
+        // Note: some brokers quote fractional pips; we use standard pip.
+        const p = (pair||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+        if(p.includes('JPY') && !p.includes('XAU') && !p.includes('XAG')) return 0.01;
+        // metals like XAUUSD aren't true "pips" in same sense; many treat 0.01 as pip
+        if(p.startsWith('XAU') || p.startsWith('XAG')) return 0.01;
+        return 0.0001;
+      }
+
+      function maybeConvert(val, profitCcy){
+        // Simple: if user wants INR and provides USD->INR, convert from USD to INR.
+        // Otherwise, return as-is.
+        if(profitCcy === 'INR'){
+          const r = parseFloat(usdInrEl.value);
+          if(isFinite(r) && r>0){
+            return { value: val * r, note: `Converted using USD→INR rate ${fmt(r,2)}.` };
+          }
+          return { value: val, note: 'No USD→INR rate provided (showing USD-equivalent number).' };
+        }
+        return { value: val, note: 'No conversion applied.' };
+      }
+
+      function calc(){
+        const pair = (pairEl.value||'').trim().toUpperCase();
+        const dir = dirEl.value;
+        const units = getUnits();
+        const entry = parseFloat(entryEl.value);
+        const exit  = parseFloat(exitEl.value);
+        const spreadPips = Math.max(0, parseFloat(spreadEl.value) || 0);
+        const commission = Math.max(0, parseFloat(commEl.value) || 0);
+        const lev = Math.max(1, parseFloat(levEl.value) || 1);
+        const decimals = parseInt(roundEl.value,10);
+        const profitCcy = ccyEl.value;
+
+        if(lotTypeEl.value === 'units') unitsWrap.style.display = 'block';
+        else unitsWrap.style.display = 'none';
+
+        if(!pair){
+          outPips.textContent='—'; outPipsNote.textContent='Enter a currency pair.';
+          tbody.innerHTML='<tr><td colspan="2" class="mini">Enter valid inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+        if(!isFinite(units) || units<=0){
+          outPips.textContent='—'; outPipsNote.textContent='Enter valid units/lot size.';
+          tbody.innerHTML='<tr><td colspan="2" class="mini">Fix lot size and calculate again.</td></tr>';
+          return;
+        }
+        if(!isFinite(entry) || entry<=0 || !isFinite(exit) || exit<=0){
+          outPips.textContent='—'; outPipsNote.textContent='Enter valid entry and exit prices.';
+          tbody.innerHTML='<tr><td colspan="2" class="mini">Fix prices and calculate again.</td></tr>';
+          return;
+        }
+
+        const ps = pipSize(pair);
+
+        // Gross pips
+        const priceDiff = (dir === 'buy') ? (exit - entry) : (entry - exit);
+        const grossPips = priceDiff / ps;
+
+        // Pip value estimate (quote currency)
+        // For pairs quoted like XXXUSD => pip value in USD is units * pipSize
+        // For USDJPY it's actually in JPY (quote currency), so still units * pipSize in JPY.
+        const pipValueQuote = units * ps;
+
+        // Net pips after spread
+        const netPips = grossPips - spreadPips;
+
+        // Profit in quote currency estimate
+        const profitQuote = (netPips * pipValueQuote) - commission;
+
+        // Convert/display
+        const conv = maybeConvert(profitQuote, profitCcy);
+        const profitDisp = conv.value;
+
+        // Margin estimate (quote-currency-ish):
+        // For XXXUSD: notional ≈ units * entry
+        // For USDXXX: notional in quote ≈ units * entry too (still gives magnitude)
+        const notional = units * entry;
+        const margin = notional / lev;
+
+        const convMargin = maybeConvert(margin, profitCcy);
+
+        // Outputs
+        outPips.textContent = fmt(grossPips, 1) + ' pips';
+        outPipsNote.textContent = `Pip size assumed: ${ps} • Spread: ${fmt(spreadPips,1)} pips`;
+
+        outPipv.textContent = money(pipValueQuote, decimals, profitCcy === 'INR' ? '≈INR' : '≈' + profitCcy);
+        outPipvNote.textContent = `Estimated pip value in quote currency: units (${fmt0(units)}) × pip size (${ps}).`;
+
+        const sign = profitDisp >= 0 ? 1 : -1;
+        outNet.textContent = (profitCcy === 'INR')
+          ? money(profitDisp, decimals, '₹')
+          : money(profitDisp, decimals, profitCcy);
+
+        const abs = Math.abs(profitDisp);
+        bar.style.width = Math.min(100, abs ? 60 : 0) + '%';
+        bar.style.background = sign >= 0
+          ? 'linear-gradient(90deg, rgba(16,185,129,.9), rgba(59,130,246,.9))'
+          : 'linear-gradient(90deg, rgba(239,68,68,.9), rgba(168,85,247,.9))';
+
+        outNetNote.textContent = `Net pips: ${fmt(netPips,1)} • Commission: ${commission>0 ? commission : 0} • ${conv.note}`;
+
+        outMargin.textContent = (profitCcy === 'INR')
+          ? money(convMargin.value, decimals, '₹')
+          : money(convMargin.value, decimals, profitCcy);
+
+        outMarginNote.textContent = `Notional ≈ units × entry = ${fmt0(units)} × ${fmt(entry,5)} ≈ ${fmt(notional,decimals)} (quote) • Leverage 1:${lev}. ${convMargin.note}`;
+
+        outSummary.textContent =
+          `${pair} • ${dir.toUpperCase()} • Units ${fmt0(units)} • Entry ${fmt(entry,5)} • Exit ${fmt(exit,5)} • Gross ${fmt(grossPips,1)} pips • Net P/L ${outNet.textContent}.`;
+
+        // Breakdown table
+        const rows = [];
+        rows.push(`<tr><td>Pair</td><td><strong>${pair}</strong></td></tr>`);
+        rows.push(`<tr><td>Direction</td><td>${dir === 'buy' ? 'Buy (Long)' : 'Sell (Short)'}</td></tr>`);
+        rows.push(`<tr><td>Units</td><td>${fmt0(units)}</td></tr>`);
+        rows.push(`<tr><td>Pip size</td><td>${ps}</td></tr>`);
+        rows.push(`<tr><td>Gross pips</td><td>${fmt(grossPips,1)}</td></tr>`);
+        rows.push(`<tr><td>Spread (pips)</td><td>− ${fmt(spreadPips,1)}</td></tr>`);
+        rows.push(`<tr><td>Net pips</td><td>${fmt(netPips,1)}</td></tr>`);
+        rows.push(`<tr><td>Pip value (quote est.)</td><td>${fmt(pipValueQuote,decimals)}</td></tr>`);
+        rows.push(`<tr><td>Commission</td><td>− ${fmt(commission,decimals)}</td></tr>`);
+        rows.push(`<tr><td><strong>Net P/L</strong></td><td><strong>${outNet.textContent}</strong></td></tr>`);
+        rows.push(`<tr><td>Margin (est.)</td><td>${outMargin.textContent}</td></tr>`);
+        tbody.innerHTML = rows.join('');
+      }
+
+      $('fx_calc_btn').addEventListener('click', calc);
+
+      $('fx_example_btn').addEventListener('click', ()=>{
+        pairEl.value = 'EURUSD';
+        dirEl.value = 'buy';
+        lotTypeEl.value = 'standard';
+        unitsEl.value = '';
+        entryEl.value = '1.08500';
+        exitEl.value = '1.09050';
+        spreadEl.value = '1.2';
+        commEl.value = '4.50';
+        ccyEl.value = 'USD';
+        usdInrEl.value = '83.20';
+        levEl.value = '100';
+        roundEl.value = '2';
+        calc();
+      });
+
+      $('fx_reset_btn').addEventListener('click', ()=>{
+        pairEl.value = 'EURUSD';
+        dirEl.value = 'buy';
+        lotTypeEl.value = 'standard';
+        unitsEl.value = '';
+        entryEl.value = '';
+        exitEl.value = '';
+        spreadEl.value = '';
+        commEl.value = '';
+        ccyEl.value = 'USD';
+        usdInrEl.value = '';
+        levEl.value = '100';
+        roundEl.value = '2';
+        unitsWrap.style.display='none';
+
+        outPips.textContent='—';
+        outPipsNote.textContent='—';
+        outPipv.textContent='—';
+        outPipvNote.textContent='—';
+        outNet.textContent='—';
+        outNetNote.textContent='—';
+        outMargin.textContent='—';
+        outMarginNote.textContent='—';
+        outSummary.textContent='Enter details to see a clean summary.';
+        bar.style.width='0%';
+        tbody.innerHTML = '<tr><td colspan="2" class="mini">Click <strong>Calculate</strong> to see the breakdown.</td></tr>';
+      });
+
+      lotTypeEl.addEventListener('change', ()=>{
+        unitsWrap.style.display = (lotTypeEl.value === 'units') ? 'block' : 'none';
+      });
+
+      // live update
+      [pairEl,dirEl,lotTypeEl,unitsEl,entryEl,exitEl,spreadEl,commEl,ccyEl,usdInrEl,levEl,roundEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(entryEl.value && exitEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(entryEl.value && exitEl.value) calc(); });
+      });
+    })();
+  </script>
+</body>
+</html>

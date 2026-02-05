@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>EPF Contribution Calculator (India) + Employer Split (EPF/EPS) | CalculatorSolution</title>
+  <meta name="description" content="Free EPF Contribution Calculator (India): calculate employee 12%, employer split into EPF & EPS (with wage ceiling), total monthly/yearly contributions, and estimated EPF corpus growth with interest.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/epf-contribution-calculator.html">
+
+  <meta property="og:title" content="EPF Contribution Calculator">
+  <meta property="og:description" content="Calculate employee & employer EPF contributions, employer EPF/EPS split, yearly totals, and estimated EPF corpus growth.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- ✅ UI/UX + Responsive-only upgrades (NO logic changes) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    a{color:inherit}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10;
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;white-space:nowrap}
+    .brand-logo{border-radius:10px;flex:0 0 auto}
+
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em}
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+    }
+
+    .calc-shell{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;align-items:start;margin-top:14px}
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+    }
+    .panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem}
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      width:100%;
+      max-width:100%;
+      appearance:none;
+    }
+    select.input{padding-right:38px}
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-block;padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px; /* ✅ tap target */
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .btn:focus-visible{outline:0;box-shadow:0 0 0 4px rgba(59,130,246,.22), 0 12px 26px rgba(37,99,235,.18)}
+
+    .sticky{position:sticky;top:82px}
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{
+      margin:4px 0 0;
+      font-size:1.55rem;
+      font-weight:1000;
+      letter-spacing:-.02em;
+      word-break:break-word;
+    }
+    .mini{font-size:.86rem;color:#64748b}
+
+    .bar{height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px}
+    .bar > span{display:block;height:100%;width:0%}
+
+    .note{
+      border:1px dashed #cbd5e1;border-radius:14px;padding:12px;background:rgba(255,255,255,.7);
+      margin-top:10px
+    }
+
+    /* ✅ Table: better mobile experience */
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{width:100%;border-collapse:collapse;min-width:860px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem;white-space:nowrap}
+    th{background:#f8fafc;font-weight:1000;position:sticky;top:0;z-index:1}
+    tr:last-child td{border-bottom:0}
+
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 10px 24px rgba(8,13,26,.05);padding:12px}
+    details.card{padding:0;overflow:hidden}
+    details.card summary{cursor:pointer;padding:12px;list-style:none}
+    details.card summary::-webkit-details-marker{display:none}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+    details.card summary:focus-visible{outline:0;box-shadow:0 0 0 4px rgba(59,130,246,.18) inset}
+
+    /* ✅ Related cards grid: ensure responsive even if global CSS missing */
+    .related-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:12px;
+    }
+    .related-grid .card{display:block;text-decoration:none}
+    .related-grid h4{margin:0 0 6px}
+    .related-grid p{margin:0;color:#475569}
+
+    /* ✅ Code blocks: prevent overflow on mobile */
+    pre{
+      max-width:100%;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      padding:12px;
+      background:rgba(255,255,255,.85);
+      border:1px solid #e2e8f0;
+      border-radius:14px;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+
+    /* ✅ Small UX polish */
+    article h2, article h3{scroll-margin-top:96px}
+    ul{padding-left:18px}
+    li{margin:6px 0}
+
+    /* ✅ Breakpoints */
+    @media (max-width: 1100px){
+      .wrap{padding:0 16px}
+    }
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      table{min-width:720px}
+      .sticky{position:static}
+    }
+    @media (max-width: 720px){
+      .hero{padding:20px 14px}
+      .hero h1{font-size:1.55rem}
+      .grid-2{grid-template-columns:1fr}
+      .panel{padding:12px}
+      .actions .btn{flex:1 1 160px}
+      .related-grid{grid-template-columns:repeat(2, minmax(0,1fr))}
+    }
+    @media (max-width: 420px){
+      .hero h1{font-size:1.35rem}
+      .chip{font-size:.84rem}
+      .metric .v{font-size:1.35rem}
+      .related-grid{grid-template-columns:1fr}
+      table{min-width:640px}
+    }
+
+    /* ✅ Respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto}
+      .btn, .card{transition:none}
+      .btn:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"EPF Contribution Calculator",
+      "url":"https://calculatorsolution.com/epf-contribution-calculator.html",
+      "description":"Calculate employee and employer EPF contributions with employer EPF/EPS split and estimate EPF corpus growth."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"EPF Contribution Calculator","item":"https://calculatorsolution.com/epf-contribution-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate EPF contribution",
+      "step":[
+        {"@type":"HowToStep","name":"Enter salary components","text":"Enter your monthly basic salary and DA (if applicable)."},
+        {"@type":"HowToStep","name":"Set contribution rates","text":"Employee and employer contribution percentages are applied to PF wages."},
+        {"@type":"HowToStep","name":"View EPF/EPS split and totals","text":"See employee share, employer EPF share, employer EPS share, yearly totals and an estimated EPF corpus projection."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"What salary is EPF calculated on?","acceptedAnswer":{"@type":"Answer","text":"Typically EPF is calculated on PF wages (often basic salary + DA). Rules can vary by employer policy and category."}},
+        {"@type":"Question","name":"What is the employer EPF/EPS split?","acceptedAnswer":{"@type":"Answer","text":"Employer contribution can be split between EPF and EPS (pension) subject to wage ceiling rules. This calculator lets you configure the split."}},
+        {"@type":"Question","name":"Does EPS amount add to EPF corpus?","acceptedAnswer":{"@type":"Answer","text":"EPS is pension; it is not credited to the EPF corpus balance in the same way. This calculator shows EPS separately and projects EPF corpus."}},
+        {"@type":"Question","name":"What is VPF?","acceptedAnswer":{"@type":"Answer","text":"VPF is voluntary provident fund—extra employee contribution in addition to standard EPF. This calculator supports an optional extra percentage."}},
+        {"@type":"Question","name":"Is the interest rate fixed?","acceptedAnswer":{"@type":"Answer","text":"EPF interest is declared periodically. Enter the rate you want to assume for an estimated projection."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>EPF Contribution Calculator</h1>
+        <p>Calculate employee + employer contributions, employer split (EPF vs EPS), yearly totals, and an estimated EPF corpus projection.</p>
+        <div class="chips">
+          <span class="chip">🧮 Employee + Employer</span>
+          <span class="chip">🧾 EPF/EPS split</span>
+          <span class="chip">📈 Corpus estimate</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-epf-contribution">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="EPF inputs">
+              <div class="panel-title">
+                <h2>Salary & contribution inputs</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="epf_basic">Monthly Basic Salary</label>
+                  <input id="epf_basic" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="e.g., 30000">
+                  <p class="help">Usually EPF is computed on PF wages (basic + DA).</p>
+                </div>
+
+                <div class="field">
+                  <label for="epf_da">Monthly DA (optional)</label>
+                  <input id="epf_da" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="e.g., 0">
+                  <p class="help">If you don’t have DA, keep 0.</p>
+                </div>
+
+                <div class="field">
+                  <label for="epf_pf_wage_cap">PF wage cap (optional)</label>
+                  <input id="epf_pf_wage_cap" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="0 = no cap">
+                  <p class="help">If your employer caps PF wages, enter cap. 0 means no cap.</p>
+                </div>
+
+                <div class="field">
+                  <label for="epf_employee_rate">Employee EPF rate (%)</label>
+                  <input id="epf_employee_rate" class="input" type="number" inputmode="decimal" min="0" step="0.01" value="12">
+                  <p class="help">Common default is 12% (editable).</p>
+                </div>
+
+                <div class="field">
+                  <label for="epf_employer_rate">Employer rate (%)</label>
+                  <input id="epf_employer_rate" class="input" type="number" inputmode="decimal" min="0" step="0.01" value="12">
+                  <p class="help">Employer total contribution rate (editable).</p>
+                </div>
+
+                <div class="field">
+                  <label for="epf_eps_rate">EPS rate inside employer (%)</label>
+                  <input id="epf_eps_rate" class="input" type="number" inputmode="decimal" min="0" step="0.01" value="8.33">
+                  <p class="help">Pension (EPS) component inside employer share.</p>
+                </div>
+
+                <div class="field">
+                  <label for="epf_eps_wage_ceiling">EPS wage ceiling</label>
+                  <input id="epf_eps_wage_ceiling" class="input" type="number" inputmode="numeric" min="0" step="100" value="15000">
+                  <p class="help">EPS may be calculated up to a ceiling (editable).</p>
+                </div>
+
+                <div class="field">
+                  <label for="epf_eps_ceiling_on">Apply EPS ceiling?</label>
+                  <select id="epf_eps_ceiling_on" class="input">
+                    <option value="yes" selected>Yes (use ceiling)</option>
+                    <option value="no">No (no ceiling)</option>
+                  </select>
+                  <p class="help">Toggle based on your employer’s policy.</p>
+                </div>
+
+                <div class="field">
+                  <label for="epf_vpf_rate">VPF extra (employee) (%)</label>
+                  <input id="epf_vpf_rate" class="input" type="number" inputmode="decimal" min="0" step="0.01" value="0">
+                  <p class="help">Optional extra % on PF wages (employee only).</p>
+                </div>
+
+                <div class="field">
+                  <label for="epf_interest">EPF interest rate (annual %)</label>
+                  <input id="epf_interest" class="input" type="number" inputmode="decimal" min="0" step="0.01" value="8.15">
+                  <p class="help">For projection only (enter your assumption).</p>
+                </div>
+
+                <div class="field">
+                  <label for="epf_years">Projection years</label>
+                  <input id="epf_years" class="input" type="number" inputmode="numeric" min="0" step="1" value="10">
+                  <p class="help">Estimate EPF corpus after N years.</p>
+                </div>
+
+                <div class="field">
+                  <label for="epf_round">Rounding</label>
+                  <select id="epf_round" class="input">
+                    <option value="0" selected>No rounding</option>
+                    <option value="1">Nearest ₹1</option>
+                    <option value="10">Nearest ₹10</option>
+                    <option value="100">Nearest ₹100</option>
+                  </select>
+                  <p class="help">Optional rounding for clean numbers.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="epf_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="epf_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="epf_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note mini">
+                <strong>Note:</strong> This calculator is for estimation and supports configurable caps/splits.
+                Your employer may apply additional rules (e.g., rounding, eligibility, wage definitions).
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="EPF results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Employee EPF (monthly)</p>
+                <p class="v" id="epf_out_emp">—</p>
+                <p class="mini" id="epf_out_emp_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Employer split (monthly)</p>
+                <p class="v" id="epf_out_empr_split">—</p>
+                <p class="mini" id="epf_out_empr_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Total monthly (Employee + Employer)</p>
+                <p class="v" id="epf_out_total_month">—</p>
+                <div class="bar"><span id="epf_bar"></span></div>
+                <p class="mini" id="epf_out_total_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Total yearly (approx)</p>
+                <p class="v" id="epf_out_total_year">—</p>
+                <p class="mini" id="epf_out_year_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Estimated EPF corpus after <span id="epf_out_years_lbl">—</span> years</p>
+                <p class="v" id="epf_out_corpus">—</p>
+                <p class="mini" id="epf_out_corpus_note">—</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Year-wise EPF Projection (Estimated)</h2>
+          <p class="mini" style="margin:0 0 10px;">
+            Projection uses monthly EPF credits (Employee EPF + Employer EPF). EPS (pension) is shown separately and is not added to EPF corpus here.
+          </p>
+
+          <div class="table-wrap">
+            <table aria-label="EPF projection table">
+              <thead>
+                <tr>
+                  <th>Year</th>
+                  <th>Opening EPF</th>
+                  <th>EPF Contribution (Year)</th>
+                  <th>Interest (Est.)</th>
+                  <th>Closing EPF</th>
+                </tr>
+              </thead>
+              <tbody id="epf_table">
+                <tr><td colspan="5" class="mini">Click <strong>Calculate</strong> to generate the projection.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          The <strong>EPF Contribution Calculator</strong> estimates provident fund contributions based on your monthly <strong>PF wages</strong>
+          (commonly <strong>Basic + DA</strong>). It shows:
+        </p>
+        <ul>
+          <li><strong>Employee EPF</strong> contribution (monthly & yearly)</li>
+          <li><strong>Employer contribution</strong> split into <strong>EPF</strong> and <strong>EPS (pension)</strong> using configurable rules</li>
+          <li><strong>Total contribution</strong> (employee + employer)</li>
+          <li>An <strong>estimated EPF corpus projection</strong> using your chosen interest rate and time period</li>
+        </ul>
+        <p class="mini">
+          Tip: If your employer caps PF wages or applies EPS ceiling rules differently, adjust the toggles/inputs to match your salary slip.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>PF wages = Basic + DA (optionally capped)
+Employee EPF = PF wages × employee_rate
+Employer total = PF wages × employer_rate
+Employer EPS = (min(PF wages, EPS ceiling) × EPS_rate) if ceiling enabled
+Employer EPF = Employer total − Employer EPS
+EPF corpus projection uses monthly EPF credits and monthly compounding interest (estimate).</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Employee share?</strong></summary><p>Employee EPF is typically a percentage of PF wages (often basic + DA). You can change the rate in this calculator.</p></details>
+        <details class="card"><summary><strong>Employer share?</strong></summary><p>Employer share may be split into EPF and EPS (pension). This calculator shows both separately.</p></details>
+        <details class="card"><summary><strong>Interest on EPF?</strong></summary><p>EPF earns a declared annual interest rate. Enter your assumed rate to estimate corpus growth.</p></details>
+        <details class="card"><summary><strong>Taxation on withdrawal?</strong></summary><p>Tax rules vary by tenure and regulations. Treat results as estimation only.</p></details>
+        <details class="card"><summary><strong>Voluntary contributions (VPF)?</strong></summary><p>VPF is an optional extra employee contribution. You can add it as an extra percentage in this calculator.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="gst-calculator-india.html"><h4>GST Calculator (India)</h4><p>Calculate GST amount and final price.</p></a>
+          <a class="card" href="salary-calculator.html"><h4>Salary Calculator</h4><p>Estimate take-home salary.</p></a>
+          <a class="card" href="simple-interest-calculator.html"><h4>Simple Interest Calculator</h4><p>Compute simple interest quickly.</p></a>
+          <a class="card" href="compound-interest-calculator.html"><h4>Compound Interest Calculator</h4><p>Estimate growth with compounding.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const fmt0 = (n)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:0}).format(n) : '—');
+      const money = (n)=> '₹ ' + fmt0(n);
+
+      const basicEl = $('epf_basic');
+      const daEl = $('epf_da');
+      const capEl = $('epf_pf_wage_cap');
+      const empRateEl = $('epf_employee_rate');
+      const emprRateEl = $('epf_employer_rate');
+      const epsRateEl = $('epf_eps_rate');
+      const epsCeilEl = $('epf_eps_wage_ceiling');
+      const epsCeilOnEl = $('epf_eps_ceiling_on');
+      const vpfRateEl = $('epf_vpf_rate');
+      const interestEl = $('epf_interest');
+      const yearsEl = $('epf_years');
+      const roundEl = $('epf_round');
+
+      const outEmp = $('epf_out_emp');
+      const outEmpNote = $('epf_out_emp_note');
+      const outEmprSplit = $('epf_out_empr_split');
+      const outEmprNote = $('epf_out_empr_note');
+      const outTotalM = $('epf_out_total_month');
+      const outTotalNote = $('epf_out_total_note');
+      const outTotalY = $('epf_out_total_year');
+      const outYearNote = $('epf_out_year_note');
+      const outCorpus = $('epf_out_corpus');
+      const outCorpusNote = $('epf_out_corpus_note');
+      const outYearsLbl = $('epf_out_years_lbl');
+      const bar = $('epf_bar');
+      const tbody = $('epf_table');
+
+      function roundTo(x, step){
+        step = parseInt(step,10) || 0;
+        if(step <= 0) return x;
+        return Math.round(x/step)*step;
+      }
+
+      function calc(){
+        const basic = parseFloat(basicEl.value);
+        const da = parseFloat(daEl.value) || 0;
+        const cap = parseFloat(capEl.value) || 0;
+
+        const empRate = parseFloat(empRateEl.value);
+        const emprRate = parseFloat(emprRateEl.value);
+        const epsRate = parseFloat(epsRateEl.value);
+        const epsCeil = parseFloat(epsCeilEl.value) || 0;
+        const epsCeilOn = epsCeilOnEl.value === 'yes';
+
+        const vpfRate = parseFloat(vpfRateEl.value) || 0;
+        const interestA = parseFloat(interestEl.value);
+        const years = parseInt(yearsEl.value, 10);
+
+        const roundStep = parseInt(roundEl.value, 10) || 0;
+
+        if(!isFinite(basic) || basic <= 0){
+          outEmp.textContent='—';
+          outEmpNote.textContent='Enter valid monthly basic salary.';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Enter valid inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+        if(!isFinite(empRate) || empRate < 0 || !isFinite(emprRate) || emprRate < 0){
+          outEmp.textContent='—';
+          outEmpNote.textContent='Enter valid contribution rates.';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+        if(!isFinite(epsRate) || epsRate < 0 || epsRate > emprRate){
+          outEmp.textContent='—';
+          outEmpNote.textContent='EPS rate must be between 0 and employer rate.';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+        if(!isFinite(interestA) || interestA < 0){
+          outEmp.textContent='—';
+          outEmpNote.textContent='Enter valid interest rate (for projection).';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+        if(!isFinite(years) || years < 0){
+          outEmp.textContent='—';
+          outEmpNote.textContent='Enter valid years.';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+
+        // PF wages
+        let pfWages = basic + da;
+        if(cap > 0) pfWages = Math.min(pfWages, cap);
+
+        // Monthly contributions
+        let empEpf = pfWages * (empRate/100);
+        let vpf = pfWages * (vpfRate/100);            // extra employee only
+        let emprTotal = pfWages * (emprRate/100);
+
+        // EPS calculation base
+        let epsBase = pfWages;
+        if(epsCeilOn && epsCeil > 0) epsBase = Math.min(pfWages, epsCeil);
+
+        let emprEps = epsBase * (epsRate/100);
+        // Employer EPF is whatever remains from employer total
+        let emprEpf = Math.max(0, emprTotal - emprEps);
+
+        // Rounded figures (optional)
+        empEpf = roundTo(empEpf, roundStep);
+        vpf = roundTo(vpf, roundStep);
+        emprTotal = roundTo(emprTotal, roundStep);
+        emprEps = roundTo(emprEps, roundStep);
+        emprEpf = roundTo(emprEpf, roundStep);
+
+        const empTotal = empEpf + vpf;                 // employee EPF + VPF
+        const totalMonthly = empTotal + emprTotal;     // includes EPS too
+
+        const epfCreditMonthly = empTotal + emprEpf;   // EPF corpus credit (employee + employer EPF); EPS excluded
+
+        const totalYearly = totalMonthly * 12;
+        const epfCreditYearly = epfCreditMonthly * 12;
+
+        // Output blocks
+        outEmp.textContent = money(empTotal);
+        outEmpNote.textContent =
+          `Employee EPF: ₹${fmt0(empEpf)}${vpfRate>0 ? ` + VPF: ₹${fmt0(vpf)}` : ''} • PF wages: ₹${fmt0(pfWages)}.`;
+
+        outEmprSplit.textContent = `${money(emprEpf)} + ${money(emprEps)}`;
+        outEmprNote.textContent =
+          `Employer EPF: ₹${fmt0(emprEpf)} • Employer EPS: ₹${fmt0(emprEps)} • Employer total: ₹${fmt0(emprTotal)}.`;
+
+        outTotalM.textContent = money(totalMonthly);
+
+        // Bar: show what % goes into EPF corpus vs EPS
+        const epsSharePct = totalMonthly>0 ? (emprEps/totalMonthly)*100 : 0;
+        const epfCorpusPct = totalMonthly>0 ? (epfCreditMonthly/totalMonthly)*100 : 0;
+
+        bar.style.width = Math.max(0, Math.min(100, epfCorpusPct)).toFixed(1) + '%';
+        bar.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+        outTotalNote.textContent = `EPF corpus credit ≈ ${epfCorpusPct.toFixed(1)}% of total monthly • EPS share ≈ ${epsSharePct.toFixed(1)}%.`;
+
+        outTotalY.textContent = money(totalYearly);
+        outYearNote.textContent = `Yearly EPF corpus credit (excl. EPS) ≈ ₹${fmt0(epfCreditYearly)}.`;
+
+        outYearsLbl.textContent = isFinite(years) ? years : '—';
+
+        // Projection: monthly contributions to EPF corpus with monthly compounding
+        const r = (interestA/100)/12;
+        const months = years * 12;
+
+        let balance = 0;
+        let rows = [];
+        if(months > 0){
+          // Build year-wise table by simulating monthly
+          let yearOpen = 0;
+          for(let y=1; y<=years; y++){
+            const open = balance;
+            let contribYear = 0;
+            let interestYear = 0;
+
+            for(let m=1; m<=12; m++){
+              // contribution at month start (simple estimate)
+              balance += epfCreditMonthly;
+              contribYear += epfCreditMonthly;
+
+              const intM = balance * r;
+              balance += intM;
+              interestYear += intM;
+            }
+
+            rows.push(`
+              <tr>
+                <td>${y}</td>
+                <td>${money(open)}</td>
+                <td>${money(contribYear)}</td>
+                <td>${money(interestYear)}</td>
+                <td>${money(balance)}</td>
+              </tr>
+            `);
+            yearOpen = balance;
+          }
+
+          outCorpus.textContent = money(balance);
+          outCorpusNote.textContent = `Assumes EPF credit ₹${fmt0(epfCreditMonthly)}/month and ${interestA}% annual interest (monthly compounding estimate).`;
+
+          tbody.innerHTML = rows.join('');
+        } else {
+          outCorpus.textContent = money(0);
+          outCorpusNote.textContent = 'Set projection years > 0 to see corpus estimate.';
+          tbody.innerHTML = '<tr><td colspan="5" class="mini">Set projection years > 0 and click <strong>Calculate</strong>.</td></tr>';
+        }
+      }
+
+      $('epf_calc_btn').addEventListener('click', calc);
+
+      $('epf_example_btn').addEventListener('click', ()=>{
+        basicEl.value = '30000';
+        daEl.value = '0';
+        capEl.value = '0';
+        empRateEl.value = '12';
+        emprRateEl.value = '12';
+        epsRateEl.value = '8.33';
+        epsCeilEl.value = '15000';
+        epsCeilOnEl.value = 'yes';
+        vpfRateEl.value = '0';
+        interestEl.value = '8.15';
+        yearsEl.value = '10';
+        roundEl.value = '1';
+        calc();
+      });
+
+      $('epf_reset_btn').addEventListener('click', ()=>{
+        basicEl.value = '';
+        daEl.value = '0';
+        capEl.value = '0';
+        empRateEl.value = '12';
+        emprRateEl.value = '12';
+        epsRateEl.value = '8.33';
+        epsCeilEl.value = '15000';
+        epsCeilOnEl.value = 'yes';
+        vpfRateEl.value = '0';
+        interestEl.value = '8.15';
+        yearsEl.value = '10';
+        roundEl.value = '0';
+
+        outEmp.textContent='—';
+        outEmpNote.textContent='—';
+        outEmprSplit.textContent='—';
+        outEmprNote.textContent='—';
+        outTotalM.textContent='—';
+        outTotalNote.textContent='—';
+        outTotalY.textContent='—';
+        outYearNote.textContent='—';
+        outCorpus.textContent='—';
+        outCorpusNote.textContent='—';
+        outYearsLbl.textContent='—';
+        bar.style.width='0%';
+
+        tbody.innerHTML = '<tr><td colspan="5" class="mini">Click <strong>Calculate</strong> to generate the projection.</td></tr>';
+      });
+
+      // Auto-calc on input for fast UX
+      [
+        basicEl,daEl,capEl,empRateEl,emprRateEl,epsRateEl,epsCeilEl,epsCeilOnEl,vpfRateEl,interestEl,yearsEl,roundEl
+      ].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(basicEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(basicEl.value) calc(); });
+      });
+    })();
+  </script>
+</body>
+</html>

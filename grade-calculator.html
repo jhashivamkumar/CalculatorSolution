@@ -1,0 +1,985 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Grade Calculator (Weighted Average + Letter Grade) | CalculatorSolution</title>
+  <meta name="description" content="Free Grade Calculator: calculate weighted average, percentage, and letter grade. Add assignments with scores and weights, choose a grading scale, and get instant results.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/grade-calculator.html">
+
+  <meta property="og:title" content="Grade Calculator">
+  <meta property="og:description" content="Calculate weighted score, percentage and letter grade using common grading scales or a custom scale.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (RESPONSIVE / UI-UX upgrade - NO JS LOGIC CHANGED) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      text-rendering:optimizeLegibility;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    a{color:inherit}
+    :focus-visible{outline:3px solid rgba(59,130,246,.45); outline-offset:2px; border-radius:10px}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    /* Header */
+    .site-header{
+      padding:12px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.70);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;letter-spacing:-.01em}
+    .brand-logo{border-radius:10px}
+
+    /* Hero */
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em}
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      backdrop-filter:blur(6px);
+    }
+
+    /* Layout */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      min-width:0; /* important for overflow layouts */
+    }
+    .panel-title{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      margin-bottom:10px; flex-wrap:wrap
+    }
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(37,99,235,.10);
+      color:#1d4ed8;font-weight:900;font-size:.85rem;
+      white-space:nowrap;
+    }
+
+    /* Form grid */
+    .grid-2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      width:100%;
+    }
+    select.input{appearance:auto}
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    /* Buttons */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .btn-danger{background:#ef4444;box-shadow:0 12px 26px rgba(239,68,68,.18)}
+
+    /* Sticky results */
+    .sticky{position:sticky;top:82px}
+
+    /* Metrics */
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{margin:4px 0 0;font-size:1.55rem;font-weight:1000;letter-spacing:-.02em}
+    .mini{font-size:.86rem;color:#64748b}
+
+    .bar{height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px}
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* Table */
+    .table-wrap{
+      overflow:auto;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{width:100%;border-collapse:collapse;min-width:860px}
+    th,td{
+      padding:10px 12px;border-bottom:1px solid #e2e8f0;
+      text-align:left;font-size:.95rem;
+      vertical-align:top;
+    }
+    th{background:#f8fafc;font-weight:1000;position:sticky;top:0;z-index:1}
+    tr:last-child td{border-bottom:0}
+    .row-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .row-actions .btn{padding:8px 10px;border-radius:10px;font-size:.9rem}
+
+    /* Notes & details */
+    .note{
+      border:1px dashed #cbd5e1;border-radius:14px;padding:12px;
+      background:rgba(255,255,255,.7);
+      margin-top:10px
+    }
+
+    .card{
+      background:#fff;border:1px solid #e2e8f0;border-radius:14px;
+      box-shadow:0 10px 24px rgba(8,13,26,.05);
+      padding:12px;
+    }
+    details.card{padding:0;overflow:hidden}
+    details.card summary{cursor:pointer;padding:12px;list-style:none}
+    details.card summary::-webkit-details-marker{display:none}
+    details.card summary:after{
+      content:"▾";
+      float:right;
+      font-weight:900;
+      color:#64748b;
+      transition:transform .18s ease;
+    }
+    details[open].card summary:after{transform:rotate(180deg)}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Related grid (safe, doesn’t touch logic) */
+    .cards-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+    .cards-grid .card{display:block;text-decoration:none}
+    .cards-grid h4{margin:0 0 6px;font-size:1rem}
+    .cards-grid p{margin:0;color:#475569}
+
+    /* Code/Pre */
+    pre{
+      white-space:pre-wrap;
+      overflow-wrap:anywhere;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid #e2e8f0;
+      background:rgba(255,255,255,.85);
+    }
+
+    /* Responsive breakpoints */
+    @media (max-width: 1024px){
+      .wrap{padding:0 16px}
+      .hero{padding:22px 16px}
+      .hero h1{font-size:1.7rem}
+      .cards-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static;top:auto}
+      table{min-width:760px}
+    }
+
+    @media (max-width: 720px){
+      .grid-2{grid-template-columns:1fr}
+      .actions .btn{flex:1 1 auto}
+      .metric .v{font-size:1.35rem}
+      table{min-width:720px}
+      .cards-grid{grid-template-columns:1fr}
+      .hero:before{width:200px;height:200px}
+    }
+
+    @media (max-width: 420px){
+      .hero{border-radius:16px}
+      .chip{font-size:.84rem}
+      .panel{padding:12px}
+      .row-actions{gap:6px}
+      .row-actions .btn{padding:8px 9px}
+      pre{font-size:.92rem}
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .btn, .card, .hero{transition:none}
+      .btn:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Grade Calculator",
+      "url":"https://calculatorsolution.com/grade-calculator.html",
+      "description":"Calculate weighted percentage and letter grade using standard or custom grading scales."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Grade Calculator","item":"https://calculatorsolution.com/grade-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate grade",
+      "step":[
+        {"@type":"HowToStep","name":"Add assignments/tests","text":"Enter score, max score and weight for each item (or leave weight blank for equal weight)."},
+        {"@type":"HowToStep","name":"Choose a grading scale","text":"Pick a common scale (A-F) or create a custom scale."},
+        {"@type":"HowToStep","name":"Calculate","text":"Get weighted percentage, letter grade, and what you need on remaining items."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Custom scales?","acceptedAnswer":{"@type":"Answer","text":"Yes. Switch to Custom scale and edit grade thresholds to match your school or university."}},
+        {"@type":"Question","name":"Weighted assignments?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use weights for exams, quizzes, projects etc. The calculator computes weighted average automatically."}},
+        {"@type":"Question","name":"Rounding?","acceptedAnswer":{"@type":"Answer","text":"Rounding differs by institution. Use the rounding option and verify with your course policy."}},
+        {"@type":"Question","name":"Pass/fail?","acceptedAnswer":{"@type":"Answer","text":"You can set a pass threshold in the custom scale and treat everything else as fail."}},
+        {"@type":"Question","name":"Notification?","acceptedAnswer":{"@type":"Answer","text":"This tool does not send notifications; official grades are typically released via school systems."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Grade Calculator</h1>
+        <p>Calculate your percentage, weighted average, and letter grade — with a standard or custom grading scale.</p>
+        <div class="chips">
+          <span class="chip">🧮 Weighted average</span>
+          <span class="chip">🅰️ Letter grade mapping</span>
+          <span class="chip">⚙️ Custom scale</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-grade-calculator">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Grade inputs">
+              <div class="panel-title">
+                <h2>Scores & grading scale</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="gr_scale">Grading scale</label>
+                  <select id="gr_scale" class="input">
+                    <option value="af_plus" selected>A+ / A / A- / ... (common)</option>
+                    <option value="af_simple">A / B / C / D / F (simple)</option>
+                    <option value="percent_only">Percentage only (no letters)</option>
+                    <option value="custom">Custom (edit thresholds)</option>
+                  </select>
+                  <p class="help">Choose a scale for letter grade output.</p>
+                </div>
+
+                <div class="field">
+                  <label for="gr_round">Rounding</label>
+                  <select id="gr_round" class="input">
+                    <option value="0" selected>No rounding</option>
+                    <option value="1">1 decimal</option>
+                    <option value="2">2 decimals</option>
+                    <option value="nearest_int">Nearest whole %</option>
+                  </select>
+                  <p class="help">Rounding affects your displayed percentage.</p>
+                </div>
+
+                <div class="field">
+                  <label for="gr_weight_mode">Weighting method</label>
+                  <select id="gr_weight_mode" class="input">
+                    <option value="weights" selected>Use weights (recommended)</option>
+                    <option value="points">Use points (score/max only)</option>
+                  </select>
+                  <p class="help">Weights treat items like “Exam 40%, Quiz 10%”. Points treat items by max score.</p>
+                </div>
+
+                <div class="field">
+                  <label for="gr_target">Target grade (optional)</label>
+                  <input id="gr_target" class="input" type="text" placeholder="e.g., A or 85%">
+                  <p class="help">Used to show what you need on remaining work (optional).</p>
+                </div>
+              </div>
+
+              <div class="note mini" id="gr_custom_note" style="display:none">
+                Custom scale is enabled below. Edit thresholds (min %) in descending order.
+              </div>
+
+              <!-- Custom scale editor -->
+              <div id="gr_custom_wrap" class="table-wrap" style="display:none;margin-top:12px">
+                <table aria-label="Custom grading scale table">
+                  <thead>
+                    <tr>
+                      <th>Grade</th>
+                      <th>Minimum %</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="gr_custom_body"></tbody>
+                </table>
+              </div>
+
+              <div class="actions" style="margin-top:12px">
+                <button class="btn" id="gr_add_row_btn" type="button">+ Add score row</button>
+                <button class="btn btn-dark" id="gr_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="gr_reset_btn" type="button">Reset</button>
+              </div>
+
+              <h3 style="margin:14px 0 8px;">Score table</h3>
+              <p class="mini" style="margin:0 0 10px;">Add your assignments/tests. Enter score and max score. Add weight if you use weighted grading.</p>
+
+              <div class="table-wrap">
+                <table aria-label="Grade score table">
+                  <thead>
+                    <tr>
+                      <th style="min-width:160px;">Item</th>
+                      <th>Score</th>
+                      <th>Max</th>
+                      <th>Weight %</th>
+                      <th>Notes</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="gr_body">
+                    <!-- rows injected by JS -->
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="note mini" style="margin-top:12px">
+                Weighted mode: total weights should ideally equal <strong>100%</strong>. If not, the calculator normalizes weights automatically.
+                Points mode: weights are ignored and the calculator uses total points.
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Grade results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Current percentage</p>
+                <p class="v" id="gr_out_pct">—</p>
+                <p class="mini" id="gr_out_pct_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Letter grade</p>
+                <p class="v" id="gr_out_letter">—</p>
+                <p class="mini" id="gr_out_letter_note">Choose a scale to map percentage.</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Progress (completed)</p>
+                <p class="v" id="gr_out_progress">—</p>
+                <div class="bar"><span id="gr_bar_progress"></span></div>
+                <p class="mini" id="gr_out_progress_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">What you need (optional)</p>
+                <p class="v" id="gr_out_need">—</p>
+                <p class="mini" id="gr_out_need_note">Enter a target grade to calculate required score on remaining weight.</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="gr_out_summary">Add rows and enter scores to see a clean summary.</p>
+              </div>
+
+              <div class="actions" style="margin-top:12px">
+                <button class="btn" id="gr_calc_btn" type="button">Calculate</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          This <strong>Grade Calculator</strong> helps you convert your scores into a <strong>percentage</strong> and (optionally) a <strong>letter grade</strong>.
+          You can use <strong>points-based</strong> grading (score/max) or <strong>weighted</strong> grading (exams/quizzes/projects with different importance).
+        </p>
+        <p class="mini">
+          Tip: If your course uses category weights, keep the total close to 100%. If you are missing some categories, leave them blank as “remaining”.
+          Use the target grade field to estimate what score you need on the remaining portion.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>Points mode: Percentage = (Σ score / Σ max) × 100
+Weighted mode: Percentage = (Σ (item% × weight)) / (Σ weight) × 100
+Letter grade: determined by the selected grading thresholds.</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Custom scales?</strong></summary><p>Switch to Custom scale and edit grade thresholds to match your institution.</p></details>
+        <details class="card"><summary><strong>Weighted assignments?</strong></summary><p>Yes. Enter weights for each item and the calculator will compute a weighted average.</p></details>
+        <details class="card"><summary><strong>Rounding?</strong></summary><p>Different courses round differently. Use the rounding option and verify with your syllabus.</p></details>
+        <details class="card"><summary><strong>Pass/fail?</strong></summary><p>Use Custom scale with just two rows like Pass (>=40) and Fail (>=0).</p></details>
+        <details class="card"><summary><strong>Notification?</strong></summary><p>This tool does not send notifications. Official grades are released via your school system.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="gpa-calculator.html"><h4>GPA Calculator</h4><p>Compute GPA or CGPA from course grades and credits.</p></a>
+          <a class="card" href="cgpa-calculator.html"><h4>CGPA Calculator</h4><p>Compute cumulative GPA across multiple semesters.</p></a>
+          <a class="card" href="percentage-needed-final-exam.html"><h4>Percentage Needed in Final Exam</h4><p>Calculate required percentage to hit your target.</p></a>
+          <a class="card" href="study-time-calculator.html"><h4>Study Time Calculator</h4><p>Plan study time based on syllabus and schedule.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- ✅ JS LOGIC UNCHANGED (verbatim) -->
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+      const fmt = (n, d)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{minimumFractionDigits:d,maximumFractionDigits:d}).format(n) : '—');
+      const clamp = (n,min,max)=>Math.max(min,Math.min(max,n));
+
+      const scaleEl = $('gr_scale');
+      const roundEl = $('gr_round');
+      const weightModeEl = $('gr_weight_mode');
+      const targetEl = $('gr_target');
+
+      const body = $('gr_body');
+
+      const customWrap = $('gr_custom_wrap');
+      const customNote = $('gr_custom_note');
+      const customBody = $('gr_custom_body');
+
+      const outPct = $('gr_out_pct');
+      const outPctNote = $('gr_out_pct_note');
+      const outLetter = $('gr_out_letter');
+      const outLetterNote = $('gr_out_letter_note');
+      const outProgress = $('gr_out_progress');
+      const outProgressNote = $('gr_out_progress_note');
+      const outNeed = $('gr_out_need');
+      const outNeedNote = $('gr_out_need_note');
+      const outSummary = $('gr_out_summary');
+      const barProgress = $('gr_bar_progress');
+
+      const defaultCustom = [
+        { grade:'A',  min:90 },
+        { grade:'B',  min:80 },
+        { grade:'C',  min:70 },
+        { grade:'D',  min:60 },
+        { grade:'F',  min:0  }
+      ];
+
+      let customScale = JSON.parse(JSON.stringify(defaultCustom));
+
+      function roundingDigits(){
+        const v = roundEl.value;
+        if(v === 'nearest_int') return { mode:'nearest_int', d:0 };
+        const d = parseInt(v,10) || 0;
+        return { mode:'fixed', d };
+      }
+
+      function parseNum(x){
+        const n = parseFloat(x);
+        return isFinite(n) ? n : NaN;
+      }
+
+      function letterFromScale(pct){
+        const scale = getScale();
+        if(scaleEl.value === 'percent_only') return '—';
+        for(const s of scale){
+          if(pct >= s.min) return s.grade;
+        }
+        return scale[scale.length-1]?.grade || '—';
+      }
+
+      function getScale(){
+        const key = scaleEl.value;
+
+        if(key === 'af_plus'){
+          // Common-ish (customizable by switching to custom)
+          return [
+            {grade:'A+',min:97},{grade:'A',min:93},{grade:'A-',min:90},
+            {grade:'B+',min:87},{grade:'B',min:83},{grade:'B-',min:80},
+            {grade:'C+',min:77},{grade:'C',min:73},{grade:'C-',min:70},
+            {grade:'D+',min:67},{grade:'D',min:63},{grade:'D-',min:60},
+            {grade:'F',min:0}
+          ];
+        }
+        if(key === 'af_simple'){
+          return [
+            {grade:'A',min:90},
+            {grade:'B',min:80},
+            {grade:'C',min:70},
+            {grade:'D',min:60},
+            {grade:'F',min:0}
+          ];
+        }
+        if(key === 'custom'){
+          // ensure sorted desc
+          const sorted = [...customScale].sort((a,b)=>b.min-a.min);
+          return sorted;
+        }
+        // percent_only
+        return [{grade:'—',min:0}];
+      }
+
+      function syncCustomUI(){
+        const isCustom = scaleEl.value === 'custom';
+        customWrap.style.display = isCustom ? 'block' : 'none';
+        customNote.style.display = isCustom ? 'block' : 'none';
+
+        if(!isCustom) return;
+
+        const rows = [...customScale].sort((a,b)=>b.min-a.min).map((r, idx)=>`
+          <tr>
+            <td><input class="input" data-cg="${idx}" data-k="grade" type="text" value="${escapeHtml(r.grade)}" style="max-width:140px"></td>
+            <td><input class="input" data-cg="${idx}" data-k="min" type="number" min="0" max="100" step="0.1" value="${r.min}" style="max-width:160px"></td>
+            <td>
+              <div class="row-actions">
+                <button class="btn btn-ghost" type="button" data-cdel="${idx}">Delete</button>
+              </div>
+            </td>
+          </tr>
+        `).join('');
+
+        customBody.innerHTML = rows || `<tr><td colspan="3" class="mini">Add thresholds to create a custom scale.</td></tr>`;
+      }
+
+      function escapeHtml(s){
+        return (s ?? '').toString()
+          .replace(/&/g,'&amp;')
+          .replace(/</g,'&lt;')
+          .replace(/>/g,'&gt;')
+          .replace(/"/g,'&quot;')
+          .replace(/'/g,'&#039;');
+      }
+
+      function addRow(name, score, max, weight, notes){
+        const id = Math.random().toString(36).slice(2,9);
+        const tr = document.createElement('tr');
+        tr.dataset.rowid = id;
+        tr.innerHTML = `
+          <td><input class="input" data-k="name" type="text" value="${escapeHtml(name||'')}" placeholder="e.g., Midterm"></td>
+          <td><input class="input" data-k="score" type="number" inputmode="decimal" min="0" step="0.1" value="${score ?? ''}" placeholder="e.g., 42"></td>
+          <td><input class="input" data-k="max" type="number" inputmode="decimal" min="0" step="0.1" value="${max ?? ''}" placeholder="e.g., 50"></td>
+          <td><input class="input" data-k="weight" type="number" inputmode="decimal" min="0" step="0.1" value="${weight ?? ''}" placeholder="e.g., 30"></td>
+          <td><input class="input" data-k="notes" type="text" value="${escapeHtml(notes||'')}" placeholder="optional"></td>
+          <td>
+            <div class="row-actions">
+              <button class="btn btn-ghost" type="button" data-dup="${id}">Duplicate</button>
+              <button class="btn btn-danger" type="button" data-del="${id}">Remove</button>
+            </div>
+          </td>
+        `;
+        body.appendChild(tr);
+      }
+
+      function readRows(){
+        const trs = [...body.querySelectorAll('tr')];
+        return trs.map(tr=>{
+          const get = (k)=> tr.querySelector(`[data-k="${k}"]`)?.value ?? '';
+          return {
+            id: tr.dataset.rowid,
+            name: get('name'),
+            score: parseNum(get('score')),
+            max: parseNum(get('max')),
+            weight: parseNum(get('weight')),
+            notes: get('notes')
+          };
+        });
+      }
+
+      function completedWeight(rows){
+        // completed means score and max are valid
+        const wm = weightModeEl.value;
+        if(wm === 'points'){
+          const completed = rows.filter(r=>isFinite(r.score) && isFinite(r.max) && r.max>0);
+          const totalMax = completed.reduce((a,r)=>a+r.max,0);
+          return { completed: totalMax, total: totalMax }; // progress is 100% in points mode based on entered max only
+        }
+        // weights mode
+        const completed = rows.filter(r=>isFinite(r.score) && isFinite(r.max) && r.max>0 && isFinite(r.weight) && r.weight>0);
+        const completedW = completed.reduce((a,r)=>a+r.weight,0);
+        const totalW = rows.filter(r=>isFinite(r.weight) && r.weight>0).reduce((a,r)=>a+r.weight,0);
+        return { completed: completedW, total: totalW };
+      }
+
+      function calculate(){
+        const rows = readRows();
+        const wm = weightModeEl.value;
+
+        // Filter valid rows
+        const validScoreRows = rows.filter(r=>isFinite(r.score) && isFinite(r.max) && r.max>0 && r.score>=0);
+        if(validScoreRows.length === 0){
+          outPct.textContent = '—';
+          outPctNote.textContent = 'Add at least one row with score and max score.';
+          outLetter.textContent = '—';
+          outLetterNote.textContent = '—';
+          outProgress.textContent = '—';
+          outProgressNote.textContent = '—';
+          outNeed.textContent = '—';
+          outNeedNote.textContent = 'Enter a target grade to calculate required score on remaining weight.';
+          outSummary.textContent = 'Add rows and enter scores to see a clean summary.';
+          barProgress.style.width = '0%';
+          return;
+        }
+
+        let pct = NaN;
+        let usedModeLabel = '';
+
+        if(wm === 'points'){
+          const sumScore = validScoreRows.reduce((a,r)=>a + clamp(r.score,0,r.max), 0);
+          const sumMax   = validScoreRows.reduce((a,r)=>a + r.max, 0);
+          pct = sumMax>0 ? (sumScore/sumMax)*100 : NaN;
+          usedModeLabel = `Points mode: ${fmt(sumScore,1)} / ${fmt(sumMax,1)} points`;
+        } else {
+          // weights mode
+          const weighted = validScoreRows
+            .filter(r=>isFinite(r.weight) && r.weight>0)
+            .map(r=>{
+              const itemPct = clamp(r.score,0,r.max)/r.max*100;
+              return { itemPct, w: r.weight };
+            });
+
+          if(weighted.length === 0){
+            // fallback to points if weights not provided
+            const sumScore = validScoreRows.reduce((a,r)=>a + clamp(r.score,0,r.max), 0);
+            const sumMax   = validScoreRows.reduce((a,r)=>a + r.max, 0);
+            pct = sumMax>0 ? (sumScore/sumMax)*100 : NaN;
+            usedModeLabel = `No weights entered → points fallback: ${fmt(sumScore,1)} / ${fmt(sumMax,1)} points`;
+          } else {
+            const sumW = weighted.reduce((a,x)=>a+x.w,0);
+            const sumWP = weighted.reduce((a,x)=>a + x.itemPct*x.w, 0);
+            pct = sumW>0 ? (sumWP/sumW) : NaN;
+            usedModeLabel = `Weighted mode: normalized weights over ${fmt(sumW,2)}% entered`;
+          }
+        }
+
+        // Rounding display
+        const rd = roundingDigits();
+        let showPct = pct;
+        if(isFinite(pct)){
+          if(rd.mode === 'nearest_int') showPct = Math.round(pct);
+          else showPct = parseFloat(pct.toFixed(rd.d));
+        }
+
+        outPct.textContent = isFinite(showPct) ? (fmt(showPct, (rd.mode==='nearest_int'?0:rd.d)) + '%') : '—';
+        outPctNote.textContent = usedModeLabel;
+
+        const letter = letterFromScale(showPct);
+        outLetter.textContent = (scaleEl.value === 'percent_only') ? '—' : letter;
+        outLetterNote.textContent = (scaleEl.value === 'percent_only') ? 'Letter grades disabled.' : `Scale: ${scaleEl.options[scaleEl.selectedIndex].text}`;
+
+        // Progress (in weights mode only meaningful)
+        const prog = completedWeight(rows);
+        if(weightModeEl.value === 'weights'){
+          const totalW = prog.total;
+          const doneW = prog.completed;
+          const p = totalW>0 ? (doneW/totalW)*100 : 0;
+          outProgress.textContent = `${fmt(doneW,2)}% / ${fmt(totalW,2)}%`;
+          outProgressNote.textContent = totalW>0 ? `Completed ≈ ${fmt(p,1)}% of weighted grade.` : 'Enter weights to compute progress.';
+          barProgress.style.width = clamp(p,0,100).toFixed(1) + '%';
+          barProgress.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+        } else {
+          outProgress.textContent = '—';
+          outProgressNote.textContent = 'Progress bar is for weights mode.';
+          barProgress.style.width = '0%';
+        }
+
+        // What you need on remaining
+        const targetRaw = (targetEl.value || '').trim();
+        let needText = '—';
+        let needNote = 'Enter a target grade to calculate required score on remaining weight.';
+
+        if(targetRaw){
+          // parse target as percent OR as letter
+          let targetPct = NaN;
+
+          // If ends with %, parse numeric
+          if(targetRaw.endsWith('%')){
+            targetPct = parseNum(targetRaw.replace('%',''));
+          } else {
+            // try numeric
+            const maybeNum = parseNum(targetRaw);
+            if(isFinite(maybeNum)){
+              targetPct = maybeNum;
+            } else {
+              // letter: find min threshold
+              const scale = getScale();
+              const t = targetRaw.toUpperCase();
+              const found = scale.find(s=>s.grade.toUpperCase() === t);
+              if(found) targetPct = found.min;
+            }
+          }
+
+          if(isFinite(targetPct)){
+            if(weightModeEl.value === 'weights'){
+              const rowsAll = readRows();
+              const totalW = rowsAll.filter(r=>isFinite(r.weight) && r.weight>0).reduce((a,r)=>a+r.weight,0);
+              const completedRows = rowsAll.filter(r=>isFinite(r.score) && isFinite(r.max) && r.max>0 && isFinite(r.weight) && r.weight>0);
+              const doneW = completedRows.reduce((a,r)=>a+r.weight,0);
+              const remainingW = Math.max(0, totalW - doneW);
+
+              // current weighted contribution (normalized by totalW)
+              const currentSumWP = completedRows.reduce((a,r)=>{
+                const p = clamp(r.score,0,r.max)/r.max*100;
+                return a + p*r.weight;
+              }, 0);
+
+              if(totalW<=0){
+                needText = '—';
+                needNote = 'Enter weights for items to compute required score.';
+              } else if(remainingW<=0){
+                needText = '—';
+                needNote = 'No remaining weighted items detected (or weights sum equals completed).';
+              } else {
+                // Need average % on remainingW to reach targetPct overall:
+                // (currentSumWP + x*remainingW) / totalW = targetPct  => x = (targetPct*totalW - currentSumWP)/remainingW
+                const req = (targetPct*totalW - currentSumWP) / remainingW;
+                const reqClamped = clamp(req,0,100);
+                needText = `${fmt(reqClamped,1)}%`;
+                needNote = `Required average on remaining ${fmt(remainingW,2)}% weight to reach ${fmt(targetPct,1)}%.`;
+              }
+            } else {
+              needText = '—';
+              needNote = 'Required score works best in weights mode (with remaining weight defined).';
+            }
+          } else {
+            needText = '—';
+            needNote = 'Target not recognized. Use e.g. “A”, “85”, or “85%”.';
+          }
+        }
+
+        outNeed.textContent = needText;
+        outNeedNote.textContent = needNote;
+
+        // Summary
+        const filled = validScoreRows.length;
+        outSummary.textContent =
+          `${filled} item(s) included • Current ${isFinite(showPct) ? fmt(showPct,(rd.mode==='nearest_int'?0:rd.d))+'%' : '—'}`
+          + (scaleEl.value==='percent_only' ? '' : ` • Grade: ${outLetter.textContent}`);
+
+      }
+
+      function installHandlers(){
+        $('gr_add_row_btn').addEventListener('click', ()=>{
+          addRow('', '', '', '', '');
+          calculate();
+        });
+
+        $('gr_calc_btn').addEventListener('click', calculate);
+
+        $('gr_example_btn').addEventListener('click', ()=>{
+          body.innerHTML = '';
+          // Example with weights totaling 100%
+          addRow('Midterm', 42, 50, 30, 'Good');
+          addRow('Quiz 1', 9, 10, 10, '');
+          addRow('Project', 85, 100, 25, '');
+          addRow('Final', '', 100, 35, 'Remaining');
+          scaleEl.value = 'af_plus';
+          weightModeEl.value = 'weights';
+          roundEl.value = '1';
+          targetEl.value = 'A';
+          calculate();
+        });
+
+        $('gr_reset_btn').addEventListener('click', ()=>{
+          body.innerHTML = '';
+          addRow('Assignment 1', '', '', '', '');
+          addRow('Assignment 2', '', '', '', '');
+          scaleEl.value = 'af_plus';
+          roundEl.value = '0';
+          weightModeEl.value = 'weights';
+          targetEl.value = '';
+          customScale = JSON.parse(JSON.stringify(defaultCustom));
+          syncCustomUI();
+          calculate();
+        });
+
+        // Delegated table actions
+        body.addEventListener('click', (e)=>{
+          const del = e.target?.getAttribute('data-del');
+          const dup = e.target?.getAttribute('data-dup');
+
+          if(del){
+            const tr = body.querySelector(`tr[data-rowid="${del}"]`);
+            if(tr) tr.remove();
+            calculate();
+          }
+          if(dup){
+            const tr = body.querySelector(`tr[data-rowid="${dup}"]`);
+            if(tr){
+              const get = (k)=> tr.querySelector(`[data-k="${k}"]`)?.value ?? '';
+              addRow(get('name'), get('score'), get('max'), get('weight'), get('notes'));
+              calculate();
+            }
+          }
+        });
+
+        body.addEventListener('input', (e)=>{
+          if(e.target && e.target.classList.contains('input')){
+            // auto-calc
+            calculate();
+          }
+        });
+
+        // Custom scale events
+        customWrap.addEventListener('input', (e)=>{
+          const idx = e.target?.getAttribute('data-cg');
+          const k = e.target?.getAttribute('data-k');
+          if(idx !== null && idx !== undefined && k){
+            const i = parseInt(idx,10);
+            if(!customScale[i]) return;
+            if(k === 'grade'){
+              customScale[i].grade = (e.target.value || '').trim() || customScale[i].grade;
+            } else if(k === 'min'){
+              const v = parseNum(e.target.value);
+              customScale[i].min = isFinite(v) ? clamp(v,0,100) : customScale[i].min;
+            }
+            calculate();
+          }
+        });
+
+        customWrap.addEventListener('click', (e)=>{
+          const del = e.target?.getAttribute('data-cdel');
+          if(del !== null && del !== undefined){
+            const i = parseInt(del,10);
+            if(customScale.length <= 2) return; // keep at least 2
+            customScale.splice(i,1);
+            syncCustomUI();
+            calculate();
+          }
+        });
+
+        scaleEl.addEventListener('change', ()=>{
+          syncCustomUI();
+          calculate();
+        });
+        roundEl.addEventListener('change', calculate);
+        weightModeEl.addEventListener('change', calculate);
+        targetEl.addEventListener('input', calculate);
+
+        // Add row button for custom scale
+        const addCustomBtn = document.createElement('button');
+        addCustomBtn.type = 'button';
+        addCustomBtn.className = 'btn btn-ghost';
+        addCustomBtn.textContent = '+ Add threshold';
+        addCustomBtn.style.marginTop = '10px';
+        addCustomBtn.addEventListener('click', ()=>{
+          customScale.push({grade:'New', min:50});
+          syncCustomUI();
+          calculate();
+        });
+        // insert after customWrap
+        customWrap.parentNode.insertBefore(addCustomBtn, customWrap.nextSibling);
+      }
+
+      // init
+      body.innerHTML = '';
+      addRow('Assignment 1', '', '', '', '');
+      addRow('Assignment 2', '', '', '', '');
+      addRow('Final Exam', '', '', '', 'Optional');
+
+      syncCustomUI();
+      installHandlers();
+      calculate();
+    })();
+  </script>
+</body>
+</html>

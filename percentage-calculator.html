@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>
+      Percentage Calculator – Find Percent, Percentage Change & Discounts |
+      CalculatorSolution
+    </title>
+
+    <meta
+      name="description"
+      content="Free online Percentage Calculator to quickly find percent, percentage change, discounts, markups and more. Enter part and whole to get instant percentage for finance, shopping, exams and daily use."
+    />
+
+    <link
+      rel="preload"
+      href="/assets/style.css"
+      as="style"
+      onload="this.rel='stylesheet'"
+    />
+    <noscript><link rel="stylesheet" href="/assets/style.css" /></noscript>
+    <link rel="preload" href="/assets/og-image.svg" as="image" />
+
+    <meta
+      property="og:title"
+      content="Percentage Calculator – Fast Online Percent & Discount Tool"
+    />
+    <meta
+      property="og:description"
+      content="Compute percentages, percentage increase/decrease and discounts in seconds. Perfect for finance, shopping, exams and more."
+    />
+    <meta
+      property="og:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://calculatorsolution.com/percentage-calculator.html"
+    />
+
+    <meta name="twitter:title" content="Free Online Percentage Calculator" />
+    <meta
+      name="twitter:description"
+      content="Instantly calculate percent, percentage change, discounts and markups using our free online Percentage Calculator."
+    />
+    <meta
+      name="twitter:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/logo.png" />
+    <link rel="manifest" href="/assets/site.webmanifest" />
+
+    <style>
+      /* ---------- Base layout & typography ---------- */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial;
+        background: linear-gradient(
+          135deg,
+          #f8fafc 0%,
+          #eef2ff 40%,
+          #f9fafb 100%
+        );
+        color: #0f172a;
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+      * {
+        box-sizing: border-box;
+      }
+
+      .wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 18px;
+      }
+
+      .site-header {
+        padding: 14px 0;
+        border-bottom: 1px solid #e2e8f0;
+        background: #ffffffdd;
+        backdrop-filter: blur(10px);
+        position: sticky;
+        top: 0;
+        z-index: 20;
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        color: #3b82f6;
+        text-decoration: none;
+        font-size: 1.1rem;
+      }
+      .brand-logo {
+        border-radius: 8px;
+      }
+      .brand-text {
+        letter-spacing: 0.01em;
+      }
+
+      /* ---------- Hero ---------- */
+      .calculator-hero {
+        margin: 28px 0 24px;
+        padding: 24px 22px;
+        border-radius: 20px;
+        background: linear-gradient(
+          135deg,
+          #3b82f6 0%,
+          #6366f1 40%,
+          #8b5cf6 100%
+        );
+        color: #eff6ff;
+        box-shadow: 0 14px 40px rgba(37, 99, 235, 0.25);
+      }
+      .calculator-hero h1 {
+        font-size: 2.1rem;
+        margin: 0 0 8px;
+        font-weight: 800;
+      }
+      .calculator-hero .lead {
+        margin: 0;
+        color: #e0f2fe;
+        font-size: 1rem;
+      }
+      .badge-line {
+        margin-top: 14px;
+        font-size: 0.9rem;
+      }
+      .badge-line span {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        margin-right: 8px;
+        margin-bottom: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: #e0f2fe;
+        color: #0369a1;
+        font-size: 0.8rem;
+        font-weight: 600;
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.18);
+      }
+
+      /* ---------- Calculator card ---------- */
+      .calculator-main {
+        margin: 26px 0 28px;
+        display: flex;
+        justify-content: center;
+      }
+
+      #calc-percentage-calculator.card {
+        width: 100%;
+        max-width: 720px;
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 18px 20px 20px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.1);
+      }
+
+      .card-title {
+        margin: 0 0 14px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #0f172a;
+      }
+
+      .calc-row {
+        display: grid;
+        grid-template-columns: 1.1fr 1.1fr 0.9fr;
+        gap: 12px;
+        align-items: flex-end;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .field-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #475569;
+      }
+      .field-hint {
+        font-size: 0.75rem;
+        color: #9ca3af;
+      }
+
+      .field input {
+        width: 100%;
+        padding: 8px 11px;
+        border-radius: 10px;
+        border: 1px solid #cbd5f5;
+        font-size: 0.95rem;
+        outline: none;
+        background: #f8fafc;
+        transition: border-color 0.16s, box-shadow 0.16s, background 0.16s;
+      }
+      .field input:focus {
+        border-color: #3b82f6;
+        background: #ffffff;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+      }
+
+      .btn {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px 14px;
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        background: linear-gradient(90deg, #3b82f6, #6366f1);
+        color: #fff;
+        box-shadow: 0 10px 28px rgba(37, 99, 235, 0.35);
+        transition: transform 0.16s, box-shadow 0.16s, filter 0.16s;
+        font-size: 0.95rem;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 40px rgba(37, 99, 235, 0.4);
+        filter: brightness(1.03);
+      }
+      .btn:active {
+        transform: translateY(0);
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+      }
+
+      .result {
+        margin-top: 14px;
+        font-size: 0.98rem;
+        color: #0f172a;
+        background: #f1f5f9;
+        border-radius: 12px;
+        padding: 10px 12px;
+      }
+      .result strong {
+        font-size: 1.18rem;
+        color: #0f766e;
+      }
+
+      /* ---------- Content sections ---------- */
+      .section-block {
+        margin: 26px 0;
+      }
+      .section-block h2,
+      .section-block h3 {
+        margin: 0 0 8px;
+        color: #0f172a;
+      }
+      .section-block p {
+        margin: 0 0 8px;
+        color: #475569;
+        font-size: 0.95rem;
+      }
+      .section-block ul {
+        margin: 6px 0 10px 18px;
+        padding: 0;
+        color: #475569;
+        font-size: 0.95rem;
+      }
+
+      pre {
+        background: #020617;
+        color: #e5e7eb;
+        padding: 10px 12px;
+        border-radius: 10px;
+        overflow-x: auto;
+        font-size: 0.9rem;
+      }
+
+      .faqs details {
+        margin-bottom: 8px;
+      }
+      .faqs summary {
+        cursor: pointer;
+      }
+
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+        margin-top: 10px;
+      }
+      .related-grid .card {
+        border-radius: 14px;
+        padding: 14px;
+        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+        text-decoration: none;
+        color: inherit;
+        border: 1px solid #e2e8f0;
+        transition: transform 0.16s, box-shadow 0.16s;
+      }
+      .related-grid .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1);
+      }
+      .related-grid .card h4 {
+        margin: 0 0 6px;
+        font-size: 1rem;
+      }
+      .related-grid .card p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #64748b;
+      }
+
+      .site-footer {
+        margin-top: 32px;
+        padding: 18px 0;
+        border-top: 1px solid #e2e8f0;
+        color: #64748b;
+        font-size: 0.9rem;
+        background: #f8fafc;
+      }
+      .site-footer a {
+        color: inherit;
+        text-decoration: underline;
+      }
+
+      /* ---------- Mobile fine-tuning ---------- */
+      @media (max-width: 768px) {
+        .calculator-hero {
+          padding: 18px 16px;
+          margin: 20px 0 18px;
+        }
+        .calculator-hero h1 {
+          font-size: 1.6rem;
+        }
+        .badge-line span {
+          margin-bottom: 4px;
+        }
+        #calc-percentage-calculator.card {
+          padding: 14px 14px 16px;
+          border-radius: 14px;
+        }
+        .calc-row {
+          grid-template-columns: 1fr;
+        }
+        .btn {
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .wrap {
+          padding: 0 10px;
+        }
+        .calculator-hero h1 {
+          font-size: 1.45rem;
+        }
+        .field input {
+          padding: 7px 10px;
+          font-size: 0.9rem;
+        }
+        .btn {
+          padding: 9px 10px;
+          font-size: 0.9rem;
+        }
+        .result {
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+
+    <!-- GA4 -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-Y5YHCPQPFS");
+    </script>
+
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://calculatorsolution.com/percentage-calculator.html"
+    />
+
+    <!-- Schema: WebPage + WebSite + Breadcrumbs + FAQ -->
+    <script type="application/ld+json">
+      [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Percentage Calculator",
+          "url": "https://calculatorsolution.com/percentage-calculator.html",
+          "description": "Free online Percentage Calculator to quickly find percent, percentage change, discounts and markups."
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "url": "https://calculatorsolution.com/",
+          "name": "CalculatorSolution",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://calculatorsolution.com/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "CalculatorSolution",
+              "item": "https://calculatorsolution.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Percentage Calculator",
+              "item": "https://calculatorsolution.com/percentage-calculator.html"
+            }
+          ]
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How do I calculate a percentage?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "To calculate a percentage, divide the part by the whole and then multiply by 100. For example, if you scored 45 out of 60, the percentage is (45 ÷ 60) × 100 = 75%."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What can I use this Percentage Calculator for?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can use this Percentage Calculator for discounts, markups, exam scores, GST or tax calculations, interest rates, growth rates and any situation where you compare a part to a whole."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is there a difference between percentage increase and decrease?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Percentage increase is based on the original value before the change, while percentage decrease is based on the starting value before it went down. The base value matters for accurate results."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I enter decimal or negative numbers?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Decimal numbers are useful for precise values and negative numbers can represent loss, decline, or reverse changes in financial and data calculations."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How many decimal places should I use?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "For everyday use like discounts or exam marks, 1–2 decimal places are enough. For finance, tax, or scientific work, you may want 3–4 decimal places for better precision."
+              }
+            }
+          ]
+        }
+      ]
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">
+          <img
+            src="/assets/logo.png"
+            alt="CalculatorSolution logo"
+            class="brand-logo"
+            width="36"
+            height="36"
+          />
+          <span class="brand-text">CalculatorSolution</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <article>
+        <div class="calculator-hero">
+          <h1>Percentage Calculator</h1>
+          <p class="lead">
+            Quickly find what percent one number is of another, calculate
+            percentage change, and understand discounts or markups in seconds.
+          </p>
+          <p class="badge-line">
+            <span>✅ Free online tool</span>
+            <span>✅ Mobile-friendly</span>
+            <span>✅ Great for finance, exams & shopping</span>
+          </p>
+        </div>
+
+        <section class="calculator-main">
+          <div
+            id="calc-percentage-calculator"
+            class="card"
+            aria-label="Percentage calculator"
+          >
+            <h2 class="card-title">
+              Calculate what percent the part is of the whole
+            </h2>
+
+            <div class="calc-row">
+              <div class="field">
+                <label class="field-label" for="part">Part</label>
+                <input
+                  id="part"
+                  type="number"
+                  placeholder="e.g. 25"
+                  aria-label="Part value"
+                />
+                <span class="field-hint"
+                  >The portion or value you care about</span
+                >
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="whole">Whole</label>
+                <input
+                  id="whole"
+                  type="number"
+                  placeholder="e.g. 200"
+                  aria-label="Whole value"
+                />
+                <span class="field-hint">The total or base value</span>
+              </div>
+
+              <button id="pct-calc" class="btn" type="button">
+                Calculate %
+              </button>
+            </div>
+
+            <div id="pct-result" class="result" aria-live="polite"></div>
+          </div>
+        </section>
+        <section class="section-block related">
+          <h2>Related Calculators</h2>
+          <div class="cards-grid related-grid">
+            <a class="card" href="percentage-change-calculator.html">
+              <h4>Percentage Increase/Decrease Calculator</h4>
+              <p>Calculate percentage change between an old and a new value.</p>
+            </a>
+            <a class="card" href="discount-calculator.html">
+              <h4>Discount Calculator</h4>
+              <p>Find final price after discount and how much you save.</p>
+            </a>
+            <a class="card" href="gst-calculator-india.html">
+              <h4>GST Calculator (India)</h4>
+              <p>Compute GST amount and final price for common GST slabs.</p>
+            </a>
+            <a class="card" href="loan-emi-calculator.html">
+              <h4>Loan EMI Calculator</h4>
+              <p>Estimate EMI, total interest and total payable for loans.</p>
+            </a>
+          </div>
+        </section>
+        <!-- Content sections (unchanged text) -->
+        <section class="section-block">
+          <h2>How to Use the Percentage Calculator</h2>
+          <p>
+            This Percentage Calculator is designed to make everyday math easy.
+            Simply enter the
+            <strong>part</strong> (the portion you are interested in) and the
+            <strong>whole</strong> (the total value), then click
+            <em>Calculate %</em>. The tool instantly shows you what percentage
+            the part is of the whole.
+          </p>
+          <ul>
+            <li>
+              <strong>Shopping &amp; discounts:</strong> Check how much you save
+              or pay after a discount.
+            </li>
+            <li>
+              <strong>Finance &amp; tax:</strong> See what percent of income
+              goes to EMI, rent, savings, or tax.
+            </li>
+            <li>
+              <strong>Exams &amp; grades:</strong> Convert raw marks into
+              percentage scores.
+            </li>
+            <li>
+              <strong>Business &amp; data:</strong> Compare performance, growth
+              or share of total sales.
+            </li>
+          </ul>
+        </section>
+
+        <section class="section-block">
+          <h2>Percentage Formula</h2>
+          <p>
+            A percentage is a way of expressing a number as a fraction of 100.
+            The basic formula is:
+          </p>
+          <pre>Percentage (%) = (Part / Whole) × 100</pre>
+          <p><strong>Example 1 – Exam score</strong></p>
+          <p>
+            You scored 72 marks out of 90. The percentage is:
+            <br />(72 ÷ 90) × 100 = 80%
+          </p>
+          <p><strong>Example 2 – Expense ratio</strong></p>
+          <p>
+            Your rent is $600 out of a $2,000 monthly income. The percentage of
+            income spent on rent is:
+            <br />(600 ÷ 2000) × 100 = 30%
+          </p>
+        </section>
+
+        <section class="section-block">
+          <h2>Percentage Increase and Decrease</h2>
+          <p>
+            Percentage change tells you how much a value has grown or declined
+            relative to its original value.
+          </p>
+          <pre>Percentage Change (%) = ((New − Old) / Old) × 100</pre>
+          <p><strong>Example – Price increase</strong></p>
+          <p>
+            A product goes from $50 to $65:
+            <br />((65 − 50) ÷ 50) × 100 = 30% increase.
+          </p>
+          <p>
+            Note that a 30% increase and a 30% decrease are not symmetric. If
+            the price falls by 30% from $65, the new price is 65 × (1 − 0.30) =
+            $45.5, not $50.
+          </p>
+        </section>
+
+        <section class="section-block faqs">
+          <h2>Percentage Calculator – FAQs</h2>
+
+          <details class="card">
+            <summary><strong>How do I calculate a percentage?</strong></summary>
+            <p>
+              Divide the part by the whole and multiply the result by 100. For
+              example, (20 ÷ 80) × 100 = 25%.
+            </p>
+          </details>
+
+          <details class="card">
+            <summary>
+              <strong>Can I use this calculator for discounts and GST?</strong>
+            </summary>
+            <p>
+              Yes. You can enter the discount or tax amount as the part and the
+              original price as the whole to understand what percent it
+              represents.
+            </p>
+          </details>
+
+          <details class="card">
+            <summary>
+              <strong
+                >Is percentage change the same as difference in percent?</strong
+              >
+            </summary>
+            <p>
+              No. Percentage change is based on the original value. A 20%
+              increase followed by a 20% decrease does not bring you back to the
+              exact starting value.
+            </p>
+          </details>
+
+          <details class="card">
+            <summary>
+              <strong>What happens if I enter zero as the whole?</strong>
+            </summary>
+            <p>
+              The whole cannot be zero, because division by zero is undefined.
+              The calculator will ask you to enter a non-zero whole value.
+            </p>
+          </details>
+
+          <details class="card">
+            <summary>
+              <strong>Can I enter decimal or negative numbers?</strong>
+            </summary>
+            <p>
+              Yes. Decimal values give more precise percentages, and negative
+              numbers can represent losses, drops, or reversed changes in many
+              finance and data contexts.
+            </p>
+          </details>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>&copy; 2025 CalculatorSolution — Free Online Calculators</p>
+        <p style="margin-top: 8px; font-size: 0.9rem">
+          <a href="/sitemap.xml">Sitemap</a> | <a href="/">Home</a> |
+          <a href="/privacy-policy.html">Privacy Policy</a> |
+          <a href="/terms-of-service.html">Terms</a> |
+          <a href="/contact.html">Contact</a> |
+          <a href="/about.html">About</a>
+        </p>
+      </div>
+    </footer>
+
+    <!-- Interactive script -->
+    <script>
+      (function () {
+        const btn = document.getElementById("pct-calc");
+        if (!btn) return;
+
+        btn.addEventListener("click", function () {
+          const partInput = document.getElementById("part");
+          const wholeInput = document.getElementById("whole");
+          const out = document.getElementById("pct-result");
+
+          const p = parseFloat(partInput.value);
+          const w = parseFloat(wholeInput.value);
+
+          if (isNaN(p) || isNaN(w)) {
+            out.textContent = "Please enter both part and whole values.";
+            return;
+          }
+          if (w === 0) {
+            out.textContent = "Enter a non-zero whole value.";
+            return;
+          }
+
+          const pct = (p / w) * 100;
+          out.innerHTML =
+            "<strong>" +
+            pct.toFixed(2) +
+            "%</strong> &nbsp;(" +
+            p +
+            " ÷ " +
+            w +
+            ") × 100";
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,845 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- ✅ Better responsive scaling + safe-area support -->
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+  <title>Freelancer Earnings Calculator (Net Income + Effective Hourly Rate) | CalculatorSolution</title>
+  <meta name="description" content="Free Freelancer Earnings Calculator: estimate gross income, platform/payment fees, taxes, monthly expenses, net earnings, and effective hourly rate with utilization.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/freelancer-earnings-calculator.html">
+
+  <meta property="og:title" content="Freelancer Earnings Calculator">
+  <meta property="og:description" content="Calculate net earnings after fees, taxes and expenses. Includes utilization and effective hourly rate.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- ✅ UI/UX Responsive critical CSS (NO logic changes) -->
+  <style>
+    :root{
+      --wrap:1100px;
+      --pad:18px;
+      --r-lg:18px;
+      --r-md:16px;
+      --r-sm:12px;
+    }
+
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    a{color:inherit}
+
+    /* ✅ Wrap now respects safe-area on iOS */
+    .wrap{
+      max-width:var(--wrap);
+      margin:0 auto;
+      padding-left:calc(var(--pad) + env(safe-area-inset-left));
+      padding-right:calc(var(--pad) + env(safe-area-inset-right));
+    }
+
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{
+      display:flex;align-items:center;gap:10px;text-decoration:none;
+      min-height:44px; /* ✅ tap target */
+    }
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;line-height:1.2}
+    .brand-logo{border-radius:10px;flex:0 0 auto}
+
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em;line-height:1.15}
+    .hero p{margin:0;opacity:.95}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      max-width:100%;
+    }
+
+    /* ✅ Prevent overflow on small screens */
+    main.wrap, article{max-width:100%}
+
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      overflow:hidden; /* ✅ prevents inner content spill */
+    }
+
+    .panel-title{
+      display:flex;align-items:flex-start;justify-content:space-between;
+      gap:10px;margin-bottom:10px;
+    }
+    .panel-title h2{margin:0;font-size:1.05rem;line-height:1.25}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(37,99,235,.10);color:#1d4ed8;
+      font-weight:900;font-size:.85rem;
+      white-space:nowrap;
+    }
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      width:100%;
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      min-height:44px; /* ✅ mobile friendly */
+    }
+    select.input{appearance:auto}
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px
+    }
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px; /* ✅ tap target */
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:2px}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .btn-ghost:hover{box-shadow:0 10px 20px rgba(2,6,23,.06);transform:translateY(-1px)}
+
+    /* ✅ Sticky safe across devices */
+    .sticky{position:sticky;top:82px}
+
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92))}
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{
+      margin:4px 0 0;
+      font-size:1.55rem;
+      font-weight:1000;
+      letter-spacing:-.02em;
+      line-height:1.15;
+      word-break:break-word; /* ✅ no overflow on long currencies */
+    }
+    .mini{font-size:.86rem;color:#64748b}
+
+    .bar{height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px}
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* ✅ Table: better mobile/scroll experience */
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{width:100%;border-collapse:collapse;min-width:920px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem;vertical-align:top}
+    th{background:#f8fafc;font-weight:1000}
+    tr:last-child td{border-bottom:0}
+
+    /* ✅ Improve code/Formula readability on phones */
+    pre{
+      max-width:100%;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid #e2e8f0;
+      background:rgba(255,255,255,.85);
+      box-shadow:0 10px 24px rgba(8,13,26,.05);
+      font-size:.92rem;
+      line-height:1.45;
+      white-space:pre; /* keep formula format */
+    }
+
+    .note{border:1px dashed #cbd5e1;border-radius:14px;padding:12px;background:rgba(255,255,255,.7);margin-top:10px}
+    .card{
+      background:#fff;border:1px solid #e2e8f0;border-radius:14px;
+      box-shadow:0 10px 24px rgba(8,13,26,.05);
+      padding:12px
+    }
+    details.card{padding:0}
+    details.card summary{
+      cursor:pointer;
+      padding:12px;
+      list-style:none;
+      min-height:44px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    details.card summary::-webkit-details-marker{display:none}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* ✅ Related cards grid: ensure it wraps nicely on all screens
+       (won't change logic, only layout polish) */
+    .related-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:12px;
+    }
+    .related-grid .card{display:block;text-decoration:none}
+    .related-grid h4{margin:0 0 6px;line-height:1.25}
+    .related-grid p{margin:0;color:#475569}
+
+    /* ✅ Responsive breakpoints (more granular than your single 920px rule) */
+    @media (max-width: 1024px){
+      .wrap{padding-left:16px;padding-right:16px}
+      .hero{padding:22px 16px}
+      table{min-width:860px}
+      .related-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static;top:auto}
+      table{min-width:760px}
+    }
+
+    @media (max-width: 680px){
+      .hero h1{font-size:1.55rem}
+      .grid-2{grid-template-columns:1fr}
+      .panel-title{align-items:center}
+      .metric .v{font-size:1.35rem}
+      .actions{flex-direction:column}
+      .actions .btn{width:100%}
+      table{min-width:720px}
+      .related-grid{grid-template-columns:1fr}
+    }
+
+    @media (max-width: 420px){
+      :root{--pad:14px}
+      .hero{border-radius:16px}
+      .panel{border-radius:14px}
+      .metric{border-radius:14px}
+      .chip{font-size:.84rem}
+    }
+
+    /* ✅ Reduce motion preference */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto!important}
+      .btn,.card{transition:none!important}
+      .btn:hover{transform:none!important}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Freelancer Earnings Calculator",
+      "url":"https://calculatorsolution.com/freelancer-earnings-calculator.html",
+      "description":"Estimate freelancer net earnings after platform fees, taxes and expenses. Includes effective hourly rate and utilization."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Freelancer Earnings Calculator","item":"https://calculatorsolution.com/freelancer-earnings-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to estimate freelancer net earnings",
+      "step":[
+        {"@type":"HowToStep","name":"Enter pricing and hours","text":"Choose hourly or project pricing and add billable hours or projects per month."},
+        {"@type":"HowToStep","name":"Add fees, taxes and expenses","text":"Include platform/payment fees, tax rate, and recurring monthly costs."},
+        {"@type":"HowToStep","name":"Review net and effective hourly rate","text":"See monthly and yearly net, profit margin, and effective hourly earnings after utilization."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Include billable hours?","acceptedAnswer":{"@type":"Answer","text":"Yes. Enter billable hours and utilization to see effective hourly rate after non-billable time."}},
+        {"@type":"Question","name":"Taxes?","acceptedAnswer":{"@type":"Answer","text":"Enter an estimated tax rate to model advance/estimated taxes. Actual tax depends on your country and deductions."}},
+        {"@type":"Question","name":"Platform fees?","acceptedAnswer":{"@type":"Answer","text":"Add platform or payment processor fee percentage and any fixed fee per invoice."}},
+        {"@type":"Question","name":"Expenses?","acceptedAnswer":{"@type":"Answer","text":"Include recurring tools/subscriptions, internet, coworking, equipment and other monthly costs."}},
+        {"@type":"Question","name":"Savings?","acceptedAnswer":{"@type":"Answer","text":"Set a savings rate to plan for PTO, emergency fund or retirement contributions."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Freelancer Earnings Calculator</h1>
+        <p>Model take-home pay after fees, taxes, expenses — plus effective hourly rate with billable utilization.</p>
+        <div class="chips">
+          <span class="chip">💸 Net earnings (month/year)</span>
+          <span class="chip">📈 Profit margin</span>
+          <span class="chip">⏱️ Effective hourly rate</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-freelancer-earnings">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Freelancer inputs">
+              <div class="panel-title">
+                <h2>Income, hours & costs</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="fe_currency">Currency</label>
+                  <select id="fe_currency" class="input">
+                    <option value="₹" selected>₹ INR</option>
+                    <option value="$">$ USD</option>
+                    <option value="€">€ EUR</option>
+                    <option value="£">£ GBP</option>
+                  </select>
+                  <p class="help">Display currency only (no FX conversion).</p>
+                </div>
+
+                <div class="field">
+                  <label for="fe_model">Pricing model</label>
+                  <select id="fe_model" class="input">
+                    <option value="hourly" selected>Hourly billing</option>
+                    <option value="project">Per-project billing</option>
+                    <option value="retainer">Monthly retainer</option>
+                  </select>
+                  <p class="help">Pick how you charge clients.</p>
+                </div>
+
+                <div class="field" id="fe_hourly_wrap">
+                  <label for="fe_hourly_rate">Hourly rate</label>
+                  <input id="fe_hourly_rate" class="input" type="number" inputmode="decimal" min="0" step="1" placeholder="e.g., 1200">
+                  <p class="help">Your rate per billable hour.</p>
+                </div>
+
+                <div class="field" id="fe_billable_hours_wrap">
+                  <label for="fe_billable_hours">Billable hours per month</label>
+                  <input id="fe_billable_hours" class="input" type="number" inputmode="decimal" min="0" step="1" placeholder="e.g., 80">
+                  <p class="help">Hours you actually invoice clients.</p>
+                </div>
+
+                <div class="field" id="fe_project_price_wrap" style="display:none;">
+                  <label for="fe_project_price">Average project price</label>
+                  <input id="fe_project_price" class="input" type="number" inputmode="decimal" min="0" step="100" placeholder="e.g., 30000">
+                  <p class="help">Average revenue per project.</p>
+                </div>
+
+                <div class="field" id="fe_projects_wrap" style="display:none;">
+                  <label for="fe_projects">Projects per month</label>
+                  <input id="fe_projects" class="input" type="number" inputmode="decimal" min="0" step="0.5" placeholder="e.g., 2">
+                  <p class="help">Can be fractional (e.g., 0.5 = one project every 2 months).</p>
+                </div>
+
+                <div class="field" id="fe_retainer_wrap" style="display:none;">
+                  <label for="fe_retainer">Retainer per month</label>
+                  <input id="fe_retainer" class="input" type="number" inputmode="decimal" min="0" step="100" placeholder="e.g., 60000">
+                  <p class="help">Monthly recurring income from retainers.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fe_utilization">Utilization (billable %)</label>
+                  <input id="fe_utilization" class="input" type="number" inputmode="decimal" min="0" max="100" step="1" placeholder="e.g., 60">
+                  <p class="help">Billable time ÷ total working time. Used for effective hourly rate.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fe_work_hours">Total working hours per month</label>
+                  <input id="fe_work_hours" class="input" type="number" inputmode="decimal" min="0" step="1" placeholder="e.g., 160">
+                  <p class="help">If you prefer, enter working hours and utilization will estimate billables.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fe_platform_fee_pct">Platform / payment fee (%)</label>
+                  <input id="fe_platform_fee_pct" class="input" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g., 10">
+                  <p class="help">Example: Upwork/platform fee or payment gateway %.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fe_fixed_fee">Fixed fees per month (optional)</label>
+                  <input id="fe_fixed_fee" class="input" type="number" inputmode="decimal" min="0" step="100" placeholder="e.g., 500">
+                  <p class="help">Bank charges, invoices tools, etc.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fe_expenses">Business expenses per month</label>
+                  <input id="fe_expenses" class="input" type="number" inputmode="decimal" min="0" step="100" placeholder="e.g., 8000">
+                  <p class="help">Tools, internet, coworking, equipment amortization, etc.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fe_tax_pct">Estimated tax rate (%)</label>
+                  <input id="fe_tax_pct" class="input" type="number" inputmode="decimal" min="0" max="100" step="0.5" placeholder="e.g., 20">
+                  <p class="help">Simple estimate. Consult a professional for exact tax.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fe_savings_pct">Savings / PTO fund (%)</label>
+                  <input id="fe_savings_pct" class="input" type="number" inputmode="decimal" min="0" max="100" step="0.5" placeholder="e.g., 10">
+                  <p class="help">Optional: set aside for PTO, emergency, retirement.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="fe_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="fe_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="fe_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note mini">
+                Net = Gross − Platform/Payment fees − Fixed fees − Expenses − Taxes − Savings (optional).<br>
+                Effective hourly rate = Net ÷ Total working hours (or based on utilization).
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Freelancer results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Gross income (monthly)</p>
+                <p class="v" id="fe_out_gross">—</p>
+                <p class="mini" id="fe_out_gross_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Net take-home (monthly)</p>
+                <p class="v" id="fe_out_net_m">—</p>
+                <p class="mini" id="fe_out_net_m_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Net take-home (yearly)</p>
+                <p class="v" id="fe_out_net_y">—</p>
+                <div class="bar"><span id="fe_bar_margin"></span></div>
+                <p class="mini" id="fe_out_margin">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Effective hourly (net)</p>
+                <p class="v" id="fe_out_eff_hr">—</p>
+                <p class="mini" id="fe_out_eff_hr_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="fe_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Breakdown (Monthly)</h2>
+          <p class="mini" style="margin:0 0 10px;">A clear breakdown of where your money goes each month.</p>
+
+          <div class="table-wrap">
+            <table aria-label="Freelancer monthly breakdown table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Amount</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody id="fe_table">
+                <tr><td colspan="3" class="mini">Click <strong>Calculate</strong> to generate the breakdown.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          This <strong>Freelancer Earnings Calculator</strong> estimates your monthly and yearly take-home income after
+          <strong>platform/payment fees</strong>, <strong>business expenses</strong>, and an <strong>estimated tax rate</strong>.
+          It also shows an <strong>effective hourly rate</strong> based on your total working hours and utilization.
+        </p>
+        <p class="mini">
+          Tip: Your “real” hourly earnings are often lower than your billed rate due to non-billable time (sales, admin, revisions).
+          Improve utilization, raise rates, or productize services to increase net earnings.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>Gross = (HourlyRate × BillableHours) OR (ProjectPrice × Projects) OR Retainer
+Fees = Gross × (Fee% / 100) + FixedFees
+TaxableBase = Gross − Fees − Expenses
+Tax = TaxableBase × (Tax% / 100)
+Savings = (Gross − Fees − Expenses − Tax) × (Savings% / 100)
+Net = Gross − Fees − Expenses − Tax − Savings</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Include billable hours?</strong></summary><p>Yes — use billable hours and utilization to estimate effective hourly rate.</p></details>
+        <details class="card"><summary><strong>Taxes?</strong></summary><p>This uses a simple percentage. Real tax depends on deductions and rules in your country.</p></details>
+        <details class="card"><summary><strong>Platform fees?</strong></summary><p>Enter fee % and fixed monthly charges to see accurate take-home.</p></details>
+        <details class="card"><summary><strong>Expenses?</strong></summary><p>Add tools, subscriptions, internet, coworking, hardware, travel, etc.</p></details>
+        <details class="card"><summary><strong>Savings?</strong></summary><p>Set a savings rate to build PTO/retirement buffers like a salary package.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="hourly-to-salary-calculator.html"><h4>Hourly to Salary Calculator</h4><p>Convert hourly rate into monthly/yearly salary.</p></a>
+          <a class="card" href="salary-calculator.html"><h4>Salary Calculator</h4><p>Estimate take-home based on deductions.</p></a>
+          <a class="card" href="gst-calculator-india.html"><h4>GST Calculator (India)</h4><p>Calculate GST amount and final price.</p></a>
+          <a class="card" href="percentage-calculator.html"><h4>Percentage Calculator</h4><p>Compute percentages and percent change.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const fmt0 = (n)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:0}).format(n) : '—');
+      const fmt2 = (n)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{minimumFractionDigits:0, maximumFractionDigits:2}).format(n) : '—');
+
+      const currencyEl = $('fe_currency');
+      const modelEl = $('fe_model');
+
+      const hourlyWrap = $('fe_hourly_wrap');
+      const billableWrap = $('fe_billable_hours_wrap');
+      const projPriceWrap = $('fe_project_price_wrap');
+      const projectsWrap = $('fe_projects_wrap');
+      const retainerWrap = $('fe_retainer_wrap');
+
+      const hourlyRateEl = $('fe_hourly_rate');
+      const billableHoursEl = $('fe_billable_hours');
+
+      const projectPriceEl = $('fe_project_price');
+      const projectsEl = $('fe_projects');
+
+      const retainerEl = $('fe_retainer');
+
+      const utilEl = $('fe_utilization');
+      const workHoursEl = $('fe_work_hours');
+
+      const feePctEl = $('fe_platform_fee_pct');
+      const fixedFeeEl = $('fe_fixed_fee');
+      const expEl = $('fe_expenses');
+      const taxPctEl = $('fe_tax_pct');
+      const savePctEl = $('fe_savings_pct');
+
+      const outGross = $('fe_out_gross');
+      const outGrossNote = $('fe_out_gross_note');
+      const outNetM = $('fe_out_net_m');
+      const outNetMNote = $('fe_out_net_m_note');
+      const outNetY = $('fe_out_net_y');
+      const outMargin = $('fe_out_margin');
+      const outEffHr = $('fe_out_eff_hr');
+      const outEffHrNote = $('fe_out_eff_hr_note');
+      const outSummary = $('fe_out_summary');
+      const barMargin = $('fe_bar_margin');
+      const tbody = $('fe_table');
+
+      function money(sym, n){
+        return (sym || '₹') + ' ' + fmt0(n);
+      }
+
+      function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+
+      function setModelUI(){
+        const m = modelEl.value;
+
+        hourlyWrap.style.display = (m==='hourly') ? 'block' : 'none';
+        billableWrap.style.display = (m==='hourly') ? 'block' : 'none';
+
+        projPriceWrap.style.display = (m==='project') ? 'block' : 'none';
+        projectsWrap.style.display = (m==='project') ? 'block' : 'none';
+
+        retainerWrap.style.display = (m==='retainer') ? 'block' : 'none';
+      }
+
+      function calc(){
+        const sym = currencyEl.value || '₹';
+        const model = modelEl.value;
+
+        const feePct = (parseFloat(feePctEl.value) || 0) / 100;
+        const fixedFees = parseFloat(fixedFeeEl.value) || 0;
+        const expenses = parseFloat(expEl.value) || 0;
+        const taxPct = (parseFloat(taxPctEl.value) || 0) / 100;
+        const savePct = (parseFloat(savePctEl.value) || 0) / 100;
+
+        let gross = 0;
+        let billableHours = parseFloat(billableHoursEl.value) || 0;
+
+        const utilization = clamp(parseFloat(utilEl.value) || 0, 0, 100) / 100;
+        const workHours = parseFloat(workHoursEl.value) || 0;
+
+        if(model === 'hourly'){
+          const rate = parseFloat(hourlyRateEl.value);
+          if(!isFinite(rate) || rate<=0){
+            outGross.textContent='—';
+            outGrossNote.textContent='Enter a valid hourly rate.';
+            tbody.innerHTML = '<tr><td colspan="3" class="mini">Fix inputs and click <strong>Calculate</strong>.</td></tr>';
+            return;
+          }
+
+          // If user provided working hours + utilization, estimate billable hours (optional convenience)
+          // Only override billable hours if billable hours is empty/0 and utilization+workHours is provided.
+          if((!billableHours || billableHours<=0) && workHours>0 && utilization>0){
+            billableHours = workHours * utilization;
+            billableHoursEl.value = (Math.round(billableHours*10)/10).toString();
+          }
+
+          gross = rate * (billableHours || 0);
+          outGrossNote.textContent = `Hourly: ${sym}${fmt0(rate)} × ${fmt2(billableHours)} billable hours.`;
+        }
+        else if(model === 'project'){
+          const price = parseFloat(projectPriceEl.value);
+          const count = parseFloat(projectsEl.value);
+
+          if(!isFinite(price) || price<=0 || !isFinite(count) || count<=0){
+            outGross.textContent='—';
+            outGrossNote.textContent='Enter valid project price and projects per month.';
+            tbody.innerHTML = '<tr><td colspan="3" class="mini">Fix inputs and click <strong>Calculate</strong>.</td></tr>';
+            return;
+          }
+          gross = price * count;
+          outGrossNote.textContent = `Projects: ${sym}${fmt0(price)} × ${fmt2(count)} / month.`;
+        }
+        else if(model === 'retainer'){
+          const r = parseFloat(retainerEl.value);
+          if(!isFinite(r) || r<=0){
+            outGross.textContent='—';
+            outGrossNote.textContent='Enter a valid retainer amount.';
+            tbody.innerHTML = '<tr><td colspan="3" class="mini">Fix inputs and click <strong>Calculate</strong>.</td></tr>';
+            return;
+          }
+          gross = r;
+          outGrossNote.textContent = `Retainer: ${sym}${fmt0(r)} / month.`;
+        }
+
+        // Fees
+        const feeVar = gross * feePct;
+        const feesTotal = feeVar + fixedFees;
+
+        // Tax base (simple model)
+        const taxableBase = Math.max(0, gross - feesTotal - expenses);
+        const tax = taxableBase * taxPct;
+
+        // Savings (optional; based on post-tax leftover)
+        const afterTax = Math.max(0, gross - feesTotal - expenses - tax);
+        const savings = afterTax * savePct;
+
+        // Net
+        const net = Math.max(0, gross - feesTotal - expenses - tax - savings);
+        const netYear = net * 12;
+
+        // Margin and effective hourly
+        const margin = (gross>0) ? (net/gross)*100 : 0;
+
+        // Effective hourly: if workHours provided, net/workHours; else if utilization+billable -> infer workHours
+        let effHr = NaN;
+        let effNote = 'Provide working hours to compute effective hourly.';
+        if(workHours>0){
+          effHr = net / workHours;
+          effNote = `Net ÷ ${fmt2(workHours)} working hours/month.`;
+        } else if(billableHours>0 && utilization>0){
+          const inferredWork = billableHours / utilization;
+          effHr = net / inferredWork;
+          effNote = `Using utilization ${Math.round(utilization*100)}% → inferred working hours ≈ ${fmt2(inferredWork)}.`;
+        } else if(billableHours>0){
+          effHr = net / billableHours;
+          effNote = `Net ÷ ${fmt2(billableHours)} billable hours (utilization not applied).`;
+        }
+
+        // Outputs
+        outGross.textContent = money(sym, gross);
+        outNetM.textContent = money(sym, net);
+        outNetY.textContent = money(sym, netYear);
+        outNetMNote.textContent = `After fees, expenses, tax${savePct>0 ? ' and savings' : ''}.`;
+
+        barMargin.style.width = clamp(margin, 0, 100).toFixed(1) + '%';
+        barMargin.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+        outMargin.textContent = `Net margin ≈ ${margin.toFixed(1)}%`;
+
+        outEffHr.textContent = isFinite(effHr) ? (sym + ' ' + fmt2(effHr) + ' / hr') : '—';
+        outEffHrNote.textContent = effNote;
+
+        const feePctShow = (feePct*100).toFixed(1).replace('.0','');
+        const taxPctShow = (taxPct*100).toFixed(1).replace('.0','');
+        const savePctShow = (savePct*100).toFixed(1).replace('.0','');
+
+        outSummary.textContent =
+          `Gross ${sym}${fmt0(gross)} • Fees ${sym}${fmt0(feesTotal)} (${feePctShow}% + fixed) • Expenses ${sym}${fmt0(expenses)} • Tax ${sym}${fmt0(tax)} (${taxPctShow}%)` +
+          (savePct>0 ? ` • Savings ${sym}${fmt0(savings)} (${savePctShow}%)` : '') +
+          ` • Net ${sym}${fmt0(net)}.`;
+
+        // Breakdown table
+        const rows = [];
+        rows.push(`<tr><td><strong>Gross income</strong></td><td><strong>${money(sym, gross)}</strong></td><td>${outGrossNote.textContent}</td></tr>`);
+        rows.push(`<tr><td>Platform/payment fee</td><td>${money(sym, feeVar)}</td><td>${feePctShow}% of gross</td></tr>`);
+        rows.push(`<tr><td>Fixed fees</td><td>${money(sym, fixedFees)}</td><td>Monthly fixed charges</td></tr>`);
+        rows.push(`<tr><td><strong>Total fees</strong></td><td><strong>${money(sym, feesTotal)}</strong></td><td>Variable + fixed fees</td></tr>`);
+        rows.push(`<tr><td>Business expenses</td><td>${money(sym, expenses)}</td><td>Tools, internet, coworking, etc.</td></tr>`);
+        rows.push(`<tr><td>Estimated tax</td><td>${money(sym, tax)}</td><td>${taxPctShow}% of taxable base (${money(sym, taxableBase)})</td></tr>`);
+        rows.push(`<tr><td>Savings / PTO fund</td><td>${money(sym, savings)}</td><td>${savePct>0 ? (savePctShow + '% of post-tax leftover') : 'Not enabled'}</td></tr>`);
+        rows.push(`<tr><td><strong>Net take-home (monthly)</strong></td><td><strong>${money(sym, net)}</strong></td><td>Net after all deductions</td></tr>`);
+        rows.push(`<tr><td><strong>Net take-home (yearly)</strong></td><td><strong>${money(sym, netYear)}</strong></td><td>Monthly net × 12</td></tr>`);
+
+        tbody.innerHTML = rows.join('');
+      }
+
+      $('fe_calc_btn').addEventListener('click', calc);
+
+      $('fe_example_btn').addEventListener('click', ()=>{
+        currencyEl.value = '₹';
+        modelEl.value = 'hourly';
+        hourlyRateEl.value = '1200';
+        billableHoursEl.value = '80';
+        utilEl.value = '60';
+        workHoursEl.value = '160';
+        feePctEl.value = '10';
+        fixedFeeEl.value = '500';
+        expEl.value = '8000';
+        taxPctEl.value = '20';
+        savePctEl.value = '10';
+        setModelUI();
+        calc();
+      });
+
+      $('fe_reset_btn').addEventListener('click', ()=>{
+        currencyEl.value = '₹';
+        modelEl.value = 'hourly';
+        [
+          hourlyRateEl, billableHoursEl, projectPriceEl, projectsEl, retainerEl,
+          utilEl, workHoursEl, feePctEl, fixedFeeEl, expEl, taxPctEl, savePctEl
+        ].forEach(el=>{ if(el) el.value=''; });
+
+        setModelUI();
+
+        outGross.textContent='—';
+        outGrossNote.textContent='—';
+        outNetM.textContent='—';
+        outNetMNote.textContent='—';
+        outNetY.textContent='—';
+        outMargin.textContent='—';
+        outEffHr.textContent='—';
+        outEffHrNote.textContent='—';
+        outSummary.textContent='Enter details to see a clean summary.';
+        barMargin.style.width='0%';
+
+        tbody.innerHTML = '<tr><td colspan="3" class="mini">Click <strong>Calculate</strong> to generate the breakdown.</td></tr>';
+      });
+
+      // Auto-recalc on edits
+      function bindAuto(el){
+        el.addEventListener('input', ()=>{ /* fast */ if((hourlyRateEl.value || projectPriceEl.value || retainerEl.value) ) calc(); });
+        el.addEventListener('change', ()=>{ if((hourlyRateEl.value || projectPriceEl.value || retainerEl.value) ) calc(); });
+      }
+
+      modelEl.addEventListener('change', ()=>{ setModelUI(); if(hourlyRateEl.value || projectPriceEl.value || retainerEl.value) calc(); });
+      [currencyEl, hourlyRateEl, billableHoursEl, projectPriceEl, projectsEl, retainerEl, utilEl, workHoursEl, feePctEl, fixedFeeEl, expEl, taxPctEl, savePctEl]
+        .forEach(el=> bindAuto(el));
+
+      setModelUI();
+    })();
+  </script>
+</body>
+</html>

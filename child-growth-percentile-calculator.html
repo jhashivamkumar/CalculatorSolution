@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>
+      Child Growth Percentile Calculator (WHO & CDC) | CalculatorSolution
+    </title>
+    <meta
+      name="description"
+      content="Child Growth Percentile Calculator using WHO & CDC growth standards. Check height & weight percentile by age for boys and girls."
+    />
+
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://calculatorsolution.com/child-growth-percentile-calculator.html"
+    />
+
+    <meta
+      property="og:title"
+      content="Child Growth Percentile Calculator (WHO & CDC)"
+    />
+    <meta
+      property="og:description"
+      content="Check child height & weight percentiles using WHO & CDC growth charts."
+    />
+    <meta
+      property="og:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="CalculatorSolution" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+
+    <link rel="icon" href="/assets/og-image.svg" />
+    <link rel="apple-touch-icon" href="/assets/logo.png" />
+
+    <link
+      rel="preload"
+      href="/assets/style.css"
+      as="style"
+      onload="this.rel='stylesheet'"
+    />
+    <noscript><link rel="stylesheet" href="/assets/style.css" /></noscript>
+
+    <style>
+      /* =========================================================
+         ✅ UI/UX + RESPONSIVE ONLY
+         - No JS logic changes
+         - Better spacing, typography, touch targets, layout
+         - Works on mobile, tablet, desktop, large screens
+         ========================================================= */
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Arial;
+        background: linear-gradient(135deg, #f8fafc, #eef2ff);
+        color: #0f172a;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      :root {
+        --wrap: 1100px;
+        --pad: 18px;
+
+        --radius-lg: 18px;
+        --radius-md: 14px;
+        --radius-sm: 12px;
+
+        --border: #e2e8f0;
+        --muted: #64748b;
+
+        --shadow-sm: 0 10px 24px rgba(2, 6, 23, 0.06);
+        --shadow-md: 0 14px 32px rgba(2, 6, 23, 0.09);
+      }
+
+      .wrap {
+        max-width: var(--wrap);
+        margin: 0 auto;
+        padding: 0 var(--pad);
+      }
+
+      /* Header */
+      .site-header {
+        padding: 14px 0;
+        border-bottom: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(8px);
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+
+      .brand {
+        display: inline-flex;
+        gap: 10px;
+        align-items: center;
+        text-decoration: none;
+        min-height: 44px; /* touch friendly */
+      }
+
+      .brand img {
+        border-radius: 10px;
+      }
+
+      .brand-text {
+        font-weight: 900;
+        color: #2563eb;
+        letter-spacing: -0.01em;
+      }
+
+      /* Breadcrumbs */
+      .breadcrumbs {
+        font-size: 0.92rem;
+        color: var(--muted);
+        margin: 14px 0;
+        overflow-wrap: anywhere;
+      }
+
+      .breadcrumbs a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .breadcrumbs a:hover {
+        text-decoration: underline;
+      }
+
+      /* Hero */
+      .hero {
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: #fff;
+        border-radius: var(--radius-lg);
+        padding: 26px;
+        margin: 10px 0 20px;
+        box-shadow: 0 18px 42px rgba(37, 99, 235, 0.18);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero:before {
+        content: "";
+        position: absolute;
+        inset: -60px -60px auto auto;
+        width: 220px;
+        height: 220px;
+        background: radial-gradient(
+          circle at center,
+          rgba(255, 255, 255, 0.22),
+          rgba(255, 255, 255, 0) 60%
+        );
+        transform: rotate(12deg);
+      }
+
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(1.45rem, 2.4vw, 2.2rem);
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+      }
+
+      .hero p {
+        margin: 10px 0 0;
+        opacity: 0.95;
+        max-width: 70ch;
+      }
+
+      .chips {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        font-weight: 800;
+        font-size: 0.86rem;
+        white-space: nowrap;
+      }
+
+      /* Panel */
+      .panel {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        align-items: start;
+      }
+
+      /* Forms */
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+
+      label {
+        font-weight: 800;
+      }
+
+      .help {
+        font-size: 0.9rem;
+        color: var(--muted);
+        margin: 0;
+      }
+
+      .input,
+      .select {
+        padding: 11px 12px;
+        border: 1px solid #cbd5f5;
+        border-radius: 12px;
+        font-size: 1rem;
+        background: #fff;
+        min-height: 44px; /* touch friendly */
+      }
+
+      .input:focus,
+      .select:focus {
+        border-color: #6366f1;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+      }
+
+      /* Buttons */
+      .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+
+      .btn {
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 0;
+        background: linear-gradient(90deg, #2563eb, #6366f1);
+        color: #fff;
+        font-weight: 900;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        box-shadow: 0 12px 28px rgba(37, 99, 235, 0.18);
+        min-height: 44px;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 34px rgba(37, 99, 235, 0.22);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+      }
+
+      .btn.secondary {
+        background: #0f172a;
+        box-shadow: 0 12px 28px rgba(2, 6, 23, 0.16);
+      }
+
+      /* Result card */
+      .result {
+        padding: 14px;
+        border-radius: 14px;
+        background: linear-gradient(180deg, #eef2ff, #fff);
+        border: 1px solid #c7d2fe;
+      }
+
+      .big {
+        font-size: clamp(1.15rem, 1.7vw, 1.45rem);
+        font-weight: 1000;
+        margin: 0;
+        line-height: 1.25;
+      }
+
+      .sub {
+        margin: 8px 0 0;
+        color: #334155;
+      }
+
+      .note {
+        margin-top: 12px;
+        font-size: 0.95rem;
+        color: #475569;
+        border-left: 4px solid #6366f1;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid var(--border);
+      }
+
+      /* FAQs */
+      details.card {
+        margin-top: 10px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: #fff;
+        padding: 10px;
+      }
+
+      details.card summary {
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 10px;
+        outline: none;
+      }
+
+      details.card[open] summary {
+        background: #f8fafc;
+      }
+
+      details.card p {
+        margin: 8px 10px 12px;
+        color: #334155;
+      }
+
+      /* Related calculators */
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+        margin-top: 12px;
+      }
+
+      .cardLink {
+        display: block;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: 0 10px 24px rgba(2, 6, 23, 0.05);
+        transition: transform 0.2s, box-shadow 0.2s;
+        min-height: 120px;
+      }
+
+      .cardLink:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-md);
+      }
+
+      .cardLink h4 {
+        margin: 0 0 6px;
+        font-weight: 1000;
+        letter-spacing: -0.01em;
+      }
+
+      .cardLink p {
+        margin: 0;
+        color: #475569;
+      }
+
+      /* Footer */
+      /* .site-footer {
+        margin-top: 40px;
+        padding: 22px 0;
+        border-top: 1px solid var(--border);
+      }
+
+      .site-footer p {
+        margin: 8px 0;
+        color: #475569;
+        overflow-wrap: anywhere;
+      }
+
+      .site-footer a {
+        color: inherit;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      } */
+
+      /* =========================================================
+         ✅ Responsive refinements (no layout/logic changes)
+         ========================================================= */
+
+      /* Tablet */
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero {
+          padding: 20px;
+        }
+
+        .panel {
+          padding: 16px;
+        }
+      }
+
+      /* Mobile */
+      @media (max-width: 640px) {
+        :root {
+          --pad: 14px;
+        }
+
+        .breadcrumbs {
+          font-size: 0.88rem;
+        }
+
+        .hero {
+          margin: 10px 0 16px;
+          border-radius: 16px;
+        }
+
+        .chips {
+          gap: 8px;
+        }
+
+        .chip {
+          font-size: 0.82rem;
+          padding: 6px 9px;
+        }
+
+        .actions {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+        }
+
+        .cards-grid {
+          grid-template-columns: 1fr;
+        }
+
+        details.card summary {
+          padding: 10px 8px;
+        }
+      }
+
+      /* Large screens */
+      @media (min-width: 1200px) {
+        .hero {
+          padding: 30px;
+        }
+      }
+
+      /* Reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          scroll-behavior: auto !important;
+        }
+        .btn,
+        .cardLink {
+          transition: none;
+        }
+        .btn:hover,
+        .cardLink:hover {
+          transform: none;
+        }
+      }
+    </style>
+
+    <!-- GA4 -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-Y5YHCPQPFS");
+    </script>
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "MedicalWebPage",
+        "name": "Child Growth Percentile Calculator (WHO & CDC)",
+        "description": "Estimate child growth percentiles using WHO and CDC reference charts.",
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "CalculatorSolution",
+              "item": "https://calculatorsolution.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Child Growth Percentile Calculator",
+              "item": "https://calculatorsolution.com/child-growth-percentile-calculator.html"
+            }
+          ]
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">
+          <img
+            src="/assets/logo.png"
+            width="36"
+            height="36"
+            alt="CalculatorSolution logo"
+          />
+          <span class="brand-text">CalculatorSolution</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <article>
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a> › <span>Child Growth Percentile Calculator</span>
+        </nav>
+
+        <div class="hero">
+          <h1>Child Growth Percentile Calculator</h1>
+          <p>
+            Estimate your child’s height & weight percentile using WHO / CDC
+            growth standards.
+          </p>
+          <div class="chips">
+            <span class="chip">📊 WHO Standards</span>
+            <span class="chip">🇺🇸 CDC Charts</span>
+            <span class="chip">🧒 Boys & Girls</span>
+            <span class="chip">🔒 Runs in browser</span>
+          </div>
+        </div>
+
+        <section class="panel" aria-label="Child growth calculator">
+          <div class="grid">
+            <div>
+              <div class="field">
+                <label for="gender">Child Gender</label>
+                <select id="gender" class="select">
+                  <option value="boy">Boy</option>
+                  <option value="girl">Girl</option>
+                </select>
+                <p class="help">Percentiles differ for boys and girls.</p>
+              </div>
+
+              <div class="field">
+                <label for="age">Age (months)</label>
+                <input
+                  id="age"
+                  class="input"
+                  type="number"
+                  min="0"
+                  placeholder="e.g. 24"
+                />
+                <p class="help">Tip: 24 months = 2 years.</p>
+              </div>
+
+              <div class="field">
+                <label for="weight">Weight (kg)</label>
+                <input
+                  id="weight"
+                  class="input"
+                  type="number"
+                  step="0.1"
+                  placeholder="e.g. 12.5"
+                />
+              </div>
+
+              <div class="field">
+                <label for="height">Height (cm)</label>
+                <input
+                  id="height"
+                  class="input"
+                  type="number"
+                  step="0.1"
+                  placeholder="e.g. 86"
+                />
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="btnCalc" type="button">
+                  Calculate
+                </button>
+                <button class="btn secondary" id="btnExample" type="button">
+                  Try Example
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <div class="result" role="status" aria-live="polite">
+                <p class="big" id="out">—</p>
+                <p class="sub" id="note">
+                  Enter details to see an estimated percentile.
+                </p>
+              </div>
+
+              <div class="note">
+                ⚠️ This tool provides an
+                <strong>educational estimate only</strong>. Exact WHO/CDC
+                percentiles require official LMS tables. Always consult a
+                pediatrician for medical decisions.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section style="margin-top: 20px">
+          <h2>How Child Growth Percentiles Work</h2>
+          <p>
+            A growth percentile compares your child’s measurements with a
+            reference population of the same age and gender. For example, a
+            weight percentile of <strong>60%</strong> means the child weighs
+            more than 60% of children in the reference group.
+          </p>
+        </section>
+
+        <section style="margin-top: 16px">
+          <h3>FAQs</h3>
+          <details class="card">
+            <summary><strong>WHO vs CDC charts?</strong></summary>
+            <p>
+              WHO charts are used for children under 5 globally. CDC charts are
+              often used in the US for ages 2–20.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Is one measurement enough?</strong></summary>
+            <p>
+              No. Pediatricians look at growth trends over time, not single
+              values.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>What percentile is normal?</strong></summary>
+            <p>
+              Anywhere between the 5th and 85th percentile can be healthy
+              depending on context.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Is this medically accurate?</strong></summary>
+            <p>
+              This calculator provides an approximation for educational use, not
+              a diagnosis.
+            </p>
+          </details>
+        </section>
+
+        <section style="margin-top: 18px">
+          <h3>Related calculators</h3>
+          <div class="cards-grid">
+            <a class="cardLink" href="bmr-calculator.html"
+              ><h4>BMR Calculator</h4>
+              <p>
+                Estimate basal metabolic rate based on age, sex, height and
+                weight.
+              </p></a
+            >
+            <a class="cardLink" href="daily-calorie-needs-calculator.html"
+              ><h4>Daily Calorie Needs</h4>
+              <p>Find daily calories based on activity level and goals.</p></a
+            >
+            <a class="cardLink" href="ideal-weight-calculator.html"
+              ><h4>Ideal Weight Calculator</h4>
+              <p>See healthy weight ranges by height and BMI.</p></a
+            >
+          </div>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>© CalculatorSolution</p>
+        <p>
+          <a href="/sitemap.xml">Sitemap</a> | <a href="/">Home</a> |
+          <a href="/privacy-policy.html">Privacy</a> |
+          <a href="/terms-of-service.html">Terms</a> |
+          <a href="/contact.html">Contact</a> |
+          <a href="/about.html">About</a>
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        const $ = (id) => document.getElementById(id);
+
+        const gender = $("gender");
+        const ageEl = $("age");
+        const weightEl = $("weight");
+        const heightEl = $("height");
+        const out = $("out");
+        const note = $("note");
+
+        function clamp(n, a, b) {
+          return Math.max(a, Math.min(b, n));
+        }
+        function fmt(n, d = 0) {
+          return new Intl.NumberFormat(undefined, {
+            maximumFractionDigits: d,
+          }).format(n);
+        }
+
+        // Educational estimator (not WHO/CDC tables):
+        // Uses a normalized score combining weight + height vs age.
+        function calc() {
+          const age = +ageEl.value || 0;
+          const w = +weightEl.value || 0;
+          const h = +heightEl.value || 0;
+
+          if (age <= 0 || w <= 0 || h <= 0) {
+            out.textContent = "Please enter age, weight, and height.";
+            note.textContent = "";
+            return;
+          }
+
+          // simple age scaling: expected growth rises with age (rough)
+          const ageFactor = Math.log(age + 1);
+
+          // balanced score
+          const score = (w * 1.8 + h * 0.8) / (ageFactor + 1.2);
+
+          // convert score into "percentile-like" output (bounded)
+          let p = 50 + (score - 20) * 2.2;
+          p = clamp(Math.round(p), 1, 99);
+
+          out.textContent = `Estimated Percentile: ${p}%`;
+          note.textContent = `Educational estimate for a ${
+            gender.value === "boy" ? "boy" : "girl"
+          } aged ${fmt(
+            age
+          )} months. For exact percentiles, use official WHO/CDC charts.`;
+        }
+
+        $("btnCalc").addEventListener("click", calc);
+
+        $("btnExample").addEventListener("click", function () {
+          gender.value = "girl";
+          ageEl.value = 24;
+          weightEl.value = 12.5;
+          heightEl.value = 86;
+          calc();
+        });
+
+        [gender, ageEl, weightEl, heightEl].forEach((el) => {
+          el.addEventListener("input", () => {
+            if (ageEl.value && weightEl.value && heightEl.value) calc();
+          });
+          el.addEventListener("change", () => {
+            if (ageEl.value && weightEl.value && heightEl.value) calc();
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

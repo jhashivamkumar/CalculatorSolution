@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>
+      Discount Calculator (Sale Price & Savings) | CalculatorSolution
+    </title>
+    <meta
+      name="description"
+      content="Free Discount Calculator: enter original price and discount % to instantly get sale price and savings. Supports extra discount and tax-after-discount scenarios."
+    />
+
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://calculatorsolution.com/discount-calculator.html"
+    />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Discount Calculator (Sale Price & Savings) | CalculatorSolution"
+    />
+    <meta
+      property="og:description"
+      content="Calculate discounted price and savings in seconds. Try extra discount + tax-after-discount cases."
+    />
+    <meta
+      property="og:url"
+      content="https://calculatorsolution.com/discount-calculator.html"
+    />
+    <meta
+      property="og:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Discount Calculator (Sale Price & Savings) | CalculatorSolution"
+    />
+    <meta
+      name="twitter:description"
+      content="Instantly compute sale price and money saved from any discount percentage."
+    />
+    <meta
+      name="twitter:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+
+    <!-- Preload critical CSS and assets -->
+    <link
+      rel="preload"
+      href="/assets/style.css"
+      as="style"
+      onload="this.rel='stylesheet'"
+    />
+    <noscript><link rel="stylesheet" href="/assets/style.css" /></noscript>
+    <link rel="preload" href="/assets/og-image.svg" as="image" />
+
+    <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/logo.png" />
+    <link rel="manifest" href="/assets/site.webmanifest" />
+
+    <style>
+      /* Critical base */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial;
+        background: linear-gradient(135deg, #f8fafc 0%, #f0f4f8 100%);
+        color: #0f172a;
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      .wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 18px;
+      }
+      .site-header {
+        padding: 14px 0;
+        border-bottom: 1px solid #e2e8f0;
+        background: rgba(248, 250, 252, 0.75);
+        backdrop-filter: saturate(140%) blur(6px);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+        color: #2563eb;
+        text-decoration: none;
+        font-size: 1.1rem;
+      }
+      .brand-logo {
+        border-radius: 10px;
+        box-shadow: 0 6px 18px rgba(8, 13, 26, 0.08);
+      }
+      .footer {
+        padding: 20px 0;
+        border-top: 1px solid #e2e8f0;
+        color: #64748b;
+        font-size: 0.9rem;
+      }
+      .card {
+        background: #fff;
+        padding: 14px;
+        border-radius: 14px;
+        box-shadow: 0 10px 30px rgba(8, 13, 26, 0.06);
+        border: 1px solid #e2e8f0;
+      }
+
+      /* Premium calculator header */
+      .calculator-hero {
+        margin: 18px 0 10px;
+        padding: 18px;
+        border-radius: 16px;
+        background: linear-gradient(
+          135deg,
+          rgba(59, 130, 246, 0.14) 0%,
+          rgba(139, 92, 246, 0.12) 100%
+        );
+        border: 1px solid rgba(148, 163, 184, 0.35);
+      }
+      .calculator-hero h1 {
+        margin: 0 0 6px;
+        font-size: 2rem;
+        letter-spacing: -0.02em;
+      }
+      .lead {
+        margin: 0;
+        color: #334155;
+        font-size: 1.02rem;
+      }
+
+      /* Premium layout */
+      .calc-layout {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 16px;
+        align-items: start;
+        margin: 14px 0 24px;
+      }
+      @media (max-width: 920px) {
+        .calc-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .calc-panel {
+        padding: 16px;
+      }
+      .panel-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin: 0 0 10px;
+      }
+      .panel-title h2 {
+        margin: 0;
+        font-size: 1.1rem;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(59, 130, 246, 0.08);
+        border: 1px solid rgba(59, 130, 246, 0.18);
+        color: #1d4ed8;
+        font-weight: 700;
+        font-size: 0.85rem;
+        white-space: nowrap;
+      }
+
+      .mini-note {
+        margin: 8px 0 0;
+        color: #475569;
+        font-size: 0.92rem;
+      }
+      .kbd {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+        font-size: 0.88rem;
+        background: #0f172a;
+        color: #fff;
+        padding: 2px 7px;
+        border-radius: 8px;
+      }
+
+      /* Helper sections */
+      .side-box {
+        padding: 16px;
+        position: sticky;
+        top: 14px;
+      }
+      @media (max-width: 920px) {
+        .side-box {
+          position: static;
+        }
+      }
+
+      .list {
+        margin: 10px 0 0;
+        padding-left: 18px;
+        color: #334155;
+      }
+      .list li {
+        margin: 6px 0;
+      }
+      .examples {
+        margin-top: 12px;
+        padding: 12px;
+        border-radius: 12px;
+        background: linear-gradient(
+          180deg,
+          rgba(2, 132, 199, 0.06),
+          rgba(139, 92, 246, 0.04)
+        );
+        border: 1px solid rgba(148, 163, 184, 0.35);
+      }
+      .examples h3 {
+        margin: 0 0 8px;
+        font-size: 1rem;
+      }
+      .ex-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .ex-item {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 10px;
+        box-shadow: 0 8px 22px rgba(8, 13, 26, 0.05);
+      }
+      .ex-item b {
+        display: block;
+        margin-bottom: 2px;
+      }
+      .muted {
+        color: #64748b;
+        font-size: 0.92rem;
+        margin: 0;
+      }
+
+      /* FAQs */
+      details.card {
+        padding: 14px;
+      }
+      details.card summary {
+        cursor: pointer;
+      }
+      details.card p {
+        margin: 10px 0 0;
+        color: #334155;
+      }
+
+      pre {
+        overflow: auto;
+        padding: 12px;
+        border-radius: 12px;
+        background: #0b1220;
+        color: #e5e7eb;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+      }
+      a {
+        color: #2563eb;
+      }
+    </style>
+
+    <!-- GA4 Analytics: replace with your real ID -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-Y5YHCPQPFS");
+    </script>
+
+    <!-- Structured Data (WebPage + Breadcrumb + FAQ + WebApplication) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://calculatorsolution.com/#website",
+            "url": "https://calculatorsolution.com/",
+            "name": "CalculatorSolution",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://calculatorsolution.com/?q={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://calculatorsolution.com/discount-calculator.html#webpage",
+            "url": "https://calculatorsolution.com/discount-calculator.html",
+            "name": "Discount Calculator",
+            "isPartOf": { "@id": "https://calculatorsolution.com/#website" },
+            "description": "Calculate sale price and savings from a discount percentage. Useful for shopping, invoices, and quick comparisons."
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://calculatorsolution.com/discount-calculator.html#breadcrumb",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "CalculatorSolution",
+                "item": "https://calculatorsolution.com/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Discount Calculator",
+                "item": "https://calculatorsolution.com/discount-calculator.html"
+              }
+            ]
+          },
+          {
+            "@type": "WebApplication",
+            "name": "Discount Calculator",
+            "url": "https://calculatorsolution.com/discount-calculator.html",
+            "applicationCategory": "FinanceApplication",
+            "operatingSystem": "All",
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://calculatorsolution.com/discount-calculator.html#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Multiple discounts?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Apply sequentially (e.g., 20% then 10% off the new price) or compute the equivalent overall discount."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Tax after discount?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Most receipts apply tax on the discounted price. Your final amount depends on local rules and the merchant setup."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Rounding?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "For currency, rounding to 2 decimals is common. Some invoices round each line item first, then total."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Return price?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Refunds usually follow the paid (discounted) price, but policies vary by merchant and coupon rules."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can discount be negative?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes—mathematically it becomes a surcharge or price increase."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+
+    <script defer src="/assets/calculators-complete.js"></script>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">
+          <img
+            src="/assets/logo.png"
+            alt="CalculatorSolution logo"
+            class="brand-logo"
+            width="36"
+            height="36"
+          />
+          <span class="brand-text">CalculatorSolution</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <article>
+        <div class="calculator-hero">
+          <h1>Discount Calculator</h1>
+          <p class="lead">
+            Enter price and discount % to get the <b>sale price</b> and
+            <b>money saved</b> instantly.
+          </p>
+          <p class="mini-note">
+            Tip: Most stores apply tax <b>after</b> discount. Use this
+            calculator to estimate the final bill quickly.
+          </p>
+        </div>
+
+        <!-- Premium layout: calculator + side tips -->
+        <section class="calc-layout" aria-label="Discount calculator tool">
+          <div class="card calc-panel">
+            <div class="panel-title">
+              <h2>Calculator</h2>
+              <span class="pill" title="Instant results, no data sent"
+                >Fast • Private • Free</span
+              >
+            </div>
+
+            <!-- Mount point for your JS -->
+            <div id="calc-discount-calculator">
+              <p class="muted">
+                Open this page in the browser and use the calculator fields
+                below.
+              </p>
+            </div>
+
+            <p class="mini-note">
+              Keyboard tip: try changing values and see results update
+              instantly. <span class="kbd">Tab</span> moves between fields.
+            </p>
+          </div>
+
+          <aside class="card side-box" aria-label="Discount tips and examples">
+            <h2 style="margin: 0 0 8px; font-size: 1.1rem">
+              Quick Tips (to save money)
+            </h2>
+            <ul class="list">
+              <li>
+                <b>Compare deals</b>: 25% off ₹2,000 saves ₹500. A flat ₹400 off
+                is smaller.
+              </li>
+              <li>
+                <b>Stacked discounts</b>: 20% then 10% is <b>not</b> 30% total
+                (it’s 28%).
+              </li>
+              <li>
+                <b>Coupons + tax</b>: Many stores apply tax on the discounted
+                subtotal.
+              </li>
+              <li>
+                <b>Rounding</b>: Some invoices round each item before summing
+                total.
+              </li>
+            </ul>
+
+            <div class="examples">
+              <h3>Examples</h3>
+              <div class="ex-row">
+                <div class="ex-item">
+                  <b>Example 1</b>
+                  <p class="muted">
+                    ₹1,999 with 15% off → Savings ≈ ₹299.85 → Sale price ≈
+                    ₹1,699.15
+                  </p>
+                </div>
+                <div class="ex-item">
+                  <b>Example 2</b>
+                  <p class="muted">
+                    ₹5,000 with 40% off → Savings ₹2,000 → Sale price ₹3,000
+                  </p>
+                </div>
+                <div class="ex-item">
+                  <b>Example 3 (stacked)</b>
+                  <p class="muted">
+                    20% off then 10% off → effective discount = 28% (0.8 × 0.9 =
+                    0.72)
+                  </p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <!-- SEO Content (Discount-specific, not generic) -->
+        <section class="card" style="padding: 16px; margin-bottom: 14px">
+          <h2 style="margin: 0 0 8px">How this Discount Calculator works</h2>
+          <p style="margin: 0; color: #334155">
+            A discount reduces the original price by a percentage. This tool
+            calculates two key outputs:
+            <b>(1)</b> the <b>discount amount</b> (how much you save) and
+            <b>(2)</b> the <b>final sale price</b> (what you pay). It’s useful
+            for shopping, invoices, seasonal sales, and quickly comparing two
+            offers.
+          </p>
+          <ul class="list">
+            <li><b>Original price</b>: the marked price before any offer.</li>
+            <li>
+              <b>Discount %</b>: percentage removed from the original price.
+            </li>
+            <li>
+              <b>Optional</b>: if you later add “extra discount” or “tax after
+              discount”, this page can support it in UI too.
+            </li>
+          </ul>
+        </section>
+
+        <section
+          class="formula card"
+          style="padding: 16px; margin-bottom: 14px"
+        >
+          <h2 style="margin: 0 0 10px">Formula</h2>
+          <pre>
+Discount Amount = Price × (Discount% ÷ 100)
+Sale Price      = Price − Discount Amount
+Equivalent for stacked discounts:
+Final Price = Price × (1 − d1) × (1 − d2) × ...</pre
+          >
+        </section>
+
+        <section class="card" style="padding: 16px; margin-bottom: 14px">
+          <h2 style="margin: 0 0 10px">Common use cases</h2>
+          <ul class="list">
+            <li>
+              <b>Shopping</b>: calculate final price for clothes, phones,
+              groceries, festival offers.
+            </li>
+            <li>
+              <b>Business</b>: compute discount on invoices and quotations
+              instantly.
+            </li>
+            <li>
+              <b>Compare offers</b>: percent off vs cashback vs flat discount.
+            </li>
+            <li>
+              <b>Stacked deals</b>: “20% off + extra 10% coupon” calculation.
+            </li>
+          </ul>
+        </section>
+
+        <section class="faqs">
+          <h2 style="margin: 0 0 10px">FAQs</h2>
+          <details class="card">
+            <summary><strong>Multiple discounts?</strong></summary>
+            <p>
+              Apply sequentially. Example: ₹1000 with 20% then 10% → 1000 × 0.8
+              × 0.9 = ₹720 (effective 28% discount).
+            </p>
+          </details>
+
+          <details class="card">
+            <summary><strong>Tax after discount?</strong></summary>
+            <p>
+              Often yes—tax is calculated on the discounted subtotal. However,
+              rules and billing systems vary by country and merchant.
+            </p>
+          </details>
+
+          <details class="card">
+            <summary><strong>Rounding?</strong></summary>
+            <p>
+              For currency, rounding to 2 decimals is common. Some invoices
+              round per item first, then total—your receipt may differ slightly.
+            </p>
+          </details>
+
+          <details class="card">
+            <summary><strong>Return price?</strong></summary>
+            <p>
+              Refunds typically follow the paid (discounted) price, but
+              coupon/offer conditions may change return value.
+            </p>
+          </details>
+
+          <details class="card">
+            <summary><strong>Can discount be negative?</strong></summary>
+            <p>Yes. A negative “discount” is a price increase or surcharge.</p>
+          </details>
+        </section>
+
+        <section class="card" style="padding: 16px; margin-top: 14px">
+          <h2 style="margin: 0 0 10px">References</h2>
+          <ul class="list">
+            <li>
+              <b>Percentage basics</b>: Sale price uses standard percent
+              reduction math (Price × (1 − %)).
+            </li>
+            <li>
+              <b>Stacked discounts</b>: Multiplicative (successive) discounts
+              are standard in retail mathematics.
+            </li>
+          </ul>
+          <p class="muted" style="margin-top: 10px">
+            Note: This calculator is for estimation and learning. Final payable
+            amount can vary due to tax rules, rounding, shipping, coupons, and
+            store policies.
+          </p>
+        </section>
+
+        <section class="related">
+          <h2 style="margin: 18px 0 10px">Related calculators</h2>
+          <div
+            class="cards-grid related-grid"
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+              gap: 14px;
+            "
+          >
+            <a class="card" href="percentage-calculator.html"
+              ><h3 style="margin: 0 0 4px">Percentage Calculator</h3>
+              <p class="muted">
+                Compute percentages and simple percent changes.
+              </p></a
+            >
+            <a class="card" href="percentage-change-calculator.html"
+              ><h3 style="margin: 0 0 4px">Percentage Increase/Decrease</h3>
+              <p class="muted">
+                Calculate percent increase or decrease between values.
+              </p></a
+            >
+            <a class="card" href="gst-calculator-india.html"
+              ><h3 style="margin: 0 0 4px">GST Calculator (India)</h3>
+              <p class="muted">Calculate GST amount and final price.</p></a
+            >
+            <a class="card" href="loan-emi-calculator.html"
+              ><h3 style="margin: 0 0 4px">Loan EMI Calculator</h3>
+              <p class="muted">Monthly EMI, total payment and interest.</p></a
+            >
+          </div>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>&copy; CalculatorSolution</p>
+        <p style="margin-top: 8px; font-size: 0.9rem">
+          <a href="/sitemap.xml">Sitemap</a> | <a href="/">Home</a> |
+          <a href="/privacy-policy.html">Privacy Policy</a> |
+          <a href="/terms-of-service.html">Terms</a> |
+          <a href="/contact.html">Contact</a> |
+          <a href="/about.html">About</a>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

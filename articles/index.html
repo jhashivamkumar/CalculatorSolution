@@ -3,87 +3,287 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Blog & Articles | Calculator Solution</title>
-  <meta name="description" content="Read 98 expert articles and blog posts about calculators, finance, health, and utility guides. Learn practical tips and insights.">
-   <link rel="preload" href="/assets/og-image.svg" as="image" />
-    <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml" />
+
+  <!-- ✅ SEO: stronger keyworded title + clean brand -->
+  <title>Calculator Guides & Articles (Finance, Health, Education) | CalculatorSolution</title>
+
+  <!-- ✅ SEO: clearer intent + category coverage -->
+  <meta name="description" content="Browse calculator guides, formulas, examples, and how-to articles for finance, health, education and utility tools. Search by topic and open the related calculator instantly.">
+
+  <link rel="preload" href="/assets/og-image.svg" as="image" />
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="/assets/style.css">
+
+  <style>
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    .lead{color:#555;font-size:1.05rem}
+    #articles{margin-top:18px}
+
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:14px}
+    .search{width:320px;max-width:100%;padding:10px 12px;border-radius:10px;border:1px solid #ddd}
+
+    .filters{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:14px}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid #e6e6e6;background:#fff;color:#0f172a;
+      padding:8px 12px;border-radius:999px;text-decoration:none;
+      font-size:.92rem;
+    }
+    .pill.active{border-color:#cbd5e1;background:#f8fafc;font-weight:600}
+
+    .meta-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:10px;color:#475569;font-size:.92rem}
+
+    .card{
+      display:block;background:#fff;border:1px solid #e6e6e6;border-radius:12px;
+      padding:18px;color:inherit;text-decoration:none;
+      box-shadow:0 1px 3px rgba(0,0,0,0.04);
+      transition:transform .12s,box-shadow .12s
+    }
+    .card h3{margin:0 0 8px;font-size:1.05rem;line-height:1.35}
+    .card p{margin:6px 0;color:#444}
+    .card:hover{transform:translateY(-4px);box-shadow:0 6px 18px rgba(0,0,0,0.08)}
+    .badge{display:inline-block;background:#f1f5f9;color:#0f172a;padding:4px 8px;border-radius:999px;font-size:0.8rem}
+    .muted{color:#64748b;font-size:.92rem}
+    .rel-link a{font-weight:600;text-decoration:underline}
+    .sr-only{position:absolute;left:-9999px}
+
+    @media (max-width:640px){
+      .wrap{padding:16px}
+      .topbar{flex-direction:column;align-items:flex-start}
+      .search{width:100%}
+    }
+  </style>
+
   <link rel="canonical" href="https://calculatorsolution.com/articles/">
+
+  <!-- ✅ Social -->
+  <meta property="og:title" content="Calculator Guides & Articles | CalculatorSolution">
+  <meta property="og:description" content="Guides, formulas, examples and how-tos for finance, health, education and utility calculators.">
   <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <!-- ✅ SEO: CollectionPage schema -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"CollectionPage",
+    "name":"Calculator Guides & Articles",
+    "url":"https://calculatorsolution.com/articles/",
+    "description":"Browse calculator guides, formulas, examples, and how-to articles for finance, health, education and utility tools."
+  }
+  </script>
 </head>
+
 <body>
   <header class="site-header">
-    <div class="wrap">
+    <div class="wrap topbar">
       <a class="brand" href="/">
-         <img
-            src="/assets/logo.png"
-            alt="CalculatorSolution logo"
-            class="brand-logo"
-            width="36"
-            height="36"
-          />CalculatorSolution</a>
-      <input id="search" class="search" type="text" placeholder="Search articles..." aria-label="Search articles">
+        <img
+          src="/assets/logo.png"
+          alt="CalculatorSolution logo"
+          class="brand-logo"
+          width="36"
+          height="36"
+        />CalculatorSolution</a>
+
+      <div style="display:flex;gap:10px;align-items:center;width:100%;justify-content:flex-end;flex-wrap:wrap">
+        <label class="sr-only" for="search">Search articles</label>
+        <input id="search" class="search" type="text" placeholder="Search guides (e.g., EMI, GST, BMI, Age)..." aria-label="Search articles">
+      </div>
     </div>
   </header>
 
   <main class="wrap">
-    <section style="text-align: center; margin-bottom: 40px;">
-      <h1>Calculator Solution Blog</h1>
-      <p class="lead">98 Articles & Guides to Help You Learn</p>
-      <div style="margin-top: 20px; font-size: 0.95rem;">
-        <a href="#finance">Finance (45)</a> | <a href="#health">Health (23)</a> | <a href="#utility">Utility (20)</a> | <a href="#education">Education (10)</a>
-      </div>
+    <section style="text-align:center;margin-bottom:26px;">
+      <h1>Calculator Guides & Articles</h1>
+      <p class="lead">Formulas, examples, and practical explainers — pick a category or search any guide.</p>
+
+      <!-- ✅ Category filter (works, not just anchor) -->
+      <nav class="filters" aria-label="Article categories">
+        <a class="pill active" href="#all" data-filter="all">All</a>
+        <a class="pill" href="#finance" data-filter="finance">Finance</a>
+        <a class="pill" href="#health" data-filter="health">Health</a>
+        <a class="pill" href="#utility" data-filter="utility">Utility</a>
+        <a class="pill" href="#education" data-filter="education">Education</a>
+      </nav>
+
+      <div class="meta-row" id="countsRow"></div>
     </section>
 
-    <div id="articles" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
-      <!-- Articles will be populated here -->
+    <div id="articles" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;">
+      <!-- Cards injected by JS -->
     </div>
 
-    <div class="empty-state" id="empty" style="display:none; text-align: center; padding: 40px;">
-      <p>No articles found. Try a different search.</p>
+    <div class="empty-state" id="empty" style="display:none;text-align:center;padding:28px;color:#666;">
+      <p>No articles found. Try a different search or switch category.</p>
     </div>
   </main>
 
   <footer class="site-footer">
     <div class="wrap">
-      <p>&copy; 2025 Calculator Solution | <a href="/">Home</a> | <a href="/sitemap.xml">Sitemap</a> | <a href="/dist/privacy-policy.html">Privacy</a></p>
+      <p>&copy; 2025 Calculator Solution | <a href="/">Home</a> | <a href="/sitemap.xml">Sitemap</a> | <a href="/privacy-policy.html">Privacy</a></p>
     </div>
   </footer>
 
   <script>
+    // ✅ You can keep your existing array. This code will FIX titles + slugs + links automatically.
     const articles = [{"slug":"percentage-calculator-0","title":"Percentage Calculator Article 1","category":"finance","calculator":"percentage-calculator"},{"slug":"percentage-change-calculator-0","title":"Percentage Increase/Decrease Calculator Article 1","category":"finance","calculator":"percentage-change-calculator"},{"slug":"discount-calculator-0","title":"Discount Calculator Article 1","category":"finance","calculator":"discount-calculator"},{"slug":"gst-calculator-india-0","title":"GST Calculator (India) Article 1","category":"finance","calculator":"gst-calculator-india"},{"slug":"loan-emi-calculator-0","title":"Loan EMI Calculator Article 1","category":"finance","calculator":"loan-emi-calculator"},{"slug":"home-loan-emi-calculator-0","title":"Home Loan EMI Calculator Article 1","category":"finance","calculator":"home-loan-emi-calculator"},{"slug":"car-loan-emi-calculator-0","title":"Car Loan EMI Calculator Article 1","category":"finance","calculator":"car-loan-emi-calculator"},{"slug":"personal-loan-emi-calculator-0","title":"Personal Loan EMI Calculator Article 1","category":"finance","calculator":"personal-loan-emi-calculator"},{"slug":"simple-interest-calculator-0","title":"Simple Interest Calculator Article 1","category":"finance","calculator":"simple-interest-calculator"},{"slug":"compound-interest-calculator-0","title":"Compound Interest Calculator Article 1","category":"finance","calculator":"compound-interest-calculator"},{"slug":"sip-calculator-0","title":"SIP Calculator Article 1","category":"finance","calculator":"sip-calculator"},{"slug":"fd-calculator-0","title":"FD Calculator Article 1","category":"finance","calculator":"fd-calculator"},{"slug":"rd-calculator-0","title":"Recurring Deposit (RD) Calculator Article 1","category":"finance","calculator":"rd-calculator"},{"slug":"salary-inhand-calculator-0","title":"Salary In-Hand Calculator Article 1","category":"finance","calculator":"salary-inhand-calculator"},{"slug":"income-tax-india-calculator-0","title":"Income Tax Calculator (India) Article 1","category":"finance","calculator":"income-tax-india-calculator"},{"slug":"currency-converter-0","title":"Currency Converter Article 1","category":"finance","calculator":"currency-converter"},{"slug":"profit-calculator-0","title":"Profit Calculator Article 1","category":"finance","calculator":"profit-calculator"},{"slug":"loss-calculator-0","title":"Loss Calculator Article 1","category":"finance","calculator":"loss-calculator"},{"slug":"break-even-calculator-0","title":"Break-even Calculator Article 1","category":"finance","calculator":"break-even-calculator"},{"slug":"roi-calculator-0","title":"ROI Calculator Article 1","category":"finance","calculator":"roi-calculator"},{"slug":"emi-vs-rent-calculator-0","title":"EMI vs Rent Calculator Article 1","category":"finance","calculator":"emi-vs-rent-calculator"},{"slug":"credit-card-interest-calculator-0","title":"Credit Card Interest Calculator Article 1","category":"finance","calculator":"credit-card-interest-calculator"},{"slug":"inflation-calculator-0","title":"Inflation Calculator Article 1","category":"finance","calculator":"inflation-calculator"},{"slug":"budget-calculator-0","title":"Budget Calculator Article 1","category":"finance","calculator":"budget-calculator"},{"slug":"margin-markup-calculator-0","title":"Margin / Markup Calculator Article 1","category":"finance","calculator":"margin-markup-calculator"},{"slug":"vat-calculator-0","title":"VAT Calculator Article 1","category":"finance","calculator":"vat-calculator"},{"slug":"tip-calculator-0","title":"Tip Calculator Article 1","category":"finance","calculator":"tip-calculator"},{"slug":"unit-price-calculator-0","title":"Unit Price Calculator Article 1","category":"finance","calculator":"unit-price-calculator"},{"slug":"invoice-total-calculator-0","title":"Invoice Total Calculator Article 1","category":"finance","calculator":"invoice-total-calculator"},{"slug":"subscription-pricing-calculator-0","title":"Subscription Pricing Calculator Article 1","category":"finance","calculator":"subscription-pricing-calculator"},{"slug":"nps-calculator-0","title":"NPS Calculator Article 1","category":"finance","calculator":"nps-calculator"},{"slug":"swp-calculator-0","title":"SWP Calculator Article 1","category":"finance","calculator":"swp-calculator"},{"slug":"gratuity-calculator-0","title":"Gratuity Calculator Article 1","category":"finance","calculator":"gratuity-calculator"},{"slug":"epf-contribution-calculator-0","title":"EPF Contribution Calculator Article 1","category":"finance","calculator":"epf-contribution-calculator"},{"slug":"hra-calculator-0","title":"HRA Calculator Article 1","category":"finance","calculator":"hra-calculator"},{"slug":"debt-payoff-calculator-0","title":"Debt Payoff Calculator Article 1","category":"finance","calculator":"debt-payoff-calculator"},{"slug":"net-worth-calculator-0","title":"Net Worth Calculator Article 1","category":"finance","calculator":"net-worth-calculator"},{"slug":"freelancer-earnings-calculator-0","title":"Freelancer Earnings Calculator Article 1","category":"finance","calculator":"freelancer-earnings-calculator"},{"slug":"car-loan-vs-cash-calculator-0","title":"Car Loan vs Cash Purchase Article 1","category":"finance","calculator":"car-loan-vs-cash-calculator"},{"slug":"savings-goal-calculator-0","title":"Savings Goal Calculator Article 1","category":"finance","calculator":"savings-goal-calculator"},{"slug":"forex-profit-calculator-0","title":"Forex Currency Profit Calculator Article 1","category":"finance","calculator":"forex-profit-calculator"},{"slug":"mortgage-amortization-calculator-0","title":"Mortgage Amortization Calculator Article 1","category":"finance","calculator":"mortgage-amortization-calculator"},{"slug":"credit-score-estimator-0","title":"Credit Score Estimator Article 1","category":"finance","calculator":"credit-score-estimator"},{"slug":"emi-prepayment-calculator-0","title":"EMI Prepayment Calculator Article 1","category":"finance","calculator":"emi-prepayment-calculator"},{"slug":"crypto-percentage-profit-calculator-0","title":"Crypto Percentage Profit Calculator Article 1","category":"finance","calculator":"crypto-percentage-profit-calculator"},{"slug":"bmr-calculator-0","title":"BMR Calculator Article 1","category":"health","calculator":"bmr-calculator"},{"slug":"body-fat-percentage-calculator-0","title":"Body Fat Percentage Calculator Article 1","category":"health","calculator":"body-fat-percentage-calculator"},{"slug":"daily-calorie-needs-calculator-0","title":"Daily Calorie Needs Calculator Article 1","category":"health","calculator":"daily-calorie-needs-calculator"},{"slug":"ideal-weight-calculator-0","title":"Ideal Weight Calculator Article 1","category":"health","calculator":"ideal-weight-calculator"},{"slug":"calories-burned-running-walking-0","title":"Calories Burned Calculator (Running/Walking) Article 1","category":"health","calculator":"calories-burned-running-walking"},{"slug":"water-intake-calculator-0","title":"Water Intake Calculator Article 1","category":"health","calculator":"water-intake-calculator"},{"slug":"water-intake-calculator-1","title":"Water Intake Calculator Article 2","category":"health","calculator":"water-intake-calculator"},{"slug":"pregnancy-due-date-calculator-0","title":"Pregnancy Due Date Calculator Article 1","category":"health","calculator":"pregnancy-due-date-calculator"},{"slug":"pregnancy-due-date-calculator-1","title":"Pregnancy Due Date Calculator Article 2","category":"health","calculator":"pregnancy-due-date-calculator"},{"slug":"ovulation-calculator-0","title":"Ovulation Calculator Article 1","category":"health","calculator":"ovulation-calculator"},{"slug":"ovulation-calculator-1","title":"Ovulation Calculator Article 2","category":"health","calculator":"ovulation-calculator"},{"slug":"target-heart-rate-calculator-0","title":"Target Heart Rate Calculator Article 1","category":"health","calculator":"target-heart-rate-calculator"},{"slug":"target-heart-rate-calculator-1","title":"Target Heart Rate Calculator Article 2","category":"health","calculator":"target-heart-rate-calculator"},{"slug":"child-growth-percentile-calculator-0","title":"Child Growth Percentile Calculator Article 1","category":"health","calculator":"child-growth-percentile-calculator"},{"slug":"child-growth-percentile-calculator-1","title":"Child Growth Percentile Calculator Article 2","category":"health","calculator":"child-growth-percentile-calculator"},{"slug":"steps-to-calories-calculator-0","title":"Steps to Calories Calculator Article 1","category":"health","calculator":"steps-to-calories-calculator"},{"slug":"steps-to-calories-calculator-1","title":"Steps to Calories Calculator Article 2","category":"health","calculator":"steps-to-calories-calculator"},{"slug":"waist-to-hip-ratio-calculator-0","title":"Waist to Hip Ratio Calculator Article 1","category":"health","calculator":"waist-to-hip-ratio-calculator"},{"slug":"waist-to-hip-ratio-calculator-1","title":"Waist to Hip Ratio Calculator Article 2","category":"health","calculator":"waist-to-hip-ratio-calculator"},{"slug":"calories-deficit-weight-loss-calculator-0","title":"Calories Deficit Weight Loss Target Article 1","category":"health","calculator":"calories-deficit-weight-loss-calculator"},{"slug":"calories-deficit-weight-loss-calculator-1","title":"Calories Deficit Weight Loss Target Article 2","category":"health","calculator":"calories-deficit-weight-loss-calculator"},{"slug":"diabetes-sugar-converter-0","title":"Diabetes Sugar Converter Article 1","category":"health","calculator":"diabetes-sugar-converter"},{"slug":"diabetes-sugar-converter-1","title":"Diabetes Sugar Converter Article 2","category":"health","calculator":"diabetes-sugar-converter"},{"slug":"age-calculator-0","title":"Age Calculator Article 1","category":"utility","calculator":"age-calculator"},{"slug":"age-calculator-1","title":"Age Calculator Article 2","category":"utility","calculator":"age-calculator"},{"slug":"date-difference-calculator-0","title":"Date Difference Calculator Article 1","category":"utility","calculator":"date-difference-calculator"},{"slug":"date-difference-calculator-1","title":"Date Difference Calculator Article 2","category":"utility","calculator":"date-difference-calculator"},{"slug":"time-duration-calculator-0","title":"Time Duration Calculator Article 1","category":"utility","calculator":"time-duration-calculator"},{"slug":"time-duration-calculator-1","title":"Time Duration Calculator Article 2","category":"utility","calculator":"time-duration-calculator"},{"slug":"unit-converter-0","title":"Unit Converter Article 1","category":"utility","calculator":"unit-converter"},{"slug":"unit-converter-1","title":"Unit Converter Article 2","category":"utility","calculator":"unit-converter"},{"slug":"fuel-cost-calculator-0","title":"Fuel Cost Calculator Article 1","category":"utility","calculator":"fuel-cost-calculator"},{"slug":"fuel-cost-calculator-1","title":"Fuel Cost Calculator Article 2","category":"utility","calculator":"fuel-cost-calculator"},{"slug":"gpa-calculator-0","title":"GPA Calculator Article 1","category":"education","calculator":"gpa-calculator"},{"slug":"gpa-calculator-1","title":"GPA Calculator Article 2","category":"education","calculator":"gpa-calculator"},{"slug":"cgpa-calculator-0","title":"CGPA Calculator Article 1","category":"education","calculator":"cgpa-calculator"},{"slug":"cgpa-calculator-1","title":"CGPA Calculator Article 2","category":"education","calculator":"cgpa-calculator"},{"slug":"grade-calculator-0","title":"Grade Calculator Article 1","category":"education","calculator":"grade-calculator"},{"slug":"grade-calculator-1","title":"Grade Calculator Article 2","category":"education","calculator":"grade-calculator"},{"slug":"percentage-needed-final-exam-0","title":"Percentage Needed in Final Exam Article 1","category":"education","calculator":"percentage-needed-final-exam"},{"slug":"percentage-needed-final-exam-1","title":"Percentage Needed in Final Exam Article 2","category":"education","calculator":"percentage-needed-final-exam"},{"slug":"area-calculator-0","title":"Area Calculator Article 1","category":"education","calculator":"area-calculator"},{"slug":"area-calculator-1","title":"Area Calculator Article 2","category":"education","calculator":"area-calculator"},{"slug":"travel-distance-cost-split-0","title":"Travel Distance Cost Split Article 1","category":"utility","calculator":"travel-distance-cost-split"},{"slug":"travel-distance-cost-split-1","title":"Travel Distance Cost Split Article 2","category":"utility","calculator":"travel-distance-cost-split"},{"slug":"download-time-calculator-0","title":"Download Time Calculator Article 1","category":"utility","calculator":"download-time-calculator"},{"slug":"download-time-calculator-1","title":"Download Time Calculator Article 2","category":"utility","calculator":"download-time-calculator"},{"slug":"bandwidth-calculator-0","title":"Bandwidth Calculator Article 1","category":"utility","calculator":"bandwidth-calculator"},{"slug":"bandwidth-calculator-1","title":"Bandwidth Calculator Article 2","category":"utility","calculator":"bandwidth-calculator"},{"slug":"aspect-ratio-calculator-0","title":"Aspect Ratio Calculator Article 1","category":"utility","calculator":"aspect-ratio-calculator"},{"slug":"aspect-ratio-calculator-1","title":"Aspect Ratio Calculator Article 2","category":"utility","calculator":"aspect-ratio-calculator"},{"slug":"reading-time-calculator-0","title":"Reading Time Calculator Article 1","category":"utility","calculator":"reading-time-calculator"},{"slug":"reading-time-calculator-1","title":"Reading Time Calculator Article 2","category":"utility","calculator":"reading-time-calculator"}];
+
     const articlesDiv = document.getElementById('articles');
     const emptyState = document.getElementById('empty');
     const searchInput = document.getElementById('search');
 
+    const countsRow = document.getElementById('countsRow');
+    const filterLinks = Array.from(document.querySelectorAll('[data-filter]'));
+
+    function normalizeSlug(slug){
+      return (slug || '').replace(/-\d+$/,'');
+    }
+
+    function toTitle(slug){
+      return (slug || '')
+        .replace(/-/g,' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    // ✅ SEO title generator (replaces "Article 1/2" automatically)
+    function seoTitle(calc, category){
+      const base = toTitle(calc);
+      const map = {
+        finance: `${base} – Formula, Examples & Calculator Guide`,
+        health: `${base} – Meaning, Formula & Health Insights`,
+        utility: `${base} – How It Works (With Examples)`,
+        education: `${base} – Formula, Examples & Calculation Guide`
+      };
+      return map[category] || `${base} – Complete Guide`;
+    }
+
+    // ✅ SEO description generator for each card
+    function seoDesc(calc){
+      const base = toTitle(calc);
+      return `Learn how the ${base} works with formulas, examples, and step-by-step guidance. Open the calculator and calculate instantly.`;
+    }
+
+    function countCategories(list){
+      const c={finance:0,health:0,utility:0,education:0};
+      list.forEach(a => { if(c[a.category] !== undefined) c[a.category]++; });
+      return c;
+    }
+
+    function renderCounts(list){
+      const c = countCategories(list);
+      countsRow.innerHTML = `
+        <span class="pill">Finance: ${c.finance}</span>
+        <span class="pill">Health: ${c.health}</span>
+        <span class="pill">Utility: ${c.utility}</span>
+        <span class="pill">Education: ${c.education}</span>
+        <span class="pill">Total: ${list.length}</span>
+      `;
+    }
+
+    function setActiveFilter(name){
+      filterLinks.forEach(a => a.classList.toggle('active', a.dataset.filter === name));
+    }
+
     function renderArticles(list) {
       articlesDiv.innerHTML = '';
       emptyState.style.display = list.length === 0 ? 'block' : 'none';
-      
+
       list.forEach(article => {
+        const pageSlug = normalizeSlug(article.slug);
+        const calcSlug = normalizeSlug(article.calculator);
+
+        // ✅ Final clean URLs (NO -0/-1, NO , NO /articles for calculators)
+        const pageHref = `/articles/${pageSlug}.html`;
+        const calcHref = `/${calcSlug}.html`;
+
+        const title = seoTitle(calcSlug, article.category);
+        const desc  = seoDesc(calcSlug);
+
         const card = document.createElement('a');
         card.className = 'card';
-        card.href = `/articles/${article.slug}.html`;
+        card.href = pageHref;
+
         card.innerHTML = `
-          <h3>${article.title}</h3>
-          <p>Category: <strong>${article.category}</strong></p>
-          <p>Related: <a href="/dist/${article.calculator}.html" onclick="event.stopPropagation();">View Calculator</a></p>
+          <h3>${title}</h3>
+          <p><span class="badge">${article.category}</span></p>
+          <p class="muted">${desc}</p>
+          <p class="rel-link" style="margin-top:10px">Related:
+            <a href="${calcHref}" onclick="event.stopPropagation();">Open Calculator</a>
+          </p>
         `;
         articlesDiv.appendChild(card);
       });
+
+      renderCounts(list);
     }
 
-    searchInput?.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
-      const filtered = articles.filter(a => 
-        a.title.toLowerCase().includes(query) || 
-        a.category.includes(query)
-      );
-      renderArticles(filtered);
+    function uniqueBySlug(list){
+      const seen = new Set();
+      const out = [];
+      for(const a of list){
+        const key = normalizeSlug(a.slug);
+        if(!seen.has(key)){
+          seen.add(key);
+          out.push(a);
+        }
+      }
+      return out;
+    }
+
+    // ✅ De-duplicate (removes duplicates from old Article 1/2 arrays)
+    const cleanedArticles = uniqueBySlug(articles);
+
+    function applyFilter(filterName){
+      const name = (filterName || 'all').toLowerCase();
+      setActiveFilter(name);
+
+      const q = (searchInput?.value || '').toLowerCase().trim();
+      let baseList = cleanedArticles;
+
+      if(name !== 'all'){
+        baseList = baseList.filter(a => (a.category || '').toLowerCase() === name);
+      }
+
+      if(q){
+        baseList = baseList.filter(a => {
+          const calc = normalizeSlug(a.calculator).toLowerCase();
+          const slug = normalizeSlug(a.slug).toLowerCase();
+          const cat  = (a.category || '').toLowerCase();
+          const title = seoTitle(normalizeSlug(a.calculator), a.category).toLowerCase();
+          return (
+            title.includes(q) ||
+            calc.includes(q) ||
+            slug.includes(q) ||
+            cat.includes(q)
+          );
+        });
+      }
+
+      renderArticles(baseList);
+    }
+
+    // Search
+    searchInput?.addEventListener('input', () => {
+      const current = (document.querySelector('.pill.active')?.dataset.filter) || 'all';
+      applyFilter(current);
     });
 
-    renderArticles(articles);
+    // Category clicks
+    filterLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const f = link.dataset.filter || 'all';
+        history.replaceState(null, '', f === 'all' ? '#all' : `#${f}`);
+        applyFilter(f);
+      });
+    });
+
+    // Load by hash
+    const hash = (location.hash || '#all').replace('#','').toLowerCase();
+    const initial = ['all','finance','health','utility','education'].includes(hash) ? hash : 'all';
+    applyFilter(initial);
   </script>
 </body>
 </html>

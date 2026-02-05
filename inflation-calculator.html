@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Inflation Calculator (Future Value & Purchasing Power) | CalculatorSolution</title>
+  <meta name="description" content="Free Inflation Calculator: adjust past prices for inflation or estimate future value. Calculate real vs nominal value, buying power loss, and year-by-year table.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/inflation-calculator.html">
+
+  <meta property="og:title" content="Inflation Calculator">
+  <meta property="og:description" content="Adjust past values for inflation or estimate future value & purchasing power with a year-by-year table.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (responsive + UI/UX polish, NO JS/logic changes) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:
+        radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+        radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+        linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    a{color:inherit}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    /* Header */
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .brand:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:6px;border-radius:12px}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem}
+    .brand-logo{border-radius:10px}
+
+    /* Hero */
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;
+      padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+      isolation:isolate;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      z-index:-1;
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em}
+    .hero p{margin:0;opacity:.95;max-width:68ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      white-space:nowrap;
+    }
+
+    /* Layout */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+
+    /* Panels */
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      overflow:hidden;
+    }
+    .panel-title{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:10px;margin-bottom:10px;flex-wrap:wrap
+    }
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(37,99,235,.10);
+      color:#1d4ed8;font-weight:900;font-size:.85rem
+    }
+
+    /* Form grid */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      width:100%;
+      padding:10px 12px;
+      border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      min-height:44px; /* better touch target */
+    }
+    select.input{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#64748b 50%),linear-gradient(135deg,#64748b 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 12px) 50%;background-size:6px 6px,6px 6px;background-repeat:no-repeat;padding-right:34px}
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    /* Buttons */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff;
+      box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px;
+      min-width:140px;
+      user-select:none;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:4px}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+
+    /* Sticky results */
+    .sticky{position:sticky;top:82px}
+
+    /* Metrics */
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{
+      margin:4px 0 0;
+      font-size:1.55rem;
+      font-weight:1000;
+      letter-spacing:-.02em;
+      overflow-wrap:anywhere;
+    }
+    .mini{font-size:.86rem;color:#64748b;overflow-wrap:anywhere}
+
+    .bar{height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px}
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* Table */
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{width:100%;border-collapse:collapse;min-width:860px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem;white-space:nowrap}
+    th{background:#f8fafc;font-weight:1000;position:sticky;top:0;z-index:1}
+    tr:last-child td{border-bottom:0}
+
+    /* Cards / Details */
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 10px 24px rgba(8,13,26,.05);padding:12px}
+    details.card{padding:0}
+    details.card summary{
+      cursor:pointer;
+      padding:12px;
+      list-style:none;
+    }
+    details.card summary::-webkit-details-marker{display:none}
+    details.card summary:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:4px;border-radius:12px}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Related grid safety: if global CSS doesn't handle perfectly */
+    .related-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
+      align-items:stretch;
+    }
+    .related-grid .card{display:block;text-decoration:none}
+    .related-grid h4{margin:0 0 6px}
+    .related-grid p{margin:0;color:#475569}
+
+    /* Typography blocks */
+    pre{
+      max-width:100%;
+      overflow:auto;
+      padding:12px;
+      border-radius:14px;
+      background:rgba(255,255,255,.75);
+      border:1px solid #e2e8f0;
+      box-shadow:0 10px 24px rgba(8,13,26,.04);
+    }
+
+    /* Footer links wrap nicely on mobile */
+    .site-footer a{color:#334155}
+    .site-footer a:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:3px;border-radius:10px}
+
+    /* Responsive breakpoints */
+    @media (max-width: 1024px){
+      .wrap{padding:0 16px}
+      .hero{padding:24px 16px}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static}
+      table{min-width:720px}
+    }
+
+    @media (max-width: 680px){
+      .hero h1{font-size:1.55rem}
+      .grid-2{grid-template-columns:1fr}
+      .btn{min-width:0;flex:1}
+      table{min-width:640px}
+    }
+
+    @media (max-width: 420px){
+      .wrap{padding:0 12px}
+      .hero{border-radius:16px}
+      .panel{border-radius:14px}
+      .metric .v{font-size:1.35rem}
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto!important}
+      .btn,.card{transition:none!important}
+      .btn:hover{transform:none!important}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Inflation Calculator",
+      "url":"https://calculatorsolution.com/inflation-calculator.html",
+      "description":"Adjust past values for inflation or estimate future purchasing power with a year-by-year table."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Inflation Calculator","item":"https://calculatorsolution.com/inflation-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate inflation-adjusted value",
+      "step":[
+        {"@type":"HowToStep","name":"Enter amount and years","text":"Choose the base year and target year (or number of years)."},
+        {"@type":"HowToStep","name":"Enter inflation rate","text":"Use CPI average or an assumed annual inflation rate (e.g., 6%)."},
+        {"@type":"HowToStep","name":"Calculate results","text":"See future value, real value, purchasing power loss and a year-by-year table."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Which index should I use?","acceptedAnswer":{"@type":"Answer","text":"Use CPI or another official price index relevant to your country and category (general CPI, food, housing, etc.)."}},
+        {"@type":"Question","name":"Is inflation compounded?","acceptedAnswer":{"@type":"Answer","text":"Yes. Inflation typically compounds over time (year-on-year)."}},
+        {"@type":"Question","name":"Nominal vs real value?","acceptedAnswer":{"@type":"Answer","text":"Nominal is the raw currency amount. Real value is adjusted for inflation to reflect purchasing power."}},
+        {"@type":"Question","name":"Can I estimate future inflation?","acceptedAnswer":{"@type":"Answer","text":"You can use a conservative assumed rate or long-term historical average, but future inflation is uncertain."}},
+        {"@type":"Question","name":"Is this useful for salary planning?","acceptedAnswer":{"@type":"Answer","text":"Yes. You can estimate how much your salary needs to increase to maintain purchasing power."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Inflation Calculator</h1>
+        <p>Convert money across time: estimate future cost, inflation-adjusted value, and purchasing power loss — with a year-by-year table.</p>
+        <div class="chips">
+          <span class="chip">📈 Future value</span>
+          <span class="chip">🪙 Real value</span>
+          <span class="chip">🧾 Year-by-year table</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-inflation">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Inflation inputs">
+              <div class="panel-title">
+                <h2>Inputs</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="inf_amount">Amount</label>
+                  <input id="inf_amount" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="e.g., 100000">
+                  <p class="help">Starting amount (today or base year).</p>
+                </div>
+
+                <div class="field">
+                  <label for="inf_rate">Inflation rate (annual %)</label>
+                  <input id="inf_rate" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 6">
+                  <p class="help">Example: 6 means 6% per year.</p>
+                </div>
+
+                <div class="field">
+                  <label for="inf_years">Years</label>
+                  <input id="inf_years" class="input" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 10">
+                  <p class="help">How many years to adjust forward/backward.</p>
+                </div>
+
+                <div class="field">
+                  <label for="inf_direction">Direction</label>
+                  <select id="inf_direction" class="input">
+                    <option value="future" selected>Future cost (amount grows)</option>
+                    <option value="past">Past value (discounting)</option>
+                  </select>
+                  <p class="help">Future: price increases. Past: convert future amount into past buying power.</p>
+                </div>
+
+                <div class="field">
+                  <label for="inf_currency">Currency symbol</label>
+                  <select id="inf_currency" class="input">
+                    <option value="₹" selected>₹ INR</option>
+                    <option value="$">$ USD</option>
+                    <option value="€">€ EUR</option>
+                    <option value="£">£ GBP</option>
+                    <option value="¥">¥ JPY</option>
+                    <option value="">None</option>
+                  </select>
+                  <p class="help">Only formatting; math stays same.</p>
+                </div>
+
+                <div class="field">
+                  <label for="inf_precision">Decimals</label>
+                  <select id="inf_precision" class="input">
+                    <option value="0" selected>0</option>
+                    <option value="2">2</option>
+                  </select>
+                  <p class="help">For cleaner display use 0 decimals.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="inf_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="inf_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="inf_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="mini" style="margin-top:10px;">
+                Formula: <strong>Future = Amount × (1 + r)^years</strong> and <strong>Past = Amount ÷ (1 + r)^years</strong>
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Inflation results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k" id="inf_key_main">Future value</p>
+                <p class="v" id="inf_out_main">—</p>
+                <p class="mini" id="inf_out_main_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Inflation impact</p>
+                <p class="v" id="inf_out_delta">—</p>
+                <div class="bar"><span id="inf_bar"></span></div>
+                <p class="mini" id="inf_out_delta_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Purchasing power change</p>
+                <p class="v" id="inf_out_pp">—</p>
+                <p class="mini" id="inf_out_pp_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Summary</p>
+                <p class="mini" id="inf_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Year-by-Year Table</h2>
+          <p class="mini" style="margin:0 0 10px;">How the value changes each year using compounding inflation.</p>
+
+          <div class="table-wrap">
+            <table aria-label="Inflation year-by-year table">
+              <thead>
+                <tr>
+                  <th>Year #</th>
+                  <th>Value</th>
+                  <th>Change vs start</th>
+                  <th>Change %</th>
+                </tr>
+              </thead>
+              <tbody id="inf_table">
+                <tr><td colspan="4" class="mini">Click <strong>Calculate</strong> to generate the table.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          This <strong>Inflation Calculator</strong> estimates how prices and purchasing power change over time.
+          If inflation averages 6% per year, an item that costs ₹1,00,000 today could cost more in the future because prices compound.
+          Similarly, you can convert a future amount into an equivalent past value (inflation-adjusted buying power).
+        </p>
+        <p class="mini">
+          Tip: For long-term planning (salary, education, retirement), use a conservative inflation rate and test multiple scenarios.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>Future Value = Amount × (1 + r)^years
+Past Value   = Amount ÷ (1 + r)^years</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Which index?</strong></summary><p>Use CPI or another official price index for your country/category when possible.</p></details>
+        <details class="card"><summary><strong>Estimate future inflation?</strong></summary><p>You can assume a rate, but real-world inflation can change. Use conservative estimates.</p></details>
+        <details class="card"><summary><strong>Nominal vs real?</strong></summary><p>Nominal is raw money. Real value adjusts for inflation to reflect purchasing power.</p></details>
+        <details class="card"><summary><strong>Compound?</strong></summary><p>Yes, inflation compounds over time, so even small rates matter in long horizons.</p></details>
+        <details class="card"><summary><strong>Use for salary planning?</strong></summary><p>Yes. It helps estimate how much salary growth is needed to maintain buying power.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="compound-interest-calculator.html"><h4>Compound Interest Calculator</h4><p>Estimate growth of investments over time.</p></a>
+          <a class="card" href="sip-calculator.html"><h4>SIP Calculator</h4><p>Plan monthly investments and future value.</p></a>
+          <a class="card" href="salary-hike-calculator.html"><h4>Salary Hike Calculator</h4><p>Calculate increment and expected salary changes.</p></a>
+          <a class="card" href="gst-calculator-india.html"><h4>GST Calculator (India)</h4><p>Calculate GST amount and final price.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;line-height:1.7;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      function nf(decimals){
+        return new Intl.NumberFormat(undefined, { maximumFractionDigits: decimals, minimumFractionDigits: decimals });
+      }
+
+      const amountEl = $('inf_amount');
+      const rateEl = $('inf_rate');
+      const yearsEl = $('inf_years');
+      const dirEl = $('inf_direction');
+      const curEl = $('inf_currency');
+      const precEl = $('inf_precision');
+
+      const keyMain = $('inf_key_main');
+      const outMain = $('inf_out_main');
+      const outMainNote = $('inf_out_main_note');
+
+      const outDelta = $('inf_out_delta');
+      const outDeltaNote = $('inf_out_delta_note');
+      const bar = $('inf_bar');
+
+      const outPP = $('inf_out_pp');
+      const outPPNote = $('inf_out_pp_note');
+
+      const outSummary = $('inf_out_summary');
+      const tbody = $('inf_table');
+
+      function money(v, decimals){
+        const c = curEl.value || '';
+        return c ? (c + ' ' + nf(decimals).format(v)) : nf(decimals).format(v);
+      }
+
+      function clamp(x, a, b){ return Math.max(a, Math.min(b, x)); }
+
+      function calc(){
+        const A = parseFloat(amountEl.value);
+        const rA = parseFloat(rateEl.value);
+        const y = parseInt(yearsEl.value || '0', 10);
+        const dir = dirEl.value;
+        const decimals = parseInt(precEl.value, 10) || 0;
+
+        if(!isFinite(A) || A<=0){
+          outMain.textContent='—';
+          outMainNote.textContent='Enter a valid amount.';
+          tbody.innerHTML = '<tr><td colspan="4" class="mini">Enter valid inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+        if(!isFinite(rA) || rA<0){
+          outMain.textContent='—';
+          outMainNote.textContent='Enter a valid inflation rate (0 or more).';
+          tbody.innerHTML = '<tr><td colspan="4" class="mini">Enter valid inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+        if(!isFinite(y) || y<0){
+          outMain.textContent='—';
+          outMainNote.textContent='Enter valid years (0 or more).';
+          tbody.innerHTML = '<tr><td colspan="4" class="mini">Enter valid inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+
+        const r = rA/100;
+        const factor = Math.pow(1 + r, y);
+
+        let result = A;
+        if(dir === 'future'){
+          result = A * factor;
+          keyMain.textContent = 'Future value';
+          outMainNote.textContent = `${y} years at ${rA}% p.a. (compounded)`;
+        } else {
+          result = A / factor;
+          keyMain.textContent = 'Past value (inflation-adjusted)';
+          outMainNote.textContent = `${y} years at ${rA}% p.a. (discounted)`;
+        }
+
+        outMain.textContent = money(result, decimals);
+
+        const delta = result - A;
+        const deltaAbs = Math.abs(delta);
+        const sign = (delta >= 0) ? '+' : '−';
+
+        // Show delta
+        outDelta.textContent = `${sign} ${money(deltaAbs, decimals)}`;
+        const pct = (A>0) ? (delta / A) * 100 : 0;
+        outDeltaNote.textContent = `Change vs start: ${pct.toFixed(2)}%`;
+
+        // Bar visual: map 0..200% to 0..100
+        const barPct = clamp(Math.abs(pct), 0, 200) / 2;
+        bar.style.width = barPct.toFixed(1) + '%';
+        bar.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+
+        // Purchasing power messaging
+        if(dir === 'future'){
+          const lossPct = 100 - (A / result) * 100; // purchasing power loss
+          outPP.textContent = `${lossPct.toFixed(2)}%`;
+          outPPNote.textContent = `Buying power lost if your money doesn't grow with inflation.`;
+        } else {
+          const powerGain = (A / result - 1) * 100;
+          outPP.textContent = `${powerGain.toFixed(2)}%`;
+          outPPNote.textContent = `How much more purchasing power the past amount represented vs today.`;
+        }
+
+        outSummary.textContent =
+          `${money(A, decimals)} • ${rA}% inflation • ${y} years • ${dir === 'future' ? 'Future value' : 'Past value'} = ${money(result, decimals)}.`;
+
+        // Table
+        const rows = [];
+        for(let i=0; i<=y; i++){
+          const f = Math.pow(1+r, i);
+          const val = (dir === 'future') ? (A * f) : (A / f);
+          const change = val - A;
+          const changePct = (A>0) ? (change / A) * 100 : 0;
+
+          rows.push(`
+            <tr>
+              <td>${i}</td>
+              <td>${money(val, decimals)}</td>
+              <td>${(change>=0?'+':'−')} ${money(Math.abs(change), decimals)}</td>
+              <td>${changePct.toFixed(2)}%</td>
+            </tr>
+          `);
+
+          if(i===60 && y>60){
+            rows.push(`<tr><td colspan="4" class="mini">Table truncated for performance (showing first 60 years). Reduce years to see full.</td></tr>`);
+            break;
+          }
+        }
+        tbody.innerHTML = rows.join('');
+      }
+
+      $('inf_calc_btn').addEventListener('click', calc);
+
+      $('inf_example_btn').addEventListener('click', ()=>{
+        amountEl.value = '100000';
+        rateEl.value = '6';
+        yearsEl.value = '10';
+        dirEl.value = 'future';
+        curEl.value = '₹';
+        precEl.value = '0';
+        calc();
+      });
+
+      $('inf_reset_btn').addEventListener('click', ()=>{
+        [amountEl,rateEl,yearsEl].forEach(el=>el.value='');
+        dirEl.value='future';
+        curEl.value='₹';
+        precEl.value='0';
+        keyMain.textContent='Future value';
+        outMain.textContent='—';
+        outMainNote.textContent='—';
+        outDelta.textContent='—';
+        outDeltaNote.textContent='—';
+        outPP.textContent='—';
+        outPPNote.textContent='—';
+        outSummary.textContent='Enter details to see a clean summary.';
+        bar.style.width='0%';
+        tbody.innerHTML = '<tr><td colspan="4" class="mini">Click <strong>Calculate</strong> to generate the table.</td></tr>';
+      });
+
+      // Auto-calc on input
+      [amountEl,rateEl,yearsEl,dirEl,curEl,precEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(amountEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(amountEl.value) calc(); });
+      });
+    })();
+  </script>
+</body>
+</html>

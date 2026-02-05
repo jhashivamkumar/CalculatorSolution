@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- ✅ Better mobile safe-area + prevents zoom issues in iOS forms -->
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+  <title>Margin vs Markup Calculator (Profit, Selling Price, Break-even) | CalculatorSolution</title>
+  <meta name="description" content="Free Margin / Markup Calculator: enter cost and selling price to calculate profit, margin %, markup %, and instantly convert between margin and markup.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/margin-markup-calculator.html">
+
+  <meta property="og:title" content="Margin / Markup Calculator">
+  <meta property="og:description" content="Calculate profit, margin %, markup % and convert margin ↔ markup for pricing decisions.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- ✅ UI/UX + Responsive improvements (NO JS/logic changes) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto;display:block}
+    .wrap{
+      max-width:1100px;margin:0 auto;
+      padding:0 18px;
+      padding-left:max(18px, env(safe-area-inset-left));
+      padding-right:max(18px, env(safe-area-inset-right));
+    }
+
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10;
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;white-space:nowrap}
+    .brand-logo{border-radius:10px;flex:0 0 auto}
+
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em;line-height:1.2}
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+    }
+
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px;
+    }
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+    }
+    .panel-title{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(37,99,235,.10);color:#1d4ed8;
+      font-weight:900;font-size:.85rem;
+      white-space:nowrap;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      width:100%;
+      min-height:44px; /* ✅ tap target */
+    }
+    select.input{appearance:none;-webkit-appearance:none}
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    .actions{
+      display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;
+      align-items:stretch;
+    }
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px; /* ✅ tap target */
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:2px}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+
+    .sticky{position:sticky;top:82px}
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+      overflow:hidden;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{
+      margin:4px 0 0;
+      font-size:1.55rem;
+      font-weight:1000;
+      letter-spacing:-.02em;
+      line-height:1.15;
+      word-break:break-word;
+    }
+    .mini{font-size:.86rem;color:#64748b}
+
+    .bar{
+      height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px
+    }
+    .bar > span{display:block;height:100%;width:0%}
+
+    .note{
+      border:1px dashed #cbd5e1;border-radius:14px;padding:12px;background:rgba(255,255,255,.7);
+      margin-top:10px
+    }
+
+    /* ✅ Table responsiveness: always scrolls nicely on small screens */
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{width:100%;border-collapse:collapse;min-width:860px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem}
+    th{background:#f8fafc;font-weight:1000}
+    tr:last-child td{border-bottom:0}
+
+    /* ✅ Cards used for FAQs + related (your global CSS also may style .card; we keep safe) */
+    .card{
+      background:#fff;border:1px solid #e2e8f0;border-radius:14px;
+      box-shadow:0 10px 24px rgba(8,13,26,.05);padding:12px
+    }
+    details.card{padding:0}
+    details.card summary{
+      cursor:pointer;padding:12px;
+      list-style:none;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+    }
+    details.card summary::-webkit-details-marker{display:none}
+    details.card summary:after{
+      content:"▾";
+      font-weight:900;
+      color:#64748b;
+      transition:transform .2s;
+    }
+    details[open].card summary:after{transform:rotate(180deg)}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* ✅ Better code/pre readability on mobile */
+    pre{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      background:rgba(255,255,255,.7);
+      border:1px solid #e2e8f0;
+      border-radius:12px;
+      padding:12px;
+      line-height:1.55;
+      max-width:100%;
+    }
+
+    /* ✅ Related grid fallback in case global CSS doesn't handle it well */
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+    .cards-grid .card h4{margin:0 0 6px 0}
+    .cards-grid .card p{margin:0;color:#475569}
+
+    /* ====== RESPONSIVE BREAKPOINTS (NO LOGIC CHANGES) ====== */
+
+    /* Large tablets / small laptops */
+    @media (max-width: 1024px){
+      .wrap{padding:0 16px}
+      .hero{padding:22px 16px}
+      .hero h1{font-size:1.7rem}
+      table{min-width:760px}
+    }
+
+    /* Tablets */
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static;top:auto}
+      table{min-width:680px}
+    }
+
+    /* Phones */
+    @media (max-width: 640px){
+      .hero{padding:18px 14px}
+      .hero h1{font-size:1.45rem}
+      .grid-2{grid-template-columns:1fr}
+      .actions{gap:8px}
+      .btn{flex:1 1 100%}
+      .cards-grid{grid-template-columns:1fr}
+      table{min-width:620px}
+    }
+
+    /* Small phones */
+    @media (max-width: 380px){
+      .brand-text{font-size:1.05rem}
+      .chip{font-size:.82rem}
+      .metric .v{font-size:1.35rem}
+      table{min-width:560px}
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .btn,.card{transition:none}
+      .btn:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Margin / Markup Calculator",
+      "url":"https://calculatorsolution.com/margin-markup-calculator.html",
+      "description":"Calculate profit, gross margin and markup. Convert margin ↔ markup and estimate selling price from target margin/markup."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Margin / Markup Calculator","item":"https://calculatorsolution.com/margin-markup-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate margin and markup",
+      "step":[
+        {"@type":"HowToStep","name":"Enter cost and selling price","text":"Profit is selling price minus cost."},
+        {"@type":"HowToStep","name":"Check margin and markup","text":"Margin is profit divided by selling price. Markup is profit divided by cost."},
+        {"@type":"HowToStep","name":"Convert or set target","text":"Enter target margin or markup to estimate the selling price needed."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Which should I use: margin or markup?","acceptedAnswer":{"@type":"Answer","text":"Margin is common in finance and reporting (profit as a share of selling price). Markup is common in retail pricing (profit as a share of cost)."}},
+        {"@type":"Question","name":"How do I convert margin to markup?","acceptedAnswer":{"@type":"Answer","text":"Markup% = Margin% / (100 − Margin%) × 100."}},
+        {"@type":"Question","name":"How do I convert markup to margin?","acceptedAnswer":{"@type":"Answer","text":"Margin% = Markup% / (100 + Markup%) × 100."}},
+        {"@type":"Question","name":"Should I include overhead in cost?","acceptedAnswer":{"@type":"Answer","text":"For realistic pricing, include allocated overheads (packaging, shipping, salaries, rent) in your unit cost."}},
+        {"@type":"Question","name":"What do negative margin/markup values mean?","acceptedAnswer":{"@type":"Answer","text":"Negative values mean you are selling below cost (a loss) or discounting heavily."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Margin / Markup Calculator</h1>
+        <p>Calculate profit, margin %, markup % — and instantly convert between margin and markup for clean pricing decisions.</p>
+        <div class="chips">
+          <span class="chip">🧮 Profit + %</span>
+          <span class="chip">🔁 Margin ↔ Markup</span>
+          <span class="chip">🏷️ Target selling price</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-margin-markup">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Margin and markup inputs">
+              <div class="panel-title">
+                <h2>Enter your values</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="mm_cost">Cost price (CP)</label>
+                  <input id="mm_cost" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 500">
+                  <p class="help">Your unit cost (include overhead if you want realistic pricing).</p>
+                </div>
+
+                <div class="field">
+                  <label for="mm_sell">Selling price (SP)</label>
+                  <input id="mm_sell" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 800">
+                  <p class="help">Customer selling price per unit.</p>
+                </div>
+
+                <div class="field">
+                  <label for="mm_target_type">Target mode</label>
+                  <select id="mm_target_type" class="input">
+                    <option value="none" selected>No target</option>
+                    <option value="margin">Target Margin %</option>
+                    <option value="markup">Target Markup %</option>
+                  </select>
+                  <p class="help">Choose to compute required selling price from a target %.</p>
+                </div>
+
+                <div class="field">
+                  <label for="mm_target_val">Target value (%)</label>
+                  <input id="mm_target_val" class="input" type="number" inputmode="decimal" min="-100" step="0.01" placeholder="e.g., 35">
+                  <p class="help" id="mm_target_help">Set target to estimate required selling price.</p>
+                </div>
+
+                <div class="field">
+                  <label for="mm_currency">Currency symbol</label>
+                  <select id="mm_currency" class="input">
+                    <option value="₹" selected>₹ INR</option>
+                    <option value="$">$ USD</option>
+                    <option value="€">€ EUR</option>
+                    <option value="£">£ GBP</option>
+                    <option value="">No symbol</option>
+                  </select>
+                  <p class="help">Only affects display.</p>
+                </div>
+
+                <div class="field">
+                  <label for="mm_round">Rounding</label>
+                  <select id="mm_round" class="input">
+                    <option value="2" selected>2 decimals</option>
+                    <option value="0">0 decimals</option>
+                    <option value="1">1 decimal</option>
+                    <option value="3">3 decimals</option>
+                  </select>
+                  <p class="help">Choose how you want numbers displayed.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="mm_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="mm_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="mm_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note mini">
+                <strong>Margin%</strong> = Profit ÷ Selling Price × 100<br>
+                <strong>Markup%</strong> = Profit ÷ Cost Price × 100
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Margin and markup results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Profit</p>
+                <p class="v" id="mm_out_profit">—</p>
+                <p class="mini" id="mm_out_profit_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Margin (on selling price)</p>
+                <p class="v" id="mm_out_margin">—</p>
+                <div class="bar"><span id="mm_bar_margin"></span></div>
+                <p class="mini" id="mm_out_margin_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Markup (on cost)</p>
+                <p class="v" id="mm_out_markup">—</p>
+                <div class="bar"><span id="mm_bar_markup"></span></div>
+                <p class="mini" id="mm_out_markup_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Convert instantly</p>
+                <p class="mini" id="mm_out_convert">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Target selling price</p>
+                <p class="v" id="mm_out_target_sp">—</p>
+                <p class="mini" id="mm_out_target_note">Choose a target mode to compute required SP.</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Summary</p>
+                <p class="mini" id="mm_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Quick Reference Table</h2>
+          <p class="mini" style="margin:0 0 10px;">Handy view of how the numbers are derived.</p>
+
+          <div class="table-wrap">
+            <table aria-label="Margin markup reference table">
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>Formula</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody id="mm_table">
+                <tr><td colspan="3" class="mini">Click <strong>Calculate</strong> to generate values.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          <strong>Margin</strong> and <strong>Markup</strong> both describe profitability, but they use different bases:
+          margin is profit as a percentage of the <strong>selling price</strong>, while markup is profit as a percentage of the <strong>cost</strong>.
+        </p>
+        <ul>
+          <li><strong>Margin %</strong> = (Selling Price − Cost) ÷ Selling Price × 100</li>
+          <li><strong>Markup %</strong> = (Selling Price − Cost) ÷ Cost × 100</li>
+        </ul>
+        <p class="mini">
+          Tip: If you have a target margin, you can compute the required selling price as:
+          <strong>SP = Cost ÷ (1 − Margin)</strong> (margin in decimals).
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>Profit = SP − CP
+Margin% = Profit / SP × 100
+Markup% = Profit / CP × 100
+Markup% from Margin% = Margin% / (100 − Margin%) × 100
+Margin% from Markup% = Markup% / (100 + Markup%) × 100</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Which to use?</strong></summary><p>Retailers often use markup for pricing; finance teams often report margin.</p></details>
+        <details class="card"><summary><strong>Convert?</strong></summary><p>Yes. This calculator converts margin ↔ markup automatically.</p></details>
+        <details class="card"><summary><strong>Effect on pricing?</strong></summary><p>Markup applied on cost determines the selling price; margin is the profit share of selling price.</p></details>
+        <details class="card"><summary><strong>Include overheads?</strong></summary><p>For realistic pricing, add overhead allocation (shipping, rent, salaries, packaging) into cost.</p></details>
+        <details class="card"><summary><strong>Negative values?</strong></summary><p>Negative margin/markup indicates you’re selling below cost (a loss).</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="percentage-calculator.html"><h4>Percentage Calculator</h4><p>Compute percentages and simple percent changes.</p></a>
+          <a class="card" href="percentage-change-calculator.html"><h4>Percentage Increase/Decrease Calculator</h4><p>Calculate percent increase or decrease between two values.</p></a>
+          <a class="card" href="discount-calculator.html"><h4>Discount Calculator</h4><p>Compute price after discount and the amount saved.</p></a>
+          <a class="card" href="gst-calculator-india.html"><h4>GST Calculator (India)</h4><p>Calculate GST amount and final price for Indian GST rates.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const costEl = $('mm_cost');
+      const sellEl = $('mm_sell');
+      const targetTypeEl = $('mm_target_type');
+      const targetValEl = $('mm_target_val');
+      const curEl = $('mm_currency');
+      const roundEl = $('mm_round');
+
+      const outProfit = $('mm_out_profit');
+      const outProfitNote = $('mm_out_profit_note');
+      const outMargin = $('mm_out_margin');
+      const outMarginNote = $('mm_out_margin_note');
+      const outMarkup = $('mm_out_markup');
+      const outMarkupNote = $('mm_out_markup_note');
+      const outConvert = $('mm_out_convert');
+      const outTargetSP = $('mm_out_target_sp');
+      const outTargetNote = $('mm_out_target_note');
+      const outSummary = $('mm_out_summary');
+
+      const barMargin = $('mm_bar_margin');
+      const barMarkup = $('mm_bar_markup');
+      const tbody = $('mm_table');
+
+      const targetHelp = $('mm_target_help');
+
+      function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+      function fmt(n){
+        const d = parseInt(roundEl.value,10);
+        if(!isFinite(n)) return '—';
+        return new Intl.NumberFormat(undefined,{minimumFractionDigits:d, maximumFractionDigits:d}).format(n);
+      }
+      function money(n){
+        const sym = curEl.value || '';
+        return (sym ? sym+' ' : '') + fmt(n);
+      }
+
+      function updateTargetHelp(){
+        const t = targetTypeEl.value;
+        if(t === 'margin') targetHelp.textContent = 'Example: 30 means 30% margin on selling price.';
+        else if(t === 'markup') targetHelp.textContent = 'Example: 50 means 50% markup on cost.';
+        else targetHelp.textContent = 'Set target to estimate required selling price.';
+      }
+
+      function calc(){
+        const cp = parseFloat(costEl.value);
+        const sp = parseFloat(sellEl.value);
+
+        if(!isFinite(cp) || cp < 0){
+          outProfit.textContent='—'; outProfitNote.textContent='Enter valid cost price.';
+          tbody.innerHTML = '<tr><td colspan="3" class="mini">Enter valid inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+        if(!isFinite(sp) || sp < 0){
+          outProfit.textContent='—'; outProfitNote.textContent='Enter valid selling price.';
+          tbody.innerHTML = '<tr><td colspan="3" class="mini">Enter valid inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+
+        const profit = sp - cp;
+
+        const margin = (sp !== 0) ? (profit / sp) * 100 : NaN;
+        const markup = (cp !== 0) ? (profit / cp) * 100 : NaN;
+
+        // Convert formulas (from % to %)
+        const markupFromMargin = (isFinite(margin) && (100 - margin) !== 0) ? (margin / (100 - margin)) * 100 : NaN;
+        const marginFromMarkup = (isFinite(markup) && (100 + markup) !== 0) ? (markup / (100 + markup)) * 100 : NaN;
+
+        outProfit.textContent = money(profit);
+        outProfitNote.textContent = profit >= 0 ? 'Positive means profit.' : 'Negative means loss (selling below cost).';
+
+        outMargin.textContent = isFinite(margin) ? (fmt(margin) + '%') : '—';
+        outMarginNote.textContent = 'Margin uses selling price as base.';
+        barMargin.style.width = isFinite(margin) ? (clamp(margin, 0, 100)).toFixed(1) + '%' : '0%';
+        barMargin.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+
+        outMarkup.textContent = isFinite(markup) ? (fmt(markup) + '%') : '—';
+        outMarkupNote.textContent = 'Markup uses cost as base.';
+        // Markup can exceed 100% easily; cap bar at 100
+        barMarkup.style.width = isFinite(markup) ? (clamp(markup, 0, 100)).toFixed(1) + '%' : '0%';
+        barMarkup.style.background = 'linear-gradient(90deg, rgba(59,130,246,.9), rgba(34,197,94,.9))';
+
+        outConvert.textContent =
+          `If Margin = ${isFinite(margin) ? fmt(margin)+'%' : '—'} → Markup ≈ ${isFinite(markupFromMargin) ? fmt(markupFromMargin)+'%' : '—'}.
+           If Markup = ${isFinite(markup) ? fmt(markup)+'%' : '—'} → Margin ≈ ${isFinite(marginFromMarkup) ? fmt(marginFromMarkup)+'%' : '—'}.`;
+
+        // Target selling price
+        const t = targetTypeEl.value;
+        const tv = parseFloat(targetValEl.value);
+
+        let targetSP = NaN;
+        let targetNote = 'Choose a target mode to compute required SP.';
+        if(t === 'margin' && isFinite(tv)){
+          // SP = CP / (1 - margin)
+          const m = tv / 100;
+          if((1 - m) <= 0){
+            targetNote = 'Target margin must be less than 100%.';
+          } else {
+            targetSP = cp / (1 - m);
+            targetNote = `To achieve ${fmt(tv)}% margin with CP ${money(cp)}, set SP ≈ ${money(targetSP)}.`;
+          }
+        } else if(t === 'markup' && isFinite(tv)){
+          // SP = CP * (1 + markup)
+          const mu = tv / 100;
+          targetSP = cp * (1 + mu);
+          targetNote = `To achieve ${fmt(tv)}% markup with CP ${money(cp)}, set SP ≈ ${money(targetSP)}.`;
+        }
+
+        outTargetSP.textContent = isFinite(targetSP) ? money(targetSP) : '—';
+        outTargetNote.textContent = targetNote;
+
+        outSummary.textContent =
+          `CP ${money(cp)} • SP ${money(sp)} • Profit ${money(profit)} • Margin ${isFinite(margin)?fmt(margin)+'%':'—'} • Markup ${isFinite(markup)?fmt(markup)+'%':'—'}.`;
+
+        // Table
+        const rows = [
+          ['Cost price (CP)', '—', money(cp)],
+          ['Selling price (SP)', '—', money(sp)],
+          ['Profit', 'SP − CP', money(profit)],
+          ['Margin %', '(Profit ÷ SP) × 100', isFinite(margin) ? (fmt(margin)+'%') : '—'],
+          ['Markup %', '(Profit ÷ CP) × 100', isFinite(markup) ? (fmt(markup)+'%') : '—'],
+          ['Convert (Margin → Markup)', 'Markup% = Margin% ÷ (100 − Margin%) × 100', isFinite(markupFromMargin) ? (fmt(markupFromMargin)+'%') : '—'],
+          ['Convert (Markup → Margin)', 'Margin% = Markup% ÷ (100 + Markup%) × 100', isFinite(marginFromMarkup) ? (fmt(marginFromMarkup)+'%') : '—'],
+        ];
+
+        tbody.innerHTML = rows.map(r=>`
+          <tr>
+            <td><strong>${r[0]}</strong></td>
+            <td class="mini">${r[1]}</td>
+            <td>${r[2]}</td>
+          </tr>
+        `).join('');
+      }
+
+      $('mm_calc_btn').addEventListener('click', calc);
+
+      $('mm_example_btn').addEventListener('click', ()=>{
+        costEl.value = '500';
+        sellEl.value = '800';
+        targetTypeEl.value = 'margin';
+        targetValEl.value = '35';
+        curEl.value = '₹';
+        roundEl.value = '2';
+        updateTargetHelp();
+        calc();
+      });
+
+      $('mm_reset_btn').addEventListener('click', ()=>{
+        [costEl, sellEl, targetValEl].forEach(el=>el.value='');
+        targetTypeEl.value='none';
+        curEl.value='₹';
+        roundEl.value='2';
+        updateTargetHelp();
+
+        outProfit.textContent='—';
+        outProfitNote.textContent='—';
+        outMargin.textContent='—';
+        outMarginNote.textContent='—';
+        outMarkup.textContent='—';
+        outMarkupNote.textContent='—';
+        outConvert.textContent='—';
+        outTargetSP.textContent='—';
+        outTargetNote.textContent='Choose a target mode to compute required SP.';
+        outSummary.textContent='Enter details to see a clean summary.';
+        barMargin.style.width='0%';
+        barMarkup.style.width='0%';
+        tbody.innerHTML = '<tr><td colspan="3" class="mini">Click <strong>Calculate</strong> to generate values.</td></tr>';
+      });
+
+      // Auto recalc
+      [costEl, sellEl, targetTypeEl, targetValEl, curEl, roundEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(costEl.value || sellEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(costEl.value || sellEl.value) calc(); });
+      });
+
+      targetTypeEl.addEventListener('change', updateTargetHelp);
+      updateTargetHelp();
+    })();
+  </script>
+</body>
+</html>

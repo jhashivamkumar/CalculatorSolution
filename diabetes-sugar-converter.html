@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>
+      Diabetes Sugar Converter (mg/dL ↔ mmol/L) | CalculatorSolution
+    </title>
+    <meta
+      name="description"
+      content="Convert blood sugar (glucose) between mg/dL and mmol/L instantly. Includes formula, examples, and guidance for fasting vs post-meal readings."
+    />
+
+    <!-- Canonical -->
+    <link
+      rel="canonical"
+      href="https://calculatorsolution.com/diabetes-sugar-converter.html"
+    />
+
+    <!-- Robots -->
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="CalculatorSolution" />
+    <meta
+      property="og:title"
+      content="Diabetes Sugar Converter (mg/dL ↔ mmol/L)"
+    />
+    <meta
+      property="og:description"
+      content="Convert glucose units instantly. Formula + examples + practical guidance for fasting and post-meal readings."
+    />
+    <meta
+      property="og:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Diabetes Sugar Converter (mg/dL ↔ mmol/L)"
+    />
+    <meta
+      name="twitter:description"
+      content="Convert glucose units instantly. Formula + examples + practical guidance."
+    />
+    <meta
+      name="twitter:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+
+    <!-- Preload critical CSS -->
+    <link
+      rel="preload"
+      href="/assets/style.css"
+      as="style"
+      onload="this.rel='stylesheet'"
+    />
+    <noscript><link rel="stylesheet" href="/assets/style.css" /></noscript>
+
+    <!-- Icons -->
+    <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/logo.png" />
+    <link rel="manifest" href="/assets/site.webmanifest" />
+
+    <!-- Critical CSS (small, LCP-friendly) -->
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial;
+        background: linear-gradient(135deg, #f8fafc 0%, #f0f4f8 100%);
+        color: #0f172a;
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      .wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 18px;
+      }
+      .site-header {
+        padding: 14px 0;
+        border-bottom: 1px solid #e2e8f0;
+        background: rgba(248, 250, 252, 0.7);
+        backdrop-filter: saturate(180%) blur(10px);
+      }
+      .brand {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        font-weight: 800;
+        color: #2563eb;
+        text-decoration: none;
+      }
+      .brand-logo {
+        border-radius: 10px;
+      }
+      .calculator-hero {
+        padding: 22px 0 8px;
+      }
+      .calculator-hero h1 {
+        font-size: 2rem;
+        margin: 0 0 8px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+      }
+      .lead {
+        margin: 0;
+        color: #334155;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 16px;
+      }
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .panel {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        box-shadow: 0 10px 30px rgba(8, 13, 26, 0.06);
+        padding: 16px;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      @media (max-width: 680px) {
+        .row {
+          grid-template-columns: 1fr;
+        }
+      }
+      label {
+        font-weight: 700;
+        font-size: 0.92rem;
+        color: #0f172a;
+      }
+      input,
+      select,
+      button {
+        width: 100%;
+        padding: 12px 12px;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        font-size: 1rem;
+        outline: none;
+      }
+      input:focus,
+      select:focus {
+        border-color: #60a5fa;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+      }
+      .btn {
+        display: inline-block;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+        font-weight: 800;
+        background: linear-gradient(90deg, #2563eb, #7c3aed);
+        color: #fff;
+      }
+      .btn.secondary {
+        background: #0f172a;
+      }
+      .muted {
+        color: #64748b;
+        font-size: 0.95rem;
+      }
+      .result {
+        padding: 12px;
+        border-radius: 12px;
+        background: #f8fafc;
+        border: 1px dashed #cbd5e1;
+      }
+      .kpi {
+        font-size: 1.4rem;
+        font-weight: 900;
+        margin: 6px 0 0;
+      }
+      .pill {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: #eef2ff;
+        color: #3730a3;
+        font-weight: 800;
+        font-size: 0.82rem;
+      }
+      .card {
+        display: block;
+        background: #fff;
+        padding: 14px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 6px 18px rgba(8, 13, 26, 0.06);
+      }
+      details.card summary {
+        cursor: pointer;
+      }
+      .site-footer {
+        padding: 20px 0;
+        border-top: 1px solid #e2e8f0;
+        color: #64748b;
+        font-size: 0.9rem;
+        margin-top: 26px;
+      }
+      .refs a {
+        word-break: break-word;
+      }
+    </style>
+
+    <!-- GA4 placeholder -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-Y5YHCPQPFS");
+    </script>
+
+    <!-- Structured Data: WebPage + WebApplication + Breadcrumb + FAQ -->
+    <script type="application/ld+json">
+      [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Diabetes Sugar Converter (mg/dL ↔ mmol/L)",
+          "url": "https://calculatorsolution.com/diabetes-sugar-converter.html",
+          "description": "Convert blood sugar (glucose) between mg/dL and mmol/L instantly. Includes formula, examples, and guidance.",
+          "isPartOf": {
+            "@type": "WebSite",
+            "name": "CalculatorSolution",
+            "url": "https://calculatorsolution.com/"
+          }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Diabetes Sugar Converter",
+          "applicationCategory": "HealthApplication",
+          "operatingSystem": "All",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+          "url": "https://calculatorsolution.com/diabetes-sugar-converter.html"
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "CalculatorSolution",
+              "item": "https://calculatorsolution.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Diabetes Sugar Converter",
+              "item": "https://calculatorsolution.com/diabetes-sugar-converter.html"
+            }
+          ]
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Why are there two glucose units (mg/dL and mmol/L)?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Different countries and labs report glucose in different units. The converter helps standardize readings."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is the exact conversion factor for glucose?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "For glucose: mmol/L = mg/dL ÷ 18, and mg/dL = mmol/L × 18."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is the conversion accurate for all blood tests?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This conversion is specific to glucose. Other lab values (cholesterol, ketones, etc.) use different factors."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Fasting vs post-meal sugar—does conversion change?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. Conversion is the same. Only interpretation ranges differ for fasting vs post-meal readings."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is this medical advice?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. This tool converts units only. Always follow your clinician’s guidance for diagnosis and targets."
+              }
+            }
+          ]
+        }
+      ]
+    </script>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">
+          <img
+            src="/assets/logo.png"
+            alt="CalculatorSolution logo"
+            class="brand-logo"
+            width="36"
+            height="36"
+          />
+          <span class="brand-text">CalculatorSolution</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <article>
+        <div class="calculator-hero">
+          <span class="pill">Health • Unit Converter</span>
+          <h1>Diabetes Sugar Converter (mg/dL ↔ mmol/L)</h1>
+          <p class="lead">
+            Convert blood glucose units instantly. Works both directions with
+            formula + examples.
+          </p>
+        </div>
+
+        <section class="grid" aria-label="Converter and results">
+          <!-- Converter -->
+          <div class="panel">
+            <h2 style="margin: 0 0 10px">Convert Glucose</h2>
+            <p class="muted" style="margin: 0 0 14px">
+              Enter a value and choose the conversion direction. Result updates
+              instantly.
+            </p>
+
+            <div class="row">
+              <div>
+                <label for="value">Glucose value</label>
+                <input
+                  id="value"
+                  type="number"
+                  inputmode="decimal"
+                  step="0.01"
+                  min="0"
+                  placeholder="e.g., 110"
+                />
+              </div>
+              <div>
+                <label for="direction">Convert</label>
+                <select id="direction">
+                  <option value="mgdl_to_mmoll">mg/dL → mmol/L</option>
+                  <option value="mmoll_to_mgdl">mmol/L → mg/dL</option>
+                </select>
+              </div>
+            </div>
+
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                margin-top: 12px;
+                flex-wrap: wrap;
+              "
+            >
+              <button class="btn" id="btnConvert" type="button">Convert</button>
+              <button class="btn secondary" id="btnSwap" type="button">
+                Swap Units
+              </button>
+              <button
+                class="btn"
+                style="background: #16a34a"
+                id="btnCopy"
+                type="button"
+              >
+                Copy Result
+              </button>
+            </div>
+
+            <div class="result" style="margin-top: 14px" aria-live="polite">
+              <div class="muted" id="resultLabel">Result</div>
+              <div class="kpi" id="resultValue">—</div>
+              <div class="muted" id="resultNote" style="margin-top: 6px">
+                Tip: Conversion factor for glucose is <strong>18</strong>.
+              </div>
+            </div>
+
+            <p class="muted" style="margin: 14px 0 0">
+              <strong>Disclaimer:</strong> This tool converts units only and
+              does not diagnose diabetes. If you have symptoms or abnormal
+              readings, consult a healthcare professional.
+            </p>
+          </div>
+
+          <!-- Quick info -->
+          <aside class="panel">
+            <h2 style="margin: 0 0 10px">Quick Examples</h2>
+            <ul style="margin: 0; padding-left: 18px">
+              <li><strong>90 mg/dL</strong> ≈ <strong>5.0 mmol/L</strong></li>
+              <li><strong>110 mg/dL</strong> ≈ <strong>6.1 mmol/L</strong></li>
+              <li><strong>7.0 mmol/L</strong> ≈ <strong>126 mg/dL</strong></li>
+            </ul>
+
+            <div style="margin-top: 14px">
+              <h3 style="margin: 0 0 8px">When to Double-Check</h3>
+              <p class="muted" style="margin: 0">
+                If a number looks unusual, verify unit (mg/dL vs mmol/L) and
+                retest using a calibrated device or lab test as advised by your
+                clinician.
+              </p>
+            </div>
+
+            <div style="margin-top: 14px">
+              <h3 style="margin: 0 0 8px">Common Mistake</h3>
+              <p class="muted" style="margin: 0">
+                People often confuse 7.0 mmol/L with 7 mg/dL. Use this converter
+                to avoid misreading.
+              </p>
+            </div>
+          </aside>
+        </section>
+
+        <section class="explanation" style="margin-top: 22px">
+          <h2>Explanation</h2>
+          <p>
+            Blood glucose readings are commonly reported in
+            <strong>mg/dL</strong> (milligrams per deciliter) or
+            <strong>mmol/L</strong> (millimoles per liter). The number may look
+            very different depending on the unit, which can create confusion
+            when comparing readings, checking online guidance, or sharing
+            results with a doctor.
+          </p>
+          <p>
+            This converter helps you instantly switch between units using the
+            standard glucose conversion factor (<strong>18</strong>). It’s
+            useful for interpreting reports, tracking home glucometer readings,
+            and avoiding unit-related mistakes—especially when traveling or
+            reading international references.
+          </p>
+          <p class="muted">
+            Note: Interpretation ranges (fasting vs post-meal) depend on
+            clinical context, the test method, and your clinician’s targets.
+            This page provides conversion only.
+          </p>
+        </section>
+
+        <section class="formula">
+          <h3>Formula</h3>
+          <pre style="white-space: pre-wrap">
+mmol/L = mg/dL ÷ 18
+mg/dL  = mmol/L × 18</pre
+          >
+        </section>
+
+        <section class="faqs">
+          <h3>FAQs</h3>
+          <details class="card">
+            <summary><strong>Why two units?</strong></summary>
+            <p>
+              Different countries/labs use different reporting standards. US
+              often uses mg/dL, while many others use mmol/L.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Is conversion exact?</strong></summary>
+            <p>
+              For glucose, the standard conversion uses factor
+              <strong>18</strong>. (Other substances use different factors.)
+            </p>
+          </details>
+          <details class="card">
+            <summary>
+              <strong>Fasting vs post-meal changes the conversion?</strong>
+            </summary>
+            <p>
+              No. Conversion stays the same. Only the clinical interpretation
+              ranges differ.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Can I use this for HbA1c?</strong></summary>
+            <p>
+              No. HbA1c is a different measurement with different units and
+              conversions.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Should I act on one reading?</strong></summary>
+            <p>
+              One reading can be affected by food, stress, illness, or device
+              variation. Follow clinical guidance for repeat testing and
+              diagnosis.
+            </p>
+          </details>
+        </section>
+
+        <section class="refs" style="margin-top: 22px">
+          <h3>References</h3>
+          <p class="muted" style="margin: 0 0 8px">
+            For health topics, references help trust and SEO. Use authoritative
+            sources:
+          </p>
+          <ul style="margin: 0; padding-left: 18px">
+            <li>World Health Organization (WHO) – Diabetes information</li>
+            <li>
+              American Diabetes Association (ADA) – Standards of care and
+              glucose guidance
+            </li>
+            <li>
+              National health portals / lab reference ranges (country-specific)
+            </li>
+          </ul>
+        </section>
+
+        <section class="related" style="margin-top: 22px">
+          <h3>Related calculators</h3>
+          <div
+            class="grid"
+            style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))"
+          >
+            <a class="card" href="bmr-calculator.html"
+              ><h4 style="margin: 0 0 6px">BMR Calculator</h4>
+              <p class="muted" style="margin: 0">
+                Estimate basal metabolic rate from age, sex, height and weight.
+              </p></a
+            >
+            <a class="card" href="daily-calorie-needs-calculator.html"
+              ><h4 style="margin: 0 0 6px">Daily Calorie Needs</h4>
+              <p class="muted" style="margin: 0">
+                Estimate maintenance calories by activity level.
+              </p></a
+            >
+            <a class="card" href="body-fat-percentage-calculator.html"
+              ><h4 style="margin: 0 0 6px">Body Fat %</h4>
+              <p class="muted" style="margin: 0">
+                Estimate body fat using measurements or formulas.
+              </p></a
+            >
+            <a class="card" href="ideal-weight-calculator.html"
+              ><h4 style="margin: 0 0 6px">Ideal Weight</h4>
+              <p class="muted" style="margin: 0">
+                Estimate ideal weight ranges from BMI or formulas.
+              </p></a
+            >
+          </div>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>&copy; CalculatorSolution</p>
+        <p style="margin-top: 8px; font-size: 0.9rem">
+          <a href="/sitemap.xml">Sitemap</a> | <a href="/">Home</a> |
+          <a href="/privacy-policy.html">Privacy Policy</a> |
+          <a href="/terms-of-service.html">Terms</a> |
+          <a href="/contact.html">Contact</a> |
+          <a href="/about.html">About</a>
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        const valueEl = document.getElementById("value");
+        const dirEl = document.getElementById("direction");
+        const outEl = document.getElementById("resultValue");
+        const labelEl = document.getElementById("resultLabel");
+        const noteEl = document.getElementById("resultNote");
+
+        function roundSmart(n) {
+          if (!isFinite(n)) return "—";
+          // show up to 2 decimals but avoid trailing .00
+          const s = (Math.round(n * 100) / 100).toFixed(2);
+          return s.replace(/\.00$/, "").replace(/(\.\d)0$/, "$1");
+        }
+
+        function convert() {
+          const v = parseFloat(valueEl.value);
+          if (isNaN(v) || v < 0) {
+            outEl.textContent = "—";
+            labelEl.textContent = "Result";
+            noteEl.innerHTML = "Enter a valid non-negative number.";
+            return;
+          }
+          const dir = dirEl.value;
+
+          if (dir === "mgdl_to_mmoll") {
+            const res = v / 18;
+            labelEl.textContent = `${roundSmart(v)} mg/dL =`;
+            outEl.textContent = `${roundSmart(res)} mmol/L`;
+            noteEl.innerHTML = "Formula: mmol/L = mg/dL ÷ 18";
+          } else {
+            const res = v * 18;
+            labelEl.textContent = `${roundSmart(v)} mmol/L =`;
+            outEl.textContent = `${roundSmart(res)} mg/dL`;
+            noteEl.innerHTML = "Formula: mg/dL = mmol/L × 18";
+          }
+        }
+
+        function swap() {
+          dirEl.value =
+            dirEl.value === "mgdl_to_mmoll" ? "mmoll_to_mgdl" : "mgdl_to_mmoll";
+          convert();
+        }
+
+        async function copyResult() {
+          const text = outEl.textContent || "";
+          if (!text || text === "—") return;
+          try {
+            await navigator.clipboard.writeText(
+              `${labelEl.textContent} ${text}`
+            );
+            const old = noteEl.innerHTML;
+            noteEl.innerHTML = "Copied ✅";
+            setTimeout(() => (noteEl.innerHTML = old), 1200);
+          } catch (e) {
+            // fallback: do nothing
+          }
+        }
+
+        document
+          .getElementById("btnConvert")
+          .addEventListener("click", convert);
+        document.getElementById("btnSwap").addEventListener("click", swap);
+        document
+          .getElementById("btnCopy")
+          .addEventListener("click", copyResult);
+
+        valueEl.addEventListener("input", convert);
+        dirEl.addEventListener("change", convert);
+
+        // default example
+        valueEl.value = "110";
+        convert();
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>EMI vs Rent Calculator (Buy vs Rent) + Break-even | CalculatorSolution</title>
+  <meta name="description" content="Free EMI vs Rent Calculator: compare buying vs renting with EMI, maintenance, property tax, appreciation, rent increase and investment return. See break-even year and monthly difference.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/emi-vs-rent-calculator.html">
+
+  <meta property="og:title" content="EMI vs Rent Calculator">
+  <meta property="og:description" content="Compare buy vs rent with EMI, maintenance, appreciation, rent growth and investment returns. See break-even timeline and totals.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (RESPONSIVE IMPROVEMENTS ONLY — NO LOGIC CHANGES) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    :root{
+      --wrap:1100px;
+      --pad:18px;
+      --radius-xl:18px;
+      --radius-lg:16px;
+      --radius-md:12px;
+      --gap:14px;
+      --focus:0 0 0 4px rgba(59,130,246,.12);
+    }
+    .wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--pad)}
+    a{color:inherit}
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{
+      outline:none; box-shadow:var(--focus); border-radius:12px;
+    }
+
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;white-space:nowrap}
+    .brand-logo{border-radius:10px;flex:0 0 auto}
+
+    .hero{
+      margin:18px 0 14px 0;border-radius:var(--radius-xl);padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em;line-height:1.18}
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      backdrop-filter:blur(6px);
+    }
+
+    .calc-shell{display:grid;grid-template-columns:1.1fr .9fr;gap:var(--gap);align-items:start;margin-top:14px}
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:var(--radius-lg);
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+    }
+    .panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .panel-title h2{margin:0;font-size:1.05rem;line-height:1.2}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;
+      background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem;
+      flex:0 0 auto;
+    }
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      width:100%;
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:var(--radius-md);
+      font-size:1rem;background:#fff;outline:none;
+      line-height:1.2;
+      min-height:44px; /* touch target */
+    }
+    select.input{appearance:none;-webkit-appearance:none}
+    .input:focus{border-color:#93c5fd;box-shadow:var(--focus)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:var(--radius-md);
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px; /* touch target */
+      white-space:nowrap;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .btn:active{transform:translateY(0)}
+
+    .sticky{position:sticky;top:82px}
+    .metric{
+      border:1px solid #e2e8f0;border-radius:var(--radius-lg);padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{margin:4px 0 0;font-size:1.55rem;font-weight:1000;letter-spacing:-.02em;line-height:1.15}
+    .mini{font-size:.86rem;color:#64748b}
+
+    .bar{
+      height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px
+    }
+    .bar > span{display:block;height:100%;width:0%}
+
+    .table-wrap{
+      overflow:auto;
+      border:1px solid #e2e8f0;border-radius:var(--radius-lg);
+      background:#fff;box-shadow:0 12px 26px rgba(8,13,26,.05);
+      -webkit-overflow-scrolling:touch;
+    }
+    table{width:100%;border-collapse:collapse;min-width:920px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem;white-space:nowrap}
+    th{background:#f8fafc;font-weight:1000}
+    tr:last-child td{border-bottom:0}
+
+    .note{
+      border:1px dashed #cbd5e1;border-radius:14px;padding:12px;background:rgba(255,255,255,.7);
+      margin-top:10px
+    }
+
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 10px 24px rgba(8,13,26,.05);padding:12px}
+    details.card{padding:0}
+    details.card summary{cursor:pointer;padding:12px;list-style:none}
+    details.card summary::-webkit-details-marker{display:none}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* ✅ RESPONSIVE IMPROVEMENTS (NO LOGIC CHANGES) */
+    @media (max-width: 1100px){
+      :root{--pad:16px}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      table{min-width:760px}
+      .sticky{position:static;top:auto}
+    }
+
+    @media (max-width: 720px){
+      .hero{padding:20px 14px}
+      .hero h1{font-size:1.55rem}
+      .grid-2{grid-template-columns:1fr}
+      .actions{flex-direction:column;align-items:stretch}
+      .btn{width:100%}
+      .panel{padding:12px}
+      .metric .v{font-size:1.4rem}
+      table{min-width:680px}
+    }
+
+    @media (max-width: 420px){
+      :root{--pad:14px}
+      .brand-text{font-size:1.05rem}
+      .hero h1{font-size:1.38rem}
+      .chip{font-size:.84rem}
+      table{min-width:620px}
+    }
+
+    /* ✅ Reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto}
+      .btn, .card{transition:none}
+      .btn:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"EMI vs Rent Calculator",
+      "url":"https://calculatorsolution.com/emi-vs-rent-calculator.html",
+      "description":"Compare renting vs buying with EMI, maintenance, rent growth, property appreciation and investment returns."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"EMI vs Rent Calculator","item":"https://calculatorsolution.com/emi-vs-rent-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to compare buying vs renting",
+      "step":[
+        {"@type":"HowToStep","name":"Enter property and loan details","text":"Add home price, down payment, loan rate and tenure to compute EMI."},
+        {"@type":"HowToStep","name":"Enter rent and growth assumptions","text":"Add current rent, rent increase rate, property appreciation and expected investment return."},
+        {"@type":"HowToStep","name":"Compare totals & break-even","text":"See monthly cost difference and the year when buying becomes better than renting (if it does)."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Include maintenance?","acceptedAnswer":{"@type":"Answer","text":"Yes. Add owner maintenance, property tax and insurance to reflect true ownership cost."}},
+        {"@type":"Question","name":"How does appreciation affect the result?","acceptedAnswer":{"@type":"Answer","text":"If property value increases, ownership builds equity that can offset interest and expenses over time."}},
+        {"@type":"Question","name":"What is opportunity cost?","acceptedAnswer":{"@type":"Answer","text":"Money used for down payment could have been invested elsewhere and earned returns. This calculator models that using an expected return rate."}},
+        {"@type":"Question","name":"Short term vs long term?","acceptedAnswer":{"@type":"Answer","text":"Renting is often cheaper short term. Buying may win long term if rent grows fast, appreciation is strong, and the loan is favorable."}},
+        {"@type":"Question","name":"Taxes?","acceptedAnswer":{"@type":"Answer","text":"Tax deductions can reduce effective cost for some borrowers. Use conservative assumptions and consult a tax professional."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>EMI vs Rent Calculator</h1>
+        <p>Compare buying vs renting using realistic assumptions: EMI, maintenance, taxes, rent growth, appreciation, and investment returns.</p>
+        <div class="chips">
+          <span class="chip">🏠 Buy vs rent</span>
+          <span class="chip">📈 Break-even year</span>
+          <span class="chip">💸 Opportunity cost</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-emi-vs-rent">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="EMI vs rent inputs">
+              <div class="panel-title">
+                <h2>Inputs</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="er_home_price">Home price</label>
+                  <input id="er_home_price" class="input" type="number" inputmode="numeric" min="0" step="100000" placeholder="e.g., 6000000">
+                  <p class="help">Total property purchase price.</p>
+                </div>
+
+                <div class="field">
+                  <label for="er_down">Down payment</label>
+                  <input id="er_down" class="input" type="number" inputmode="numeric" min="0" step="50000" placeholder="e.g., 1200000">
+                  <p class="help">Upfront cash paid (reduces loan amount).</p>
+                </div>
+
+                <div class="field">
+                  <label for="er_rate">Home loan interest (annual)</label>
+                  <input id="er_rate" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 9.0">
+                  <p class="help">Example: 9 means 9% per year.</p>
+                </div>
+
+                <div class="field">
+                  <label for="er_tenure_years">Loan tenure</label>
+                  <div style="display:flex;gap:10px;min-width:0;flex-wrap:wrap;">
+                    <input id="er_tenure_years" class="input" type="number" inputmode="numeric" min="1" step="1" placeholder="e.g., 20" style="flex:1 1 180px;min-width:0;">
+                    <span class="mini" style="align-self:center;">years</span>
+                  </div>
+                  <p class="help">Typical home loans: 10–30 years.</p>
+                </div>
+
+                <div class="field">
+                  <label for="er_rent">Current monthly rent</label>
+                  <input id="er_rent" class="input" type="number" inputmode="numeric" min="0" step="500" placeholder="e.g., 25000">
+                  <p class="help">Monthly rent you pay today.</p>
+                </div>
+
+                <div class="field">
+                  <label for="er_rent_growth">Rent increase (annual)</label>
+                  <input id="er_rent_growth" class="input" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g., 5">
+                  <p class="help">Example: 5 means rent grows 5% per year.</p>
+                </div>
+
+                <div class="field">
+                  <label for="er_appreciation">Property appreciation (annual)</label>
+                  <input id="er_appreciation" class="input" type="number" inputmode="decimal" min="-50" step="0.1" placeholder="e.g., 6">
+                  <p class="help">Estimated annual property value growth.</p>
+                </div>
+
+                <div class="field">
+                  <label for="er_invest_return">Investment return (annual)</label>
+                  <input id="er_invest_return" class="input" type="number" inputmode="decimal" min="-50" step="0.1" placeholder="e.g., 10">
+                  <p class="help">Opportunity cost of down payment & savings.</p>
+                </div>
+
+                <div class="field">
+                  <label for="er_maint">Owner maintenance (monthly)</label>
+                  <input id="er_maint" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="e.g., 3000">
+                  <p class="help">Society + repairs + routine upkeep.</p>
+                </div>
+
+                <div class="field">
+                  <label for="er_prop_tax">Property tax/insurance (monthly)</label>
+                  <input id="er_prop_tax" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="e.g., 800">
+                  <p class="help">Add monthly-equivalent taxes/insurance.</p>
+                </div>
+
+                <div class="field">
+                  <label for="er_horizon">Comparison horizon</label>
+                  <div style="display:flex;gap:10px;min-width:0;flex-wrap:wrap;">
+                    <input id="er_horizon" class="input" type="number" inputmode="numeric" min="1" step="1" placeholder="e.g., 15" style="flex:1 1 180px;min-width:0;">
+                    <span class="mini" style="align-self:center;">years</span>
+                  </div>
+                  <p class="help">How long you plan to stay (e.g., 5–20 years).</p>
+                </div>
+
+                <div class="field">
+                  <label for="er_round">Round EMI</label>
+                  <select id="er_round" class="input">
+                    <option value="0" selected>No rounding</option>
+                    <option value="10">Nearest 10</option>
+                    <option value="100">Nearest 100</option>
+                  </select>
+                  <p class="help">To match bank EMI rounding.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="er_calc_btn" type="button">Compare</button>
+                <button class="btn btn-dark" id="er_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="er_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note mini">
+                What this models: Buying cost = EMI + owner costs, and you build equity via principal repayment + property appreciation.
+                Renting cost = rent, but you can invest the down payment and monthly savings (if rent is cheaper than buy cost).
+                This is an estimation (not financial advice).
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="EMI vs rent results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Monthly EMI (buy)</p>
+                <p class="v" id="er_out_emi">—</p>
+                <p class="mini" id="er_out_emi_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Monthly ownership cost</p>
+                <p class="v" id="er_out_buy_cost">—</p>
+                <p class="mini" id="er_out_buy_cost_note">EMI + maintenance + taxes/insurance.</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Monthly rent (today)</p>
+                <p class="v" id="er_out_rent">—</p>
+                <div class="bar"><span id="er_bar_now"></span></div>
+                <p class="mini" id="er_out_now_diff">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Break-even (net worth)</p>
+                <p class="v" id="er_out_breakeven">—</p>
+                <p class="mini" id="er_out_breakeven_note">Year when buying net worth exceeds renting (if any).</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Winner at horizon</p>
+                <p class="v" id="er_out_winner">—</p>
+                <p class="mini" id="er_out_winner_note">Based on your horizon and assumptions.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Year-by-Year Comparison</h2>
+          <p class="mini" style="margin:0 0 10px;">Rent grows yearly; buy equity grows via principal + appreciation. “Rent wealth” is investment value of down payment + monthly savings.</p>
+
+          <div class="table-wrap">
+            <table aria-label="EMI vs rent year-by-year table">
+              <thead>
+                <tr>
+                  <th>Year</th>
+                  <th>Rent (monthly)</th>
+                  <th>Rent paid (year)</th>
+                  <th>Buy cost (monthly)</th>
+                  <th>Buy paid (year)</th>
+                  <th>Loan balance</th>
+                  <th>Home value</th>
+                  <th>Buy equity</th>
+                  <th>Rent investment value</th>
+                  <th>Net winner</th>
+                </tr>
+              </thead>
+              <tbody id="er_table">
+                <tr><td colspan="10" class="mini">Click <strong>Compare</strong> to generate results.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          <strong>Buy vs Rent</strong> decisions depend on more than EMI. When you buy, you pay EMI plus owner costs (maintenance, property tax/insurance),
+          but you also build <strong>equity</strong> (principal repayment) and may benefit from <strong>appreciation</strong>.
+          When you rent, your monthly cost may be lower, and you can invest your down payment and any monthly savings.
+        </p>
+        <p class="mini">
+          Tip: Try multiple scenarios with conservative appreciation and investment return. Small changes in assumptions can change break-even.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>EMI = P × r × (1+r)^n / ((1+r)^n − 1)
+Ownership monthly cost = EMI + maintenance + taxes/insurance
+Buy equity ≈ (Home value − Loan balance)
+Rent investment value = FV(down payment + monthly savings, investment return)</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Include maintenance?</strong></summary><p>Yes — add monthly maintenance and recurring owner costs for a fair comparison.</p></details>
+        <details class="card"><summary><strong>Appreciation effect?</strong></summary><p>Appreciation increases home value over time, improving buying’s long-term outcome.</p></details>
+        <details class="card"><summary><strong>Opportunity cost?</strong></summary><p>Down payment and monthly savings could be invested; enter a return rate to model this.</p></details>
+        <details class="card"><summary><strong>Short term vs long term?</strong></summary><p>Renting is often cheaper short term. Buying may win long term depending on rent growth, appreciation, and loan terms.</p></details>
+        <details class="card"><summary><strong>Taxes?</strong></summary><p>Tax benefits vary. Use conservative assumptions and consult a professional for accurate tax impacts.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="home-loan-emi-calculator.html"><h4>Home Loan EMI Calculator</h4><p>Calculate EMI, interest and total payable.</p></a>
+          <a class="card" href="loan-emi-calculator.html"><h4>Loan EMI Calculator</h4><p>Quick EMI and interest estimate for any loan.</p></a>
+          <a class="card" href="emi-prepayment-calculator.html"><h4>EMI Prepayment Calculator</h4><p>Estimate interest saved and months saved with prepayment.</p></a>
+          <a class="card" href="inflation-calculator.html"><h4>Inflation Calculator</h4><p>See how money value changes over time.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+      const fmt0 = (n)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:0}).format(n) : '—');
+      const money = (n)=> '₹ ' + fmt0(n);
+
+      const homeEl = $('er_home_price');
+      const downEl = $('er_down');
+      const rateEl = $('er_rate');
+      const tenureEl = $('er_tenure_years');
+
+      const rentEl = $('er_rent');
+      const rentGrowEl = $('er_rent_growth');
+      const apprEl = $('er_appreciation');
+      const invEl = $('er_invest_return');
+
+      const maintEl = $('er_maint');
+      const taxEl = $('er_prop_tax');
+      const horizonEl = $('er_horizon');
+      const roundEl = $('er_round');
+
+      const outEmi = $('er_out_emi');
+      const outEmiNote = $('er_out_emi_note');
+      const outBuyCost = $('er_out_buy_cost');
+      const outBuyCostNote = $('er_out_buy_cost_note');
+      const outRent = $('er_out_rent');
+      const outNowDiff = $('er_out_now_diff');
+      const outBE = $('er_out_breakeven');
+      const outBENote = $('er_out_breakeven_note');
+      const outWinner = $('er_out_winner');
+      const outWinnerNote = $('er_out_winner_note');
+      const barNow = $('er_bar_now');
+      const tbody = $('er_table');
+
+      function roundTo(x, step){
+        step = parseInt(step,10) || 0;
+        if(!step) return x;
+        return Math.round(x/step)*step;
+      }
+
+      function emi(P, r, n){
+        const pow = Math.pow(1+r, n);
+        return (P * r * pow) / (pow - 1);
+      }
+
+      function computeLoanBalance(P, r, emiVal, monthsPaid){
+        // Remaining balance after k payments for standard amortizing loan.
+        // B_k = P*(1+r)^k - EMI*[(1+r)^k - 1]/r
+        const k = monthsPaid;
+        const pow = Math.pow(1+r, k);
+        const bal = (P * pow) - (emiVal * (pow - 1) / r);
+        return Math.max(0, bal);
+      }
+
+      function calc(){
+        const home = parseFloat(homeEl.value);
+        const down = parseFloat(downEl.value) || 0;
+
+        const rateA = parseFloat(rateEl.value);
+        const tenureY = parseFloat(tenureEl.value);
+
+        const rent0 = parseFloat(rentEl.value);
+        const rentGrowA = parseFloat(rentGrowEl.value);
+
+        const apprA = parseFloat(apprEl.value);
+        const invA = parseFloat(invEl.value);
+
+        const maint = parseFloat(maintEl.value) || 0;
+        const tax = parseFloat(taxEl.value) || 0;
+
+        const horizonY = parseInt(horizonEl.value || '0', 10);
+
+        const roundStep = parseInt(roundEl.value, 10) || 0;
+
+        // Validation
+        if(!isFinite(home) || home<=0){
+          outEmi.textContent='—'; outEmiNote.textContent='Enter valid home price.';
+          tbody.innerHTML = '<tr><td colspan="10" class="mini">Enter valid inputs and click <strong>Compare</strong>.</td></tr>';
+          return;
+        }
+        if(down<0 || down>home){
+          outEmi.textContent='—'; outEmiNote.textContent='Down payment must be between 0 and home price.';
+          tbody.innerHTML = '<tr><td colspan="10" class="mini">Fix inputs and compare again.</td></tr>';
+          return;
+        }
+        if(!isFinite(rateA) || rateA<=0){
+          outEmi.textContent='—'; outEmiNote.textContent='Enter valid loan interest rate.';
+          tbody.innerHTML = '<tr><td colspan="10" class="mini">Fix inputs and compare again.</td></tr>';
+          return;
+        }
+        if(!isFinite(tenureY) || tenureY<=0){
+          outEmi.textContent='—'; outEmiNote.textContent='Enter valid loan tenure.';
+          tbody.innerHTML = '<tr><td colspan="10" class="mini">Fix inputs and compare again.</td></tr>';
+          return;
+        }
+        if(!isFinite(rent0) || rent0<0){
+          outEmi.textContent='—'; outEmiNote.textContent='Enter valid current rent.';
+          tbody.innerHTML = '<tr><td colspan="10" class="mini">Fix inputs and compare again.</td></tr>';
+          return;
+        }
+        if(!isFinite(rentGrowA) || rentGrowA<0){
+          outEmi.textContent='—'; outEmiNote.textContent='Enter valid rent growth rate.';
+          tbody.innerHTML = '<tr><td colspan="10" class="mini">Fix inputs and compare again.</td></tr>';
+          return;
+        }
+        if(!isFinite(horizonY) || horizonY<=0){
+          outEmi.textContent='—'; outEmiNote.textContent='Enter valid comparison horizon.';
+          tbody.innerHTML = '<tr><td colspan="10" class="mini">Fix inputs and compare again.</td></tr>';
+          return;
+        }
+        if(horizonY > 50){
+          outEmi.textContent='—'; outEmiNote.textContent='Please keep horizon <= 50 years for realistic comparison.';
+          tbody.innerHTML = '<tr><td colspan="10" class="mini">Reduce horizon and compare again.</td></tr>';
+          return;
+        }
+
+        const loan = home - down;
+        const n = Math.round(tenureY * 12);
+        const r = (rateA/100)/12;
+
+        let emiVal = emi(loan, r, n);
+        emiVal = roundTo(emiVal, roundStep);
+
+        const buyMonthly = emiVal + maint + tax;
+
+        outEmi.textContent = money(emiVal);
+        outEmiNote.textContent = `Loan: ${money(loan)} • Tenure: ${n} months • Rate: ${rateA}% p.a.`;
+
+        outBuyCost.textContent = money(buyMonthly);
+        outBuyCostNote.textContent = `EMI ${money(emiVal)} + owner costs ${money(maint + tax)}.`;
+
+        outRent.textContent = money(rent0);
+
+        // “Now” diff bar
+        const nowDiff = buyMonthly - rent0; // positive => buying costs more per month now
+        const diffLabel = nowDiff > 0
+          ? `Buying costs ~${money(nowDiff)} more per month today.`
+          : `Renting costs ~${money(Math.abs(nowDiff))} more per month today.`;
+        outNowDiff.textContent = diffLabel;
+
+        // bar width based on ratio
+        const denom = Math.max(1, buyMonthly + rent0);
+        const rentShare = (rent0/denom)*100;
+        barNow.style.width = Math.max(0, Math.min(100, rentShare)).toFixed(1) + '%';
+        barNow.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+
+        // Year-by-year model
+        const rentGrow = (rentGrowA/100);
+        const appr = (apprA/100);
+        const inv = (invA/100);
+
+        // Renting investment value: start with down payment invested
+        // Plus invest monthly savings when rent < buyMonthly; if rent > buyMonthly, assume no negative investment.
+        // We compound monthly.
+        const invM = inv/12;
+        let invValue = down > 0 ? down : 0;
+
+        let breakevenYear = null;
+        let lastWinner = '—';
+
+        const rows = [];
+        for(let y=1; y<=horizonY; y++){
+          const rentMonthly = rent0 * Math.pow(1+rentGrow, (y-1));
+          const rentPaidYear = rentMonthly * 12;
+
+          const buyPaidYear = buyMonthly * 12;
+
+          // Months paid so far (cap to loan term)
+          const monthsPaid = Math.min(y*12, n);
+          const balance = computeLoanBalance(loan, r, emiVal, monthsPaid);
+
+          const homeValue = home * Math.pow(1+appr, y);
+          const buyEquity = Math.max(0, homeValue - balance);
+
+          // Update rent investment value month-by-month within year
+          for(let m=1; m<=12; m++){
+            // compound
+            invValue = invValue * (1 + invM);
+
+            // add monthly savings if renting is cheaper than buying (based on current year's rent)
+            const saving = Math.max(0, buyMonthly - rentMonthly);
+            invValue += saving;
+          }
+
+          const diffWealth = buyEquity - invValue;
+          const winner = diffWealth >= 0 ? 'Buying' : 'Renting';
+
+          if(breakevenYear === null && diffWealth >= 0){
+            breakevenYear = y;
+          }
+
+          lastWinner = winner;
+
+          rows.push(`
+            <tr>
+              <td>${y}</td>
+              <td>${money(rentMonthly)}</td>
+              <td>${money(rentPaidYear)}</td>
+              <td>${money(buyMonthly)}</td>
+              <td>${money(buyPaidYear)}</td>
+              <td>${money(balance)}</td>
+              <td>${money(homeValue)}</td>
+              <td>${money(buyEquity)}</td>
+              <td>${money(invValue)}</td>
+              <td><strong>${winner}</strong></td>
+            </tr>
+          `);
+
+          if(y===30 && horizonY>30){
+            rows.push(`<tr><td colspan="10" class="mini">Table truncated for performance (showing first 30 years). Reduce horizon to see full.</td></tr>`);
+            break;
+          }
+        }
+
+        tbody.innerHTML = rows.join('');
+
+        if(breakevenYear === null){
+          outBE.textContent = 'No break-even';
+          outBENote.textContent = `Buying does not exceed renting by year ${Math.min(horizonY,30)} with current assumptions.`;
+        } else {
+          outBE.textContent = `Year ${breakevenYear}`;
+          outBENote.textContent = 'Buying net worth estimate becomes higher than renting investment estimate.';
+        }
+
+        outWinner.textContent = lastWinner;
+        outWinnerNote.textContent = `At your horizon (${horizonY} years), ${lastWinner} looks better under these assumptions.`;
+      }
+
+      $('er_calc_btn').addEventListener('click', calc);
+
+      $('er_example_btn').addEventListener('click', ()=>{
+        homeEl.value = '6000000';
+        downEl.value = '1200000';
+        rateEl.value = '9.0';
+        tenureEl.value = '20';
+        rentEl.value = '25000';
+        rentGrowEl.value = '5';
+        apprEl.value = '6';
+        invEl.value = '10';
+        maintEl.value = '3000';
+        taxEl.value = '800';
+        horizonEl.value = '15';
+        roundEl.value = '0';
+        calc();
+      });
+
+      $('er_reset_btn').addEventListener('click', ()=>{
+        [homeEl,downEl,rateEl,tenureEl,rentEl,rentGrowEl,apprEl,invEl,maintEl,taxEl,horizonEl].forEach(el=>el.value='');
+        roundEl.value='0';
+        outEmi.textContent='—';
+        outEmiNote.textContent='—';
+        outBuyCost.textContent='—';
+        outBuyCostNote.textContent='EMI + maintenance + taxes/insurance.';
+        outRent.textContent='—';
+        outNowDiff.textContent='—';
+        outBE.textContent='—';
+        outBENote.textContent='Year when buying net worth exceeds renting (if any).';
+        outWinner.textContent='—';
+        outWinnerNote.textContent='Based on your horizon and assumptions.';
+        barNow.style.width='0%';
+        tbody.innerHTML = '<tr><td colspan="10" class="mini">Click <strong>Compare</strong> to generate results.</td></tr>';
+      });
+
+      // Auto recalc when typing (if enough inputs exist)
+      [homeEl,downEl,rateEl,tenureEl,rentEl,rentGrowEl,apprEl,invEl,maintEl,taxEl,horizonEl,roundEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(homeEl.value && rateEl.value && tenureEl.value && rentEl.value && horizonEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(homeEl.value && rateEl.value && tenureEl.value && rentEl.value && horizonEl.value) calc(); });
+      });
+    })();
+  </script>
+</body>
+</html>

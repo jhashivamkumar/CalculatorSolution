@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>Compound Interest Calculator | CalculatorSolution</title>
+    <meta
+      name="description"
+      content="Compound Interest Calculator — calculate future value with compounding. Add monthly contributions, compare frequencies, and see total interest earned."
+    />
+
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://calculatorsolution.com/compound-interest-calculator.html"
+    />
+
+    <meta property="og:title" content="Compound Interest Calculator" />
+    <meta
+      property="og:description"
+      content="Calculate compound growth with contributions and compounding frequency."
+    />
+    <meta
+      property="og:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+
+    <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/logo.png" />
+    <link rel="manifest" href="/assets/site.webmanifest" />
+
+    <link
+      rel="preload"
+      href="/assets/style.css"
+      as="style"
+      onload="this.rel='stylesheet'"
+    />
+    <noscript><link rel="stylesheet" href="/assets/style.css" /></noscript>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Arial;
+        background: linear-gradient(135deg, #f8fafc, #eef2ff);
+        color: #0f172a;
+        line-height: 1.6;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      .wrap {
+        max-width: 1100px;
+        margin: auto;
+        padding: 0 18px;
+      }
+      .site-header {
+        padding: 14px 0;
+        border-bottom: 1px solid #e2e8f0;
+        background: #fff;
+      }
+      .brand {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        text-decoration: none;
+      }
+      .brand-text {
+        font-weight: 900;
+        color: #2563eb;
+      }
+
+      .breadcrumbs {
+        font-size: 0.9rem;
+        color: #64748b;
+        margin: 14px 0;
+      }
+      .breadcrumbs a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .breadcrumbs a:hover {
+        text-decoration: underline;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: #fff;
+        border-radius: 18px;
+        padding: 26px;
+        margin: 10px 0 20px;
+      }
+      .hero h1 {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+      }
+      .hero p {
+        margin: 8px 0 0;
+        opacity: 0.95;
+      }
+      .chips {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        font-weight: 800;
+        font-size: 0.85rem;
+      }
+
+      .panel {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 18px;
+        box-shadow: 0 10px 30px rgba(2, 6, 23, 0.06);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+      label {
+        font-weight: 800;
+      }
+      .help {
+        font-size: 0.88rem;
+        color: #64748b;
+        margin: 0;
+      }
+      .input,
+      .select {
+        padding: 10px 12px;
+        border: 1px solid #cbd5f5;
+        border-radius: 12px;
+        font-size: 1rem;
+      }
+      .input:focus,
+      .select:focus {
+        border-color: #6366f1;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 6px;
+      }
+      .btn {
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 0;
+        background: linear-gradient(90deg, #2563eb, #6366f1);
+        color: #fff;
+        font-weight: 900;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        box-shadow: 0 12px 28px rgba(37, 99, 235, 0.18);
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 34px rgba(37, 99, 235, 0.22);
+      }
+      .btn.secondary {
+        background: #0f172a;
+        box-shadow: 0 12px 28px rgba(2, 6, 23, 0.16);
+      }
+
+      .result {
+        padding: 14px;
+        border-radius: 14px;
+        background: linear-gradient(180deg, #eef2ff, #fff);
+        border: 1px solid #c7d2fe;
+      }
+      .big {
+        font-size: 1.35rem;
+        font-weight: 1000;
+        margin: 0;
+      }
+      .sub {
+        margin: 8px 0 0;
+        color: #334155;
+      }
+      .kpis {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .kpi {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 10px;
+      }
+      .kpi small {
+        display: block;
+        color: #64748b;
+        font-weight: 800;
+      }
+      .kpi strong {
+        font-size: 1.05rem;
+      }
+      .note {
+        margin-top: 12px;
+        font-size: 0.92rem;
+        color: #475569;
+        border-left: 4px solid #6366f1;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+      }
+
+      details.card {
+        margin-top: 10px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        padding: 10px;
+      }
+
+      pre {
+        background: #0b1220;
+        color: #e5e7eb;
+        padding: 12px;
+        border-radius: 12px;
+        overflow: auto;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+        margin-top: 12px;
+      }
+      .cardLink {
+        display: block;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 14px;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: 0 10px 24px rgba(2, 6, 23, 0.05);
+        transition: transform 0.2s;
+      }
+      .cardLink:hover {
+        transform: translateY(-3px);
+      }
+      .cardLink h4 {
+        margin: 0 0 6px;
+        font-weight: 1000;
+      }
+      .cardLink p {
+        margin: 0;
+        color: #475569;
+      }
+
+      .site-footer {
+        margin-top: 40px;
+        padding: 20px 0;
+        border-top: 1px solid #e2e8f0;
+        /* color: #64748b;
+        background: #fff; */
+      }
+      /* .site-footer a {
+        color: inherit;
+      } */
+    </style>
+
+    <!-- GA4 -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-Y5YHCPQPFS");
+    </script>
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+      [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Compound Interest Calculator"
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "url": "https://calculatorsolution.com/",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://calculatorsolution.com/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "CalculatorSolution",
+              "item": "https://calculatorsolution.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Compound Interest Calculator",
+              "item": "https://calculatorsolution.com/compound-interest-calculator.html"
+            }
+          ]
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is compounding frequency?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Annually, semiannually, quarterly, monthly, daily etc."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Nominal vs effective rate?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Effective rate accounts for compounding frequency."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I add monthly contributions?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes — monthly contributions are included in the calculation."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Inflation adjusted?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Subtract inflation rate from returns to estimate real growth."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does this include taxes?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. Consider tax on interest or capital gains separately."
+              }
+            }
+          ]
+        }
+      ]
+    </script>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">
+          <img
+            src="/assets/logo.png"
+            alt="CalculatorSolution logo"
+            width="36"
+            height="36"
+          />
+          <span class="brand-text">CalculatorSolution</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <article>
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a> › <span>Compound Interest Calculator</span>
+        </nav>
+
+        <div class="hero">
+          <h1>Compound Interest Calculator</h1>
+          <p>
+            Calculate future value with compounding + optional monthly
+            contributions.
+          </p>
+          <div class="chips">
+            <span class="chip">💰 Future Value</span>
+            <span class="chip">📈 Total Interest</span>
+            <span class="chip">➕ Monthly Contributions</span>
+            <span class="chip">🔒 Runs in browser</span>
+          </div>
+        </div>
+
+        <section class="panel" aria-label="Compound interest calculator">
+          <div class="grid">
+            <div>
+              <div class="field">
+                <label for="principal">Initial Amount (P)</label>
+                <input
+                  id="principal"
+                  class="input"
+                  type="number"
+                  min="0"
+                  step="1"
+                  placeholder="e.g. 100000"
+                />
+                <p class="help">Your starting investment / deposit.</p>
+              </div>
+
+              <div class="field">
+                <label for="rate">Annual Interest Rate (r %)</label>
+                <input
+                  id="rate"
+                  class="input"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="e.g. 12"
+                />
+              </div>
+
+              <div class="field">
+                <label for="years">Time Period (years)</label>
+                <input
+                  id="years"
+                  class="input"
+                  type="number"
+                  min="0"
+                  step="0.1"
+                  placeholder="e.g. 10"
+                />
+              </div>
+
+              <div class="field">
+                <label for="freq">Compounding Frequency (n)</label>
+                <select id="freq" class="select">
+                  <option value="1">Yearly (1)</option>
+                  <option value="2">Half-yearly (2)</option>
+                  <option value="4">Quarterly (4)</option>
+                  <option value="12" selected>Monthly (12)</option>
+                  <option value="365">Daily (365)</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="monthly">Monthly Contribution (optional)</label>
+                <input
+                  id="monthly"
+                  class="input"
+                  type="number"
+                  min="0"
+                  step="1"
+                  placeholder="e.g. 5000"
+                />
+                <p class="help">Set to 0 if you don’t add monthly deposits.</p>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="btnCalc" type="button">
+                  Calculate
+                </button>
+                <button class="btn secondary" id="btnExample" type="button">
+                  Try Example
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <div class="result" role="status" aria-live="polite">
+                <p class="big" id="out">—</p>
+                <p class="sub" id="note">
+                  Enter values to calculate future value.
+                </p>
+
+                <div class="kpis" id="kpis" style="display: none">
+                  <div class="kpi">
+                    <small>Total Invested</small
+                    ><strong id="kInvested">—</strong>
+                  </div>
+                  <div class="kpi">
+                    <small>Total Interest</small
+                    ><strong id="kInterest">—</strong>
+                  </div>
+                  <div class="kpi">
+                    <small>Final Amount</small><strong id="kFinal">—</strong>
+                  </div>
+                  <div class="kpi">
+                    <small>Effective Annual Rate</small
+                    ><strong id="kEir">—</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="note">
+                Tip: Compare monthly vs yearly compounding to see how frequency
+                changes the final amount.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section style="margin-top: 20px">
+          <h2>Explanation</h2>
+          <p>
+            Compounding means you earn interest not only on your initial amount,
+            but also on the interest already added. The more frequently interest
+            is compounded (monthly vs yearly), the higher the final amount —
+            assuming the same nominal rate. If you add a monthly contribution,
+            the calculator also includes growth on those deposits over time.
+          </p>
+        </section>
+
+        <section style="margin-top: 14px">
+          <h3>Formula</h3>
+          <pre>
+A = P(1 + r/n)^(n·t)
+If monthly contributions (PMT):
+A = P(1+i)^m + PMT · [((1+i)^m - 1)/i]
+where i = (r/n), m = n·t (approx for same-frequency deposits)</pre
+          >
+        </section>
+
+        <section style="margin-top: 14px">
+          <h3>FAQs</h3>
+          <details class="card">
+            <summary><strong>What is compounding frequency?</strong></summary>
+            <p>
+              It is how often interest is added (monthly, quarterly, yearly).
+              More frequent compounding increases the effective annual rate.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Nominal vs effective rate?</strong></summary>
+            <p>
+              Nominal rate is the stated yearly rate. Effective rate includes
+              compounding impact.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Can deposits be periodic?</strong></summary>
+            <p>
+              Yes. Monthly contributions are included (similar to SIP/annuity
+              style growth).
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Inflation adjusted?</strong></summary>
+            <p>
+              To estimate real returns, subtract inflation from the annual rate
+              (approx).
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Taxes?</strong></summary>
+            <p>
+              This calculator does not include tax. Apply tax rules based on
+              your investment type.
+            </p>
+          </details>
+        </section>
+
+        <section style="margin-top: 18px">
+          <h3>Related calculators</h3>
+          <div class="cards-grid">
+            <a class="cardLink" href="sip-calculator.html"
+              ><h4>SIP Calculator</h4>
+              <p>Calculate returns for monthly investments (SIP-style).</p></a
+            >
+            <a class="cardLink" href="simple-interest-calculator.html"
+              ><h4>Simple Interest Calculator</h4>
+              <p>Compare simple interest vs compound growth.</p></a
+            >
+            <a class="cardLink" href="emi-calculator.html"
+              ><h4>EMI Calculator</h4>
+              <p>Estimate monthly loan payments and interest.</p></a
+            >
+          </div>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>&copy; CalculatorSolution</p>
+        <p style="margin-top: 8px; font-size: 0.9rem">
+          <a href="/sitemap.xml">Sitemap</a> | <a href="/">Home</a> |
+          <a href="/privacy-policy.html">Privacy Policy</a> |
+          <a href="/terms-of-service.html">Terms</a> |
+          <a href="/contact.html">Contact</a> |
+          <a href="/about.html">About</a>
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        const $ = (id) => document.getElementById(id);
+        const principal = $("principal");
+        const rate = $("rate");
+        const years = $("years");
+        const freq = $("freq");
+        const monthly = $("monthly");
+
+        const out = $("out");
+        const note = $("note");
+        const kpis = $("kpis");
+        const kInvested = $("kInvested");
+        const kInterest = $("kInterest");
+        const kFinal = $("kFinal");
+        const kEir = $("kEir");
+
+        function fmtMoney(n) {
+          if (!isFinite(n)) return "—";
+          return new Intl.NumberFormat(undefined, {
+            maximumFractionDigits: 0,
+          }).format(n);
+        }
+        function fmtPct(n) {
+          if (!isFinite(n)) return "—";
+          return (Math.round(n * 1000) / 10).toFixed(1) + "%";
+        }
+
+        function calc() {
+          const P = +principal.value || 0;
+          const r = (+rate.value || 0) / 100;
+          const t = +years.value || 0;
+          const n = +freq.value || 12;
+          const PMT = +monthly.value || 0;
+
+          if (P <= 0 || r < 0 || t <= 0 || n <= 0) {
+            out.textContent = "Please enter Principal, Rate, and Years.";
+            note.textContent = "";
+            kpis.style.display = "none";
+            return;
+          }
+
+          const m = n * t; // total periods
+          const i = r / n; // periodic rate
+
+          // Future value of principal
+          const FV_P = P * Math.pow(1 + i, m);
+
+          // Future value of contributions (approx: contributions at same frequency)
+          // If PMT is monthly but n != 12, we still treat PMT as "per period" for simplicity.
+          const FV_PMT =
+            PMT > 0 && i > 0
+              ? PMT * ((Math.pow(1 + i, m) - 1) / i)
+              : PMT > 0
+              ? PMT * m
+              : 0;
+
+          const finalAmount = FV_P + FV_PMT;
+
+          const totalInvested = P + PMT * m;
+          const totalInterest = finalAmount - totalInvested;
+
+          const effectiveAnnual = Math.pow(1 + r / n, n) - 1;
+
+          out.textContent = "Result Summary";
+          note.textContent =
+            "Future value based on compounding + contributions.";
+          kpis.style.display = "grid";
+
+          kInvested.textContent = "₹ " + fmtMoney(totalInvested);
+          kInterest.textContent = "₹ " + fmtMoney(totalInterest);
+          kFinal.textContent = "₹ " + fmtMoney(finalAmount);
+          kEir.textContent = fmtPct(effectiveAnnual);
+        }
+
+        $("btnCalc").addEventListener("click", calc);
+
+        $("btnExample").addEventListener("click", function () {
+          principal.value = 100000;
+          rate.value = 12;
+          years.value = 10;
+          freq.value = 12;
+          monthly.value = 5000;
+          calc();
+        });
+
+        [principal, rate, years, freq, monthly].forEach((el) => {
+          el.addEventListener("input", () => {
+            if (principal.value && rate.value && years.value) calc();
+          });
+          el.addEventListener("change", () => {
+            if (principal.value && rate.value && years.value) calc();
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

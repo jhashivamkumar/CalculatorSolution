@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Fuel Cost Calculator (Trip Cost, Mileage, Fuel Price) | CalculatorSolution</title>
+  <meta name="description" content="Free Fuel Cost Calculator: enter distance, mileage/efficiency and fuel price to calculate litres used, total trip fuel cost, cost per km and round-trip cost.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/fuel-cost-calculator.html">
+
+  <meta property="og:title" content="Fuel Cost Calculator">
+  <meta property="og:description" content="Estimate trip fuel cost using distance, mileage and fuel price. Includes liters used, cost per km and round-trip option.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (logic unchanged; responsive + UI polish only) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    a{color:inherit}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    /* Header */
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;white-space:nowrap}
+    .brand-logo{border-radius:10px;flex:0 0 auto}
+
+    /* Hero */
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em}
+    .hero p{margin:0;opacity:.95;max-width:75ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+    }
+
+    /* Layout */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      min-width:0; /* prevent overflow in grid */
+    }
+    .panel-title{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;
+      background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem
+    }
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;min-width:0}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+
+    /* Inputs */
+    .input{
+      width:100%;
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      min-width:0;
+      appearance:none;
+    }
+    select.input{padding-right:38px;background-image:linear-gradient(45deg, transparent 50%, #94a3b8 50%),linear-gradient(135deg, #94a3b8 50%, transparent 50%);background-position:calc(100% - 18px) calc(50% + 1px),calc(100% - 12px) calc(50% + 1px);background-size:6px 6px,6px 6px;background-repeat:no-repeat}
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    /* Inline row inputs (keep your logic; only styling class added via CSS selector) */
+    .field > div[style*="display:flex"]{flex-wrap:wrap;align-items:center}
+    .field > div[style*="display:flex"] > *{flex:1 1 180px}
+    .field > div[style*="display:flex"] > select.input{flex:0 0 auto}
+
+    /* Buttons */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-block;padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      touch-action:manipulation;
+      min-height:44px;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .actions .btn{flex:1 1 160px}
+
+    /* Results */
+    .sticky{position:sticky;top:82px}
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+      min-width:0;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{margin:4px 0 0;font-size:1.55rem;font-weight:1000;letter-spacing:-.02em;word-break:break-word}
+    .mini{font-size:.86rem;color:#64748b}
+
+    .bar{
+      height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px
+    }
+    .bar > span{display:block;height:100%;width:0%}
+
+    .note{
+      border:1px dashed #cbd5e1;border-radius:14px;padding:12px;background:rgba(255,255,255,.7);
+      margin-top:10px
+    }
+
+    /* Table */
+    .table-wrap{
+      overflow:auto;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{width:100%;border-collapse:collapse;min-width:860px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem;vertical-align:top}
+    th{background:#f8fafc;font-weight:1000}
+    tr:last-child td{border-bottom:0}
+
+    /* Content cards (FAQ + Related) */
+    .card{
+      background:#fff;border:1px solid #e2e8f0;border-radius:14px;
+      box-shadow:0 10px 24px rgba(8,13,26,.05);padding:12px;
+      min-width:0;
+    }
+    details.card{padding:0}
+    details.card summary{
+      cursor:pointer;padding:12px;list-style:none;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+    }
+    details.card summary::-webkit-details-marker{display:none}
+    details.card summary:after{content:"▾";opacity:.7}
+    details[open].card summary:after{content:"▴"}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Related grid support even if global CSS doesn't define it */
+    .related-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:12px;
+    }
+    .related-grid .card h4{margin:0 0 6px;font-size:1rem}
+    .related-grid .card p{margin:0;color:#475569;font-size:.92rem}
+
+    /* Pre block */
+    pre{
+      overflow:auto;
+      background:rgba(255,255,255,.75);
+      border:1px solid #e2e8f0;
+      border-radius:14px;
+      padding:12px;
+      font-size:.95rem;
+      line-height:1.5;
+      white-space:pre;
+    }
+
+    /* Section spacing */
+    section{scroll-margin-top:96px}
+
+    /* Responsive */
+    @media (max-width: 1024px){
+      .wrap{padding:0 16px}
+      .hero h1{font-size:1.65rem}
+      .metric .v{font-size:1.45rem}
+      .related-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      table{min-width:680px}
+      .sticky{position:static}
+      .actions .btn{flex:1 1 180px}
+    }
+
+    @media (max-width: 640px){
+      .hero{padding:18px 14px}
+      .hero:before{width:180px;height:180px;inset:-50px -50px auto auto}
+      .grid-2{grid-template-columns:1fr}
+      table{min-width:520px}
+      .panel{padding:12px}
+      .metric{padding:12px}
+      .related-grid{grid-template-columns:1fr}
+      .brand-text{font-size:1.05rem}
+    }
+
+    @media (max-width: 420px){
+      .wrap{padding:0 12px}
+      .btn{width:100%}
+      table{min-width:460px}
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto}
+      .btn, .card{transition:none}
+      .btn:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Fuel Cost Calculator",
+      "url":"https://calculatorsolution.com/fuel-cost-calculator.html",
+      "description":"Estimate trip fuel cost based on distance, fuel efficiency and fuel price."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Fuel Cost Calculator","item":"https://calculatorsolution.com/fuel-cost-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate fuel cost for a trip",
+      "step":[
+        {"@type":"HowToStep","name":"Enter distance","text":"Add the one-way distance of your trip."},
+        {"@type":"HowToStep","name":"Enter mileage/efficiency","text":"Choose km/L or L/100 km and input your vehicle efficiency."},
+        {"@type":"HowToStep","name":"Enter fuel price","text":"Enter fuel price per litre to get total fuel cost and litres used."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Include return trip?","acceptedAnswer":{"@type":"Answer","text":"Enable Round trip or simply double the distance. You can also compute return separately if mileage differs."}},
+        {"@type":"Question","name":"City vs highway mileage?","acceptedAnswer":{"@type":"Answer","text":"Fuel economy changes by driving conditions. Use a realistic mileage for your route or average the two."}},
+        {"@type":"Question","name":"Should I include tolls?","acceptedAnswer":{"@type":"Answer","text":"Tolls are not fuel costs. Add them separately if you want total trip cost."}},
+        {"@type":"Question","name":"Electric vehicles?","acceptedAnswer":{"@type":"Answer","text":"For EVs, use a kWh calculator. Convert using kWh/100 km and electricity price per kWh."}},
+        {"@type":"Question","name":"Does AC or load matter?","acceptedAnswer":{"@type":"Answer","text":"Yes. Heavy load, AC and traffic can reduce mileage. Increase litres estimate slightly to be safe."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Fuel Cost Calculator</h1>
+        <p>Estimate your trip’s fuel consumption and total cost in seconds — with unit options and round-trip support.</p>
+        <div class="chips">
+          <span class="chip">⛽ Litres used</span>
+          <span class="chip">🧾 Total fuel cost</span>
+          <span class="chip">📍 Cost per km</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-fuel-cost">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Fuel cost inputs">
+              <div class="panel-title">
+                <h2>Trip details</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="fc_distance">Distance</label>
+                  <div style="display:flex;gap:10px;">
+                    <input id="fc_distance" class="input" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g., 250">
+                    <select id="fc_dist_unit" class="input" style="max-width:140px;">
+                      <option value="km" selected>km</option>
+                      <option value="mi">miles</option>
+                    </select>
+                  </div>
+                  <p class="help">One-way distance. Enable round trip if needed.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fc_roundtrip">Round trip</label>
+                  <select id="fc_roundtrip" class="input">
+                    <option value="no" selected>No (one-way)</option>
+                    <option value="yes">Yes (return included)</option>
+                  </select>
+                  <p class="help">If enabled, distance is doubled automatically.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fc_eff">Fuel efficiency</label>
+                  <div style="display:flex;gap:10px;">
+                    <input id="fc_eff" class="input" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g., 18">
+                    <select id="fc_eff_unit" class="input" style="max-width:170px;">
+                      <option value="kmpl" selected>km/L</option>
+                      <option value="l100">L / 100 km</option>
+                      <option value="mpg_us">MPG (US)</option>
+                      <option value="mpg_uk">MPG (UK)</option>
+                    </select>
+                  </div>
+                  <p class="help">Pick the unit you know; we’ll convert internally.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fc_price">Fuel price</label>
+                  <div style="display:flex;gap:10px;">
+                    <input id="fc_price" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 105.50">
+                    <select id="fc_currency" class="input" style="max-width:160px;">
+                      <option value="INR" selected>₹ INR / L</option>
+                      <option value="USD">$ USD / gal</option>
+                      <option value="EUR">€ EUR / L</option>
+                      <option value="GBP">£ GBP / L</option>
+                    </select>
+                  </div>
+                  <p class="help">We calculate cost using your selected currency and unit.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fc_extra">Extra costs (optional)</label>
+                  <input id="fc_extra" class="input" type="number" inputmode="decimal" min="0" step="1" placeholder="e.g., 300">
+                  <p class="help">Tolls, parking, snacks — added to “Total trip cost”.</p>
+                </div>
+
+                <div class="field">
+                  <label for="fc_safety">Safety buffer</label>
+                  <select id="fc_safety" class="input">
+                    <option value="0" selected>0% (none)</option>
+                    <option value="5">+5%</option>
+                    <option value="10">+10%</option>
+                    <option value="15">+15%</option>
+                  </select>
+                  <p class="help">Useful for AC, traffic, hills, heavy load.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="fc_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="fc_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="fc_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note mini">
+                Core Formula: <strong>Fuel Used = Distance ÷ Mileage</strong> (or Distance × L/100km ÷ 100).<br>
+                Then <strong>Fuel Cost = Fuel Used × Fuel Price</strong>. Add optional extras for total trip cost.
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Fuel cost results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Fuel used</p>
+                <p class="v" id="fc_out_litres">—</p>
+                <p class="mini" id="fc_out_litres_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Fuel cost</p>
+                <p class="v" id="fc_out_cost">—</p>
+                <div class="bar"><span id="fc_bar"></span></div>
+                <p class="mini" id="fc_out_cost_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Cost per km</p>
+                <p class="v" id="fc_out_cpk">—</p>
+                <p class="mini">Helpful for budgeting and comparing routes.</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Total trip cost (fuel + extras)</p>
+                <p class="v" id="fc_out_total">—</p>
+                <p class="mini" id="fc_out_total_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="fc_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Breakdown</h2>
+          <p class="mini" style="margin:0 0 10px;">A quick breakdown of the inputs, converted units, and calculation.</p>
+
+          <div class="table-wrap">
+            <table aria-label="Fuel cost breakdown table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody id="fc_table">
+                <tr><td colspan="2" class="mini">Click <strong>Calculate</strong> to generate a breakdown.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          This <strong>Fuel Cost Calculator</strong> estimates the cost of fuel for your trip using distance, fuel efficiency (mileage),
+          and fuel price. You can choose <strong>km/L</strong>, <strong>L/100 km</strong>, or <strong>MPG</strong> units, and optionally add
+          a <strong>safety buffer</strong> for traffic, AC, hills, or heavy load.
+        </p>
+        <p class="mini">
+          Tip: Use your realistic mileage (not the brochure value). For long highway trips, mileage is usually better than city driving.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>Fuel Used (L) = Distance (km) / Mileage (km/L)
+Fuel Used (L) = Distance (km) × (L/100km) / 100
+Fuel Cost = Fuel Used × Fuel Price</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Include return trip?</strong></summary><p>Enable Round trip or double your one-way distance.</p></details>
+        <details class="card"><summary><strong>City vs highway?</strong></summary><p>Mileage changes with traffic and speed. Use a realistic value for your route.</p></details>
+        <details class="card"><summary><strong>Include tolls?</strong></summary><p>Enter tolls/parking in “Extra costs” to get total trip cost.</p></details>
+        <details class="card"><summary><strong>Electric vehicles?</strong></summary><p>EVs use kWh. Use a dedicated EV charging cost calculator.</p></details>
+        <details class="card"><summary><strong>Load or AC?</strong></summary><p>It reduces mileage. Use a safety buffer (5–15%) if needed.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="age-calculator.html"><h4>Age Calculator</h4><p>Calculate age from date of birth to today or a target date.</p></a>
+          <a class="card" href="date-difference-calculator.html"><h4>Date Difference Calculator</h4><p>Find difference between two dates in days, months, years.</p></a>
+          <a class="card" href="time-duration-calculator.html"><h4>Time Duration Calculator</h4><p>Add/subtract times and compute durations.</p></a>
+          <a class="card" href="unit-converter.html"><h4>Unit Converter</h4><p>Convert between length, mass, volume, temperature and more.</p></a>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;line-height:1.6;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      function fmt(n, d=2){
+        return isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:d}).format(n) : '—';
+      }
+
+      // Currency formatting
+      function curSym(code){
+        if(code==='INR') return '₹';
+        if(code==='USD') return '$';
+        if(code==='EUR') return '€';
+        if(code==='GBP') return '£';
+        return '';
+      }
+
+      // Convert distance to km
+      function toKm(distance, unit){
+        if(!isFinite(distance) || distance<0) return NaN;
+        return (unit==='mi') ? (distance * 1.609344) : distance;
+      }
+
+      // Convert efficiency input to km/L
+      // - km/L -> km/L
+      // - L/100km -> km/L = 100 / (L/100km)
+      // - MPG (US) -> km/L = mpg * 0.425144
+      // - MPG (UK) -> km/L = mpg * 0.354006
+      function effToKmpl(value, unit){
+        if(!isFinite(value) || value<=0) return NaN;
+        if(unit==='kmpl') return value;
+        if(unit==='l100') return 100 / value;
+        if(unit==='mpg_us') return value * 0.425144;
+        if(unit==='mpg_uk') return value * 0.354006;
+        return NaN;
+      }
+
+      // Fuel price to price per litre (for internal computation)
+      // INR/EUR/GBP assumed per litre; USD assumed per US gallon
+      function priceToPerL(price, currencyCode){
+        if(!isFinite(price) || price<0) return NaN;
+        if(currencyCode==='USD'){
+          // US gallon -> litre
+          return price / 3.785411784;
+        }
+        return price; // per litre already
+      }
+
+      // DOM
+      const distEl = $('fc_distance');
+      const distUnitEl = $('fc_dist_unit');
+      const rtEl = $('fc_roundtrip');
+      const effEl = $('fc_eff');
+      const effUnitEl = $('fc_eff_unit');
+      const priceEl = $('fc_price');
+      const curEl = $('fc_currency');
+      const extraEl = $('fc_extra');
+      const safetyEl = $('fc_safety');
+
+      const outLitres = $('fc_out_litres');
+      const outLitresNote = $('fc_out_litres_note');
+      const outCost = $('fc_out_cost');
+      const outCostNote = $('fc_out_cost_note');
+      const outCpk = $('fc_out_cpk');
+      const outTotal = $('fc_out_total');
+      const outTotalNote = $('fc_out_total_note');
+      const outSummary = $('fc_out_summary');
+      const bar = $('fc_bar');
+
+      const tbody = $('fc_table');
+
+      function calc(){
+        const distIn = parseFloat(distEl.value);
+        const distUnit = distUnitEl.value;
+        const roundTrip = rtEl.value === 'yes';
+
+        const effIn = parseFloat(effEl.value);
+        const effUnit = effUnitEl.value;
+
+        const priceIn = parseFloat(priceEl.value);
+        const currency = curEl.value;
+
+        const extra = parseFloat(extraEl.value) || 0;
+        const safetyPct = parseFloat(safetyEl.value) || 0;
+
+        if(!isFinite(distIn) || distIn<=0){
+          outLitres.textContent='—';
+          outLitresNote.textContent='Enter valid distance.';
+          tbody.innerHTML = '<tr><td colspan="2" class="mini">Enter inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+        if(!isFinite(effIn) || effIn<=0){
+          outLitres.textContent='—';
+          outLitresNote.textContent='Enter valid mileage/efficiency.';
+          tbody.innerHTML = '<tr><td colspan="2" class="mini">Enter inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+        if(!isFinite(priceIn) || priceIn<=0){
+          outLitres.textContent='—';
+          outLitresNote.textContent='Enter valid fuel price.';
+          tbody.innerHTML = '<tr><td colspan="2" class="mini">Enter inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+
+        // Convert
+        let km = toKm(distIn, distUnit);
+        if(roundTrip) km *= 2;
+
+        const kmpl = effToKmpl(effIn, effUnit);
+
+        // Litres used
+        let litres = km / kmpl;
+
+        // Safety buffer
+        const safetyFactor = 1 + (safetyPct/100);
+        const litresBuffered = litres * safetyFactor;
+
+        const perL = priceToPerL(priceIn, currency); // internal currency per litre
+        const fuelCost = litresBuffered * perL;
+        const totalTrip = fuelCost + extra;
+
+        const sym = curSym(currency);
+
+        // Cost per km (based on buffered litres)
+        const costPerKm = (km>0) ? (fuelCost / km) : NaN;
+
+        // Outputs
+        outLitres.textContent = `${fmt(litresBuffered, 2)} L`;
+        outLitresNote.textContent = `Distance: ${fmt(km,1)} km • Efficiency: ${fmt(kmpl,2)} km/L • Buffer: +${fmt(safetyPct,0)}%`;
+
+        outCost.textContent = `${sym} ${fmt(fuelCost, 0)}`;
+        outCostNote.textContent =
+          currency==='USD'
+            ? `Fuel price: ${sym} ${fmt(priceIn,2)}/gal (≈ ${sym} ${fmt(perL,2)}/L)`
+            : `Fuel price: ${sym} ${fmt(priceIn,2)}/L`;
+
+        outCpk.textContent = `${sym} ${fmt(costPerKm, 2)}`;
+        outTotal.textContent = `${sym} ${fmt(totalTrip, 0)}`;
+        outTotalNote.textContent = extra>0 ? `Includes extras: ${sym} ${fmt(extra,0)}` : 'No extras added.';
+
+        const extraShare = totalTrip>0 ? (extra/totalTrip)*100 : 0;
+        bar.style.width = Math.max(0, Math.min(100, extraShare)).toFixed(1) + '%';
+        bar.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+
+        const distLabel = `${fmt(distIn,1)} ${distUnit}`;
+        const rtLabel = roundTrip ? 'Round trip' : 'One-way';
+
+        outSummary.textContent =
+          `${rtLabel} • Distance ${distLabel} • Fuel used ${fmt(litresBuffered,2)} L • Fuel cost ${sym}${fmt(fuelCost,0)} • Total ${sym}${fmt(totalTrip,0)}.`;
+
+        // Breakdown table
+        const rows = [];
+        rows.push(row('Distance (input)', `${fmt(distIn,2)} ${distUnit}`));
+        rows.push(row('Distance (used)', `${fmt(km,2)} km ${roundTrip ? '(round trip)' : ''}`));
+        rows.push(row('Efficiency (input)', `${fmt(effIn,2)} ${effUnitLabel(effUnit)}`));
+        rows.push(row('Efficiency (converted)', `${fmt(kmpl,3)} km/L`));
+        rows.push(row('Fuel price (input)', currency==='USD' ? `${sym} ${fmt(priceIn,2)}/gal` : `${sym} ${fmt(priceIn,2)}/L`));
+        rows.push(row('Fuel price (per litre)', `${sym} ${fmt(perL,3)}/L`));
+        rows.push(row('Base fuel (no buffer)', `${fmt(litres,2)} L`));
+        rows.push(row('Safety buffer', `+${fmt(safetyPct,0)}%`));
+        rows.push(row('Fuel used (final)', `${fmt(litresBuffered,2)} L`));
+        rows.push(row('Fuel cost', `${sym} ${fmt(fuelCost,2)}`));
+        rows.push(row('Extras', `${sym} ${fmt(extra,2)}`));
+        rows.push(row('Total trip cost', `${sym} ${fmt(totalTrip,2)}`));
+        rows.push(row('Cost per km', `${sym} ${fmt(costPerKm,4)}`));
+
+        tbody.innerHTML = rows.join('');
+      }
+
+      function effUnitLabel(u){
+        if(u==='kmpl') return 'km/L';
+        if(u==='l100') return 'L/100 km';
+        if(u==='mpg_us') return 'MPG (US)';
+        if(u==='mpg_uk') return 'MPG (UK)';
+        return u;
+      }
+
+      function row(a,b){
+        return `<tr><td><strong>${escapeHtml(a)}</strong></td><td>${escapeHtml(String(b))}</td></tr>`;
+      }
+
+      function escapeHtml(s){
+        return (s||'').replace(/[&<>"']/g, (c)=>({
+          '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+        }[c]));
+      }
+
+      $('fc_calc_btn').addEventListener('click', calc);
+
+      $('fc_example_btn').addEventListener('click', ()=>{
+        distEl.value = '260';
+        distUnitEl.value = 'km';
+        rtEl.value = 'yes';
+        effEl.value = '18';
+        effUnitEl.value = 'kmpl';
+        priceEl.value = '105.50';
+        curEl.value = 'INR';
+        extraEl.value = '450';
+        safetyEl.value = '10';
+        calc();
+      });
+
+      $('fc_reset_btn').addEventListener('click', ()=>{
+        [distEl, effEl, priceEl, extraEl].forEach(el=>el.value='');
+        distUnitEl.value='km';
+        rtEl.value='no';
+        effUnitEl.value='kmpl';
+        curEl.value='INR';
+        safetyEl.value='0';
+
+        outLitres.textContent='—';
+        outLitresNote.textContent='—';
+        outCost.textContent='—';
+        outCostNote.textContent='—';
+        outCpk.textContent='—';
+        outTotal.textContent='—';
+        outTotalNote.textContent='—';
+        outSummary.textContent='Enter details to see a clean summary.';
+        bar.style.width='0%';
+
+        tbody.innerHTML = '<tr><td colspan="2" class="mini">Click <strong>Calculate</strong> to generate a breakdown.</td></tr>';
+      });
+
+      // Auto-calc on input
+      [distEl,distUnitEl,rtEl,effEl,effUnitEl,priceEl,curEl,extraEl,safetyEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(distEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(distEl.value) calc(); });
+      });
+    })();
+  </script>
+</body>
+</html>

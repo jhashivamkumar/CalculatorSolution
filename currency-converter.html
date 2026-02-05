@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Currency Converter – Live Exchange Rates | CalculatorSolution</title>
+    <meta
+      name="description"
+      content="Free Currency Converter to convert INR, USD, EUR, GBP and more using live exchange rates. See rate, converted amount, and last updated date instantly."
+    />
+
+    <link
+      rel="preload"
+      href="/assets/style.css"
+      as="style"
+      onload="this.rel='stylesheet'"
+    />
+    <noscript><link rel="stylesheet" href="/assets/style.css" /></noscript>
+    <link rel="preload" href="/assets/og-image.svg" as="image" />
+    <meta
+      property="og:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+    <meta
+      name="twitter:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+    <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/logo.png" />
+    <link rel="manifest" href="/assets/site.webmanifest" />
+
+    <style>
+      :root {
+        --bg1: #f8fafc;
+        --bg2: #f0f4f8;
+        --text: #0f172a;
+        --muted: #475569;
+        --muted2: #64748b;
+        --card: #ffffff;
+        --border: #e2e8f0;
+        --p1: #3b82f6;
+        --p2: #8b5cf6;
+        --p3: #22c55e;
+        --shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial;
+        background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%);
+        color: var(--text);
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      .wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 18px;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(10px);
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+        color: var(--p1);
+        text-decoration: none;
+      }
+      .brand-logo {
+        border-radius: 10px;
+      }
+      .brand-text {
+        letter-spacing: 0.2px;
+      }
+
+      .hero {
+        margin: 18px 0 14px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, var(--p1) 0%, var(--p2) 100%);
+        color: #fff;
+        padding: 22px 18px;
+        box-shadow: 0 18px 50px rgba(59, 130, 246, 0.18);
+        overflow: hidden;
+        position: relative;
+      }
+      .hero:before {
+        content: "";
+        position: absolute;
+        inset: -80px -60px auto auto;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.14);
+        filter: blur(1px);
+      }
+      .hero h1 {
+        margin: 0 0 6px;
+        font-size: 2rem;
+        font-weight: 900;
+        letter-spacing: -0.3px;
+      }
+      .hero p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.92);
+        /* max-width: 70ch; */
+      }
+      .pill-row {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        font-size: 0.85rem;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--p3);
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.22);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 14px;
+        margin: 14px 0 22px;
+        align-items: start;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        padding: 14px;
+      }
+      .card h2 {
+        margin: 0 0 10px;
+        font-size: 1.1rem;
+      }
+      .sub {
+        margin: 0 0 12px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      label {
+        font-size: 0.85rem;
+        color: var(--muted2);
+      }
+      input,
+      select {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid #cbd5f5;
+        outline: none;
+        font-size: 1rem;
+        background: #fff;
+      }
+      input:focus,
+      select:focus {
+        border-color: #93c5fd;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+      }
+      .row-3 {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 10px;
+        align-items: end;
+      }
+      .swap {
+        height: 44px;
+        width: 44px;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: linear-gradient(135deg, #ffffff, #f1f5f9);
+        cursor: pointer;
+        box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.15s;
+      }
+      .swap:hover {
+        transform: translateY(-1px);
+      }
+      .actions {
+        grid-column: 1/-1;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 2px;
+      }
+      .btn {
+        appearance: none;
+        border: none;
+        cursor: pointer;
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-weight: 800;
+        color: #fff;
+        background: linear-gradient(90deg, var(--p1), var(--p2));
+        box-shadow: 0 16px 34px rgba(59, 130, 246, 0.18);
+        transition: transform 0.15s, box-shadow 0.15s;
+        white-space: nowrap;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 20px 44px rgba(59, 130, 246, 0.22);
+      }
+      .btn.secondary {
+        color: var(--text);
+        background: linear-gradient(90deg, #ffffff, #f1f5f9);
+        border: 1px solid var(--border);
+        box-shadow: 0 14px 28px rgba(15, 23, 42, 0.06);
+      }
+
+      .result {
+        margin-top: 12px;
+        padding: 12px;
+        border-radius: 14px;
+        border: 1px dashed #cbd5e1;
+        background: linear-gradient(135deg, #ffffff, #f8fafc);
+      }
+      .big {
+        font-size: 1.35rem;
+        font-weight: 900;
+        letter-spacing: -0.2px;
+        margin: 0 0 6px;
+      }
+      .meta {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      .meta small {
+        color: var(--muted2);
+      }
+      .err {
+        color: #b91c1c;
+      }
+      .ok {
+        color: #065f46;
+      }
+
+      .info-card ul {
+        margin: 8px 0 0 18px;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      .section {
+        margin: 18px 0;
+      }
+      .section h3 {
+        margin: 0 0 8px;
+      }
+      .section p {
+        margin: 0 0 8px;
+        color: var(--muted);
+      }
+      details.card {
+        padding: 12px;
+      }
+      details summary {
+        cursor: pointer;
+      }
+      details p {
+        margin: 8px 0 0;
+        color: var(--muted);
+      }
+
+      .site-footer {
+        margin-top: 26px;
+        padding: 18px 0;
+        border-top: 1px solid var(--border);
+        color: var(--muted2);
+        font-size: 0.9rem;
+        background: #f8fafc;
+      }
+      .site-footer a {
+        color: inherit;
+        text-decoration: underline;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 640px) {
+        .wrap {
+          padding: 0 12px;
+        }
+        .hero h1 {
+          font-size: 1.55rem;
+        }
+        .form {
+          grid-template-columns: 1fr;
+        }
+        .row-3 {
+          grid-template-columns: 1fr;
+          align-items: stretch;
+        }
+        .swap {
+          width: 100%;
+          height: 42px;
+        }
+        .actions .btn {
+          width: 100%;
+          text-align: center;
+        }
+        input,
+        select {
+          padding: 9px 11px;
+        }
+      }
+    </style>
+
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://calculatorsolution.com/currency-converter.html"
+    />
+
+    <!-- FAQ Schema (matches questions below) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Where do exchange rates come from in this currency converter?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "This converter uses a free exchange-rate API (Frankfurter) to fetch the latest published rates and calculate conversions in your browser."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are currency conversion rates real-time?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Most free APIs provide the latest available rates (typically updated on working days). They may not match bank card or cash exchange rates exactly due to spreads and fees."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why does my bank show a different converted amount?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Banks and payment providers add spreads and fees. This tool shows mid-market style rates, so final charged amounts can differ."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I use this converter offline?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Live conversion needs internet to fetch rates. Without internet, you can only convert using a manually entered rate."
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">
+          <img
+            src="/assets/logo.png"
+            alt="CalculatorSolution logo"
+            class="brand-logo"
+            width="36"
+            height="36"
+          />
+          <span class="brand-text">CalculatorSolution</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <article>
+        <section class="hero">
+          <h1>Currency Converter</h1>
+          <p>
+            Convert amounts between currencies using the latest available
+            exchange rates. Perfect for travel, online shopping, freelancing
+            payments, and finance planning.
+          </p>
+          <div class="pill-row" aria-hidden="true">
+            <span class="pill"><span class="dot"></span> Live rates</span>
+            <span class="pill"><span class="dot"></span> Mobile friendly</span>
+            <span class="pill"><span class="dot"></span> Fast & private</span>
+          </div>
+        </section>
+
+        <section class="grid">
+          <!-- Converter -->
+          <div class="card">
+            <h2>Convert currencies</h2>
+            <p class="sub">
+              Enter an amount, pick currencies, and get the converted value
+              instantly.
+            </p>
+
+            <div class="form">
+              <div class="field">
+                <label for="amount">Amount</label>
+                <input
+                  id="amount"
+                  type="number"
+                  inputmode="decimal"
+                  min="0"
+                  step="0.01"
+                  placeholder="e.g. 1000"
+                  value="1"
+                />
+              </div>
+
+              <div class="field">
+                <label for="fromCur">From</label>
+                <select id="fromCur" aria-label="From currency"></select>
+              </div>
+
+              <div class="row-3">
+                <div class="field">
+                  <label for="toCur">To</label>
+                  <select id="toCur" aria-label="To currency"></select>
+                </div>
+
+                <button
+                  class="swap"
+                  id="swapBtn"
+                  type="button"
+                  title="Swap currencies"
+                  aria-label="Swap currencies"
+                >
+                  ⇄
+                </button>
+
+                <div class="field">
+                  <label>&nbsp;</label>
+                  <button class="btn" id="convertBtn" type="button">
+                    Convert
+                  </button>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn secondary" id="resetBtn" type="button">
+                  Reset
+                </button>
+                <button class="btn secondary" id="refreshBtn" type="button">
+                  Refresh rates
+                </button>
+              </div>
+            </div>
+
+            <div class="result" id="resultBox" aria-live="polite">
+              <p class="big">Loading currencies…</p>
+              <p class="meta">
+                If this takes long, check your internet connection.
+              </p>
+            </div>
+          </div>
+
+          <!-- Info -->
+          <aside class="card info-card">
+            <h2>How it works</h2>
+            <p class="sub">This tool fetches exchange rates and calculates:</p>
+            <ul>
+              <li><strong>Converted amount</strong> = amount × rate</li>
+              <li><strong>Rate</strong> shown as 1 “from” = X “to”</li>
+              <li><strong>Updated date</strong> from the API response</li>
+            </ul>
+
+            <div class="section">
+              <h3>Tip</h3>
+              <p>
+                For bank/card usage, expect small differences because providers
+                add fees/spreads.
+              </p>
+            </div>
+          </aside>
+        </section>
+<!-- Related -->
+        <section class="section">
+          <h2>Related calculators</h2>
+          <div
+            class="grid"
+            style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))"
+          >
+            <a class="card" href="percentage-calculator.html"
+              ><strong>Percentage Calculator</strong>
+              <div class="sub">
+                Compute percentages and simple percent changes.
+              </div></a
+            >
+            <a class="card" href="loan-emi-calculator.html"
+              ><strong>Loan EMI Calculator</strong>
+              <div class="sub">
+                Calculate EMI, total payment and interest.
+              </div></a
+            >
+            <a class="card" href="gst-calculator-india.html"
+              ><strong>GST Calculator (India)</strong>
+              <div class="sub">Calculate GST amount and final price.</div></a
+            >
+          </div>
+        </section>
+        <!-- SEO Explanation -->
+        <section class="card section">
+          <h2>Currency Converter – Explanation</h2>
+          <p>
+            A currency converter helps you calculate how much money you’ll
+            receive when exchanging one currency for another. For example,
+            converting USD to INR for international payments, or INR to EUR for
+            travel budgeting. This calculator uses the latest published exchange
+            rates and performs the conversion instantly in your browser.
+          </p>
+          <p>
+            Exchange rates change based on market demand, central bank policies,
+            interest rates, inflation, and global events. Banks and payment
+            providers may apply a spread (margin) and additional fees, so their
+            final rate can differ from the mid-market rate shown by public
+            sources.
+          </p>
+          <p>
+            Use this tool to compare scenarios quickly: test different amounts,
+            swap currencies, or refresh to see the latest rate. For important
+            transactions, confirm the exact rate and fees with your provider.
+          </p>
+        </section>
+
+        <!-- FAQs -->
+        <section class="section">
+          <h2>Currency Converter FAQs</h2>
+
+          <details class="card">
+            <summary>
+              <strong
+                >Where do exchange rates come from in this currency
+                converter?</strong
+              >
+            </summary>
+            <p>
+              This page fetches rates from a free currency API (Frankfurter). It
+              returns the latest available rates and date, then we calculate the
+              converted value in your browser.
+            </p>
+          </details>
+
+          <details class="card">
+            <summary>
+              <strong>Are currency conversion rates real-time?</strong>
+            </summary>
+            <p>
+              Most free services provide the latest published rates (often
+              updated on working days). For trading-level real-time pricing,
+              you’d need paid market data feeds.
+            </p>
+          </details>
+
+          <details class="card">
+            <summary>
+              <strong>Why does my bank show a different amount?</strong>
+            </summary>
+            <p>
+              Banks/fintech apps often add a spread and fees. This converter
+              shows a reference rate, so the final charged amount can differ
+              slightly.
+            </p>
+          </details>
+
+          <details class="card">
+            <summary>
+              <strong>Can I use this converter offline?</strong>
+            </summary>
+            <p>
+              Live conversion needs the internet. Offline, you’d need to
+              manually enter a rate and multiply it by your amount.
+            </p>
+          </details>
+        </section>
+
+        
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>&copy; 2025 CalculatorSolution — Free Online Calculators</p>
+        <p style="margin-top: 8px; font-size: 0.9rem">
+          <a href="/sitemap.xml">Sitemap</a> | <a href="/">Home</a> |
+          <a href="/privacy-policy.html">Privacy Policy</a> |
+          <a href="/terms-of-service.html">Terms</a> |
+          <a href="/contact.html">Contact</a> |
+          <a href="/about.html">About</a>
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        // ✅ Fix: Use the correct API base URL (not api.frankfurter.dev)
+        // Working endpoints:
+        // - https://api.frankfurter.app/currencies
+        // - https://api.frankfurter.app/latest?from=USD&to=INR&amount=1
+        const API = "https://api.frankfurter.app";
+
+        const $ = (id) => document.getElementById(id);
+        const amountEl = $("amount");
+        const fromEl = $("fromCur");
+        const toEl = $("toCur");
+        const resultBox = $("resultBox");
+
+        const convertBtn = $("convertBtn");
+        const resetBtn = $("resetBtn");
+        const refreshBtn = $("refreshBtn");
+        const swapBtn = $("swapBtn");
+
+        function esc(s) {
+          return String(s || "").replace(
+            /[&<>"']/g,
+            (m) =>
+              ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+              }[m])
+          );
+        }
+
+        function setResult(html, tone) {
+          const cls = tone === "err" ? "err" : tone === "ok" ? "ok" : "";
+          resultBox.innerHTML = '<div class="' + cls + '">' + html + "</div>";
+        }
+
+        async function fetchJSON(url) {
+          const res = await fetch(url, { cache: "no-store" });
+          if (!res.ok) {
+            const text = await res.text().catch(() => "");
+            throw new Error(
+              "HTTP " +
+                res.status +
+                " " +
+                (text ? "- " + text.slice(0, 120) : "")
+            );
+          }
+          return res.json();
+        }
+
+        async function loadCurrencies() {
+          setResult(
+            '<p class="big">Loading currencies…</p><p class="meta">Fetching currency list…</p>'
+          );
+          const data = await fetchJSON(API + "/currencies");
+          // data = { "USD":"United States Dollar", ... }
+          const codes = Object.keys(data).sort();
+
+          function fillSelect(sel, defaultCode) {
+            sel.innerHTML = "";
+            for (const code of codes) {
+              const opt = document.createElement("option");
+              opt.value = code;
+              opt.textContent = code + " — " + data[code];
+              sel.appendChild(opt);
+            }
+            sel.value =
+              defaultCode && data[defaultCode] ? defaultCode : codes[0] || "";
+          }
+
+          fillSelect(fromEl, "USD");
+          fillSelect(toEl, "INR");
+
+          setResult(
+            '<p class="big">Ready ✅</p><p class="meta">Enter amount and click <strong>Convert</strong>.</p>',
+            "ok"
+          );
+        }
+
+        async function convert() {
+          const amount = parseFloat(amountEl.value);
+          const from = fromEl.value;
+          const to = toEl.value;
+
+          if (!isFinite(amount) || amount <= 0) {
+            setResult(
+              '<p class="big">Enter a valid amount</p><p class="meta">Example: 100, 2500, 99.50</p>',
+              "err"
+            );
+            return;
+          }
+          if (!from || !to) {
+            setResult(
+              '<p class="big">Select currencies</p><p class="meta">Choose both “From” and “To”.</p>',
+              "err"
+            );
+            return;
+          }
+          if (from === to) {
+            setResult(
+              '<p class="big">' +
+                esc(amount.toFixed(2)) +
+                " " +
+                esc(from) +
+                "</p>" +
+                '<p class="meta">Same currency selected. Rate = 1.00</p>',
+              "ok"
+            );
+            return;
+          }
+
+          convertBtn.disabled = true;
+          convertBtn.textContent = "Converting…";
+          setResult(
+            '<p class="big">Converting…</p><p class="meta">Fetching latest rate…</p>'
+          );
+
+          try {
+            const url =
+              API +
+              "/latest?from=" +
+              encodeURIComponent(from) +
+              "&to=" +
+              encodeURIComponent(to) +
+              "&amount=" +
+              encodeURIComponent(amount);
+            const data = await fetchJSON(url);
+            // { amount, base, date, rates: { INR: ... } }
+            const rate = data && data.rates ? data.rates[to] : null;
+
+            if (rate == null) {
+              throw new Error("Rate not available for " + to);
+            }
+
+            // Also show 1-from = x-to (compute using returned amount)
+            const oneUrl =
+              API +
+              "/latest?from=" +
+              encodeURIComponent(from) +
+              "&to=" +
+              encodeURIComponent(to) +
+              "&amount=1";
+            const one = await fetchJSON(oneUrl);
+            const oneRate = one && one.rates ? one.rates[to] : null;
+
+            setResult(
+              '<p class="big">' +
+                esc(amount.toFixed(2)) +
+                " " +
+                esc(from) +
+                " = " +
+                esc(Number(rate).toFixed(4)) +
+                " " +
+                esc(to) +
+                "</p>" +
+                '<p class="meta">Rate: <strong>1 ' +
+                esc(from) +
+                " = " +
+                esc(Number(oneRate).toFixed(6)) +
+                " " +
+                esc(to) +
+                "</strong> " +
+                "<br><small>Last updated: " +
+                esc(data.date || "latest") +
+                "</small></p>",
+              "ok"
+            );
+          } catch (e) {
+            setResult(
+              '<p class="big">Conversion failed</p>' +
+                '<p class="meta">Reason: ' +
+                esc(e.message || "Unknown error") +
+                "</p>" +
+                '<p class="meta"><small>Tip: Ensure you are using <code>https://api.frankfurter.app</code> endpoints.</small></p>',
+              "err"
+            );
+          } finally {
+            convertBtn.disabled = false;
+            convertBtn.textContent = "Convert";
+          }
+        }
+
+        function reset() {
+          amountEl.value = "1";
+          if (fromEl.options.length) fromEl.value = "USD";
+          if (toEl.options.length) toEl.value = "INR";
+          setResult(
+            '<p class="big">Reset ✅</p><p class="meta">Click <strong>Convert</strong> to calculate again.</p>',
+            "ok"
+          );
+        }
+
+        function swap() {
+          const a = fromEl.value;
+          fromEl.value = toEl.value;
+          toEl.value = a;
+        }
+
+        // events
+        convertBtn.addEventListener("click", convert);
+        resetBtn.addEventListener("click", reset);
+        refreshBtn.addEventListener("click", async () => {
+          await loadCurrencies();
+        });
+        swapBtn.addEventListener("click", () => {
+          swap();
+        });
+
+        // Convert on Enter
+        ["amount"].forEach((id) => {
+          $(id).addEventListener("keydown", (e) => {
+            if (e.key === "Enter") convert();
+          });
+        });
+
+        // init
+        loadCurrencies().catch((err) => {
+          setResult(
+            '<p class="big">Could not load currencies</p>' +
+              '<p class="meta">Reason: ' +
+              esc(err.message || "Unknown error") +
+              "</p>" +
+              '<p class="meta"><small>Make sure the API URL is reachable: <code>https://api.frankfurter.app/currencies</code></small></p>',
+            "err"
+          );
+        });
+      })();
+    </script>
+  </body>
+</html>

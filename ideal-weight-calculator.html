@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Ideal Weight Calculator (BMI + Devine/Robinson/Miller/Hamwi) | CalculatorSolution</title>
+  <meta name="description" content="Free Ideal Weight Calculator: estimate healthy weight range from BMI (18.5–24.9) and compare Devine, Robinson, Miller, and Hamwi ideal body weight formulas. Supports cm/ft-in and kg/lb.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/ideal-weight-calculator.html">
+
+  <meta property="og:title" content="Ideal Weight Calculator">
+  <meta property="og:description" content="Estimate healthy weight range from BMI and compare popular ideal body weight formulas (Devine, Robinson, Miller, Hamwi).">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (responsive polish only — NO logic changes) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    /* ✅ Header: better mobile spacing + safe-area */
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    @supports(padding:max(0px)){
+      .site-header{padding-top:max(14px, env(safe-area-inset-top))}
+    }
+
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;letter-spacing:-.01em}
+    .brand-logo{border-radius:10px}
+
+    /* ✅ Hero: responsive typography + padding */
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{
+      margin:0 0 6px 0;
+      font-size:clamp(1.35rem, 2.8vw, 1.85rem);
+      letter-spacing:-.02em;
+      line-height:1.15;
+    }
+    .hero p{margin:0;opacity:.95;max-width:72ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      white-space:nowrap;
+    }
+
+    /* ✅ Main layout: keeps same grid logic, improves responsiveness */
+    .calc-shell{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;align-items:start;margin-top:14px}
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      overflow:hidden; /* prevents any inner overflow on small widths */
+    }
+    .panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .panel-title h2{margin:0;font-size:1.05rem;line-height:1.2}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;
+      background:rgba(37,99,235,.10);color:#1d4ed8;font-weight:900;font-size:.85rem;
+      white-space:nowrap;
+    }
+
+    /* ✅ Inputs grid: auto stacks on narrow widths */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      width:100%;
+    }
+    select.input{appearance:none}
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    /* ✅ Action buttons: full width on small screens */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-block;padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      white-space:nowrap;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .btn:active{transform:translateY(0)}
+
+    /* ✅ Sticky results: safe top offset, auto disables on small */
+    .sticky{position:sticky;top:82px}
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{margin:4px 0 0;font-size:clamp(1.25rem, 3vw, 1.55rem);font-weight:1000;letter-spacing:-.02em;line-height:1.2}
+    .mini{font-size:.86rem;color:#64748b}
+
+    .bar{height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px}
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* ✅ Table: smooth horizontal scroll + sticky head for UX */
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05);
+    }
+    table{width:100%;border-collapse:collapse;min-width:860px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem;vertical-align:top}
+    th{background:#f8fafc;font-weight:1000;position:sticky;top:0;z-index:1}
+    tr:last-child td{border-bottom:0}
+
+    .note{
+      border:1px dashed #cbd5e1;border-radius:14px;padding:12px;background:rgba(255,255,255,.7);
+      margin-top:10px
+    }
+
+    /* ✅ Cards / details */
+    .card{
+      background:#fff;border:1px solid #e2e8f0;border-radius:14px;
+      box-shadow:0 10px 24px rgba(8,13,26,.05);
+      padding:12px
+    }
+    details.card{padding:0;overflow:hidden}
+    details.card summary{cursor:pointer;padding:12px;list-style:none}
+    details.card summary::-webkit-details-marker{display:none}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+    details.card summary:focus{outline:2px solid rgba(59,130,246,.35);outline-offset:2px;border-radius:10px}
+
+    /* ✅ Pre block readability on mobile */
+    pre{
+      white-space:pre-wrap;
+      word-break:break-word;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid #e2e8f0;
+      background:rgba(255,255,255,.75);
+    }
+
+    /* ✅ Related grid safety (in case global CSS doesn't cover) */
+    .cards-grid{display:grid;gap:12px}
+    .related-grid{grid-template-columns:repeat(4, minmax(0, 1fr))}
+
+    /* ✅ Breakpoints */
+    @media (max-width: 1024px){
+      .related-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      table{min-width:680px}
+      .sticky{position:static;top:auto}
+    }
+
+    @media (max-width: 640px){
+      .wrap{padding:0 14px}
+      .hero{padding:18px 14px;border-radius:16px}
+      .grid-2{grid-template-columns:1fr}
+      .actions{flex-direction:column;align-items:stretch}
+      .btn{width:100%;text-align:center}
+      .chip{font-size:.84rem}
+      table{min-width:620px}
+      .panel{padding:12px}
+    }
+
+    @media (max-width: 360px){
+      .brand-text{font-size:1.05rem}
+      .chip{white-space:normal}
+    }
+
+    /* ✅ Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .btn, .card{transition:none}
+      .btn:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Ideal Weight Calculator",
+      "url":"https://calculatorsolution.com/ideal-weight-calculator.html",
+      "description":"Estimate ideal body weight using popular formulas and a healthy BMI range."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Ideal Weight Calculator","item":"https://calculatorsolution.com/ideal-weight-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to estimate ideal weight",
+      "step":[
+        {"@type":"HowToStep","name":"Enter your height and sex","text":"Choose units (cm or ft/in) and select male/female for formula estimates."},
+        {"@type":"HowToStep","name":"Choose a method","text":"Compare BMI healthy range and formulas like Devine, Robinson, Miller, and Hamwi."},
+        {"@type":"HowToStep","name":"Review results","text":"Use results as a reference range and consider body composition and health conditions."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Is 'ideal' universal?","acceptedAnswer":{"@type":"Answer","text":"No. It depends on frame size, body composition, age, ethnicity, and medical context. Use these as reference estimates."}},
+        {"@type":"Question","name":"Can I use this for goals?","acceptedAnswer":{"@type":"Answer","text":"Use it as a rough target range. Sustainable goals should consider fitness, nutrition, and medical guidance."}},
+        {"@type":"Question","name":"What about athletes?","acceptedAnswer":{"@type":"Answer","text":"Athletes may weigh more due to muscle. BMI and 'ideal weight' formulas can underestimate healthy weight for muscular builds."}},
+        {"@type":"Question","name":"Is it valid for children?","acceptedAnswer":{"@type":"Answer","text":"Children and teens should use age- and sex-specific growth charts (percentiles), not adult formulas."}},
+        {"@type":"Question","name":"Should I consult a doctor?","acceptedAnswer":{"@type":"Answer","text":"Yes for personalized targets—especially if pregnant, elderly, or managing health conditions."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Ideal Weight Calculator</h1>
+        <p>Estimate a healthy weight range using BMI and compare popular “ideal body weight” formulas (Devine, Robinson, Miller, Hamwi).</p>
+        <div class="chips">
+          <span class="chip">📏 Height units: cm / ft-in</span>
+          <span class="chip">⚖️ Output: kg & lb</span>
+          <span class="chip">📊 BMI healthy range</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-ideal-weight">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Ideal weight inputs">
+              <div class="panel-title">
+                <h2>Your details</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="iw_unit">Height unit</label>
+                  <select id="iw_unit" class="input">
+                    <option value="cm" selected>Centimeters (cm)</option>
+                    <option value="ftin">Feet & Inches (ft/in)</option>
+                  </select>
+                  <p class="help">Choose the unit you’re comfortable with.</p>
+                </div>
+
+                <div class="field">
+                  <label for="iw_sex">Sex (for formula estimates)</label>
+                  <select id="iw_sex" class="input">
+                    <option value="male" selected>Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                  <p class="help">Formulas differ slightly by sex.</p>
+                </div>
+
+                <div class="field" id="iw_cm_wrap">
+                  <label for="iw_cm">Height</label>
+                  <input id="iw_cm" class="input" type="number" inputmode="decimal" min="50" step="0.1" placeholder="e.g., 172">
+                  <p class="help">Enter your height in centimeters.</p>
+                </div>
+
+                <div class="field" id="iw_ftin_wrap" style="display:none;">
+                  <label>Height</label>
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                    <input id="iw_ft" class="input" type="number" inputmode="numeric" min="1" step="1" placeholder="ft" style="flex:1;min-width:110px;">
+                    <input id="iw_in" class="input" type="number" inputmode="numeric" min="0" max="11" step="1" placeholder="in" style="flex:1;min-width:110px;">
+                  </div>
+                  <p class="help">Example: 5 ft 8 in.</p>
+                </div>
+
+                <div class="field">
+                  <label for="iw_weight">Current weight (optional)</label>
+                  <input id="iw_weight" class="input" type="number" inputmode="decimal" min="0" step="0.1" placeholder="e.g., 72">
+                  <p class="help">If entered, we’ll show your current BMI and where you fall.</p>
+                </div>
+
+                <div class="field">
+                  <label for="iw_wunit">Weight unit</label>
+                  <select id="iw_wunit" class="input">
+                    <option value="kg" selected>Kilograms (kg)</option>
+                    <option value="lb">Pounds (lb)</option>
+                  </select>
+                  <p class="help">Used only for current BMI calculation.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="iw_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="iw_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="iw_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note mini">
+                BMI healthy range commonly used: <strong>18.5–24.9</strong>.
+                “Ideal weight” formulas are reference estimates and may not reflect body composition.
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Ideal weight results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Healthy weight range (BMI 18.5–24.9)</p>
+                <p class="v" id="iw_out_bmi_range">—</p>
+                <p class="mini" id="iw_out_bmi_range_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Formula-based ideal weight (avg)</p>
+                <p class="v" id="iw_out_avg">—</p>
+                <p class="mini" id="iw_out_avg_note">Devine, Robinson, Miller & Hamwi average.</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Your current BMI (if weight entered)</p>
+                <p class="v" id="iw_out_bmi">—</p>
+                <div class="bar"><span id="iw_bar_bmi"></span></div>
+                <p class="mini" id="iw_out_bmi_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Quick summary</p>
+                <p class="mini" id="iw_out_summary">Enter height to see results.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Formula Comparison</h2>
+          <p class="mini" style="margin:0 0 10px;">Common “ideal body weight” formulas (adult reference). Values shown in kg and lb.</p>
+
+          <div class="table-wrap">
+            <table aria-label="Ideal weight formulas table">
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>Ideal Weight (kg)</th>
+                  <th>Ideal Weight (lb)</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody id="iw_table">
+                <tr><td colspan="4" class="mini">Click <strong>Calculate</strong> to generate results.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          An <strong>ideal weight</strong> is not a single perfect number—it's usually best treated as a
+          <strong>range</strong>. This calculator shows a <strong>healthy BMI range</strong> (18.5–24.9) for your height,
+          and also compares several common <strong>ideal body weight (IBW)</strong> formulas.
+        </p>
+        <p>
+          These formulas are often used as quick references in fitness and clinical settings. They don’t account for
+          muscle mass, body fat distribution, age, or medical conditions. If you are athletic, pregnant, elderly,
+          or managing health issues, consult a professional for a personalized target.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>BMI Range:
+Weight = BMI × (height in meters)^2
+
+Devine (IBW):
+Male:   50 kg + 2.3 kg × (inches over 60)
+Female: 45.5 kg + 2.3 kg × (inches over 60)
+
+Robinson:
+Male:   52 kg + 1.9 kg × (inches over 60)
+Female: 49 kg + 1.7 kg × (inches over 60)
+
+Miller:
+Male:   56.2 kg + 1.41 kg × (inches over 60)
+Female: 53.1 kg + 1.36 kg × (inches over 60)
+
+Hamwi:
+Male:   48.0 kg + 2.7 kg × (inches over 60)
+Female: 45.5 kg + 2.2 kg × (inches over 60)</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Is 'ideal' universal?</strong></summary><p>No — it depends on frame size, body composition, age, and health. Use results as reference estimates.</p></details>
+        <details class="card"><summary><strong>Use for goals?</strong></summary><p>Use as a rough target range. A sustainable plan should include diet, activity, and medical guidance if needed.</p></details>
+        <details class="card"><summary><strong>Athletes?</strong></summary><p>Muscular builds can be heavier while still healthy. BMI and formulas may underestimate ideal weight for athletes.</p></details>
+        <details class="card"><summary><strong>Children?</strong></summary><p>Use pediatric growth charts (percentiles) rather than adult formulas.</p></details>
+        <details class="card"><summary><strong>Medical advice?</strong></summary><p>Consult a clinician for personalized targets, especially with medical conditions or pregnancy.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="bmi-calculator.html"><h4>BMI Calculator</h4><p>Calculate BMI and weight category for adults.</p></a>
+          <a class="card" href="bmr-calculator.html"><h4>BMR Calculator</h4><p>Estimate basal metabolic rate from age, sex, height and weight.</p></a>
+          <a class="card" href="body-fat-percentage-calculator.html"><h4>Body Fat Percentage Calculator</h4><p>Estimate body fat using measurements or formulas.</p></a>
+          <a class="card" href="daily-calorie-needs-calculator.html"><h4>Daily Calorie Needs Calculator</h4><p>Estimate daily calorie needs based on activity level.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;line-height:1.6;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+      const fmt1 = (n)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:1}).format(n) : '—');
+      const fmt0 = (n)=> (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:0}).format(n) : '—');
+
+      const KG_PER_LB = 0.45359237;
+      const LB_PER_KG = 2.2046226218;
+
+      const unitEl = $('iw_unit');
+      const sexEl  = $('iw_sex');
+
+      const cmWrap = $('iw_cm_wrap');
+      const ftinWrap = $('iw_ftin_wrap');
+
+      const cmEl = $('iw_cm');
+      const ftEl = $('iw_ft');
+      const inEl = $('iw_in');
+
+      const wEl = $('iw_weight');
+      const wunitEl = $('iw_wunit');
+
+      const outBmiRange = $('iw_out_bmi_range');
+      const outBmiRangeNote = $('iw_out_bmi_range_note');
+      const outAvg = $('iw_out_avg');
+      const outBmi = $('iw_out_bmi');
+      const outBmiNote = $('iw_out_bmi_note');
+      const outSummary = $('iw_out_summary');
+      const bar = $('iw_bar_bmi');
+      const tbody = $('iw_table');
+
+      function inchesFromHeight(){
+        const unit = unitEl.value;
+        let cm = NaN;
+
+        if(unit === 'cm'){
+          cm = parseFloat(cmEl.value);
+        } else {
+          const ft = parseFloat(ftEl.value);
+          const inch = parseFloat(inEl.value);
+          if(isFinite(ft) && ft>=0 && isFinite(inch) && inch>=0){
+            cm = (ft*12 + inch) * 2.54;
+          }
+        }
+        if(!isFinite(cm) || cm<=0) return NaN;
+        const inches = cm / 2.54;
+        return inches;
+      }
+
+      function metersFromHeight(){
+        const inches = inchesFromHeight();
+        if(!isFinite(inches)) return NaN;
+        return (inches * 2.54) / 100;
+      }
+
+      function kgFromCurrentWeight(){
+        const w = parseFloat(wEl.value);
+        if(!isFinite(w) || w<=0) return NaN;
+        return (wunitEl.value === 'kg') ? w : (w * KG_PER_LB);
+      }
+
+      function clamp(x, a, b){ return Math.max(a, Math.min(b, x)); }
+
+      function bmiCategory(bmi){
+        if(!isFinite(bmi)) return {label:'—', pos:0};
+        if(bmi < 18.5) return {label:'Underweight', pos: clamp(bmi/40,0,1)};
+        if(bmi < 25) return {label:'Healthy range', pos: clamp(bmi/40,0,1)};
+        if(bmi < 30) return {label:'Overweight', pos: clamp(bmi/40,0,1)};
+        return {label:'Obesity', pos: clamp(bmi/40,0,1)};
+      }
+
+      function ibwDevine(inches, sex){
+        const over = Math.max(0, inches - 60);
+        return (sex === 'male')
+          ? 50 + 2.3 * over
+          : 45.5 + 2.3 * over;
+      }
+
+      function ibwRobinson(inches, sex){
+        const over = Math.max(0, inches - 60);
+        return (sex === 'male')
+          ? 52 + 1.9 * over
+          : 49 + 1.7 * over;
+      }
+
+      function ibwMiller(inches, sex){
+        const over = Math.max(0, inches - 60);
+        return (sex === 'male')
+          ? 56.2 + 1.41 * over
+          : 53.1 + 1.36 * over;
+      }
+
+      function ibwHamwi(inches, sex){
+        const over = Math.max(0, inches - 60);
+        return (sex === 'male')
+          ? 48.0 + 2.7 * over
+          : 45.5 + 2.2 * over;
+      }
+
+      function render(){
+        const inches = inchesFromHeight();
+        const m = metersFromHeight();
+        const sex = sexEl.value;
+
+        // UI toggle
+        const unit = unitEl.value;
+        cmWrap.style.display = (unit === 'cm') ? 'block' : 'none';
+        ftinWrap.style.display = (unit === 'ftin') ? 'block' : 'none';
+
+        if(!isFinite(inches) || !isFinite(m) || m<=0){
+          outBmiRange.textContent = '—';
+          outBmiRangeNote.textContent = 'Enter a valid height.';
+          outAvg.textContent = '—';
+          outBmi.textContent = '—';
+          outBmiNote.textContent = '—';
+          outSummary.textContent = 'Enter height to see results.';
+          bar.style.width = '0%';
+          tbody.innerHTML = '<tr><td colspan="4" class="mini">Click <strong>Calculate</strong> to generate results.</td></tr>';
+          return;
+        }
+
+        // BMI healthy range (18.5–24.9)
+        const minKg = 18.5 * (m*m);
+        const maxKg = 24.9 * (m*m);
+
+        outBmiRange.textContent = `${fmt1(minKg)} – ${fmt1(maxKg)} kg (${fmt1(minKg*LB_PER_KG)} – ${fmt1(maxKg*LB_PER_KG)} lb)`;
+        outBmiRangeNote.textContent = `Height: ${fmt1(m*100)} cm • Healthy BMI: 18.5–24.9`;
+
+        // Formula IBW
+        const d = ibwDevine(inches, sex);
+        const r = ibwRobinson(inches, sex);
+        const mi = ibwMiller(inches, sex);
+        const h = ibwHamwi(inches, sex);
+        const avg = (d + r + mi + h) / 4;
+
+        outAvg.textContent = `${fmt1(avg)} kg (${fmt1(avg*LB_PER_KG)} lb)`;
+
+        // Table
+        const rows = [
+          {name:'Devine', kg:d, note:'Common clinical reference (adult).'},
+          {name:'Robinson', kg:r, note:'Alternative IBW estimate.'},
+          {name:'Miller', kg:mi, note:'Alternative IBW estimate.'},
+          {name:'Hamwi', kg:h, note:'Older IBW estimate; still referenced.'},
+          {name:'BMI Healthy Range (18.5–24.9)', kgMin:minKg, kgMax:maxKg, note:'Range-based estimate, not a single value.'}
+        ];
+
+        tbody.innerHTML = rows.map(x=>{
+          if(x.kgMin != null){
+            return `
+              <tr>
+                <td><strong>${x.name}</strong></td>
+                <td>${fmt1(x.kgMin)} – ${fmt1(x.kgMax)}</td>
+                <td>${fmt1(x.kgMin*LB_PER_KG)} – ${fmt1(x.kgMax*LB_PER_KG)}</td>
+                <td>${x.note}</td>
+              </tr>
+            `;
+          }
+          return `
+            <tr>
+              <td><strong>${x.name}</strong></td>
+              <td>${fmt1(x.kg)}</td>
+              <td>${fmt1(x.kg*LB_PER_KG)}</td>
+              <td>${x.note}</td>
+            </tr>
+          `;
+        }).join('');
+
+        // Current BMI (optional)
+        const kg = kgFromCurrentWeight();
+        if(isFinite(kg) && kg>0){
+          const bmi = kg / (m*m);
+          outBmi.textContent = bmi.toFixed(1);
+          const cat = bmiCategory(bmi);
+          // 0–40 scale bar
+          const pct = clamp((bmi/40)*100, 0, 100);
+          bar.style.width = pct.toFixed(1) + '%';
+          bar.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+          outBmiNote.textContent = `${cat.label} • BMI scale shown up to 40 for visualization`;
+
+          // Summary
+          const within = (kg>=minKg && kg<=maxKg);
+          outSummary.textContent =
+            `Healthy BMI range: ${fmt1(minKg)}–${fmt1(maxKg)} kg. Your current weight: ${fmt1(kg)} kg (${fmt1(kg*LB_PER_KG)} lb) • BMI ${bmi.toFixed(1)} (${cat.label}) • ${within ? 'Within healthy BMI range.' : 'Outside healthy BMI range.'}`;
+        } else {
+          outBmi.textContent = '—';
+          outBmiNote.textContent = 'Enter current weight to compute BMI.';
+          bar.style.width = '0%';
+          outSummary.textContent =
+            `Healthy BMI range: ${fmt1(minKg)}–${fmt1(maxKg)} kg. Formula average IBW: ${fmt1(avg)} kg. (Enter current weight to compute BMI.)`;
+        }
+      }
+
+      $('iw_calc_btn').addEventListener('click', render);
+
+      $('iw_example_btn').addEventListener('click', ()=>{
+        unitEl.value = 'cm';
+        sexEl.value = 'male';
+        cmEl.value = '172';
+        wunitEl.value = 'kg';
+        wEl.value = '72';
+        render();
+      });
+
+      $('iw_reset_btn').addEventListener('click', ()=>{
+        unitEl.value = 'cm';
+        sexEl.value = 'male';
+        [cmEl, ftEl, inEl, wEl].forEach(el=>el.value='');
+        wunitEl.value = 'kg';
+
+        outBmiRange.textContent = '—';
+        outBmiRangeNote.textContent = '—';
+        outAvg.textContent = '—';
+        outBmi.textContent = '—';
+        outBmiNote.textContent = '—';
+        outSummary.textContent = 'Enter height to see results.';
+        bar.style.width = '0%';
+        tbody.innerHTML = '<tr><td colspan="4" class="mini">Click <strong>Calculate</strong> to generate results.</td></tr>';
+
+        cmWrap.style.display='block';
+        ftinWrap.style.display='none';
+      });
+
+      // Live updates
+      [unitEl, sexEl, cmEl, ftEl, inEl, wEl, wunitEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(cmEl.value || ftEl.value) render(); });
+        el.addEventListener('change', ()=>{ if(cmEl.value || ftEl.value) render(); });
+      });
+
+      // Ensure correct visibility on load
+      unitEl.dispatchEvent(new Event('change'));
+    })();
+  </script>
+</body>
+</html>

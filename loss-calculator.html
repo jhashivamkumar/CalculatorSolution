@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Loss Calculator (Amount & Loss %) | CalculatorSolution</title>
+  <meta name="description" content="Free Loss Calculator: enter cost price and selling price to calculate loss amount and loss percentage instantly. Includes quick example and clear explanation.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/loss-calculator.html">
+
+  <meta property="og:title" content="Loss Calculator">
+  <meta property="og:description" content="Calculate loss amount and loss percentage from cost price and selling price.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (UI/UX + responsive upgrades ONLY, NO logic changes) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    a{color:inherit}
+    :focus-visible{outline:3px solid rgba(59,130,246,.45);outline-offset:3px;border-radius:10px}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;letter-spacing:-.01em}
+    .brand-logo{border-radius:10px}
+
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em}
+    .hero p{margin:0;opacity:.95}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+    }
+
+    /* Layout */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      overflow:hidden; /* prevents inner overflow on small screens */
+    }
+    .panel-title{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      margin-bottom:10px
+    }
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(37,99,235,.10);color:#1d4ed8;
+      font-weight:900;font-size:.85rem;
+      white-space:nowrap;
+    }
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      width:100%;
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      -webkit-appearance:none;appearance:none;
+    }
+    select.input{padding-right:40px;background-image:linear-gradient(45deg,transparent 50%,#64748b 50%),linear-gradient(135deg,#64748b 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-block;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff;
+      box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px; /* better touch target */
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+
+    /* Sticky results on desktop only */
+    .sticky{position:sticky;top:82px}
+
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{
+      margin:4px 0 0;
+      font-size:1.55rem;
+      font-weight:1000;
+      letter-spacing:-.02em;
+      overflow-wrap:anywhere;
+      word-break:break-word;
+    }
+    .mini{font-size:.86rem;color:#64748b;overflow-wrap:anywhere}
+
+    .bar{
+      height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px
+    }
+    .bar > span{display:block;height:100%;width:0%}
+
+    .card{
+      background:#fff;border:1px solid #e2e8f0;border-radius:14px;
+      box-shadow:0 10px 24px rgba(8,13,26,.05);padding:12px
+    }
+    details.card{padding:0}
+    details.card summary{
+      cursor:pointer;padding:12px;
+      list-style:none;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+    }
+    details.card summary::-webkit-details-marker{display:none}
+    details.card summary:after{
+      content:"▾";
+      color:#64748b;
+      font-weight:900;
+      transition:transform .2s ease;
+      flex:0 0 auto;
+    }
+    details.card[open] summary:after{transform:rotate(180deg)}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Content typography + spacing */
+    article{padding-bottom:22px}
+    h2,h3{letter-spacing:-.01em}
+    pre{
+      white-space:pre-wrap;
+      overflow-wrap:anywhere;
+      background:rgba(255,255,255,.9);
+      border:1px solid #e2e8f0;
+      border-radius:14px;
+      padding:12px;
+      box-shadow:0 10px 24px rgba(8,13,26,.04);
+    }
+
+    /* Related grid support (in case global CSS not present) */
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:12px;
+      margin-top:10px;
+    }
+    .cards-grid .card h4{margin:0 0 6px;font-size:1rem}
+    .cards-grid .card p{margin:0;color:#475569;font-size:.92rem}
+
+    /* Footer links better wrapping */
+    .site-footer a{color:#0f172a}
+    .site-footer a:hover{text-decoration:underline}
+
+    /* Responsive breakpoints */
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static}
+      .hero{padding:22px 16px}
+      .hero h1{font-size:1.65rem}
+      .cards-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
+    }
+    @media (max-width: 640px){
+      .wrap{padding:0 14px}
+      .grid-2{grid-template-columns:1fr}
+      .actions{gap:10px}
+      .btn{flex:1 1 auto}
+      .hero{border-radius:16px}
+      .hero:before{width:200px;height:200px}
+      .metric .v{font-size:1.35rem}
+      .cards-grid{grid-template-columns:1fr}
+      details.card summary{padding:12px 12px}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .card,.btn{transition:none}
+      .card:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Loss Calculator",
+      "url":"https://calculatorsolution.com/loss-calculator.html",
+      "description":"Compute loss amount and loss percentage from cost price and selling price."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Loss Calculator","item":"https://calculatorsolution.com/loss-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate loss and loss percentage",
+      "step":[
+        {"@type":"HowToStep","name":"Enter cost price","text":"Cost price is the original purchase price."},
+        {"@type":"HowToStep","name":"Enter selling price","text":"Selling price is the amount you sold it for."},
+        {"@type":"HowToStep","name":"Calculate loss","text":"Loss = Cost price − Selling price, and Loss% = (Loss ÷ Cost price) × 100."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"When is loss percentage > 100%?","acceptedAnswer":{"@type":"Answer","text":"If cost price is very small and the difference between cost and selling price is large, the percentage can exceed 100%."}},
+        {"@type":"Question","name":"Can loss be negative?","acceptedAnswer":{"@type":"Answer","text":"Yes. A negative loss means you made a profit (selling price is higher than cost price)."}},
+        {"@type":"Question","name":"Should I include discounts and taxes?","acceptedAnswer":{"@type":"Answer","text":"Use the net selling price you actually receive. Include discounts, and include taxes only if they affect your net amount."}},
+        {"@type":"Question","name":"How should I round the results?","acceptedAnswer":{"@type":"Answer","text":"For quick estimates, rounding is fine. For accounting or reports, use the rounding rules you follow in your system."}},
+        {"@type":"Question","name":"Is this suitable for accounting?","acceptedAnswer":{"@type":"Answer","text":"This is a calculation tool. Reporting should follow your accounting standards and policies."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Loss Calculator</h1>
+        <p>Compute <strong>loss amount</strong> and <strong>loss percentage</strong> from cost price and selling price — instantly.</p>
+        <div class="chips">
+          <span class="chip">📉 Loss amount</span>
+          <span class="chip">🧮 Loss %</span>
+          <span class="chip">⚡ Instant result</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-loss-calculator">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Loss calculator inputs">
+              <div class="panel-title">
+                <h2>Enter values</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="loss_cp">Cost price (CP)</label>
+                  <input id="loss_cp" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 1000">
+                  <p class="help">Original cost / buying price.</p>
+                </div>
+
+                <div class="field">
+                  <label for="loss_sp">Selling price (SP)</label>
+                  <input id="loss_sp" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 850">
+                  <p class="help">Final selling amount received.</p>
+                </div>
+
+                <div class="field">
+                  <label for="loss_currency">Currency display</label>
+                  <select id="loss_currency" class="input">
+                    <option value="₹" selected>₹ INR</option>
+                    <option value="$">$ USD</option>
+                    <option value="€">€ EUR</option>
+                    <option value="£">£ GBP</option>
+                    <option value="">No symbol</option>
+                  </select>
+                  <p class="help">Display only (does not affect math).</p>
+                </div>
+
+                <div class="field">
+                  <label for="loss_round">Round result</label>
+                  <select id="loss_round" class="input">
+                    <option value="2" selected>2 decimals</option>
+                    <option value="0">0 decimals</option>
+                    <option value="1">1 decimal</option>
+                    <option value="3">3 decimals</option>
+                  </select>
+                  <p class="help">Choose how many decimals to show.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="loss_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="loss_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="loss_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="mini" style="margin-top:10px;">
+                Formula: <strong>Loss = CP − SP</strong> • <strong>Loss% = (Loss ÷ CP) × 100</strong>
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Loss calculator results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Loss amount</p>
+                <p class="v" id="loss_out_amount">—</p>
+                <p class="mini" id="loss_out_amount_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Loss percentage</p>
+                <p class="v" id="loss_out_percent">—</p>
+                <div class="bar"><span id="loss_bar"></span></div>
+                <p class="mini" id="loss_out_percent_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="loss_out_summary">Enter CP and SP to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          The <strong>Loss Calculator</strong> helps you quickly compute the <strong>loss amount</strong> and <strong>loss percentage</strong>
+          when the selling price is lower than the cost price. This is useful for basic business math, trading, quick inventory estimates,
+          and exam preparation.
+        </p>
+        <p class="mini">
+          Note: If selling price is higher than cost price, the result becomes a <strong>profit</strong> (loss will be negative).
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>Loss = CP − SP
+Loss% = (Loss ÷ CP) × 100</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>When is loss percentage &gt; 100%?</strong></summary><p>If cost price is very small and the loss is large, the percentage can exceed 100%.</p></details>
+        <details class="card"><summary><strong>Can loss be negative?</strong></summary><p>Yes. Negative loss means profit (SP &gt; CP).</p></details>
+        <details class="card"><summary><strong>Include discounts?</strong></summary><p>Yes—use your net selling price after discounts.</p></details>
+        <details class="card"><summary><strong>Rounding?</strong></summary><p>Round for readability, but for accounting use your standard rounding rules.</p></details>
+        <details class="card"><summary><strong>Use in accounting?</strong></summary><p>This tool helps calculation; reporting should follow your accounting standards.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="profit-calculator.html"><h4>Profit Calculator</h4><p>Compute profit amount and profit percentage.</p></a>
+          <a class="card" href="percentage-calculator.html"><h4>Percentage Calculator</h4><p>Compute percentages and percent changes.</p></a>
+          <a class="card" href="discount-calculator.html"><h4>Discount Calculator</h4><p>Compute final price after discount.</p></a>
+          <a class="card" href="gst-calculator-india.html"><h4>GST Calculator (India)</h4><p>Calculate GST amount and final price.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;line-height:1.7;overflow-wrap:anywhere;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const cpEl = $('loss_cp');
+      const spEl = $('loss_sp');
+      const curEl = $('loss_currency');
+      const roundEl = $('loss_round');
+
+      const outAmount = $('loss_out_amount');
+      const outAmountNote = $('loss_out_amount_note');
+      const outPercent = $('loss_out_percent');
+      const outPercentNote = $('loss_out_percent_note');
+      const outSummary = $('loss_out_summary');
+      const bar = $('loss_bar');
+
+      function fmt(n, dec){
+        if(!isFinite(n)) return '—';
+        return new Intl.NumberFormat(undefined, { minimumFractionDigits: dec, maximumFractionDigits: dec }).format(n);
+      }
+
+      function calc(){
+        const cp = parseFloat(cpEl.value);
+        const sp = parseFloat(spEl.value);
+        const sym = curEl.value || '';
+        const dec = parseInt(roundEl.value, 10);
+
+        if(!isFinite(cp) || cp <= 0){
+          outAmount.textContent = '—';
+          outAmountNote.textContent = 'Enter a valid cost price (CP > 0).';
+          outPercent.textContent = '—';
+          outPercentNote.textContent = '—';
+          outSummary.textContent = 'Enter CP and SP to see a clean summary.';
+          bar.style.width = '0%';
+          return;
+        }
+        if(!isFinite(sp) || sp < 0){
+          outAmount.textContent = '—';
+          outAmountNote.textContent = 'Enter a valid selling price (SP ≥ 0).';
+          outPercent.textContent = '—';
+          outPercentNote.textContent = '—';
+          outSummary.textContent = 'Enter CP and SP to see a clean summary.';
+          bar.style.width = '0%';
+          return;
+        }
+
+        const loss = cp - sp;
+        const lossPct = (loss / cp) * 100;
+
+        const signNote = loss < 0 ? 'This is profit (SP is higher than CP).' : (loss === 0 ? 'No profit, no loss.' : 'This is a loss (SP is lower than CP).');
+
+        outAmount.textContent = (sym ? (sym + ' ') : '') + fmt(loss, dec);
+        outAmountNote.textContent = signNote;
+
+        outPercent.textContent = fmt(lossPct, 2) + '%';
+
+        // Bar only for loss >= 0 (keep UI sensible)
+        const barPct = (loss >= 0) ? Math.min(100, Math.max(0, lossPct)) : 0;
+        bar.style.width = barPct.toFixed(1) + '%';
+        bar.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+
+        outPercentNote.textContent =
+          (loss >= 0)
+            ? `Loss% = (Loss ÷ CP) × 100 = (${fmt(loss, dec)} ÷ ${fmt(cp, dec)}) × 100`
+            : `Profit% = (Profit ÷ CP) × 100 = (${fmt(Math.abs(loss), dec)} ÷ ${fmt(cp, dec)}) × 100`;
+
+        outSummary.textContent =
+          `CP ${sym ? sym + ' ' : ''}${fmt(cp, dec)} • SP ${sym ? sym + ' ' : ''}${fmt(sp, dec)} • Result ${sym ? sym + ' ' : ''}${fmt(loss, dec)} (${fmt(lossPct, 2)}%).`;
+      }
+
+      $('loss_calc_btn').addEventListener('click', calc);
+
+      $('loss_example_btn').addEventListener('click', ()=>{
+        cpEl.value = '1000';
+        spEl.value = '850';
+        curEl.value = '₹';
+        roundEl.value = '2';
+        calc();
+      });
+
+      $('loss_reset_btn').addEventListener('click', ()=>{
+        [cpEl, spEl].forEach(el=>el.value='');
+        curEl.value='₹';
+        roundEl.value='2';
+        outAmount.textContent='—';
+        outAmountNote.textContent='—';
+        outPercent.textContent='—';
+        outPercentNote.textContent='—';
+        outSummary.textContent='Enter CP and SP to see a clean summary.';
+        bar.style.width='0%';
+      });
+
+      [cpEl, spEl, curEl, roundEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(cpEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(cpEl.value) calc(); });
+      });
+    })();
+  </script>
+</body>
+</html>

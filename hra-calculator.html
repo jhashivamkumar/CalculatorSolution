@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>HRA Calculator (India) – Exemption, Taxable HRA & Breakdown | CalculatorSolution</title>
+  <meta name="description" content="Free HRA Calculator (India): calculate HRA exemption and taxable HRA using salary, HRA received, rent paid and city type (metro/non-metro). Get a clear breakdown and quick summary.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/hra-calculator.html">
+
+  <meta property="og:title" content="HRA Calculator (India)">
+  <meta property="og:description" content="Calculate HRA exemption, taxable HRA and a full breakdown using metro/non-metro rules.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (RESPONSIVE + UI/UX polish, NO logic changes) -->
+  <style>
+    :root{
+      --bg1:#f8fafc;
+      --bg2:#f1f5f9;
+      --text:#0f172a;
+      --muted:#64748b;
+      --border:#e2e8f0;
+      --card:#ffffff;
+      --shadow:0 14px 40px rgba(8,13,26,.06);
+      --r12:12px;
+      --r14:14px;
+      --r16:16px;
+      --r18:18px;
+      --r20:20px;
+      --focus:0 0 0 4px rgba(59,130,246,.12);
+    }
+
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:
+        radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+        radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+        linear-gradient(135deg,var(--bg1),var(--bg2));
+      color:var(--text);
+      line-height:1.6;
+      min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    a{color:inherit}
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{
+      outline:none;
+      box-shadow:var(--focus);
+      border-radius:12px;
+    }
+
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:0 18px;
+    }
+
+    /* Header */
+    .site-header{
+      padding:14px 0;
+      border-bottom:1px solid var(--border);
+      background:rgba(255,255,255,.65);
+      backdrop-filter:blur(10px);
+      position:sticky;
+      top:0;
+      z-index:10;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+      min-height:44px; /* tap target */
+    }
+    .brand-text{
+      font-weight:900;
+      color:#2563eb;
+      font-size:1.05rem;
+      letter-spacing:-.01em;
+    }
+    .brand-logo{border-radius:10px}
+
+    /* Hero */
+    .hero{
+      margin:18px 0 14px 0;
+      border-radius:18px;
+      padding:26px 18px;
+      color:#fff;
+      background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero:before{
+      content:"";
+      position:absolute;
+      inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+    }
+    .hero h1{
+      margin:0 0 6px 0;
+      font-size:clamp(1.45rem, 2.2vw + 1rem, 1.95rem);
+      letter-spacing:-.02em;
+      line-height:1.15;
+    }
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;
+      font-size:.88rem;
+      line-height:1.2;
+      min-height:34px;
+    }
+
+    /* Main calculator layout */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px;
+    }
+
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--border);
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      padding:14px;
+    }
+    .panel-title{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .panel-title h2{
+      margin:0;
+      font-size:1.05rem;
+      line-height:1.25;
+    }
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(37,99,235,.10);
+      color:#1d4ed8;
+      font-weight:900;
+      font-size:.85rem;
+      white-space:nowrap;
+    }
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{
+      font-weight:900;
+      font-size:.92rem;
+      line-height:1.25;
+    }
+    .input{
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      font-size:1rem;
+      background:#fff;
+      outline:none;
+      min-height:44px; /* tap target */
+      width:100%;
+      max-width:100%;
+    }
+    select.input{appearance:none}
+    .input:focus{border-color:#93c5fd;box-shadow:var(--focus)}
+    .help{margin:0;font-size:.86rem;color:var(--muted)}
+
+    /* Buttons */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:900;
+      border:0;
+      cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff;
+      box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px; /* tap target */
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{
+      background:#fff;
+      color:var(--text);
+      border:1px solid var(--border);
+      box-shadow:none;
+    }
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+
+    /* Sticky results (desktop/tablet) */
+    .sticky{position:sticky;top:82px}
+
+    /* Metrics */
+    .metric{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{
+      margin:4px 0 0;
+      font-size:clamp(1.25rem, 1.2vw + 1rem, 1.65rem);
+      font-weight:1000;
+      letter-spacing:-.02em;
+      line-height:1.15;
+      word-break:break-word;
+    }
+    .mini{font-size:.86rem;color:var(--muted)}
+    .note{
+      border:1px dashed #cbd5e1;
+      border-radius:14px;
+      padding:12px;
+      background:rgba(255,255,255,.7);
+      margin-top:10px;
+    }
+
+    /* Progress bar */
+    .bar{
+      height:10px;
+      border-radius:999px;
+      background:var(--border);
+      overflow:hidden;
+      margin-top:10px;
+    }
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* Table (mobile-friendly scroll) */
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05);
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:860px; /* keeps columns readable; scroll on small screens */
+    }
+    th,td{
+      padding:10px 12px;
+      border-bottom:1px solid var(--border);
+      text-align:left;
+      font-size:.95rem;
+      vertical-align:top;
+    }
+    th{background:#f8fafc;font-weight:1000}
+    tr:last-child td{border-bottom:0}
+
+    /* Content sections */
+    article > section{scroll-margin-top:92px}
+    h2{line-height:1.2}
+    h3{line-height:1.2}
+    ul{padding-left:18px}
+    pre{
+      background:rgba(255,255,255,.75);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      white-space:pre-wrap;      /* ✅ wraps nicely on mobile */
+      word-break:break-word;     /* ✅ no overflow */
+      font-size:.95rem;
+      line-height:1.5;
+      margin:10px 0 0;
+    }
+
+    /* FAQ cards */
+    .card{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:14px;
+      box-shadow:0 10px 24px rgba(8,13,26,.05);
+      padding:12px;
+    }
+    details.card{padding:0;overflow:hidden}
+    details.card summary{
+      cursor:pointer;
+      padding:12px;
+      list-style:none;
+      min-height:44px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    details.card summary::-webkit-details-marker{display:none}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Related calculators grid (your HTML already has these classes; define them here for perfect responsiveness) */
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:12px;
+      margin-top:10px;
+    }
+    .cards-grid .card{
+      display:block;
+      text-decoration:none;
+      padding:14px;
+      transition:transform .12s, box-shadow .12s;
+    }
+    .cards-grid .card:hover{transform:translateY(-3px)}
+    .cards-grid h4{margin:0 0 6px;font-size:1rem;line-height:1.25}
+    .cards-grid p{margin:0;color:#475569;font-size:.92rem;line-height:1.4}
+
+    /* Footer */
+    .site-footer a{color:inherit}
+    .site-footer p{margin:0}
+    .site-footer .wrap{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .site-footer p a{
+      display:inline-block;
+      padding:6px 0;
+      min-height:24px;
+    }
+
+    /* ✅ Responsive breakpoints */
+    @media (max-width: 1100px){
+      .wrap{padding:0 16px}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static;top:auto}
+      table{min-width:720px}
+      .hero{padding:22px 16px}
+      .panel-title{align-items:center}
+      .cards-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
+    }
+
+    @media (max-width: 720px){
+      .grid-2{grid-template-columns:1fr;gap:10px}
+      .actions{gap:8px}
+      .btn{flex:1 1 140px}
+      table{min-width:660px}
+      .hero p{max-width:unset}
+    }
+
+    @media (max-width: 520px){
+      .wrap{padding:0 14px}
+      .hero{border-radius:16px}
+      .panel{border-radius:14px}
+      .metric{border-radius:14px}
+      .table-wrap{border-radius:14px}
+      .cards-grid{grid-template-columns:1fr}
+      th,td{padding:10px 10px}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .btn, .cards-grid .card{transition:none}
+      .btn:hover{transform:none}
+      .cards-grid .card:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"HRA Calculator",
+      "url":"https://calculatorsolution.com/hra-calculator.html",
+      "description":"Calculate HRA exemption and taxable HRA in India using salary, rent paid, HRA received and metro/non-metro rule."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"HRA Calculator","item":"https://calculatorsolution.com/hra-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate HRA exemption",
+      "step":[
+        {"@type":"HowToStep","name":"Enter salary components","text":"Enter basic salary and DA (if part of retirement benefits) and HRA received."},
+        {"@type":"HowToStep","name":"Enter rent and city type","text":"Enter actual rent paid and choose metro/non-metro to apply 50%/40% rule."},
+        {"@type":"HowToStep","name":"Compare the three limits","text":"Exemption is the minimum of: (1) actual HRA, (2) rent minus 10% of salary, (3) 50%/40% of salary."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Which cities are treated as metro?","acceptedAnswer":{"@type":"Answer","text":"Metro category uses the 50% of salary limit. If you’re unsure, select non-metro or confirm with your HR/tax advisor."}},
+        {"@type":"Question","name":"Do I need rent receipts?","acceptedAnswer":{"@type":"Answer","text":"Yes, keep rent receipts and any required landlord details as proof."}},
+        {"@type":"Question","name":"Can I claim HRA if I live in my own house?","acceptedAnswer":{"@type":"Answer","text":"No. HRA exemption applies only when you pay rent for accommodation."}},
+        {"@type":"Question","name":"What if I stayed only part of the year?","acceptedAnswer":{"@type":"Answer","text":"Use the months option to prorate amounts for the period you paid rent."}},
+        {"@type":"Question","name":"Is HRA separate from other allowances?","acceptedAnswer":{"@type":"Answer","text":"Yes. HRA exemption is calculated separately from other allowances."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>HRA Calculator (India)</h1>
+        <p>Calculate your HRA exemption and taxable HRA with a clean breakdown — metro vs non-metro included.</p>
+        <div class="chips">
+          <span class="chip">🏙️ Metro / Non-metro</span>
+          <span class="chip">🧾 Exemption breakdown</span>
+          <span class="chip">✅ Taxable HRA</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-hra">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="HRA inputs">
+              <div class="panel-title">
+                <h2>Salary & rent details</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="hra_basic">Basic salary (per month)</label>
+                  <input id="hra_basic" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="e.g., 50000">
+                  <p class="help">Monthly basic salary (not CTC).</p>
+                </div>
+
+                <div class="field">
+                  <label for="hra_da">DA (for retirement benefits) (per month)</label>
+                  <input id="hra_da" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="e.g., 0">
+                  <p class="help">Only if DA is considered for retirement benefits (else keep 0).</p>
+                </div>
+
+                <div class="field">
+                  <label for="hra_received">HRA received (per month)</label>
+                  <input id="hra_received" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="e.g., 20000">
+                  <p class="help">Monthly HRA component in salary slip.</p>
+                </div>
+
+                <div class="field">
+                  <label for="hra_rent">Rent paid (per month)</label>
+                  <input id="hra_rent" class="input" type="number" inputmode="numeric" min="0" step="100" placeholder="e.g., 18000">
+                  <p class="help">Actual monthly rent paid (supported by receipts).</p>
+                </div>
+
+                <div class="field">
+                  <label for="hra_city">City type</label>
+                  <select id="hra_city" class="input">
+                    <option value="metro" selected>Metro (50% of salary limit)</option>
+                    <option value="nonmetro">Non-metro (40% of salary limit)</option>
+                  </select>
+                  <p class="help">Metro uses 50% cap; non-metro uses 40% cap.</p>
+                </div>
+
+                <div class="field">
+                  <label for="hra_months">Months eligible</label>
+                  <select id="hra_months" class="input">
+                    <option value="12" selected>12 months (full year)</option>
+                    <option value="11">11 months</option>
+                    <option value="10">10 months</option>
+                    <option value="9">9 months</option>
+                    <option value="8">8 months</option>
+                    <option value="7">7 months</option>
+                    <option value="6">6 months</option>
+                    <option value="5">5 months</option>
+                    <option value="4">4 months</option>
+                    <option value="3">3 months</option>
+                    <option value="2">2 months</option>
+                    <option value="1">1 month</option>
+                  </select>
+                  <p class="help">Use this if you stayed/rented for part of the year.</p>
+                </div>
+
+                <div class="field">
+                  <label for="hra_round">Round values</label>
+                  <select id="hra_round" class="input">
+                    <option value="0" selected>No rounding</option>
+                    <option value="10">Nearest 10</option>
+                    <option value="100">Nearest 100</option>
+                  </select>
+                  <p class="help">Optional rounding for neat outputs.</p>
+                </div>
+
+                <div class="field">
+                  <label for="hra_note">Notes (optional)</label>
+                  <input id="hra_note" class="input" type="text" placeholder="e.g., New regime may not allow HRA exemption">
+                  <p class="help">This field is for your reference only (not used in calc).</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="hra_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="hra_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="hra_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note mini">
+                Exemption = <strong>min</strong>(
+                Actual HRA received,
+                Rent paid − 10% of Salary,
+                50% (metro) / 40% (non-metro) of Salary
+                ). <br>
+                Salary here = Basic + DA (if applicable for retirement benefits).
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="HRA results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">HRA Exemption (annual)</p>
+                <p class="v" id="hra_out_exempt">—</p>
+                <p class="mini" id="hra_out_exempt_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Taxable HRA (annual)</p>
+                <p class="v" id="hra_out_taxable">—</p>
+                <p class="mini" id="hra_out_taxable_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Limiting factor</p>
+                <p class="v" id="hra_out_limit">—</p>
+                <div class="bar"><span id="hra_bar"></span></div>
+                <p class="mini" id="hra_out_limit_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Summary</p>
+                <p class="mini" id="hra_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Breakdown (Annual)</h2>
+          <p class="mini" style="margin:0 0 10px;">These are the 3 limits. Your HRA exemption is the minimum of these.</p>
+
+          <div class="table-wrap">
+            <table aria-label="HRA exemption breakdown table">
+              <thead>
+                <tr>
+                  <th>Rule / Limit</th>
+                  <th>Value</th>
+                  <th>How it’s computed</th>
+                </tr>
+              </thead>
+              <tbody id="hra_table">
+                <tr><td colspan="3" class="mini">Click <strong>Calculate</strong> to generate breakdown.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          The <strong>HRA (House Rent Allowance) exemption</strong> is available to salaried individuals who receive HRA and
+          pay rent for accommodation. The exemption is calculated as the <strong>minimum</strong> of three values:
+        </p>
+        <ul>
+          <li>Actual HRA received</li>
+          <li>Rent paid minus 10% of salary</li>
+          <li>50% of salary (metro) or 40% of salary (non-metro)</li>
+        </ul>
+        <p class="mini">
+          Tip: If rent is low relative to salary, the “Rent − 10% of salary” limit can become zero and reduce exemption.
+          Keep rent receipts and required landlord details for compliance.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>Exempt = min(
+  Actual HRA received,
+  Rent paid − 10% of Salary,
+  50% of Salary (Metro) OR 40% of Salary (Non-metro)
+)
+Taxable HRA = Actual HRA received − Exempt
+Salary = Basic + DA (only if DA is considered for retirement benefits)</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Which cities?</strong></summary><p>Metro category uses 50% of salary as the cap. Choose non-metro if you’re unsure.</p></details>
+        <details class="card"><summary><strong>Rent receipts?</strong></summary><p>Maintain rent receipts and any required landlord details as proof.</p></details>
+        <details class="card"><summary><strong>If owner?</strong></summary><p>HRA exemption is not applicable if you live in your own house and don’t pay rent.</p></details>
+        <details class="card"><summary><strong>Partial months?</strong></summary><p>Select eligible months to prorate annual figures.</p></details>
+        <details class="card"><summary><strong>Include other allowances?</strong></summary><p>HRA exemption is calculated separately from other allowances.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="income-tax-calculator-india.html"><h4>Income Tax Calculator (India)</h4><p>Estimate tax based on slabs and deductions.</p></a>
+          <a class="card" href="salary-calculator.html"><h4>Salary Calculator</h4><p>Estimate take-home salary and components.</p></a>
+          <a class="card" href="gst-calculator-india.html"><h4>GST Calculator (India)</h4><p>Calculate GST amount and final price.</p></a>
+          <a class="card" href="percentage-calculator.html"><h4>Percentage Calculator</h4><p>Compute percentages and percent changes.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const basicEl = $('hra_basic');
+      const daEl = $('hra_da');
+      const hraRecEl = $('hra_received');
+      const rentEl = $('hra_rent');
+      const cityEl = $('hra_city');
+      const monthsEl = $('hra_months');
+      const roundEl = $('hra_round');
+
+      const outEx = $('hra_out_exempt');
+      const outExNote = $('hra_out_exempt_note');
+      const outTx = $('hra_out_taxable');
+      const outTxNote = $('hra_out_taxable_note');
+      const outLimit = $('hra_out_limit');
+      const outLimitNote = $('hra_out_limit_note');
+      const outSummary = $('hra_out_summary');
+      const bar = $('hra_bar');
+      const tbody = $('hra_table');
+
+      const money0 = (n)=> '₹ ' + (isFinite(n) ? new Intl.NumberFormat(undefined,{maximumFractionDigits:0}).format(n) : '—');
+
+      function roundTo(x, step){
+        step = parseInt(step,10) || 0;
+        if(!step) return x;
+        return Math.round(x/step)*step;
+      }
+
+      function calc(){
+        const basic = parseFloat(basicEl.value);
+        const da = parseFloat(daEl.value) || 0;
+        const hraMonthly = parseFloat(hraRecEl.value);
+        const rentMonthly = parseFloat(rentEl.value);
+        const months = parseInt(monthsEl.value, 10) || 12;
+        const isMetro = cityEl.value === 'metro';
+        const capPct = isMetro ? 0.50 : 0.40;
+        const roundStep = parseInt(roundEl.value, 10) || 0;
+
+        if(!isFinite(basic) || basic<=0){
+          outEx.textContent='—'; outExNote.textContent='Enter valid basic salary.';
+          tbody.innerHTML = '<tr><td colspan="3" class="mini">Enter valid inputs and click <strong>Calculate</strong>.</td></tr>';
+          return;
+        }
+        if(da < 0){
+          outEx.textContent='—'; outExNote.textContent='DA cannot be negative.';
+          tbody.innerHTML = '<tr><td colspan="3" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+        if(!isFinite(hraMonthly) || hraMonthly<0){
+          outEx.textContent='—'; outExNote.textContent='Enter valid HRA received.';
+          tbody.innerHTML = '<tr><td colspan="3" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+        if(!isFinite(rentMonthly) || rentMonthly<0){
+          outEx.textContent='—'; outExNote.textContent='Enter valid rent paid.';
+          tbody.innerHTML = '<tr><td colspan="3" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+        if(months < 1 || months > 12){
+          outEx.textContent='—'; outExNote.textContent='Months must be between 1 and 12.';
+          tbody.innerHTML = '<tr><td colspan="3" class="mini">Fix inputs and calculate again.</td></tr>';
+          return;
+        }
+
+        // Salary for HRA formula (Basic + DA for retirement benefits)
+        const salaryMonthly = basic + da;
+
+        const salaryAnnual = salaryMonthly * months;
+        const hraAnnual = hraMonthly * months;
+        const rentAnnual = rentMonthly * months;
+
+        const limit1 = hraAnnual; // actual HRA
+        const limit2 = Math.max(0, rentAnnual - 0.10 * salaryAnnual); // rent - 10% salary
+        const limit3 = capPct * salaryAnnual; // 50%/40% of salary
+
+        // Exemption is min of the 3
+        let exempt = Math.min(limit1, limit2, limit3);
+        exempt = roundTo(exempt, roundStep);
+
+        // Taxable HRA = actual HRA - exempt
+        let taxable = Math.max(0, hraAnnual - exempt);
+        taxable = roundTo(taxable, roundStep);
+
+        // Determine which limit is binding (smallest)
+        const raw = [
+          {key:'Actual HRA received', val: limit1, how:'HRA received per month × months'},
+          {key:'Rent − 10% of Salary', val: limit2, how:'(Rent paid × months) − 10% × (Salary × months)'},
+          {key:`${isMetro ? '50%' : '40%'} of Salary`, val: limit3, how:`${isMetro ? '50%' : '40%'} × (Salary × months)`}
+        ].sort((a,b)=>a.val-b.val);
+
+        const limiting = raw[0];
+
+        // Outputs
+        outEx.textContent = money0(exempt);
+        outExNote.textContent = `${months} month(s) • City: ${isMetro ? 'Metro (50%)' : 'Non-metro (40%)'} • Salary used: Basic + DA`;
+
+        outTx.textContent = money0(taxable);
+        outTxNote.textContent = `Taxable HRA = Actual HRA (${money0(hraAnnual)}) − Exempt (${money0(exempt)}).`;
+
+        outLimit.textContent = limiting.key;
+        const exPct = hraAnnual>0 ? (exempt/hraAnnual)*100 : 0;
+        bar.style.width = Math.max(0, Math.min(100, exPct)).toFixed(1) + '%';
+        bar.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+        outLimitNote.textContent = `Exemption is limited by: ${limiting.key}. Exempt ≈ ${exPct.toFixed(1)}% of actual HRA.`;
+
+        outSummary.textContent =
+          `Basic ₹${new Intl.NumberFormat().format(basic)} • DA ₹${new Intl.NumberFormat().format(da)} • Rent ₹${new Intl.NumberFormat().format(rentMonthly)} • HRA ₹${new Intl.NumberFormat().format(hraMonthly)} • Exempt ₹${new Intl.NumberFormat().format(exempt)} • Taxable ₹${new Intl.NumberFormat().format(taxable)} (annual for ${months} month(s)).`;
+
+        // Breakdown table
+        const rows = [
+          `<tr>
+            <td><strong>1) Actual HRA received</strong></td>
+            <td>${money0(roundTo(limit1, roundStep))}</td>
+            <td class="mini">${raw.find(x=>x.key==='Actual HRA received').how}</td>
+          </tr>`,
+          `<tr>
+            <td><strong>2) Rent paid − 10% of salary</strong></td>
+            <td>${money0(roundTo(limit2, roundStep))}</td>
+            <td class="mini">Rent (${money0(rentAnnual)}) − 10% of salary (${money0(0.10 * salaryAnnual)})</td>
+          </tr>`,
+          `<tr>
+            <td><strong>3) ${isMetro ? '50%' : '40%'} of salary</strong></td>
+            <td>${money0(roundTo(limit3, roundStep))}</td>
+            <td class="mini">${isMetro ? '50%' : '40%'} × Salary (${money0(salaryAnnual)})</td>
+          </tr>`,
+          `<tr>
+            <td><strong>HRA Exemption (minimum of above)</strong></td>
+            <td><strong>${money0(exempt)}</strong></td>
+            <td class="mini">Exemption is the minimum of (1), (2) and (3).</td>
+          </tr>`,
+          `<tr>
+            <td><strong>Taxable HRA</strong></td>
+            <td><strong>${money0(taxable)}</strong></td>
+            <td class="mini">Actual HRA − Exemption</td>
+          </tr>`
+        ];
+
+        tbody.innerHTML = rows.join('');
+      }
+
+      $('hra_calc_btn').addEventListener('click', calc);
+
+      $('hra_example_btn').addEventListener('click', ()=>{
+        basicEl.value = '50000';
+        daEl.value = '0';
+        hraRecEl.value = '20000';
+        rentEl.value = '18000';
+        cityEl.value = 'metro';
+        monthsEl.value = '12';
+        roundEl.value = '0';
+        calc();
+      });
+
+      $('hra_reset_btn').addEventListener('click', ()=>{
+        [basicEl, daEl, hraRecEl, rentEl].forEach(el=>el.value='');
+        cityEl.value='metro';
+        monthsEl.value='12';
+        roundEl.value='0';
+        outEx.textContent='—';
+        outExNote.textContent='—';
+        outTx.textContent='—';
+        outTxNote.textContent='—';
+        outLimit.textContent='—';
+        outLimitNote.textContent='—';
+        outSummary.textContent='Enter details to see a clean summary.';
+        bar.style.width='0%';
+        tbody.innerHTML = '<tr><td colspan="3" class="mini">Click <strong>Calculate</strong> to generate breakdown.</td></tr>';
+      });
+
+      [basicEl, daEl, hraRecEl, rentEl, cityEl, monthsEl, roundEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(basicEl.value) calc(); });
+        el.addEventListener('change', ()=>{ if(basicEl.value) calc(); });
+      });
+    })();
+  </script>
+</body>
+</html>

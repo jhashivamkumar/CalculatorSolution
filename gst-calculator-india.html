@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>GST Calculator (India) | GST Inclusive/Exclusive Price + CGST/SGST/IGST | CalculatorSolution</title>
+  <meta name="description" content="Free GST Calculator (India): calculate GST amount, GST-inclusive and GST-exclusive price. Split tax into CGST/SGST (intra-state) or IGST (inter-state). Supports 0%, 5%, 12%, 18%, 28% slabs.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/gst-calculator-india.html">
+
+  <meta property="og:title" content="GST Calculator (India)">
+  <meta property="og:description" content="Compute GST amount, inclusive/exclusive prices and CGST/SGST or IGST split instantly.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- ✅ Responsive + UI/UX polish (NO JS logic changed) -->
+  <style>
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:#0f172a; line-height:1.6; min-height:100vh;
+      -webkit-text-size-adjust:100%;
+      text-rendering:optimizeLegibility;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto;display:block}
+    a{color:inherit}
+    :focus-visible{outline:3px solid rgba(59,130,246,.55);outline-offset:2px;border-radius:10px}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+    /* Header */
+    .site-header{
+      padding:14px 0;border-bottom:1px solid #e2e8f0;
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-height:44px}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;letter-spacing:-.01em}
+    .brand-logo{border-radius:10px}
+
+    /* Hero */
+    .hero{
+      margin:18px 0 14px 0;border-radius:18px;padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em;line-height:1.2}
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      min-height:34px;
+    }
+
+    /* Layout */
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid #e2e8f0;border-radius:16px;
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+    }
+    .panel-title{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      margin-bottom:10px;flex-wrap:wrap
+    }
+    .panel-title h2{margin:0;font-size:1.05rem;line-height:1.25}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(37,99,235,.10);color:#1d4ed8;
+      font-weight:900;font-size:.85rem;
+      white-space:nowrap;
+      min-height:32px;
+    }
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;
+      font-size:1rem;background:#fff;outline:none;
+      min-height:44px;
+      width:100%;
+    }
+    select.input{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#64748b 50%),linear-gradient(135deg,#64748b 50%,transparent 50%);background-position:calc(100% - 18px) calc(1em + 2px),calc(100% - 13px) calc(1em + 2px);background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:36px}
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:#64748b}
+
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:12px;
+      font-weight:900;border:0;cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff; box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      min-height:44px;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid #e2e8f0;box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+
+    /* Sticky results on desktop only (kept) */
+    .sticky{position:sticky;top:82px}
+
+    .metric{
+      border:1px solid #e2e8f0;border-radius:16px;padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{
+      background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92));
+    }
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{margin:4px 0 0;font-size:1.55rem;font-weight:1000;letter-spacing:-.02em;line-height:1.15;word-break:break-word}
+    .mini{font-size:.86rem;color:#64748b}
+
+    .bar{height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px}
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* Table responsiveness */
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid #e2e8f0;border-radius:16px;background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{width:100%;border-collapse:collapse;min-width:860px}
+    th,td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:.95rem;white-space:nowrap}
+    th{background:#f8fafc;font-weight:1000}
+    tr:last-child td{border-bottom:0}
+
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(2,6,23,.06);
+      border:1px solid rgba(2,6,23,.08);
+      font-weight:900;font-size:.85rem;
+      min-height:32px;
+    }
+
+    /* FAQ + related cards */
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 10px 24px rgba(8,13,26,.05);padding:12px}
+    details.card{padding:0;overflow:hidden}
+    details.card summary{cursor:pointer;padding:12px;list-style:none}
+    details.card summary::-webkit-details-marker{display:none}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+    details.card[open] summary{border-bottom:1px solid #e2e8f0;background:#f8fafc}
+
+    /* Content readability */
+    article{padding-bottom:10px}
+    h2,h3{line-height:1.25}
+    pre{
+      white-space:pre-wrap;
+      word-break:break-word;
+      background:#0b1220;
+      color:#e2e8f0;
+      padding:12px;
+      border-radius:14px;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+    ul{padding-left:18px}
+
+    /* ✅ Related grid support even if global CSS missing */
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+      margin-top:10px;
+    }
+    .cards-grid .card h4{margin:0 0 6px;font-size:1rem;line-height:1.25}
+    .cards-grid .card p{margin:0;color:#475569;font-size:.92rem}
+
+    /* Breakpoints */
+    @media (max-width: 1024px){
+      .wrap{padding:0 16px}
+      .hero{padding:22px 16px}
+      .hero h1{font-size:1.7rem}
+      .cards-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      table{min-width:680px}
+      .sticky{position:static;top:auto}
+    }
+
+    @media (max-width: 640px){
+      .hero{border-radius:16px;padding:18px 14px}
+      .hero h1{font-size:1.45rem}
+      .grid-2{grid-template-columns:1fr}
+      .actions{gap:8px}
+      .btn{width:100%}
+      .cards-grid{grid-template-columns:1fr}
+      table{min-width:560px}
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion:reduce){
+      .btn{transition:none}
+      .btn:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"GST Calculator (India)",
+      "url":"https://calculatorsolution.com/gst-calculator-india.html",
+      "description":"Calculate GST inclusive/exclusive price and split GST into CGST/SGST or IGST."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"GST Calculator (India)","item":"https://calculatorsolution.com/gst-calculator-india.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate GST in India",
+      "step":[
+        {"@type":"HowToStep","name":"Enter amount and GST rate","text":"Enter the base amount (or final amount) and choose GST slab like 5%, 12%, 18%, 28%."},
+        {"@type":"HowToStep","name":"Choose price type","text":"Select whether your amount is GST-exclusive (base) or GST-inclusive (final)."},
+        {"@type":"HowToStep","name":"Choose intra/inter-state","text":"Select intra-state to split into CGST+SGST or inter-state for IGST."},
+        {"@type":"HowToStep","name":"View GST breakup","text":"See GST amount, final price and tax split instantly."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"How many GST slabs are common in India?","acceptedAnswer":{"@type":"Answer","text":"Common GST slabs are 0%, 5%, 12%, 18% and 28%."}},
+        {"@type":"Question","name":"Is GST included in MRP?","acceptedAnswer":{"@type":"Answer","text":"Often yes, but it depends on the product and seller. Check the invoice/label to confirm."}},
+        {"@type":"Question","name":"What is the difference between CGST/SGST and IGST?","acceptedAnswer":{"@type":"Answer","text":"For intra-state sales, GST is split into CGST and SGST. For inter-state sales, IGST applies."}},
+        {"@type":"Question","name":"How to compute exclusive price from inclusive price?","acceptedAnswer":{"@type":"Answer","text":"Exclusive = Inclusive / (1 + rate/100). GST = Inclusive - Exclusive."}},
+        {"@type":"Question","name":"How should I round GST?","acceptedAnswer":{"@type":"Answer","text":"Follow the rounding used on your invoice. Many invoices round to 2 decimals."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>GST Calculator (India)</h1>
+        <p>Calculate GST amount, inclusive/exclusive price, and CGST/SGST or IGST split — instantly.</p>
+        <div class="chips">
+          <span class="chip">🇮🇳 0% / 5% / 12% / 18% / 28%</span>
+          <span class="chip">🧾 GST Inclusive ↔ Exclusive</span>
+          <span class="chip">🏛️ CGST/SGST or IGST split</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-gst-india">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="GST inputs">
+              <div class="panel-title">
+                <h2>GST details</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="gst_amount">Amount</label>
+                  <input id="gst_amount" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 1000">
+                  <p class="help">Enter base or final amount (choose below).</p>
+                </div>
+
+                <div class="field">
+                  <label for="gst_rate">GST rate</label>
+                  <select id="gst_rate" class="input">
+                    <option value="0">0%</option>
+                    <option value="5">5%</option>
+                    <option value="12">12%</option>
+                    <option value="18" selected>18%</option>
+                    <option value="28">28%</option>
+                    <option value="custom">Custom…</option>
+                  </select>
+                  <p class="help">Choose a slab or enter a custom rate.</p>
+                </div>
+
+                <div class="field" id="gst_custom_rate_wrap" style="display:none">
+                  <label for="gst_custom_rate">Custom GST rate (%)</label>
+                  <input id="gst_custom_rate" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 7.5">
+                  <p class="help">Used when “Custom…” is selected.</p>
+                </div>
+
+                <div class="field">
+                  <label for="gst_price_type">Your amount is</label>
+                  <select id="gst_price_type" class="input">
+                    <option value="exclusive" selected>GST Exclusive (Base price)</option>
+                    <option value="inclusive">GST Inclusive (Final price)</option>
+                  </select>
+                  <p class="help">Exclusive: add GST. Inclusive: remove GST.</p>
+                </div>
+
+                <div class="field">
+                  <label for="gst_supply">Supply type</label>
+                  <select id="gst_supply" class="input">
+                    <option value="intra" selected>Intra-state (CGST + SGST)</option>
+                    <option value="inter">Inter-state (IGST)</option>
+                  </select>
+                  <p class="help">Used only for GST split display.</p>
+                </div>
+
+                <div class="field">
+                  <label for="gst_round">Rounding</label>
+                  <select id="gst_round" class="input">
+                    <option value="2" selected>2 decimals</option>
+                    <option value="0">0 decimals</option>
+                    <option value="1">1 decimal</option>
+                    <option value="3">3 decimals</option>
+                  </select>
+                  <p class="help">Invoice usually rounds to 2 decimals.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="gst_calc_btn" type="button">Calculate GST</button>
+                <button class="btn btn-dark" id="gst_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="gst_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="mini" style="margin-top:10px;">
+                <span class="badge">Formula</span>
+                <span class="mini">
+                  GST (exclusive) = Amount × rate/100 •
+                  Inclusive = Amount × (1 + rate/100) •
+                  Exclusive = Inclusive / (1 + rate/100)
+                </span>
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="GST results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">GST amount</p>
+                <p class="v" id="gst_out_tax">—</p>
+                <p class="mini" id="gst_out_tax_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Price (exclusive)</p>
+                <p class="v" id="gst_out_excl">—</p>
+                <p class="mini">Base price before GST.</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Price (inclusive)</p>
+                <p class="v" id="gst_out_incl">—</p>
+                <div class="bar"><span id="gst_bar_tax"></span></div>
+                <p class="mini" id="gst_out_tax_share">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">GST split</p>
+                <p class="mini" id="gst_out_split">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Summary</p>
+                <p class="mini" id="gst_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">GST Breakdown</h2>
+          <p class="mini" style="margin:0 0 10px;">A clean breakdown of base price, tax and final price (copy-friendly).</p>
+
+          <div class="table-wrap">
+            <table aria-label="GST breakdown table">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody id="gst_table">
+                <tr><td colspan="2" class="mini">Click <strong>Calculate GST</strong> to generate results.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          This <strong>GST Calculator (India)</strong> helps you compute tax and final price for common GST slabs (0%, 5%, 12%, 18%, 28%).
+          You can calculate both:
+        </p>
+        <ul>
+          <li><strong>GST Exclusive → Inclusive</strong> (add GST to base price)</li>
+          <li><strong>GST Inclusive → Exclusive</strong> (remove GST from final price)</li>
+        </ul>
+        <p>
+          It also shows the tax split:
+          <strong>CGST + SGST</strong> for intra-state supply, or <strong>IGST</strong> for inter-state supply (for display purposes).
+        </p>
+        <p class="mini">
+          Tip: Always match your invoice rounding (usually 2 decimals) for the closest results.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>GST (exclusive) = Base × rate/100
+Inclusive price = Base × (1 + rate/100)
+Exclusive price = Inclusive / (1 + rate/100)</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>How many GST slabs?</strong></summary><p>Common slabs: 0%, 5%, 12%, 18%, 28%.</p></details>
+        <details class="card"><summary><strong>Is GST included in MRP?</strong></summary><p>Often yes, but always verify on the invoice/label.</p></details>
+        <details class="card"><summary><strong>Reverse charge?</strong></summary><p>Reverse charge applies in specific cases and depends on the transaction type.</p></details>
+        <details class="card"><summary><strong>How to compute exclusive price?</strong></summary><p>Exclusive = Inclusive / (1 + rate/100). GST = Inclusive − Exclusive.</p></details>
+        <details class="card"><summary><strong>Rounding rules?</strong></summary><p>Follow invoice rounding used by the seller; commonly 2 decimals.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="percentage-calculator.html"><h4>Percentage Calculator</h4><p>Compute percentages and simple percent changes.</p></a>
+          <a class="card" href="discount-calculator.html"><h4>Discount Calculator</h4><p>Compute price after discount and amount saved.</p></a>
+          <a class="card" href="loan-emi-calculator.html"><h4>Loan EMI Calculator</h4><p>Calculate EMI, total payment and interest.</p></a>
+          <a class="card" href="income-tax-calculator-india.html"><h4>Income Tax Calculator (India)</h4><p>Estimate income tax under common slabs.</p></a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const amountEl = $('gst_amount');
+      const rateEl = $('gst_rate');
+      const customWrap = $('gst_custom_rate_wrap');
+      const customRateEl = $('gst_custom_rate');
+      const priceTypeEl = $('gst_price_type');
+      const supplyEl = $('gst_supply');
+      const roundEl = $('gst_round');
+
+      const outTax = $('gst_out_tax');
+      const outTaxNote = $('gst_out_tax_note');
+      const outExcl = $('gst_out_excl');
+      const outIncl = $('gst_out_incl');
+      const outTaxShare = $('gst_out_tax_share');
+      const outSplit = $('gst_out_split');
+      const outSummary = $('gst_out_summary');
+      const barTax = $('gst_bar_tax');
+
+      const tbody = $('gst_table');
+
+      function roundTo(n, d){
+        d = parseInt(d,10);
+        if(!isFinite(d) || d<0) d=2;
+        const f = Math.pow(10,d);
+        return Math.round(n*f)/f;
+      }
+
+      function fmtMoney(n, d){
+        if(!isFinite(n)) return '—';
+        return '₹ ' + new Intl.NumberFormat(undefined,{
+          minimumFractionDigits:d,
+          maximumFractionDigits:d
+        }).format(n);
+      }
+
+      function getRate(){
+        const v = rateEl.value;
+        if(v === 'custom'){
+          const cr = parseFloat(customRateEl.value);
+          return isFinite(cr) ? cr : NaN;
+        }
+        const r = parseFloat(v);
+        return isFinite(r) ? r : NaN;
+      }
+
+      function syncRateUi(){
+        const isCustom = rateEl.value === 'custom';
+        customWrap.style.display = isCustom ? 'block' : 'none';
+      }
+
+      function calc(){
+        const amount = parseFloat(amountEl.value);
+        const rate = getRate();
+        const roundDigits = parseInt(roundEl.value,10);
+        const isExclusive = priceTypeEl.value === 'exclusive';
+        const supply = supplyEl.value;
+
+        syncRateUi();
+
+        if(!isFinite(amount) || amount < 0){
+          outTax.textContent='—';
+          outTaxNote.textContent='Enter a valid amount.';
+          tbody.innerHTML = '<tr><td colspan="2" class="mini">Enter valid inputs and click <strong>Calculate GST</strong>.</td></tr>';
+          return;
+        }
+        if(!isFinite(rate) || rate < 0){
+          outTax.textContent='—';
+          outTaxNote.textContent='Enter a valid GST rate.';
+          tbody.innerHTML = '<tr><td colspan="2" class="mini">Enter valid inputs and click <strong>Calculate GST</strong>.</td></tr>';
+          return;
+        }
+
+        const k = 1 + (rate/100);
+        let excl, tax, incl;
+
+        if(isExclusive){
+          excl = amount;
+          tax = excl * (rate/100);
+          incl = excl + tax;
+          outTaxNote.textContent = `GST added on base price at ${rate}%`;
+        }else{
+          incl = amount;
+          excl = (k === 0) ? NaN : (incl / k);
+          tax = incl - excl;
+          outTaxNote.textContent = `GST extracted from final price at ${rate}%`;
+        }
+
+        excl = roundTo(excl, roundDigits);
+        tax  = roundTo(tax,  roundDigits);
+        incl = roundTo(incl, roundDigits);
+
+        outTax.textContent = fmtMoney(tax, roundDigits);
+        outExcl.textContent = fmtMoney(excl, roundDigits);
+        outIncl.textContent = fmtMoney(incl, roundDigits);
+
+        const taxShare = (incl>0) ? (tax/incl)*100 : 0;
+        barTax.style.width = Math.max(0, Math.min(100, taxShare)).toFixed(1) + '%';
+        barTax.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+        outTaxShare.textContent = `GST share ≈ ${taxShare.toFixed(1)}% of inclusive price`;
+
+        if(supply === 'intra'){
+          const half = roundTo(tax/2, roundDigits);
+          outSplit.textContent = `CGST: ${fmtMoney(half, roundDigits)} • SGST: ${fmtMoney(half, roundDigits)} (intra-state)`;
+        }else{
+          outSplit.textContent = `IGST: ${fmtMoney(tax, roundDigits)} (inter-state)`;
+        }
+
+        const labelType = isExclusive ? 'Exclusive (Base)' : 'Inclusive (Final)';
+        outSummary.textContent =
+          `${labelType} amount ₹${new Intl.NumberFormat(undefined,{maximumFractionDigits:roundDigits}).format(amount)} • Rate ${rate}% • GST ₹${new Intl.NumberFormat(undefined,{maximumFractionDigits:roundDigits}).format(tax)} • Final ₹${new Intl.NumberFormat(undefined,{maximumFractionDigits:roundDigits}).format(incl)}.`;
+
+        tbody.innerHTML = `
+          <tr><td>GST rate</td><td><strong>${rate}%</strong></td></tr>
+          <tr><td>Price (exclusive)</td><td><strong>${fmtMoney(excl, roundDigits)}</strong></td></tr>
+          <tr><td>GST amount</td><td><strong>${fmtMoney(tax, roundDigits)}</strong></td></tr>
+          <tr><td>Price (inclusive)</td><td><strong>${fmtMoney(incl, roundDigits)}</strong></td></tr>
+          <tr><td>Tax split</td><td>${outSplit.textContent}</td></tr>
+        `;
+      }
+
+      $('gst_calc_btn').addEventListener('click', calc);
+
+      $('gst_example_btn').addEventListener('click', ()=>{
+        amountEl.value = '1000';
+        rateEl.value = '18';
+        customRateEl.value = '';
+        priceTypeEl.value = 'exclusive';
+        supplyEl.value = 'intra';
+        roundEl.value = '2';
+        syncRateUi();
+        calc();
+      });
+
+      $('gst_reset_btn').addEventListener('click', ()=>{
+        amountEl.value = '';
+        rateEl.value = '18';
+        customRateEl.value = '';
+        priceTypeEl.value = 'exclusive';
+        supplyEl.value = 'intra';
+        roundEl.value = '2';
+        syncRateUi();
+
+        outTax.textContent='—';
+        outTaxNote.textContent='—';
+        outExcl.textContent='—';
+        outIncl.textContent='—';
+        outTaxShare.textContent='—';
+        outSplit.textContent='—';
+        outSummary.textContent='Enter details to see a clean summary.';
+        barTax.style.width='0%';
+        tbody.innerHTML = '<tr><td colspan="2" class="mini">Click <strong>Calculate GST</strong> to generate results.</td></tr>';
+      });
+
+      // Live update
+      [amountEl, rateEl, customRateEl, priceTypeEl, supplyEl, roundEl].forEach(el=>{
+        el.addEventListener('input', ()=>{ if(amountEl.value !== '') calc(); });
+        el.addEventListener('change', ()=>{ if(amountEl.value !== '') calc(); });
+      });
+
+      syncRateUi();
+    })();
+  </script>
+</body>
+</html>

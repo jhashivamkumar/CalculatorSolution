@@ -8,7 +8,7 @@
 ## 📑 All 6 Compliance Pages Created
 
 ### 1. 🔐 PRIVACY POLICY
-**File:** `/dist/privacy-policy.html`  
+**File:** `/privacy-policy.html`  
 **URL:** `https://calculatorsolution.com/privacy-policy.html`  
 **Word Count:** ~2,500 words  
 **Sections:** 16 comprehensive sections
@@ -41,7 +41,7 @@
 ---
 
 ### 2. 📋 TERMS OF SERVICE
-**File:** `/dist/terms-of-service.html`  
+**File:** `/terms-of-service.html`  
 **URL:** `https://calculatorsolution.com/terms-of-service.html`  
 **Word Count:** ~3,200 words  
 **Sections:** 20 comprehensive sections
@@ -80,7 +80,7 @@
 ---
 
 ### 3. ⚠️ DISCLAIMER
-**File:** `/dist/disclaimer.html`  
+**File:** `/disclaimer.html`  
 **URL:** `https://calculatorsolution.com/disclaimer.html`  
 **Word Count:** ~2,800 words  
 **Sections:** 20 comprehensive sections
@@ -118,7 +118,7 @@
 ---
 
 ### 4. 💰 REFUND POLICY
-**File:** `/dist/refund-policy.html`  
+**File:** `/refund-policy.html`  
 **URL:** `https://calculatorsolution.com/refund-policy.html`  
 **Word Count:** ~2,600 words  
 **Sections:** 21 comprehensive sections
@@ -157,7 +157,7 @@
 ---
 
 ### 5. 🏢 ABOUT US
-**File:** `/dist/about.html`  
+**File:** `/about.html`  
 **URL:** `https://calculatorsolution.com/about.html`  
 **Word Count:** ~1,800 words  
 **Sections:** 15+ sections
@@ -190,7 +190,7 @@
 ---
 
 ### 6. 📞 CONTACT US
-**File:** `/dist/contact.html`  
+**File:** `/contact.html`  
 **URL:** `https://calculatorsolution.com/contact.html`  
 **Word Count:** ~1,600 words  
 **Sections:** 15+ sections
@@ -338,19 +338,19 @@ All pages tested and working on:
 ## 🚀 Deployment Status
 
 ### Files Generated ✅
-- ✅ `/dist/privacy-policy.html` - 221 lines
-- ✅ `/dist/terms-of-service.html` - 285 lines
-- ✅ `/dist/disclaimer.html` - 320 lines
-- ✅ `/dist/refund-policy.html` - 310 lines
-- ✅ `/dist/about.html` - 216 lines
-- ✅ `/dist/contact.html` - 203 lines
+- ✅ `/privacy-policy.html` - 221 lines
+- ✅ `/terms-of-service.html` - 285 lines
+- ✅ `/disclaimer.html` - 320 lines
+- ✅ `/refund-policy.html` - 310 lines
+- ✅ `/about.html` - 216 lines
+- ✅ `/contact.html` - 203 lines
 
 ### Sitemap Updated ✅
 - ✅ 81 total URLs (was 75, now +6 compliance pages)
 - ✅ Homepage: 1 URL
 - ✅ Calculators: 74 URLs
 - ✅ Compliance pages: 6 URLs
-- ✅ File: `/dist/sitemap.xml`
+- ✅ File: `/sitemap.xml`
 
 ### Documentation Created ✅
 - ✅ COMPLIANCE_PAGES_SUMMARY.md
@@ -422,7 +422,7 @@ All pages tested and working on:
 
 ```
 d:\sam\cal\
-├── /dist/
+├── /
 │   ├── privacy-policy.html ✅
 │   ├── terms-of-service.html ✅
 │   ├── disclaimer.html ✅

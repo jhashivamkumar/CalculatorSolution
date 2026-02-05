@@ -1,0 +1,885 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Invoice Total Calculator (Line Items + Tax + Discount) | CalculatorSolution</title>
+  <meta name="description" content="Free Invoice Total Calculator: add multiple line items, apply discount, tax and shipping to calculate subtotal, tax, grand total, and per-item breakdown instantly.">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/invoice-total-calculator.html">
+
+  <meta property="og:title" content="Invoice Total Calculator">
+  <meta property="og:description" content="Calculate invoice subtotal, discount, tax and grand total with multiple line items — fast and accurate.">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <!-- Global CSS -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <!-- Premium critical CSS (RESPONSIVE IMPROVEMENTS ONLY — JS/LOGIC UNCHANGED) -->
+  <style>
+    :root{
+      --wrap:1100px;
+      --pad:18px;
+      --radius-lg:18px;
+      --radius-md:16px;
+      --radius-sm:12px;
+      --border:#e2e8f0;
+      --muted:#64748b;
+      --text:#0f172a;
+      --header-h:68px;
+    }
+
+    html,body{height:100%;margin:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      background:radial-gradient(1200px 700px at 10% 10%, rgba(59,130,246,.14), transparent 60%),
+                 radial-gradient(900px 600px at 90% 20%, rgba(168,85,247,.14), transparent 55%),
+                 linear-gradient(135deg,#f8fafc,#f1f5f9);
+      color:var(--text);
+      line-height:1.6;
+      min-height:100vh;
+      text-rendering:optimizeLegibility;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    *{box-sizing:border-box}
+    img{max-width:100%;height:auto}
+    a{color:inherit}
+
+    .wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--pad)}
+
+    .site-header{
+      padding:14px 0;border-bottom:1px solid var(--border);
+      background:rgba(255,255,255,.65);backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:10
+    }
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .brand-text{font-weight:900;color:#2563eb;font-size:1.15rem;letter-spacing:-.01em}
+    .brand-logo{border-radius:10px}
+
+    .hero{
+      margin:18px 0 14px 0;border-radius:var(--radius-lg);
+      padding:26px 18px;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#a855f7);
+      box-shadow:0 18px 50px rgba(2,6,23,.15);
+      position:relative;overflow:hidden;
+    }
+    .hero:before{
+      content:""; position:absolute; inset:-60px -60px auto auto;
+      width:240px;height:240px;border-radius:999px;
+      background:rgba(255,255,255,.16);
+      transform:rotate(10deg);
+      pointer-events:none;
+    }
+    .hero h1{margin:0 0 6px 0;font-size:1.85rem;letter-spacing:-.02em}
+    .hero p{margin:0;opacity:.95;max-width:70ch}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:800;font-size:.88rem;
+      white-space:nowrap;
+    }
+
+    .calc-shell{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+      margin-top:14px
+    }
+
+    .panel{
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--border);
+      border-radius:var(--radius-md);
+      box-shadow:0 14px 40px rgba(8,13,26,.06);
+      padding:14px;
+      min-width:0; /* important for grid shrink */
+    }
+    .panel-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+    .panel-title h2{margin:0;font-size:1.05rem}
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(37,99,235,.10);
+      color:#1d4ed8;
+      font-weight:900;
+      font-size:.85rem
+    }
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .field label{font-weight:900;font-size:.92rem}
+    .input{
+      width:100%;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius:var(--radius-sm);
+      font-size:1rem;
+      background:#fff;
+      outline:none;
+    }
+    .input:focus{border-color:#93c5fd;box-shadow:0 0 0 4px rgba(59,130,246,.12)}
+    .help{margin:0;font-size:.86rem;color:var(--muted)}
+
+    .actions,.line-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:900;
+      border:0;
+      cursor:pointer;
+      background:linear-gradient(90deg,#2563eb,#60a5fa);
+      color:#fff;
+      box-shadow:0 12px 26px rgba(37,99,235,.18);
+      transition:transform .2s, box-shadow .2s;
+      text-decoration:none;
+      line-height:1.1;
+      white-space:nowrap;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(37,99,235,.22)}
+    .btn:active{transform:translateY(0)}
+    .btn-ghost{background:#fff;color:#0f172a;border:1px solid var(--border);box-shadow:none}
+    .btn-dark{background:#0f172a;box-shadow:0 14px 30px rgba(2,6,23,.18)}
+    .btn-danger{background:linear-gradient(90deg,#ef4444,#f97316);box-shadow:0 12px 26px rgba(239,68,68,.18)}
+    .btn:focus-visible{outline:3px solid rgba(59,130,246,.35);outline-offset:2px}
+
+    .sticky{position:sticky;top:calc(var(--header-h) + 14px)}
+    .metric{
+      border:1px solid var(--border);
+      border-radius:var(--radius-md);
+      padding:12px;
+      background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(255,255,255,.92));
+      margin-bottom:10px;
+    }
+    .metric.alt{background:linear-gradient(180deg, rgba(168,85,247,.10), rgba(255,255,255,.92))}
+    .metric .k{margin:0;color:#475569;font-size:.86rem;font-weight:800}
+    .metric .v{margin:4px 0 0;font-size:1.55rem;font-weight:1000;letter-spacing:-.02em}
+    .mini{font-size:.86rem;color:var(--muted)}
+
+    .bar{height:10px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:10px}
+    .bar > span{display:block;height:100%;width:0%}
+
+    /* Table: safe responsive scrolling (no logic changes) */
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      border:1px solid var(--border);
+      border-radius:var(--radius-md);
+      background:#fff;
+      box-shadow:0 12px 26px rgba(8,13,26,.05)
+    }
+    table{width:100%;border-collapse:collapse;min-width:900px}
+    th,td{padding:10px 12px;border-bottom:1px solid var(--border);text-align:left;font-size:.95rem;vertical-align:top}
+    th{background:#f8fafc;font-weight:1000;white-space:nowrap}
+    tr:last-child td{border-bottom:0}
+
+    /* Make action buttons fit better inside table on mid screens */
+    td:last-child{white-space:nowrap}
+    td:last-child .btn{padding:9px 12px;border-radius:12px}
+    td:last-child .btn + .btn{margin-left:8px}
+
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;
+      background:rgba(2,6,23,.06);border:1px solid var(--border);
+      font-weight:900;font-size:.85rem;color:#0f172a;
+      max-width:100%;
+      white-space:nowrap;
+    }
+
+    .card{
+      background:#fff;border:1px solid var(--border);
+      border-radius:14px;box-shadow:0 10px 24px rgba(8,13,26,.05);
+      padding:12px
+    }
+    details.card{padding:0}
+    details.card summary{cursor:pointer;padding:12px;list-style:none}
+    details.card summary::-webkit-details-marker{display:none}
+    details.card p{padding:0 12px 12px;margin:0;color:#334155}
+
+    /* Related grid fallback (in case global CSS doesn't define it) */
+    .cards-grid{display:grid;grid-template-columns:repeat(4, minmax(0, 1fr));gap:12px}
+    .cards-grid .card{display:block;text-decoration:none}
+    .cards-grid .card h4{margin:0 0 6px;font-size:1rem}
+    .cards-grid .card p{margin:0;color:#475569;font-size:.92rem}
+
+    /* Pre/code readability */
+    pre{
+      background:#0b1220;
+      color:#e5e7eb;
+      padding:12px 14px;
+      border-radius:14px;
+      overflow:auto;
+      font-size:.92rem;
+      line-height:1.55;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 10px 22px rgba(2,6,23,.12);
+      max-width:100%;
+    }
+
+    /* --- RESPONSIVE BREAKPOINTS --- */
+
+    /* <= 1024px: comfortable tablet */
+    @media (max-width: 1024px){
+      :root{--wrap:1100px;--pad:16px}
+      .hero{padding:22px 16px}
+      .hero h1{font-size:1.7rem}
+      table{min-width:820px}
+      .cards-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
+    }
+
+    /* <= 920px: stack panels (already present but improved) */
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr}
+      .sticky{position:static}
+      table{min-width:740px}
+      .panel{padding:14px}
+      .metric .v{font-size:1.45rem}
+    }
+
+    /* <= 720px: mobile */
+    @media (max-width: 720px){
+      :root{--pad:14px;--header-h:64px}
+      .hero{padding:18px 14px;border-radius:16px}
+      .hero h1{font-size:1.45rem}
+      .hero p{font-size:.98rem}
+      .chip{font-size:.84rem}
+
+      .grid-2{grid-template-columns:1fr}
+      .panel-title{align-items:flex-start}
+      .pill{font-size:.82rem}
+
+      /* Buttons become full-width for easy tap targets */
+      .line-actions{gap:10px}
+      .line-actions .btn{flex:1 1 160px;min-height:44px}
+
+      /* Reduce table minimum to avoid too much scroll */
+      table{min-width:680px}
+      th,td{padding:10px}
+      td:last-child .btn{padding:10px 12px}
+
+      .cards-grid{grid-template-columns:1fr}
+      pre{white-space:pre-wrap;word-break:break-word}
+    }
+
+    /* <= 420px: small phones */
+    @media (max-width: 420px){
+      .brand-text{font-size:1.05rem}
+      .hero h1{font-size:1.32rem}
+      .metric .v{font-size:1.32rem}
+      .badge{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+      table{min-width:620px}
+    }
+
+    /* Motion preference */
+    @media (prefers-reduced-motion: reduce){
+      .btn, .card{transition:none}
+      .btn:hover{transform:none}
+    }
+  </style>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <!-- Schema: WebPage + Breadcrumb + HowTo + FAQ -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Invoice Total Calculator",
+      "url":"https://calculatorsolution.com/invoice-total-calculator.html",
+      "description":"Calculate invoice totals with multiple line items, discount, tax and shipping."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"CalculatorSolution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Invoice Total Calculator","item":"https://calculatorsolution.com/invoice-total-calculator.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"HowTo",
+      "name":"How to calculate an invoice total",
+      "step":[
+        {"@type":"HowToStep","name":"Add line items","text":"Enter item name, quantity and unit price for each line."},
+        {"@type":"HowToStep","name":"Apply discount and tax","text":"Choose discount type and enter tax rate to compute totals."},
+        {"@type":"HowToStep","name":"Include shipping and round","text":"Optionally add shipping and rounding to match your invoice format."}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Multiple tax rates?","acceptedAnswer":{"@type":"Answer","text":"If items have different tax rates, calculate tax per line item. This calculator supports a single global tax rate for the full invoice."}},
+        {"@type":"Question","name":"Discounts before tax?","acceptedAnswer":{"@type":"Answer","text":"Many regions apply discount before tax, but rules vary. You can choose whether to apply tax before or after discount."}},
+        {"@type":"Question","name":"Shipping?","acceptedAnswer":{"@type":"Answer","text":"If you charge shipping to your customer, add it to your invoice total. Some jurisdictions also tax shipping."}},
+        {"@type":"Question","name":"Rounding?","acceptedAnswer":{"@type":"Answer","text":"Follow your invoice or accounting rounding rules. This calculator includes optional rounding."}},
+        {"@type":"Question","name":"Payment terms?","acceptedAnswer":{"@type":"Answer","text":"Common terms include Net 7/15/30, advance, or due on delivery. Terms don’t change totals, but are important for invoices."}}
+      ]
+    }
+  ]</script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="hero">
+        <h1>Invoice Total Calculator</h1>
+        <p>Build an invoice with multiple line items and instantly compute subtotal, discount, tax, shipping, and grand total.</p>
+        <div class="chips">
+          <span class="chip">🧾 Multi line items</span>
+          <span class="chip">🏷️ Discount (₹ / %)</span>
+          <span class="chip">🧮 Tax + rounding</span>
+        </div>
+      </div>
+
+      <section>
+        <div id="premium-invoice-total">
+          <div class="calc-shell">
+
+            <!-- Inputs -->
+            <div class="panel" aria-label="Invoice inputs">
+              <div class="panel-title">
+                <h2>Invoice details</h2>
+                <span class="pill">✅ Inputs</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="inv_currency">Currency symbol</label>
+                  <input id="inv_currency" class="input" type="text" value="₹" maxlength="4">
+                  <p class="help">Change to $, €, £, etc.</p>
+                </div>
+
+                <div class="field">
+                  <label for="inv_tax_rate">Tax rate (%)</label>
+                  <input id="inv_tax_rate" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 18">
+                  <p class="help">Single global tax rate for the invoice.</p>
+                </div>
+
+                <div class="field">
+                  <label for="inv_tax_base">Apply tax on</label>
+                  <select id="inv_tax_base" class="input">
+                    <option value="after" selected>After discount (common)</option>
+                    <option value="before">Before discount</option>
+                  </select>
+                  <p class="help">Choose based on your billing rules.</p>
+                </div>
+
+                <div class="field">
+                  <label for="inv_shipping">Shipping / Handling</label>
+                  <input id="inv_shipping" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 100">
+                  <p class="help">Added to total. (Tax on shipping is optional below.)</p>
+                </div>
+
+                <div class="field">
+                  <label for="inv_tax_shipping">Tax shipping?</label>
+                  <select id="inv_tax_shipping" class="input">
+                    <option value="no" selected>No</option>
+                    <option value="yes">Yes</option>
+                  </select>
+                  <p class="help">Some regions tax shipping charges.</p>
+                </div>
+
+                <div class="field">
+                  <label for="inv_discount_type">Discount type</label>
+                  <select id="inv_discount_type" class="input">
+                    <option value="none" selected>None</option>
+                    <option value="flat">Flat amount</option>
+                    <option value="percent">Percentage</option>
+                  </select>
+                  <p class="help">Discount applied on subtotal.</p>
+                </div>
+
+                <div class="field">
+                  <label for="inv_discount_value">Discount value</label>
+                  <input id="inv_discount_value" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 500 or 10">
+                  <p class="help" id="inv_discount_help">Choose discount type above.</p>
+                </div>
+
+                <div class="field">
+                  <label for="inv_rounding">Rounding</label>
+                  <select id="inv_rounding" class="input">
+                    <option value="none" selected>No rounding</option>
+                    <option value="nearest_1">Nearest 1</option>
+                    <option value="nearest_10">Nearest 10</option>
+                    <option value="nearest_100">Nearest 100</option>
+                    <option value="2dec">2 decimal places</option>
+                  </select>
+                  <p class="help">Use to match invoice totals.</p>
+                </div>
+              </div>
+
+              <div class="line-actions">
+                <button class="btn" id="inv_add_row" type="button">+ Add line item</button>
+                <button class="btn btn-dark" id="inv_example" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="inv_reset" type="button">Reset</button>
+              </div>
+
+              <div class="mini" style="margin-top:10px;">
+                Formula: <strong>Subtotal</strong> = Σ(qty × price).
+                <strong>Discount</strong> applied on subtotal.
+                <strong>Tax</strong> applied before/after discount (your choice).
+                <strong>Total</strong> = (Tax base + tax) + shipping (and optionally tax on shipping).
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel sticky" aria-label="Invoice totals">
+              <div class="panel-title">
+                <h2>Totals</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Subtotal</p>
+                <p class="v" id="inv_out_subtotal">—</p>
+                <p class="mini" id="inv_out_lines">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Discount</p>
+                <p class="v" id="inv_out_discount">—</p>
+                <p class="mini" id="inv_out_discount_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Tax</p>
+                <p class="v" id="inv_out_tax">—</p>
+                <div class="bar"><span id="inv_bar_tax"></span></div>
+                <p class="mini" id="inv_out_tax_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Shipping</p>
+                <p class="v" id="inv_out_shipping">—</p>
+                <p class="mini" id="inv_out_shipping_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Grand Total</p>
+                <p class="v" id="inv_out_total">—</p>
+                <p class="mini" id="inv_out_round_note">—</p>
+              </div>
+
+              <div class="metric alt">
+                <p class="k">Summary</p>
+                <p class="mini" id="inv_out_summary">Add items to see totals.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <h2 style="margin:18px 0 6px;">Line Items</h2>
+          <p class="mini" style="margin:0 0 10px;">Add/remove items. Totals update instantly.</p>
+
+          <div class="table-wrap" aria-label="Scrollable invoice table">
+            <table aria-label="Invoice line items table">
+              <thead>
+                <tr>
+                  <th style="width:30%;">Item</th>
+                  <th style="width:14%;">Qty</th>
+                  <th style="width:18%;">Unit Price</th>
+                  <th style="width:18%;">Line Total</th>
+                  <th style="width:20%;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="inv_table">
+                <!-- rows injected by JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mini" style="margin-top:10px;">
+            <span class="badge">Tip</span>
+            If you need different tax rates per item, compute tax per line and add it to unit price (or create separate invoices).
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:18px;">
+        <h2>Explanation</h2>
+        <p>
+          This <strong>Invoice Total Calculator</strong> helps you add multiple line items and compute a clean invoice total.
+          Enter item name, quantity and unit price for each row. Then add optional <strong>discount</strong>, <strong>tax</strong>,
+          <strong>shipping</strong>, and <strong>rounding</strong> to match your billing format.
+        </p>
+        <p class="mini">
+          Tip: Many businesses apply discount before tax. If your jurisdiction applies tax first, switch the “Apply tax on” setting.
+        </p>
+      </section>
+
+      <section>
+        <h3>Formula</h3>
+        <pre>Subtotal = Σ(qty × unitPrice)
+Discount = flat OR (percent × subtotal)
+TaxBase  = (taxBeforeDiscount ? subtotal : subtotal − discount)
+Tax      = TaxBase × (taxRate/100)
+Total    = TaxBase + Tax + Shipping (+ Tax on Shipping, if enabled)</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Multiple tax rates?</strong></summary><p>If your invoice contains items with different tax rates, calculate tax per line item. This version uses one global tax rate for simplicity.</p></details>
+        <details class="card"><summary><strong>Discounts before tax?</strong></summary><p>Many regions apply discounts before tax. You can choose tax-before or tax-after discount above.</p></details>
+        <details class="card"><summary><strong>Shipping?</strong></summary><p>Add shipping/handling if billed to the customer. Some regions also tax shipping.</p></details>
+        <details class="card"><summary><strong>Rounding?</strong></summary><p>Choose rounding to match your invoice rules (nearest 1/10/100 or 2 decimals).</p></details>
+        <details class="card"><summary><strong>Payment terms?</strong></summary><p>Terms like Net 30 define when payment is due. They don’t change totals, but are important invoice metadata.</p></details>
+      </section>
+
+      <section class="related" style="margin-top:18px;">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="gst-calculator-india.html"><h4>GST Calculator (India)</h4><p>Calculate GST amount and final price.</p></a>
+          <a class="card" href="discount-calculator.html"><h4>Discount Calculator</h4><p>Compute discounted price and savings.</p></a>
+          <a class="card" href="percentage-calculator.html"><h4>Percentage Calculator</h4><p>Compute percentages and percent changes.</p></a>
+          <a class="card" href="profit-margin-calculator.html"><h4>Profit Margin Calculator</h4><p>Calculate profit margin and markup.</p></a>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap" style="padding:18px 0;color:#64748b;">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;display:flex;flex-wrap:wrap;gap:10px;">
+        <a href="/sitemap.xml">Sitemap</a>
+        <span aria-hidden="true">|</span>
+        <a href="/">Home</a>
+        <span aria-hidden="true">|</span>
+        <a href="/privacy-policy.html">Privacy Policy</a>
+        <span aria-hidden="true">|</span>
+        <a href="/terms-of-service.html">Terms</a>
+        <span aria-hidden="true">|</span>
+        <a href="/contact.html">Contact</a>
+        <span aria-hidden="true">|</span>
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      const currencyEl = $('inv_currency');
+      const taxRateEl = $('inv_tax_rate');
+      const taxBaseEl = $('inv_tax_base');
+      const shippingEl = $('inv_shipping');
+      const taxShipEl = $('inv_tax_shipping');
+      const discTypeEl = $('inv_discount_type');
+      const discValEl  = $('inv_discount_value');
+      const discHelpEl = $('inv_discount_help');
+      const roundingEl = $('inv_rounding');
+
+      const outSubtotal = $('inv_out_subtotal');
+      const outLines = $('inv_out_lines');
+      const outDiscount = $('inv_out_discount');
+      const outDiscountNote = $('inv_out_discount_note');
+      const outTax = $('inv_out_tax');
+      const outTaxNote = $('inv_out_tax_note');
+      const outShipping = $('inv_out_shipping');
+      const outShippingNote = $('inv_out_shipping_note');
+      const outTotal = $('inv_out_total');
+      const outRoundNote = $('inv_out_round_note');
+      const outSummary = $('inv_out_summary');
+      const barTax = $('inv_bar_tax');
+
+      const tbody = $('inv_table');
+
+      const clamp = (n, a, b)=>Math.min(b, Math.max(a, n));
+      const nnum = (v)=> {
+        const x = parseFloat(v);
+        return isFinite(x) ? x : 0;
+      };
+
+      function sym(){ return (currencyEl.value || '₹').trim() || '₹'; }
+
+      function fmt(n){
+        if(!isFinite(n)) return '—';
+        const mode = roundingEl.value;
+        if(mode === '2dec'){
+          return new Intl.NumberFormat(undefined,{minimumFractionDigits:2, maximumFractionDigits:2}).format(n);
+        }
+        return new Intl.NumberFormat(undefined,{maximumFractionDigits:2}).format(n);
+      }
+
+      function money(n){
+        return sym() + ' ' + fmt(n);
+      }
+
+      function applyRounding(total){
+        const mode = roundingEl.value;
+        if(mode === 'none') return total;
+
+        if(mode === '2dec'){
+          return Math.round(total * 100) / 100;
+        }
+
+        const step = (mode === 'nearest_1') ? 1 : (mode === 'nearest_10') ? 10 : 100;
+        return Math.round(total / step) * step;
+      }
+
+      function rowTemplate(rowId, name='', qty=1, price=0){
+        return `
+          <tr data-row="${rowId}">
+            <td>
+              <input class="input" data-k="name" type="text" placeholder="e.g., Consulting / Product" value="${escapeHtml(name)}">
+              <p class="help" style="margin:6px 0 0;">Optional label</p>
+            </td>
+            <td>
+              <input class="input" data-k="qty" type="number" inputmode="decimal" min="0" step="0.01" value="${qty}">
+              <p class="help" style="margin:6px 0 0;">Quantity</p>
+            </td>
+            <td>
+              <input class="input" data-k="price" type="number" inputmode="decimal" min="0" step="0.01" value="${price}">
+              <p class="help" style="margin:6px 0 0;">Unit price</p>
+            </td>
+            <td>
+              <div class="badge" data-k="lineTotal">${money(qty*price)}</div>
+              <p class="help" style="margin:6px 0 0;">Auto</p>
+            </td>
+            <td>
+              <button class="btn btn-ghost" type="button" data-act="dup">Duplicate</button>
+              <button class="btn btn-danger" type="button" data-act="del">Remove</button>
+            </td>
+          </tr>
+        `;
+      }
+
+      function escapeHtml(s){
+        return String(s || '')
+          .replace(/&/g,'&amp;')
+          .replace(/</g,'&lt;')
+          .replace(/>/g,'&gt;')
+          .replace(/"/g,'&quot;')
+          .replace(/'/g,'&#039;');
+      }
+
+      function getRows(){
+        const rows = [];
+        tbody.querySelectorAll('tr[data-row]').forEach(tr=>{
+          const name = tr.querySelector('[data-k="name"]').value || '';
+          const qty  = nnum(tr.querySelector('[data-k="qty"]').value);
+          const price= nnum(tr.querySelector('[data-k="price"]').value);
+          rows.push({ tr, name, qty, price, lineTotal: qty*price });
+        });
+        return rows;
+      }
+
+      function setDiscountHelp(){
+        const t = discTypeEl.value;
+        if(t === 'none') discHelpEl.textContent = 'No discount applied.';
+        if(t === 'flat') discHelpEl.textContent = `Enter flat discount amount in ${sym()} (e.g., 500).`;
+        if(t === 'percent') discHelpEl.textContent = 'Enter discount percentage (e.g., 10 means 10%).';
+      }
+
+      function recalc(){
+        setDiscountHelp();
+
+        const rows = getRows();
+        const lineCount = rows.length;
+
+        // subtotal
+        let subtotal = rows.reduce((a,r)=>a + (isFinite(r.lineTotal)?r.lineTotal:0), 0);
+        subtotal = Math.max(0, subtotal);
+
+        // discount
+        const discType = discTypeEl.value;
+        const discVal  = nnum(discValEl.value);
+        let discount = 0;
+        if(discType === 'flat'){
+          discount = clamp(discVal, 0, subtotal);
+        } else if(discType === 'percent'){
+          discount = clamp((subtotal * (discVal/100)), 0, subtotal);
+        }
+
+        // tax base
+        const taxRate = Math.max(0, nnum(taxRateEl.value));
+        const taxOn = taxBaseEl.value; // after/before
+        const baseForTax = (taxOn === 'before') ? subtotal : Math.max(0, subtotal - discount);
+
+        // shipping
+        let shipping = Math.max(0, nnum(shippingEl.value));
+        const taxShipping = (taxShipEl.value === 'yes');
+
+        // tax
+        let tax = baseForTax * (taxRate/100);
+        if(taxShipping){
+          tax += shipping * (taxRate/100);
+        }
+
+        // total
+        const rawTotal = baseForTax + tax + shipping;
+        const roundedTotal = applyRounding(rawTotal);
+        const roundDiff = roundedTotal - rawTotal;
+
+        // update row totals
+        rows.forEach(r=>{
+          const badge = r.tr.querySelector('[data-k="lineTotal"]');
+          badge.textContent = money(r.lineTotal);
+        });
+
+        // outputs
+        outSubtotal.textContent = money(subtotal);
+        outLines.textContent = lineCount ? `${lineCount} line item(s)` : 'No items added yet';
+
+        outDiscount.textContent = money(discount);
+        outDiscountNote.textContent =
+          (discType === 'none') ? 'No discount applied.' :
+          (discType === 'flat') ? `Flat discount applied on subtotal.` :
+          `Discount = ${fmt(discVal)}% of subtotal.`;
+
+        outTax.textContent = money(tax);
+        const taxPct = (baseForTax + shipping) > 0 ? (tax / (baseForTax + shipping)) * 100 : 0;
+        barTax.style.width = clamp(taxPct, 0, 100).toFixed(1) + '%';
+        barTax.style.background = 'linear-gradient(90deg, rgba(168,85,247,.9), rgba(59,130,246,.9))';
+        outTaxNote.textContent =
+          taxRate > 0
+            ? `Tax rate: ${fmt(taxRate)}% • Tax on ${taxOn === 'before' ? 'subtotal' : 'discounted subtotal'}${taxShipping ? ' + shipping' : ''}.`
+            : 'Tax rate is 0% (no tax).';
+
+        outShipping.textContent = money(shipping);
+        outShippingNote.textContent = taxShipping ? 'Shipping is taxed.' : 'Shipping not taxed.';
+
+        outTotal.textContent = money(roundedTotal);
+        outRoundNote.textContent =
+          roundingEl.value === 'none'
+            ? 'No rounding.'
+            : `Rounding applied. Difference: ${money(roundDiff)}.`;
+
+        outSummary.textContent =
+          `Subtotal ${money(subtotal)} − Discount ${money(discount)} + Tax ${money(tax)} + Shipping ${money(shipping)} = Total ${money(roundedTotal)}.`;
+      }
+
+      function addRow(name='', qty=1, price=0){
+        const id = String(Date.now()) + '_' + Math.floor(Math.random()*1000);
+        tbody.insertAdjacentHTML('beforeend', rowTemplate(id, name, qty, price));
+        recalc();
+      }
+
+      function clearRows(){
+        tbody.innerHTML = '';
+      }
+
+      // Events
+      $('inv_add_row').addEventListener('click', ()=> addRow('', 1, 0));
+
+      tbody.addEventListener('click', (e)=>{
+        const btn = e.target.closest('button[data-act]');
+        if(!btn) return;
+
+        const tr = btn.closest('tr[data-row]');
+        const act = btn.getAttribute('data-act');
+
+        if(act === 'del'){
+          tr.remove();
+          if(tbody.querySelectorAll('tr[data-row]').length === 0){
+            addRow('Item 1', 1, 0);
+          } else {
+            recalc();
+          }
+        }
+        if(act === 'dup'){
+          const name = tr.querySelector('[data-k="name"]').value || '';
+          const qty  = nnum(tr.querySelector('[data-k="qty"]').value);
+          const price= nnum(tr.querySelector('[data-k="price"]').value);
+          addRow(name, qty || 1, price || 0);
+        }
+      });
+
+      tbody.addEventListener('input', (e)=>{
+        const el = e.target;
+        if(el && el.classList && el.classList.contains('input')){
+          recalc();
+        }
+      });
+
+      [currencyEl, taxRateEl, taxBaseEl, shippingEl, taxShipEl, discTypeEl, discValEl, roundingEl].forEach(el=>{
+        el.addEventListener('input', recalc);
+        el.addEventListener('change', recalc);
+      });
+
+      $('inv_example').addEventListener('click', ()=>{
+        clearRows();
+        addRow('Website Design', 1, 12000);
+        addRow('Hosting (12 months)', 1, 2400);
+        addRow('Maintenance', 1, 3000);
+
+        currencyEl.value = '₹';
+        taxRateEl.value = '18';
+        taxBaseEl.value = 'after';
+        shippingEl.value = '0';
+        taxShipEl.value = 'no';
+        discTypeEl.value = 'percent';
+        discValEl.value  = '10';
+        roundingEl.value = '2dec';
+
+        recalc();
+      });
+
+      $('inv_reset').addEventListener('click', ()=>{
+        currencyEl.value='₹';
+        taxRateEl.value='';
+        taxBaseEl.value='after';
+        shippingEl.value='';
+        taxShipEl.value='no';
+        discTypeEl.value='none';
+        discValEl.value='';
+        roundingEl.value='none';
+        clearRows();
+        addRow('Item 1', 1, 0);
+        recalc();
+      });
+
+      // init
+      clearRows();
+      addRow('Item 1', 1, 0);
+      addRow('Item 2', 1, 0);
+      recalc();
+    })();
+  </script>
+</body>
+</html>

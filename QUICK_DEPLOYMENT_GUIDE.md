@@ -13,7 +13,7 @@
 - 6 Legal/compliance pages (Privacy, Terms, Disclaimer, Refund, About, Contact)
 
 ✅ **All Files Generated:**
-- HTML pages in `/dist/` folder
+- HTML pages in `/` folder
 - Modern responsive CSS
 - Working calculator JavaScript
 - Sitemap.xml (81 URLs)
@@ -240,7 +240,7 @@
 ## 🎯 Quick Checklist
 
 ### Before Deployment
-- [ ] All files in `/dist/` folder
+- [ ] All files in `/` folder
 - [ ] sitemap.xml has 81 URLs
 - [ ] All HTML files present
 - [ ] CSS and JS files present
@@ -373,7 +373,7 @@ Day 32+: Ads appear and you start earning!
 
 ```
 d:\sam\cal\
-├── /dist/                          (Upload this entire folder)
+├── /                          (Upload this entire folder)
 │   ├── index.html                  (Homepage)
 │   ├── *.html                      (74 calculators + 6 compliance pages)
 │   ├── sitemap.xml                 (81 URLs for Google)

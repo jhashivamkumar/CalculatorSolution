@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>Credit Score Estimator (Range + Tips) | CalculatorSolution</title>
+    <meta
+      name="description"
+      content="Credit Score Estimator — estimate your credit score range based on payment history, utilization, age of credit, mix, and recent inquiries. Educational only."
+    />
+
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://calculatorsolution.com/credit-score-estimator.html"
+    />
+
+    <meta property="og:title" content="Credit Score Estimator" />
+    <meta
+      property="og:description"
+      content="Estimate your credit score range using key credit factors. Educational estimate (not official)."
+    />
+    <meta
+      property="og:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+
+    <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/logo.png" />
+    <link rel="manifest" href="/assets/site.webmanifest" />
+
+    <link
+      rel="preload"
+      href="/assets/style.css"
+      as="style"
+      onload="this.rel='stylesheet'"
+    />
+    <noscript><link rel="stylesheet" href="/assets/style.css" /></noscript>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Arial;
+        background: linear-gradient(135deg, #f8fafc, #eef2ff);
+        color: #0f172a;
+        line-height: 1.6;
+        -webkit-text-size-adjust: 100%;
+        text-rendering: optimizeLegibility;
+      }
+      * {
+        box-sizing: border-box;
+      }
+
+      /* ✅ Responsive spacing system */
+      :root {
+        --wrap: 1100px;
+        --gutter: 18px;
+        --radius-lg: 18px;
+        --radius-md: 14px;
+        --radius-sm: 12px;
+        --shadow-1: 0 10px 30px rgba(2, 6, 23, 0.06);
+        --shadow-2: 0 12px 28px rgba(37, 99, 235, 0.18);
+        --shadow-3: 0 12px 28px rgba(2, 6, 23, 0.16);
+      }
+
+      .wrap {
+        max-width: var(--wrap);
+        margin: auto;
+        padding: 0 var(--gutter);
+      }
+
+      /* ✅ Header: perfect on mobile + large screens */
+      .site-header {
+        padding: 14px 0;
+        border-bottom: 1px solid #e2e8f0;
+        background: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: saturate(180%) blur(8px);
+      }
+      .brand {
+        display: inline-flex;
+        gap: 10px;
+        align-items: center;
+        text-decoration: none;
+        min-height: 44px; /* ✅ touch friendly */
+      }
+      .brand img {
+        border-radius: 10px;
+        flex: 0 0 auto;
+      }
+      .brand-text {
+        font-weight: 900;
+        color: #2563eb;
+        font-size: 1.02rem;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+      }
+
+      /* ✅ Breadcrumbs wrap safely */
+      .breadcrumbs {
+        font-size: 0.9rem;
+        color: #64748b;
+        margin: 14px 0;
+        overflow-wrap: anywhere;
+      }
+      .breadcrumbs a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .breadcrumbs a:hover {
+        text-decoration: underline;
+      }
+
+      /* ✅ Hero becomes compact on small devices */
+      .hero {
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: #fff;
+        border-radius: var(--radius-lg);
+        padding: 26px;
+        margin: 10px 0 20px;
+      }
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(1.45rem, 2.2vw + 1rem, 2.1rem);
+        font-weight: 1000;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+      }
+      .hero p {
+        margin: 10px 0 0;
+        opacity: 0.95;
+        max-width: 68ch;
+      }
+      .chips {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        font-weight: 900;
+        font-size: 0.85rem;
+        line-height: 1;
+        min-height: 34px;
+      }
+
+      /* ✅ Panel scales nicely */
+      .panel {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 18px;
+        box-shadow: var(--shadow-1);
+      }
+
+      /* ✅ Grid: better breakpoints + consistent gaps */
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        align-items: start;
+      }
+      @media (max-width: 980px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ✅ Form fields: accessible, responsive, tap-friendly */
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+      label {
+        font-weight: 900;
+        line-height: 1.25;
+      }
+      .help {
+        font-size: 0.9rem;
+        color: #64748b;
+        margin: 0;
+      }
+      .input,
+      .select {
+        width: 100%;
+        padding: 12px 12px;
+        border: 1px solid #cbd5f5;
+        border-radius: 12px;
+        font-size: 1rem;
+        min-height: 44px; /* ✅ mobile tap size */
+        background: #fff;
+      }
+      .select {
+        appearance: none;
+        background-image: linear-gradient(45deg, transparent 50%, #64748b 50%),
+          linear-gradient(135deg, #64748b 50%, transparent 50%);
+        background-position: calc(100% - 18px) calc(50% - 2px),
+          calc(100% - 13px) calc(50% - 2px);
+        background-size: 6px 6px, 6px 6px;
+        background-repeat: no-repeat;
+        padding-right: 42px;
+      }
+      .input:focus,
+      .select:focus {
+        border-color: #6366f1;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+      }
+
+      /* ✅ Actions: buttons become full width on small screens */
+      .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+      .btn {
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 0;
+        background: linear-gradient(90deg, #2563eb, #6366f1);
+        color: #fff;
+        font-weight: 1000;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        box-shadow: var(--shadow-2);
+        min-height: 44px;
+        flex: 1 1 180px;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 34px rgba(37, 99, 235, 0.22);
+      }
+      .btn.secondary {
+        background: #0f172a;
+        box-shadow: var(--shadow-3);
+      }
+      @media (max-width: 520px) {
+        .btn {
+          width: 100%;
+          flex: 1 1 100%;
+        }
+      }
+
+      /* ✅ Result block: responsive typography */
+      .result {
+        padding: 14px;
+        border-radius: 14px;
+        background: linear-gradient(180deg, #eef2ff, #fff);
+        border: 1px solid #c7d2fe;
+      }
+      .big {
+        font-size: clamp(1.1rem, 1.3vw + 0.9rem, 1.35rem);
+        font-weight: 1000;
+        margin: 0;
+        line-height: 1.25;
+      }
+      .sub {
+        margin: 10px 0 0;
+        color: #334155;
+      }
+
+      /* ✅ Meter: wraps correctly */
+      .meter {
+        margin-top: 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        background: #fff;
+        overflow: hidden;
+      }
+      .meterTop {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 12px;
+        font-weight: 900;
+        color: #475569;
+        font-size: 0.95rem;
+      }
+      .bar {
+        height: 12px;
+        background: linear-gradient(90deg, #ef4444, #f59e0b, #22c55e);
+        position: relative;
+      }
+      .pin {
+        position: absolute;
+        top: -8px;
+        width: 2px;
+        height: 28px;
+        background: #0f172a;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+      }
+      .legend {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding: 10px 12px;
+        color: #475569;
+        font-size: 0.92rem;
+      }
+      .pill {
+        border: 1px solid #e2e8f0;
+        border-radius: 999px;
+        padding: 4px 10px;
+        background: #fff;
+        font-weight: 900;
+        line-height: 1.2;
+      }
+
+      /* ✅ KPIs: better responsive breakpoint */
+      .kpis {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      @media (max-width: 520px) {
+        .kpis {
+          grid-template-columns: 1fr;
+        }
+      }
+      .kpi {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 10px;
+        min-height: 64px;
+      }
+      .kpi small {
+        display: block;
+        color: #64748b;
+        font-weight: 900;
+      }
+      .kpi strong {
+        font-size: 1.05rem;
+      }
+
+      /* ✅ Tips + Note spacing improves on mobile */
+      .tips {
+        margin-top: 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        background: #fff;
+        padding: 12px;
+      }
+      .tips h4 {
+        margin: 0 0 8px;
+        font-weight: 1000;
+      }
+      .tips ul {
+        margin: 0;
+        padding-left: 18px;
+        color: #334155;
+      }
+      .tips li {
+        margin: 6px 0;
+      }
+
+      .note {
+        margin-top: 12px;
+        font-size: 0.92rem;
+        color: #475569;
+        border-left: 4px solid #6366f1;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+      }
+
+      /* ✅ FAQ details: tap-friendly */
+      details.card {
+        margin-top: 10px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        padding: 10px;
+      }
+      details.card summary {
+        cursor: pointer;
+        padding: 8px 6px;
+        list-style: none;
+        outline: none;
+      }
+      details.card summary::-webkit-details-marker {
+        display: none;
+      }
+      details.card summary strong {
+        display: inline-block;
+      }
+      details.card[open] {
+        box-shadow: 0 8px 18px rgba(2, 6, 23, 0.06);
+      }
+      details.card p {
+        margin: 8px 6px 10px;
+        color: #334155;
+      }
+
+      /* ✅ Code block: more readable on small screens */
+      pre {
+        background: #0b1220;
+        color: #e5e7eb;
+        padding: 12px;
+        border-radius: 12px;
+        overflow: auto;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        font-size: 0.95rem;
+        line-height: 1.55;
+        max-width: 100%;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      /* ✅ Related cards: already good, just improve tap + spacing */
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+        margin-top: 12px;
+      }
+      .cardLink {
+        display: block;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 14px;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: 0 10px 24px rgba(2, 6, 23, 0.05);
+        transition: transform 0.2s;
+        min-height: 96px;
+      }
+      .cardLink:hover {
+        transform: translateY(-3px);
+      }
+      .cardLink h4 {
+        margin: 0 0 6px;
+        font-weight: 1000;
+        line-height: 1.25;
+      }
+      .cardLink p {
+        margin: 0;
+        color: #475569;
+      }
+
+      /* ✅ Footer wraps on small screens */
+      .site-footer {
+        margin-top: 40px;
+        padding: 20px 0;
+        border-top: 1px solid #e2e8f0;
+      }
+      .site-footer p {
+        margin: 0;
+      }
+      .site-footer a {
+        color: inherit;
+      }
+      .site-footer p + p {
+        margin-top: 10px;
+      }
+
+      /* ✅ Mobile refinements */
+      @media (max-width: 520px) {
+        :root {
+          --gutter: 14px;
+        }
+        .hero {
+          padding: 18px;
+          border-radius: 16px;
+        }
+        .panel {
+          padding: 14px;
+          border-radius: 14px;
+        }
+        .chip {
+          font-size: 0.82rem;
+        }
+      }
+
+      /* ✅ Respect reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        .btn,
+        .cardLink {
+          transition: none !important;
+        }
+        .btn:hover,
+        .cardLink:hover {
+          transform: none !important;
+        }
+      }
+    </style>
+
+    <!-- GA4 -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-Y5YHCPQPFS");
+    </script>
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+      [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Credit Score Estimator"
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "url": "https://calculatorsolution.com/",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://calculatorsolution.com/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "CalculatorSolution",
+              "item": "https://calculatorsolution.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Credit Score Estimator",
+              "item": "https://calculatorsolution.com/credit-score-estimator.html"
+            }
+          ]
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is this official?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. Only credit bureaus and lenders provide official credit scores. This is an educational estimate."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What affects score the most?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Payment history and credit utilization are usually the biggest contributors."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Should I check regularly?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Regular checks help you spot errors or possible fraud early."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How to improve credit score?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Pay on time, keep utilization low, avoid too many new accounts, and maintain older accounts."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are there free reports?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Many regions allow at least one free credit report yearly. Availability depends on local regulations."
+              }
+            }
+          ]
+        }
+      ]
+    </script>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">
+          <img
+            src="/assets/logo.png"
+            alt="CalculatorSolution logo"
+            width="36"
+            height="36"
+          />
+          <span class="brand-text">CalculatorSolution</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <article>
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a> › <span>Credit Score Estimator</span>
+        </nav>
+
+        <div class="hero">
+          <h1>Credit Score Estimator</h1>
+          <p>
+            Estimate your credit score <strong>range</strong> using key factors
+            (educational — not official).
+          </p>
+          <div class="chips">
+            <span class="chip">✅ Payment History</span>
+            <span class="chip">📉 Utilization</span>
+            <span class="chip">⏳ Credit Age</span>
+            <span class="chip">🧾 Inquiries</span>
+            <span class="chip">🧩 Credit Mix</span>
+          </div>
+        </div>
+
+        <section class="panel" aria-label="Credit score estimator">
+          <div class="grid">
+            <div>
+              <div class="field">
+                <label for="onTime">On-time Payments (last 12 months)</label>
+                <select id="onTime" class="select">
+                  <option value="100">100% (no late payments)</option>
+                  <option value="95">95–99%</option>
+                  <option value="85">85–94%</option>
+                  <option value="70">70–84%</option>
+                  <option value="50">Below 70%</option>
+                </select>
+                <p class="help">
+                  Late payments can reduce score significantly.
+                </p>
+              </div>
+
+              <div class="field">
+                <label for="util">Credit Utilization (%)</label>
+                <input
+                  id="util"
+                  class="input"
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="1"
+                  placeholder="e.g. 28"
+                />
+                <p class="help">
+                  Utilization = total used ÷ total limit × 100.
+                </p>
+              </div>
+
+              <div class="field">
+                <label for="age">Credit History Age (years)</label>
+                <input
+                  id="age"
+                  class="input"
+                  type="number"
+                  min="0"
+                  step="0.5"
+                  placeholder="e.g. 4"
+                />
+                <p class="help">Older credit history is generally better.</p>
+              </div>
+
+              <div class="field">
+                <label for="inq">Hard Inquiries (last 12 months)</label>
+                <select id="inq" class="select">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="4">3–4</option>
+                  <option value="6">5–6</option>
+                  <option value="9">7+</option>
+                </select>
+                <p class="help">
+                  Many new inquiries may reduce score temporarily.
+                </p>
+              </div>
+
+              <div class="field">
+                <label for="mix">Credit Mix</label>
+                <select id="mix" class="select">
+                  <option value="good">Good (credit card + loan)</option>
+                  <option value="avg">
+                    Average (only cards or only loans)
+                  </option>
+                  <option value="thin">Thin file (very limited credit)</option>
+                </select>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="btnCalc" type="button">
+                  Estimate Score
+                </button>
+                <button class="btn secondary" id="btnExample" type="button">
+                  Try Example
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <div class="result" role="status" aria-live="polite">
+                <p class="big" id="out">—</p>
+                <p class="sub" id="band">
+                  Enter inputs to estimate your range.
+                </p>
+
+                <div
+                  class="meter"
+                  aria-label="Score range meter"
+                  id="meter"
+                  style="display: none"
+                >
+                  <div class="meterTop"><span>300</span><span>850</span></div>
+                  <div class="bar">
+                    <span class="pin" id="pin" style="left: 50%"></span>
+                  </div>
+                  <div class="legend">
+                    <span class="pill">Poor</span>
+                    <span class="pill">Fair</span>
+                    <span class="pill">Good</span>
+                    <span class="pill">Very Good</span>
+                    <span class="pill">Excellent</span>
+                  </div>
+                </div>
+
+                <div class="kpis" id="kpis" style="display: none">
+                  <div class="kpi">
+                    <small>Estimated Score</small><strong id="kScore">—</strong>
+                  </div>
+                  <div class="kpi">
+                    <small>Estimated Range</small><strong id="kRange">—</strong>
+                  </div>
+                  <div class="kpi">
+                    <small>Utilization Impact</small
+                    ><strong id="kUtilImpact">—</strong>
+                  </div>
+                  <div class="kpi">
+                    <small>Biggest Fix</small><strong id="kFix">—</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tips" id="tips" style="display: none">
+                <h4>Quick improvement tips</h4>
+                <ul id="tipsList"></ul>
+              </div>
+
+              <div class="note">
+                Educational estimate only — different bureaus and models may
+                score differently. Always rely on official bureau reports /
+                lender score disclosures for real decisions.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section style="margin-top: 20px">
+          <h2>Explanation</h2>
+          <p>
+            Credit scores are generally influenced by factors like
+            <strong>payment history</strong>,
+            <strong>credit utilization</strong>,
+            <strong>length of credit history</strong>,
+            <strong>new credit inquiries</strong>, and
+            <strong>credit mix</strong>. This calculator combines your inputs
+            into an educational estimate so you can understand which areas may
+            be pulling your score up or down.
+          </p>
+        </section>
+
+        <section style="margin-top: 14px">
+          <h3>Formula (simple educational weighting)</h3>
+          <pre>
+Estimate = Base + PaymentHistory + Utilization + CreditAge + Inquiries + Mix
+
+Payment history: higher on-time % adds points
+Utilization: lower % adds points (best typically under ~30%)
+Age: older history adds points
+Inquiries: more inquiries subtract points
+Mix: healthy mix adds points</pre
+          >
+        </section>
+
+        <section style="margin-top: 14px">
+          <h3>FAQs</h3>
+          <details class="card">
+            <summary><strong>Is this official?</strong></summary>
+            <p>
+              No — only credit bureaus and lenders provide official scores. This
+              is an educational estimate.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>What affects score?</strong></summary>
+            <p>
+              Payment history and utilization are usually the biggest factors
+              for many scoring models.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Check regularly?</strong></summary>
+            <p>
+              Yes — it helps you catch reporting errors and suspicious activity
+              early.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>How to improve?</strong></summary>
+            <p>
+              Pay on time, reduce utilization, avoid too many new
+              accounts/inquiries, and keep older accounts active.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Free reports?</strong></summary>
+            <p>
+              Many countries offer free credit reports (often yearly).
+              Availability depends on local regulations.
+            </p>
+          </details>
+        </section>
+
+        <section style="margin-top: 18px">
+          <h3>Related calculators</h3>
+          <div class="cards-grid">
+            <a class="cardLink" href="credit-card-interest-calculator.html"
+              ><h4>Credit Card Interest Calculator</h4>
+              <p>Estimate daily interest cost and the impact of payments.</p></a
+            >
+            <a class="cardLink" href="debt-payoff-calculator.html"
+              ><h4>Debt Payoff Calculator</h4>
+              <p>See how extra payments reduce payoff time and interest.</p></a
+            >
+            <a class="cardLink" href="compound-interest-calculator.html"
+              ><h4>Compound Interest Calculator</h4>
+              <p>Plan savings growth and compare compounding periods.</p></a
+            >
+          </div>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>&copy; CalculatorSolution</p>
+        <p style="margin-top: 8px; font-size: 0.9rem">
+          <a href="/sitemap.xml">Sitemap</a> | <a href="/">Home</a> |
+          <a href="/privacy-policy.html">Privacy Policy</a> |
+          <a href="/terms-of-service.html">Terms</a> |
+          <a href="/contact.html">Contact</a> |
+          <a href="/about.html">About</a>
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        const $ = (id) => document.getElementById(id);
+
+        const onTime = $("onTime");
+        const util = $("util");
+        const age = $("age");
+        const inq = $("inq");
+        const mix = $("mix");
+
+        const out = $("out");
+        const band = $("band");
+
+        const meter = $("meter");
+        const pin = $("pin");
+
+        const kpis = $("kpis");
+        const kScore = $("kScore");
+        const kRange = $("kRange");
+        const kUtilImpact = $("kUtilImpact");
+        const kFix = $("kFix");
+
+        const tips = $("tips");
+        const tipsList = $("tipsList");
+
+        function clamp(n, min, max) {
+          return Math.max(min, Math.min(max, n));
+        }
+
+        function getBand(score) {
+          if (score < 580)
+            return {
+              name: "Poor",
+              hint: "Focus on on-time payments and lowering utilization.",
+            };
+          if (score < 670)
+            return {
+              name: "Fair",
+              hint: "Reduce utilization and avoid new inquiries for a while.",
+            };
+          if (score < 740)
+            return {
+              name: "Good",
+              hint: "Keep utilization low and maintain perfect payments.",
+            };
+          if (score < 800)
+            return {
+              name: "Very Good",
+              hint: "Great position — keep habits consistent.",
+            };
+          return {
+            name: "Excellent",
+            hint: "Strong credit profile — maintain low utilization and timely payments.",
+          };
+        }
+
+        function scoreFromInputs() {
+          const on = +onTime.value || 50;
+          const u = clamp(+util.value || 0, 0, 100);
+          const a = clamp(+age.value || 0, 0, 50);
+          const q = +inq.value || 0;
+          const m = mix.value;
+
+          // Base
+          let s = 300;
+
+          // Payment history (up to ~300)
+          // 100%: +300, 95: +260, 85: +200, 70: +120, 50: +40
+          const payMap = { 100: 300, 95: 260, 85: 200, 70: 120, 50: 40 };
+          s += payMap[on] ?? 40;
+
+          // Utilization (up to ~200) - best under 10, okay under 30, worse above 50
+          let utilPts = 0;
+          if (u <= 9) utilPts = 200;
+          else if (u <= 29) utilPts = 160;
+          else if (u <= 49) utilPts = 110;
+          else if (u <= 74) utilPts = 60;
+          else utilPts = 20;
+          s += utilPts;
+
+          // Credit age (up to ~120)
+          // 0-1: 15, 2-3: 40, 4-6: 70, 7-10: 95, 10+: 120
+          let agePts = 15;
+          if (a >= 2 && a <= 3) agePts = 40;
+          else if (a >= 4 && a <= 6) agePts = 70;
+          else if (a >= 7 && a <= 10) agePts = 95;
+          else if (a > 10) agePts = 120;
+          s += agePts;
+
+          // Inquiries (subtract up to ~80)
+          // 0: 0, 1: -10, 2: -20, 3-4: -35, 5-6: -55, 7+: -80
+          let inqPenalty = 0;
+          if (q === 1) inqPenalty = 10;
+          else if (q === 2) inqPenalty = 20;
+          else if (q === 4) inqPenalty = 35;
+          else if (q === 6) inqPenalty = 55;
+          else if (q === 9) inqPenalty = 80;
+          s -= inqPenalty;
+
+          // Mix (up to ~30)
+          let mixPts = 0;
+          if (m === "good") mixPts = 30;
+          else if (m === "avg") mixPts = 18;
+          else mixPts = 8;
+          s += mixPts;
+
+          // Final clamp to 300-850
+          const score = Math.round(clamp(s, 300, 850));
+
+          // Range width (educational)
+          const range = clamp(
+            30 + Math.round(u / 4) + q * 4 + (a < 2 ? 25 : 0),
+            35,
+            90
+          );
+          const lo = clamp(score - range, 300, 850);
+          const hi = clamp(score + range, 300, 850);
+
+          // Identify biggest fix
+          let biggestFix = "Maintain on-time payments";
+          if (on !== 100) biggestFix = "Improve payment history";
+          else if (u > 30) biggestFix = "Lower utilization below 30%";
+          else if (q >= 4) biggestFix = "Avoid new inquiries";
+          else if (a < 4) biggestFix = "Build credit age (time)";
+
+          // Util impact label
+          let utilLabel = "Great (≤ 9%)";
+          if (u > 9 && u <= 29) utilLabel = "Good (10–29%)";
+          else if (u > 29 && u <= 49) utilLabel = "OK (30–49%)";
+          else if (u > 49 && u <= 74) utilLabel = "High (50–74%)";
+          else if (u > 74) utilLabel = "Very High (75%+)";
+
+          return { score, lo, hi, utilLabel, biggestFix, on, u, a, q, m };
+        }
+
+        function renderTips(data) {
+          const list = [];
+          if (data.on !== 100)
+            list.push(
+              "Set autopay for at least the minimum to avoid late payments."
+            );
+          if (data.u > 30)
+            list.push(
+              "Reduce utilization: pay early, split payments, or request a limit increase."
+            );
+          if (data.q >= 4)
+            list.push(
+              "Pause new credit applications for a few months to let inquiries age."
+            );
+          if (data.a < 4)
+            list.push(
+              "Keep older accounts open and active (small purchases, full pay)."
+            );
+          list.push(
+            "Check your credit report for errors and dispute incorrect entries."
+          );
+
+          tipsList.innerHTML = list.map((t) => `<li>${t}</li>`).join("");
+          tips.style.display = "block";
+        }
+
+        function calc() {
+          const uVal = util.value === "" ? NaN : +util.value;
+          const aVal = age.value === "" ? NaN : +age.value;
+
+          if (isNaN(uVal) || isNaN(aVal)) {
+            out.textContent = "Please enter Utilization and Credit Age.";
+            band.textContent = "";
+            meter.style.display = "none";
+            kpis.style.display = "none";
+            tips.style.display = "none";
+            return;
+          }
+
+          const data = scoreFromInputs();
+          const b = getBand(data.score);
+
+          out.textContent = `Estimated score: ${data.score}`;
+          band.textContent = `${b.name} — ${b.hint}`;
+
+          // meter pin: map 300..850 to 0..100%
+          const pct = ((data.score - 300) / (850 - 300)) * 100;
+          pin.style.left = clamp(pct, 0, 100) + "%";
+          meter.style.display = "block";
+
+          kpis.style.display = "grid";
+          kScore.textContent = data.score;
+          kRange.textContent = `${data.lo} – ${data.hi}`;
+          kUtilImpact.textContent = data.utilLabel;
+          kFix.textContent = data.biggestFix;
+
+          renderTips(data);
+        }
+
+        $("btnCalc").addEventListener("click", calc);
+
+        $("btnExample").addEventListener("click", function () {
+          onTime.value = "100";
+          util.value = "28";
+          age.value = "4";
+          inq.value = "1";
+          mix.value = "avg";
+          calc();
+        });
+
+        [onTime, util, age, inq, mix].forEach((el) => {
+          el.addEventListener("input", () => {
+            if (util.value !== "" && age.value !== "") calc();
+          });
+          el.addEventListener("change", () => {
+            if (util.value !== "" && age.value !== "") calc();
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <!-- ✅ SEO: stronger + complete title (fix truncated) -->
+  <title>Calories Burned Calculator (Running & Walking) | CalculatorSolution</title>
+
+  <!-- ✅ SEO: stronger description with intent keywords -->
+  <meta name="description" content="Free Calories Burned Calculator for Running & Walking: estimate calories using weight, distance, pace, duration, and incline. Includes MET method, pace table, and weekly + yearly summary for better planning.">
+
+  <!-- Preload critical CSS and fonts to reduce render-blocking -->
+  <link rel="preload" href="/assets/style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/style.css"></noscript>
+
+  <link rel="preload" href="/assets/og-image.svg" as="image">
+  <meta property="og:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <meta name="twitter:image" content="https://calculatorsolution.com/assets/og-image.svg">
+  <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/logo.png">
+  <link rel="manifest" href="/assets/site.webmanifest">
+
+  <style>
+    /* =========================
+       Base
+    ========================== */
+    html,body{height:100%;margin:0;}
+    body{
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background:linear-gradient(135deg, #f8fafc 0%, #f0f4f8 100%);
+      color:#0f172a;
+      line-height:1.6;
+      min-height:100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    *{box-sizing:border-box;}
+    img{max-width:100%;height:auto;display:block;}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px;}
+    .site-header{padding:14px 0; border-bottom: 1px solid #e2e8f0; background:rgba(248,250,252,.75); backdrop-filter:saturate(180%) blur(10px);}
+    .brand{
+      font-weight:700;
+      color:#3b82f6;
+      text-decoration:none;
+      font-size:1.2rem;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+    }
+    .brand-logo{flex:0 0 auto;}
+    .brand-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+    /* (Hero classes kept as-is for site consistency, even if unused on this page) */
+    .hero{background:linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); color:white; padding:60px 20px; text-align:center;}
+    .hero h1{font-size:2.5rem; margin:0 0 12px 0; font-weight:800;}
+    .hero > .wrap > p{font-size:1.1rem; margin:0 0 20px 0; opacity:0.95;}
+    .hero-grid,.cards-grid,.featured-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:14px;
+      margin-top:20px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border-radius:10px;
+      text-decoration:none;
+      font-weight:800;
+      background:linear-gradient(90deg,#3b82f6,#6c9cff);
+      color:#fff;
+      box-shadow:0 10px 24px rgba(59,130,246,0.12);
+      border:0;
+      cursor:pointer;
+      transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:hover{transform:translateY(-3px); box-shadow:0 14px 40px rgba(59,130,246,0.14);}
+    .btn:active{transform:translateY(-1px); filter:saturate(1.05);}
+    .btn:focus-visible{outline:3px solid rgba(59,130,246,0.35); outline-offset:3px;}
+
+    .btn-ghost{background:#fff; color:#0f172a; border:1px solid #e2e8f0; box-shadow:none;}
+    .btn-ghost:hover{transform:translateY(-2px);}
+    .btn-dark{background:#0f172a; box-shadow:0 10px 22px rgba(2,6,23,0.15);}
+
+    .card{
+      display:block;
+      background:#fff;
+      padding:14px;
+      border-radius:12px;
+      box-shadow:0 10px 26px rgba(8,13,26,0.06);
+      text-decoration:none;
+      color:inherit;
+      transition:transform .18s ease, box-shadow .18s ease;
+      border:1px solid #e2e8f0;
+    }
+    .card:hover{transform:translateY(-4px);}
+    .card:focus-visible{outline:3px solid rgba(59,130,246,0.35); outline-offset:3px;}
+
+    .footer{padding:20px 0; border-top:1px solid #e2e8f0; color:#64748b; font-size:0.9rem;}
+    .site-footer a{color:inherit;}
+
+    /* =========================
+       Calculator UI (no logic changes)
+    ========================== */
+    .calculator-hero{margin:18px 0 8px 0;}
+    .calculator-hero h1{font-size:2rem; margin:0 0 6px 0; letter-spacing:-0.02em;}
+    .lead{color:#334155; margin:0; max-width:72ch;}
+
+    .calculator-main{padding-bottom:10px;}
+
+    .calc-shell{
+      display:grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap:14px;
+      margin-top:14px;
+      align-items:start;
+    }
+
+    .panel{
+      background:#fff;
+      border:1px solid #e2e8f0;
+      border-radius:14px;
+      box-shadow:0 12px 28px rgba(8,13,26,0.06);
+      padding:14px;
+      overflow:hidden;
+    }
+
+    .panel-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+      flex-wrap:wrap; /* ✅ allows wrap on small screens */
+    }
+    .panel-title h2{font-size:1.1rem; margin:0;}
+
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(59,130,246,0.10);
+      color:#1d4ed8;
+      font-weight:900;
+      font-size:0.85rem;
+      white-space:nowrap;
+      max-width:100%;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .field{display:flex; flex-direction:column; gap:6px; min-width:0;}
+    .field label{font-weight:900; font-size:0.92rem;}
+
+    .input, select{
+      width:100%;
+      padding:10px 12px;
+      border:1px solid #e2e8f0;
+      border-radius:12px;
+      font-size:1rem;
+      outline:none;
+      background:#fff;
+      min-width:0;
+    }
+    .input:focus, select:focus{border-color:#93c5fd; box-shadow:0 0 0 4px rgba(59,130,246,0.10);}
+    .help{font-size:0.86rem; color:#64748b; margin:0;}
+    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
+
+    .metric{
+      background:linear-gradient(180deg, rgba(59,130,246,0.08), transparent);
+      border:1px solid #e2e8f0;
+      border-radius:14px;
+      padding:12px;
+      margin-bottom:10px;
+    }
+    .metric .k{font-size:0.85rem; color:#475569; margin:0;}
+    .metric .v{font-size:1.45rem; font-weight:1000; margin:4px 0 0 0; letter-spacing:-0.02em;}
+    .mini{font-size:0.86rem; color:#64748b;}
+
+    .note{
+      border-left:4px solid #3b82f6;
+      padding:10px 12px;
+      background:#fff;
+      border-radius:14px;
+      border:1px solid #e2e8f0;
+    }
+    .note p{margin:0; color:#334155;}
+
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      border:1px solid #e2e8f0;
+      border-radius:14px;
+      background:#fff;
+      box-shadow:0 10px 24px rgba(8,13,26,0.04);
+    }
+
+    table{width:100%; border-collapse:collapse; min-width:820px;}
+    th,td{padding:10px 12px; border-bottom:1px solid #e2e8f0; text-align:left; font-size:0.95rem; vertical-align:top;}
+    th{background:#f8fafc; font-weight:1000;}
+    tr:last-child td{border-bottom:0;}
+
+    .tag{display:inline-block; padding:4px 8px; border-radius:999px; font-weight:1000; font-size:0.8rem; background:rgba(16,185,129,0.10); color:#065f46;}
+    .tag.warn{background:rgba(245,158,11,0.12); color:#92400e;}
+    .tag.bad{background:rgba(239,68,68,0.10); color:#991b1b;}
+
+    /* ✅ Related section spacing + responsive grid */
+    .related{margin-top:22px;}
+    .related h3{margin:18px 0 10px 0;}
+    .related-grid{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));}
+
+    /* ✅ Content sections readability */
+    section.explanation, section.formula, section.faqs{margin-top:18px;}
+    section.explanation p{max-width:75ch;}
+    pre{
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      padding:12px 14px;
+      background:#0b1220;
+      color:#e2e8f0;
+      border-radius:12px;
+      border:1px solid rgba(148,163,184,0.25);
+      font-size:.95rem;
+      line-height:1.5;
+    }
+
+    /* ✅ FAQ details are cards already; make them behave well on mobile */
+    details.card{padding:12px 14px;}
+    details.card summary{cursor:pointer; list-style:none;}
+    details.card summary::-webkit-details-marker{display:none;}
+    details.card summary:focus-visible{outline:3px solid rgba(59,130,246,0.35); outline-offset:3px;}
+
+    /* =========================
+       Responsive breakpoints (UI-only)
+    ========================== */
+
+    /* Tablets & small laptops */
+    @media (max-width: 920px){
+      .calc-shell{grid-template-columns:1fr;}
+      table{min-width: 660px;}
+      .calculator-hero h1{font-size:1.85rem;}
+      .panel{padding:14px;}
+    }
+
+    /* Phones / small devices */
+    @media (max-width: 640px){
+      .wrap{padding:0 14px;}
+      .site-header{padding:12px 0;}
+
+      .calculator-hero{margin-top:14px;}
+      .calculator-hero h1{font-size:1.55rem;}
+      .lead{font-size:0.98rem;}
+
+      .grid-2{grid-template-columns:1fr;} /* ✅ stack form fields */
+      .actions{gap:10px;}
+      .btn{width:100%;} /* ✅ full-width buttons for thumbs */
+      .metric .v{font-size:1.35rem;}
+      table{min-width:560px;}
+    }
+
+    /* Very small phones */
+    @media (max-width: 380px){
+      .brand{font-size:1.08rem;}
+      .calculator-hero h1{font-size:1.38rem;}
+      .pill{font-size:0.8rem;}
+    }
+
+    /* Prefer reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .btn, .card{transition:none !important;}
+      .btn:hover, .card:hover{transform:none !important;}
+    }
+  </style>
+
+  <!-- GA4 Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments)}
+    gtag('js', new Date());
+    gtag('config', 'G-Y5YHCPQPFS');
+  </script>
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://calculatorsolution.com/calories-burned-running-walking.html">
+
+  <!-- ✅ SEO: upgraded structured data -->
+  <script type="application/ld+json">[
+    {
+      "@context":"https://schema.org",
+      "@type":"WebPage",
+      "name":"Calories Burned Calculator (Running & Walking)",
+      "url":"https://calculatorsolution.com/calories-burned-running-walking.html",
+      "description":"Estimate calories burned for running and walking using weight, duration, pace, distance, and incline. Includes pace table and weekly/yearly summaries."
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"WebSite",
+      "url":"https://calculatorsolution.com/",
+      "name":"CalculatorSolution",
+      "potentialAction":{
+        "@type":"SearchAction",
+        "target":"https://calculatorsolution.com/?q={search_term_string}",
+        "query-input":"required name=search_term_string"
+      }
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"Calculator Solution","item":"https://calculatorsolution.com/"},
+        {"@type":"ListItem","position":2,"name":"Calories Burned Calculator (Running/Walking)","item":"https://calculatorsolution.com/calories-burned-running-walking.html"}
+      ]
+    },
+    {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Does incline increase calories burned?","acceptedAnswer":{"@type":"Answer","text":"Yes. Uphill/incline generally increases energy cost compared to flat ground at the same pace."}},
+        {"@type":"Question","name":"Is pace or distance more important?","acceptedAnswer":{"@type":"Answer","text":"Both matter. Pace affects intensity (MET), and distance/time determines how long you sustain that intensity."}},
+        {"@type":"Question","name":"How accurate are smartwatches?","acceptedAnswer":{"@type":"Answer","text":"Accuracy varies by device and user. Wearables are often best for comparing trends over time."}},
+        {"@type":"Question","name":"Is heart-rate better for estimating calories?","acceptedAnswer":{"@type":"Answer","text":"Heart-rate based models can be more personalized, but still vary; use them consistently for comparisons."}},
+        {"@type":"Question","name":"Can I use this for other activities like swimming?","acceptedAnswer":{"@type":"Answer","text":"Swimming uses different MET values. This page focuses on running/walking, but the MET method is similar."}}
+      ]
+    }
+  ]</script>
+
+  <!-- <script defer src="/assets/calculators-complete.js"></script> -->
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="/">
+        <img src="/assets/logo.png" alt="CalculatorSolution logo" class="brand-logo" width="36" height="36">
+        <span class="brand-text">CalculatorSolution</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article>
+      <div class="calculator-hero">
+        <h1>Calories Burned Calculator (Running/Walking)</h1>
+        <p class="lead">Estimate calories using weight, pace, distance, duration, and incline — with weekly & yearly summary.</p>
+      </div>
+
+      <section class="calculator-main">
+        <!-- ✅ Interactive calories calculator -->
+        <div id="calc-calories-burned-running-walking">
+          <div class="calc-shell">
+            <!-- Inputs -->
+            <div class="panel" aria-label="Calories burned inputs">
+              <div class="panel-title">
+                <h2>Enter activity details</h2>
+                <span class="pill">🏃‍♂️ Run / 🚶 Walk</span>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="cal_type">Activity</label>
+                  <select id="cal_type">
+                    <option value="walk">Walking</option>
+                    <option value="run">Running</option>
+                  </select>
+                  <p class="help">Choose the closest match. Running is generally higher intensity than walking.</p>
+                </div>
+
+                <div class="field">
+                  <label for="cal_weight">Weight</label>
+                  <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <input id="cal_weight" class="input" inputmode="decimal" type="number" min="0" step="0.1" placeholder="e.g., 70" style="flex:1 1 160px;">
+                    <select id="cal_weight_unit" aria-label="Weight unit" style="min-width:92px; flex:0 0 auto;">
+                      <option value="kg" selected>kg</option>
+                      <option value="lb">lb</option>
+                    </select>
+                  </div>
+                  <p class="help">Calories scale strongly with body weight.</p>
+                </div>
+
+                <div class="field">
+                  <label for="cal_distance">Distance</label>
+                  <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <input id="cal_distance" class="input" inputmode="decimal" type="number" min="0" step="0.01" placeholder="e.g., 5" style="flex:1 1 160px;">
+                    <select id="cal_distance_unit" aria-label="Distance unit" style="min-width:92px; flex:0 0 auto;">
+                      <option value="km" selected>km</option>
+                      <option value="mi">mi</option>
+                    </select>
+                  </div>
+                  <p class="help">If you don’t know distance, enter duration + pace.</p>
+                </div>
+
+                <div class="field">
+                  <label for="cal_duration_min">Duration</label>
+                  <input id="cal_duration_min" class="input" inputmode="numeric" type="number" min="0" step="1" placeholder="e.g., 30">
+                  <p class="help">Minutes of activity. If both pace and distance are given, duration can be auto-estimated.</p>
+                </div>
+
+                <div class="field">
+                  <label for="cal_pace">Pace (optional)</label>
+                  <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <input id="cal_pace" class="input" inputmode="decimal" type="number" min="0" step="0.01" placeholder="e.g., 8.0" style="flex:1 1 160px;">
+                    <select id="cal_pace_unit" aria-label="Pace unit" style="min-width:92px; flex:0 0 auto;">
+                      <option value="min_per_km" selected>min/km</option>
+                      <option value="min_per_mi">min/mi</option>
+                    </select>
+                  </div>
+                  <p class="help">Pace affects intensity (MET). If you don’t know pace, we estimate from distance & duration.</p>
+                </div>
+
+                <div class="field">
+                  <label for="cal_incline">Incline (optional)</label>
+                  <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <input id="cal_incline" class="input" inputmode="decimal" type="number" step="0.1" placeholder="e.g., 3" style="flex:1 1 160px;">
+                    <span class="mini" style="align-self:center;">%</span>
+                  </div>
+                  <p class="help">Incline increases calories. Leave blank for flat ground.</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="cal_calc_btn" type="button">Calculate</button>
+                <button class="btn btn-dark" id="cal_example_btn" type="button">Try Example</button>
+                <button class="btn btn-ghost" id="cal_reset_btn" type="button">Reset</button>
+              </div>
+
+              <div class="note" style="margin-top:12px;">
+                <p><strong>Pro tip:</strong> For better planning, use the weekly table below to set a realistic calorie-burn target.</p>
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="panel" aria-label="Calories burned results">
+              <div class="panel-title">
+                <h2>Results</h2>
+                <span class="pill">🔥 Output</span>
+              </div>
+
+              <div class="metric">
+                <p class="k">Estimated Calories Burned</p>
+                <p class="v" id="cal_out_cal">—</p>
+                <p class="mini" id="cal_out_note">—</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Estimated MET (Intensity)</p>
+                <p class="v" id="cal_out_met">—</p>
+                <p class="mini">Higher pace and incline generally increase MET.</p>
+              </div>
+
+              <div class="metric">
+                <p class="k">Session Summary</p>
+                <p class="mini" id="cal_out_summary">Enter details to see a clean summary.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ✅ Weekly + Year summary table (SEO + user value) -->
+          <h2 style="margin-top:18px;">Weekly & Year Summary</h2>
+          <p class="lead">Generate simple projections from the same workout repeated multiple times per week.</p>
+
+          <div class="table-wrap" style="margin-top:10px;">
+            <table aria-label="Calories burned weekly and yearly summary table">
+              <thead>
+                <tr>
+                  <th>Frequency</th>
+                  <th>Per Session</th>
+                  <th>Per Week</th>
+                  <th>Per Month</th>
+                  <th>Per Year</th>
+                  <th>Note</th>
+                </tr>
+              </thead>
+              <tbody id="cal_table">
+                <tr>
+                  <td colspan="6" class="mini">Click <strong>Calculate</strong> to generate weekly and yearly projections.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- ✅ Pace & MET guidance table (SEO) -->
+          <h2 style="margin-top:18px;">Pace Guide (Simple MET Ranges)</h2>
+          <p class="lead">These are approximate ranges to help choose intensity. Your actual burn can vary by fitness, terrain, wind, and form.</p>
+
+          <div class="table-wrap" style="margin-top:10px;">
+            <table aria-label="Pace and MET guide table">
+              <thead>
+                <tr>
+                  <th>Activity</th>
+                  <th>Pace (min/km)</th>
+                  <th>Intensity</th>
+                  <th>Approx MET</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Walking</td><td>12–10</td><td><span class="tag">Easy</span></td><td>3.0–3.8</td></tr>
+                <tr><td>Walking</td><td>10–9</td><td><span class="tag warn">Moderate</span></td><td>3.8–4.8</td></tr>
+                <tr><td>Walking</td><td>9–8</td><td><span class="tag warn">Brisk</span></td><td>4.8–5.8</td></tr>
+                <tr><td>Running</td><td>8–7</td><td><span class="tag warn">Light</span></td><td>7.0–9.0</td></tr>
+                <tr><td>Running</td><td>7–6</td><td><span class="tag">Moderate</span></td><td>9.0–11.0</td></tr>
+                <tr><td>Running</td><td>6–5</td><td><span class="tag">Hard</span></td><td>11.0–13.5</td></tr>
+                <tr><td>Running</td><td>&lt; 5</td><td><span class="tag bad">Very hard</span></td><td>13.5+</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="related">
+        <h3>Related calculators</h3>
+        <div class="cards-grid related-grid">
+          <a class="card" href="bmr-calculator.html"><h4>BMR Calculator</h4><p>Estimate basal metabolic rate from age, sex, height and weight.</p></a>
+          <a class="card" href="body-fat-percentage-calculator.html"><h4>Body Fat Percentage Calculator</h4><p>Estimate body fat using measurements or formulas.</p></a>
+          <a class="card" href="daily-calorie-needs-calculator.html"><h4>Daily Calorie Needs Calculator</h4><p>Estimate daily calorie needs based on activity level.</p></a>
+          <a class="card" href="ideal-weight-calculator.html"><h4>Ideal Weight Calculator</h4><p>Estimate ideal weight ranges from BMI or other formulas.</p></a>
+        </div>
+      </section>
+
+      <!-- ✅ SEO: specific explanation -->
+      <section class="explanation">
+        <h2>Explanation</h2>
+        <p>
+          This <strong>Calories Burned Calculator for Running and Walking</strong> estimates energy expenditure using the widely used
+          <strong>MET method</strong> (Metabolic Equivalent of Task). MET represents exercise intensity. Calories burned generally increase with
+          <strong>higher body weight</strong>, <strong>longer duration</strong>, <strong>faster pace</strong>, and <strong>incline</strong>.
+        </p>
+        <p>
+          For quick planning, use the <strong>weekly and yearly summary</strong> to see what happens if you repeat the same workout multiple times per week.
+          This is useful for building consistency and setting realistic fitness targets.
+        </p>
+        <p class="mini">
+          Important: this is an estimate. Real values vary by fitness level, terrain, temperature, wind, biomechanics, and measurement errors.
+        </p>
+      </section>
+
+      <section class="formula">
+        <h3>Formula</h3>
+        <pre>Calories ≈ MET × weight(kg) × duration(hours)</pre>
+      </section>
+
+      <section class="faqs">
+        <h3>FAQs</h3>
+        <details class="card"><summary><strong>Include incline?</strong></summary><p>Yes. Incline increases energy expenditure, so calories generally rise for the same pace and duration.</p></details>
+        <details class="card"><summary><strong>Pace vs distance?</strong></summary><p>Both matter. Pace changes intensity (MET), and distance/time determines how long you sustain that intensity.</p></details>
+        <details class="card"><summary><strong>Wearable accuracy?</strong></summary><p>Accuracy varies; wearables are often best for tracking trends over time.</p></details>
+        <details class="card"><summary><strong>Heart rate?</strong></summary><p>Heart-rate methods can be more personalized, but still vary; use consistently for comparisons.</p></details>
+        <details class="card"><summary><strong>Swimming?</strong></summary><p>Swimming uses different MET values. This calculator focuses on running/walking, but the MET concept applies.</p></details>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; CalculatorSolution</p>
+      <p style="margin-top:8px;font-size:0.9rem;">
+        <a href="/sitemap.xml">Sitemap</a> |
+        <a href="/">Home</a> |
+        <a href="/privacy-policy.html">Privacy Policy</a> |
+        <a href="/terms-of-service.html">Terms</a> |
+        <a href="/contact.html">Contact</a> |
+        <a href="/about.html">About</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- ✅ Interactive script (UNCHANGED) -->
+  <script>
+    (function(){
+      const $ = (id) => document.getElementById(id);
+
+      const typeEl = $('cal_type');
+      const weightEl = $('cal_weight');
+      const weightUnitEl = $('cal_weight_unit');
+      const distEl = $('cal_distance');
+      const distUnitEl = $('cal_distance_unit');
+      const durEl = $('cal_duration_min');
+      const paceEl = $('cal_pace');
+      const paceUnitEl = $('cal_pace_unit');
+      const inclineEl = $('cal_incline');
+
+      const outCal = $('cal_out_cal');
+      const outMet = $('cal_out_met');
+      const outNote = $('cal_out_note');
+      const outSummary = $('cal_out_summary');
+      const tableBody = $('cal_table');
+
+      // Choose a currency-free number format
+      const fmtNum = (n, d=0) => (isFinite(n) ? new Intl.NumberFormat(undefined, {maximumFractionDigits:d}).format(n) : '—');
+
+      const toKg = (w, unit) => unit === 'lb' ? (w * 0.45359237) : w;
+      const toKm = (d, unit) => unit === 'mi' ? (d * 1.609344) : d;
+
+      // Very practical MET estimator:
+      // - If pace provided: use pace ranges
+      // - Else if distance+duration: derive pace
+      // - Else fallback by activity
+      function estimateMET(activity, paceMinPerKm){
+        // walking ranges
+        if (activity === 'walk'){
+          if (!isFinite(paceMinPerKm) || paceMinPerKm <= 0) return 3.5;
+          if (paceMinPerKm >= 12) return 3.0;
+          if (paceMinPerKm >= 10) return 3.8;
+          if (paceMinPerKm >= 9)  return 4.8;
+          if (paceMinPerKm >= 8)  return 5.8;
+          return 6.5; // very brisk / near jog
+        }
+        // running ranges
+        if (!isFinite(paceMinPerKm) || paceMinPerKm <= 0) return 8.0;
+        if (paceMinPerKm >= 8)  return 7.5;
+        if (paceMinPerKm >= 7)  return 9.0;
+        if (paceMinPerKm >= 6)  return 10.8;
+        if (paceMinPerKm >= 5)  return 12.5;
+        return 14.0;
+      }
+
+      function paceToMinPerKm(pace, unit){
+        if (!isFinite(pace) || pace <= 0) return NaN;
+        if (unit === 'min_per_mi') return pace / 1.609344;
+        return pace; // min/km
+      }
+
+      function derivePaceFromDistDur(distKm, durMin){
+        if (!isFinite(distKm) || distKm <= 0) return NaN;
+        if (!isFinite(durMin) || durMin <= 0) return NaN;
+        return durMin / distKm; // min/km
+      }
+
+      function applyInclineBoost(met, inclinePct){
+        // Simple conservative adjustment: small boost per incline percent
+        if (!isFinite(inclinePct) || inclinePct <= 0) return met;
+        const boost = Math.min(0.35, inclinePct * 0.03); // cap boost
+        return met * (1 + boost);
+      }
+
+      function calc(){
+        const activity = typeEl.value;
+        const w = parseFloat(weightEl.value);
+        const wUnit = weightUnitEl.value;
+        const d = parseFloat(distEl.value);
+        const dUnit = distUnitEl.value;
+        const durMin = parseFloat(durEl.value);
+        const paceIn = parseFloat(paceEl.value);
+        const paceUnit = paceUnitEl.value;
+        const incline = parseFloat(inclineEl.value);
+
+        if (!isFinite(w) || w <= 0){
+          outCal.textContent = '—';
+          outMet.textContent = '—';
+          outNote.textContent = 'Enter a valid weight.';
+          outSummary.textContent = '—';
+          tableBody.innerHTML = '<tr><td colspan="6" class="mini">Enter inputs and click <strong>Calculate</strong> to generate projections.</td></tr>';
+          return;
+        }
+
+        const weightKg = toKg(w, wUnit);
+
+        const distKm = (isFinite(d) && d > 0) ? toKm(d, dUnit) : NaN;
+
+        // pace handling
+        let paceMinPerKm = paceToMinPerKm(paceIn, paceUnit);
+        if (!isFinite(paceMinPerKm)){
+          paceMinPerKm = derivePaceFromDistDur(distKm, durMin);
+        }
+
+        // duration handling: if missing but distance+pace given, compute duration
+        let durationMin = durMin;
+        if ((!isFinite(durationMin) || durationMin <= 0) && isFinite(distKm) && distKm > 0 && isFinite(paceMinPerKm) && paceMinPerKm > 0){
+          durationMin = distKm * paceMinPerKm;
+          durEl.value = Math.round(durationMin);
+        }
+
+        if (!isFinite(durationMin) || durationMin <= 0){
+          outCal.textContent = '—';
+          outMet.textContent = '—';
+          outNote.textContent = 'Enter duration (minutes) or provide distance + pace.';
+          outSummary.textContent = '—';
+          tableBody.innerHTML = '<tr><td colspan="6" class="mini">Enter inputs and click <strong>Calculate</strong> to generate projections.</td></tr>';
+          return;
+        }
+
+        // MET estimate
+        let met = estimateMET(activity, paceMinPerKm);
+        met = applyInclineBoost(met, incline);
+
+        const hours = durationMin / 60;
+        const calories = met * weightKg * hours;
+
+        outCal.textContent = fmtNum(calories, 0) + ' kcal';
+        outMet.textContent = fmtNum(met, 1);
+        outNote.textContent = 'Estimate using MET × weight × time. Real calories can vary.';
+        const distText = (isFinite(distKm) ? (fmtNum(distKm, 2) + ' km') : '—');
+        const paceText = (isFinite(paceMinPerKm) ? (fmtNum(paceMinPerKm, 2) + ' min/km') : '—');
+        outSummary.textContent = `${activity === 'run' ? 'Running' : 'Walking'} • Weight: ${fmtNum(weightKg,1)} kg • Duration: ${fmtNum(durationMin,0)} min • Distance: ${distText} • Pace: ${paceText}${isFinite(incline) ? (' • Incline: ' + fmtNum(incline,1) + '%') : ''}`;
+
+        // Weekly + Yearly projections based on sessions/week
+        const per = calories;
+        const rows = [
+          {f:'1× / week', n:1, note:'Easy consistency start'},
+          {f:'3× / week', n:3, note:'Common fitness routine'},
+          {f:'5× / week', n:5, note:'High consistency plan'},
+          {f:'7× / week', n:7, note:'Daily activity streak'}
+        ];
+
+        const perMonthFactor = 4.33; // avg weeks per month
+        const perYearFactor = 52;
+
+        tableBody.innerHTML = rows.map(r=>{
+          const week = per * r.n;
+          const month = week * perMonthFactor;
+          const year = per * r.n * perYearFactor;
+          return `
+            <tr>
+              <td><strong>${r.f}</strong></td>
+              <td>${fmtNum(per,0)} kcal</td>
+              <td>${fmtNum(week,0)} kcal</td>
+              <td>${fmtNum(month,0)} kcal</td>
+              <td>${fmtNum(year,0)} kcal</td>
+              <td class="mini">${r.note}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      $('cal_calc_btn').addEventListener('click', calc);
+
+      $('cal_example_btn').addEventListener('click', function(){
+        typeEl.value = 'run';
+        weightEl.value = '70';
+        weightUnitEl.value = 'kg';
+        distEl.value = '5';
+        distUnitEl.value = 'km';
+        durEl.value = '30';
+        paceEl.value = ''; // derived
+        paceUnitEl.value = 'min_per_km';
+        inclineEl.value = '2';
+        calc();
+      });
+
+      $('cal_reset_btn').addEventListener('click', function(){
+        [weightEl, distEl, durEl, paceEl, inclineEl].forEach(el => el.value = '');
+        typeEl.value = 'walk';
+        weightUnitEl.value = 'kg';
+        distUnitEl.value = 'km';
+        paceUnitEl.value = 'min_per_km';
+        outCal.textContent = '—';
+        outMet.textContent = '—';
+        outNote.textContent = '—';
+        outSummary.textContent = 'Enter details to see a clean summary.';
+        tableBody.innerHTML = '<tr><td colspan="6" class="mini">Click <strong>Calculate</strong> to generate weekly and yearly projections.</td></tr>';
+      });
+
+      // live update
+      [typeEl, weightEl, weightUnitEl, distEl, distUnitEl, durEl, paceEl, paceUnitEl, inclineEl].forEach(el=>{
+        el.addEventListener('input', function(){
+          if (weightEl.value) calc();
+        });
+        el.addEventListener('change', function(){
+          if (weightEl.value) calc();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

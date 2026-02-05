@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>
+      Crypto Percentage Profit Calculator (ROI + Fees + Leverage) |
+      CalculatorSolution
+    </title>
+    <meta
+      name="description"
+      content="Crypto Percentage Profit Calculator — calculate ROI % profit/loss for crypto trades. Includes fees, leverage, net P&L, break-even sell price, and quick risk tips."
+    />
+
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://calculatorsolution.com/crypto-percentage-profit-calculator.html"
+    />
+
+    <meta property="og:title" content="Crypto Percentage Profit Calculator" />
+    <meta
+      property="og:description"
+      content="Calculate crypto ROI % with fees, leverage, net P&L, and break-even sell price."
+    />
+    <meta
+      property="og:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:image"
+      content="https://calculatorsolution.com/assets/og-image.svg"
+    />
+
+    <link rel="icon" href="/assets/og-image.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/logo.png" />
+    <link rel="manifest" href="/assets/site.webmanifest" />
+
+    <link
+      rel="preload"
+      href="/assets/style.css"
+      as="style"
+      onload="this.rel='stylesheet'"
+    />
+    <noscript><link rel="stylesheet" href="/assets/style.css" /></noscript>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Arial;
+        background: linear-gradient(135deg, #f8fafc, #eef2ff);
+        color: #0f172a;
+        line-height: 1.6;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      .wrap {
+        max-width: 1100px;
+        margin: auto;
+        padding: 0 18px;
+      }
+      .site-header {
+        padding: 14px 0;
+        border-bottom: 1px solid #e2e8f0;
+        background: #fff;
+      }
+      .brand {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        text-decoration: none;
+      }
+      .brand-text {
+        font-weight: 900;
+        color: #2563eb;
+      }
+
+      .breadcrumbs {
+        font-size: 0.9rem;
+        color: #64748b;
+        margin: 14px 0;
+      }
+      .breadcrumbs a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .breadcrumbs a:hover {
+        text-decoration: underline;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: #fff;
+        border-radius: 18px;
+        padding: 26px;
+        margin: 10px 0 20px;
+      }
+      .hero h1 {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 1000;
+        letter-spacing: -0.02em;
+      }
+      .hero p {
+        margin: 8px 0 0;
+        opacity: 0.95;
+      }
+      .chips {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        font-weight: 900;
+        font-size: 0.85rem;
+      }
+
+      .panel {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 18px;
+        box-shadow: 0 10px 30px rgba(2, 6, 23, 0.06);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+      label {
+        font-weight: 900;
+      }
+      .help {
+        font-size: 0.88rem;
+        color: #64748b;
+        margin: 0;
+      }
+      .input,
+      .select {
+        padding: 10px 12px;
+        border: 1px solid #cbd5f5;
+        border-radius: 12px;
+        font-size: 1rem;
+      }
+      .input:focus,
+      .select:focus {
+        border-color: #6366f1;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+      }
+
+      .row2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      @media (max-width: 520px) {
+        .row2 {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 6px;
+      }
+      .btn {
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 0;
+        background: linear-gradient(90deg, #2563eb, #6366f1);
+        color: #fff;
+        font-weight: 1000;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        box-shadow: 0 12px 28px rgba(37, 99, 235, 0.18);
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 34px rgba(37, 99, 235, 0.22);
+      }
+      .btn.secondary {
+        background: #0f172a;
+        box-shadow: 0 12px 28px rgba(2, 6, 23, 0.16);
+      }
+
+      .result {
+        padding: 14px;
+        border-radius: 14px;
+        background: linear-gradient(180deg, #eef2ff, #fff);
+        border: 1px solid #c7d2fe;
+      }
+      .big {
+        font-size: 1.35rem;
+        font-weight: 1000;
+        margin: 0;
+      }
+      .sub {
+        margin: 8px 0 0;
+        color: #334155;
+      }
+
+      .meter {
+        margin-top: 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        background: #fff;
+        overflow: hidden;
+      }
+      .meterTop {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 12px;
+        font-weight: 900;
+        color: #475569;
+      }
+      .bar {
+        height: 12px;
+        background: linear-gradient(90deg, #ef4444, #f59e0b, #22c55e);
+        position: relative;
+      }
+      .pin {
+        position: absolute;
+        top: -8px;
+        width: 2px;
+        height: 28px;
+        background: #0f172a;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+      }
+      .legend {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding: 10px 12px;
+        color: #475569;
+        font-size: 0.92rem;
+      }
+      .pill {
+        border: 1px solid #e2e8f0;
+        border-radius: 999px;
+        padding: 4px 10px;
+        background: #fff;
+        font-weight: 900;
+      }
+
+      .kpis {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .kpi {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 10px;
+      }
+      .kpi small {
+        display: block;
+        color: #64748b;
+        font-weight: 900;
+      }
+      .kpi strong {
+        font-size: 1.05rem;
+      }
+
+      .tips {
+        margin-top: 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        background: #fff;
+        padding: 12px;
+      }
+      .tips h4 {
+        margin: 0 0 8px;
+        font-weight: 1000;
+      }
+      .tips ul {
+        margin: 0;
+        padding-left: 18px;
+        color: #334155;
+      }
+      .tips li {
+        margin: 6px 0;
+      }
+
+      .note {
+        margin-top: 12px;
+        font-size: 0.92rem;
+        color: #475569;
+        border-left: 4px solid #6366f1;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+      }
+
+      details.card {
+        margin-top: 10px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        padding: 10px;
+      }
+
+      pre {
+        background: #0b1220;
+        color: #e5e7eb;
+        padding: 12px;
+        border-radius: 12px;
+        overflow: auto;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+        margin-top: 12px;
+      }
+      .cardLink {
+        display: block;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 14px;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: 0 10px 24px rgba(2, 6, 23, 0.05);
+        transition: transform 0.2s;
+      }
+      .cardLink:hover {
+        transform: translateY(-3px);
+      }
+      .cardLink h4 {
+        margin: 0 0 6px;
+        font-weight: 1000;
+      }
+      .cardLink p {
+        margin: 0;
+        color: #475569;
+      }
+
+      .site-footer {
+        margin-top: 40px;
+        padding: 20px 0;
+        border-top: 1px solid #e2e8f0;
+        /* color: #64748b;
+        background: #fff; */
+      }
+      /* .site-footer a {
+        color: inherit;
+      } */
+    </style>
+
+    <!-- GA4 -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-Y5YHCPQPFS"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-Y5YHCPQPFS");
+    </script>
+
+    <!-- Schema -->
+    <script type="application/ld+json">
+      [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Crypto Percentage Profit Calculator"
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "url": "https://calculatorsolution.com/",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://calculatorsolution.com/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "CalculatorSolution",
+              "item": "https://calculatorsolution.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Crypto Percentage Profit Calculator",
+              "item": "https://calculatorsolution.com/crypto-percentage-profit-calculator.html"
+            }
+          ]
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Include fees?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Enter trading fees and (optional) network fees to get net profit and ROI."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Leverage?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Leverage increases both gains and losses. This calculator estimates leverage ROI on margin used."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Tax?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Crypto gains may be taxable depending on your country. Consult local rules or a tax advisor."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "High volatility?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use position sizing, stop-loss, and avoid risking funds you cannot afford to lose."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Stablecoins?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Stablecoins are typically less volatile, but returns vary by platform and risk."
+              }
+            }
+          ]
+        }
+      ]
+    </script>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">
+          <img
+            src="/assets/logo.png"
+            alt="CalculatorSolution logo"
+            width="36"
+            height="36"
+          />
+          <span class="brand-text">CalculatorSolution</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <article>
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a> ›
+          <span>Crypto Percentage Profit Calculator</span>
+        </nav>
+
+        <div class="hero">
+          <h1>Crypto Percentage Profit Calculator</h1>
+          <p>
+            Calculate ROI % profit/loss for crypto trades — with fees, leverage,
+            and break-even price.
+          </p>
+          <div class="chips">
+            <span class="chip">📈 ROI %</span>
+            <span class="chip">💸 Fees</span>
+            <span class="chip">⚙️ Leverage</span>
+            <span class="chip">🎯 Break-even</span>
+            <span class="chip">🧠 Risk tips</span>
+          </div>
+        </div>
+
+        <section class="panel" aria-label="Crypto ROI calculator">
+          <div class="grid">
+            <div>
+              <div class="row2">
+                <div class="field">
+                  <label for="buy">Buy Price</label>
+                  <input
+                    id="buy"
+                    class="input"
+                    type="number"
+                    min="0"
+                    step="0.00000001"
+                    placeholder="e.g. 25000"
+                  />
+                  <p class="help">Price per coin/token at entry.</p>
+                </div>
+                <div class="field">
+                  <label for="sell">Sell Price</label>
+                  <input
+                    id="sell"
+                    class="input"
+                    type="number"
+                    min="0"
+                    step="0.00000001"
+                    placeholder="e.g. 27500"
+                  />
+                  <p class="help">Price per coin/token at exit.</p>
+                </div>
+              </div>
+
+              <div class="row2">
+                <div class="field">
+                  <label for="qty">Quantity</label>
+                  <input
+                    id="qty"
+                    class="input"
+                    type="number"
+                    min="0"
+                    step="0.00000001"
+                    placeholder="e.g. 0.10"
+                  />
+                  <p class="help">How many coins/tokens you bought.</p>
+                </div>
+                <div class="field">
+                  <label for="lev">Leverage (optional)</label>
+                  <select id="lev" class="select">
+                    <option value="1">1x (spot)</option>
+                    <option value="2">2x</option>
+                    <option value="3">3x</option>
+                    <option value="5">5x</option>
+                    <option value="10">10x</option>
+                    <option value="20">20x</option>
+                    <option value="50">50x</option>
+                    <option value="100">100x</option>
+                  </select>
+                  <p class="help">Used for leverage ROI on margin.</p>
+                </div>
+              </div>
+
+              <div class="row2">
+                <div class="field">
+                  <label for="feePct">Trading Fee (%)</label>
+                  <input
+                    id="feePct"
+                    class="input"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    placeholder="e.g. 0.10"
+                  />
+                  <p class="help">
+                    Enter one-side fee (%). Applies on buy and sell.
+                  </p>
+                </div>
+                <div class="field">
+                  <label for="netFee">Network/Other Fees (flat)</label>
+                  <input
+                    id="netFee"
+                    class="input"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    placeholder="e.g. 2"
+                  />
+                  <p class="help">Withdrawal/gas/etc (optional).</p>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" id="btnCalc" type="button">
+                  Calculate Profit %
+                </button>
+                <button class="btn secondary" id="btnExample" type="button">
+                  Try Example
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <div class="result" role="status" aria-live="polite">
+                <p class="big" id="out">—</p>
+                <p class="sub" id="sub">Enter values to compute ROI.</p>
+
+                <div
+                  class="meter"
+                  id="meter"
+                  style="display: none"
+                  aria-label="Profit meter"
+                >
+                  <div class="meterTop">
+                    <span>Loss</span><span>Profit</span>
+                  </div>
+                  <div class="bar">
+                    <span class="pin" id="pin" style="left: 50%"></span>
+                  </div>
+                  <div class="legend">
+                    <span class="pill">Net P&amp;L</span>
+                    <span class="pill">Net ROI %</span>
+                    <span class="pill">With fees</span>
+                  </div>
+                </div>
+
+                <div class="kpis" id="kpis" style="display: none">
+                  <div class="kpi">
+                    <small>Net Profit/Loss</small><strong id="kPnL">—</strong>
+                  </div>
+                  <div class="kpi">
+                    <small>Net ROI %</small><strong id="kRoi">—</strong>
+                  </div>
+                  <div class="kpi">
+                    <small>Total Fees</small><strong id="kFees">—</strong>
+                  </div>
+                  <div class="kpi">
+                    <small>Break-even Sell</small><strong id="kBE">—</strong>
+                  </div>
+                </div>
+
+                <div
+                  class="kpis"
+                  id="kpis2"
+                  style="display: none; margin-top: 10px"
+                >
+                  <div class="kpi">
+                    <small>Position Value (Buy)</small
+                    ><strong id="kPos">—</strong>
+                  </div>
+                  <div class="kpi">
+                    <small>Leverage ROI %</small><strong id="kLevRoi">—</strong>
+                  </div>
+                  <div class="kpi">
+                    <small>Margin Used</small><strong id="kMargin">—</strong>
+                  </div>
+                  <div class="kpi">
+                    <small>Price Move %</small><strong id="kMove">—</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tips" id="tips" style="display: none">
+                <h4>Quick risk tips</h4>
+                <ul id="tipsList"></ul>
+              </div>
+
+              <div class="note">
+                Crypto prices are volatile. This tool is educational and does
+                not guarantee outcomes. Always consider risk management and fees
+                before trading.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section style="margin-top: 20px">
+          <h2>Explanation</h2>
+          <p>
+            Crypto ROI (return on investment) tells you the
+            <strong>percentage gain or loss</strong> from a trade. The most
+            common formula is <strong>(Sell − Buy) ÷ Buy × 100</strong>. In real
+            trading, your net results depend on
+            <strong>exchange trading fees</strong>, and sometimes
+            <strong>network/gas fees</strong>. This calculator computes:
+            <strong>gross ROI</strong>, <strong>net ROI after fees</strong>, and
+            a <strong>break-even sell price</strong>
+            (the sell price needed to cover fees).
+          </p>
+        </section>
+
+        <section style="margin-top: 14px">
+          <h3>Formula</h3>
+          <pre>
+Gross ROI % = (SellPrice - BuyPrice) / BuyPrice × 100
+
+Gross P&L = (SellPrice - BuyPrice) × Quantity
+
+Trading Fees (both sides) = (BuyValue × fee%) + (SellValue × fee%)
+Net P&L = Gross P&L - TradingFees - NetworkFees
+
+Net ROI % = Net P&L / BuyValue × 100
+
+Break-even SellPrice ≈ BuyPrice × (1 + fee%) / (1 - fee%)  (ignores flat network fee)</pre
+          >
+        </section>
+
+        <section style="margin-top: 14px">
+          <h3>FAQs</h3>
+          <details class="card">
+            <summary><strong>Include fees?</strong></summary>
+            <p>
+              Yes. Add trading fee (%) and optional network fees to calculate
+              net ROI and net profit.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Tax?</strong></summary>
+            <p>
+              Crypto gains may be taxable depending on your country. Check local
+              rules.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>High volatility?</strong></summary>
+            <p>
+              Use stop-loss, proper position sizing, and avoid over-leverage.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Leverage?</strong></summary>
+            <p>
+              Leverage magnifies both gains and losses. This calculator
+              estimates leverage ROI on margin used.
+            </p>
+          </details>
+          <details class="card">
+            <summary><strong>Stablecoins?</strong></summary>
+            <p>
+              Stablecoins are less volatile, but yields and risks vary by
+              platform and product.
+            </p>
+          </details>
+        </section>
+
+        <section style="margin-top: 18px">
+          <h3>Related calculators</h3>
+          <div class="cards-grid">
+            <a class="cardLink" href="percentage-calculator.html"
+              ><h4>Percentage Calculator</h4>
+              <p>Compute percent values and quick changes.</p></a
+            >
+            <a class="cardLink" href="percentage-change-calculator.html"
+              ><h4>Percentage Change Calculator</h4>
+              <p>Measure increase/decrease between two prices.</p></a
+            >
+            <a class="cardLink" href="compound-interest-calculator.html"
+              ><h4>Compound Interest Calculator</h4>
+              <p>Understand compounding growth over time.</p></a
+            >
+          </div>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>&copy; CalculatorSolution</p>
+        <p style="margin-top: 8px; font-size: 0.9rem">
+          <a href="/sitemap.xml">Sitemap</a> | <a href="/">Home</a> |
+          <a href="/privacy-policy.html">Privacy Policy</a> |
+          <a href="/terms-of-service.html">Terms</a> |
+          <a href="/contact.html">Contact</a> |
+          <a href="/about.html">About</a>
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        const $ = (id) => document.getElementById(id);
+        const fmt = (n) => {
+          if (!isFinite(n)) return "—";
+          const abs = Math.abs(n);
+          if (abs >= 1000)
+            return n.toLocaleString(undefined, { maximumFractionDigits: 2 });
+          if (abs >= 1)
+            return n.toLocaleString(undefined, { maximumFractionDigits: 6 });
+          return n.toLocaleString(undefined, { maximumFractionDigits: 10 });
+        };
+
+        const buy = $("buy");
+        const sell = $("sell");
+        const qty = $("qty");
+        const lev = $("lev");
+        const feePct = $("feePct");
+        const netFee = $("netFee");
+
+        const out = $("out");
+        const sub = $("sub");
+        const meter = $("meter");
+        const pin = $("pin");
+
+        const kpis = $("kpis");
+        const kPnL = $("kPnL");
+        const kRoi = $("kRoi");
+        const kFees = $("kFees");
+        const kBE = $("kBE");
+
+        const kpis2 = $("kpis2");
+        const kPos = $("kPos");
+        const kLevRoi = $("kLevRoi");
+        const kMargin = $("kMargin");
+        const kMove = $("kMove");
+
+        const tips = $("tips");
+        const tipsList = $("tipsList");
+
+        function clamp(n, min, max) {
+          return Math.max(min, Math.min(max, n));
+        }
+
+        function calc() {
+          const b = +buy.value;
+          const s = +sell.value;
+          const q = +qty.value;
+          const L = +lev.value || 1;
+          const fee = (+feePct.value || 0) / 100;
+          const extra = +netFee.value || 0;
+
+          if (!(b > 0) || !(s > 0) || !(q > 0)) {
+            out.textContent = "Please enter Buy, Sell, and Quantity.";
+            sub.textContent = "";
+            meter.style.display = "none";
+            kpis.style.display = "none";
+            kpis2.style.display = "none";
+            tips.style.display = "none";
+            return;
+          }
+
+          const buyValue = b * q;
+          const sellValue = s * q;
+
+          const grossPnL = (s - b) * q;
+          const grossRoi = ((s - b) / b) * 100;
+
+          const tradeFees = buyValue * fee + sellValue * fee;
+          const totalFees = tradeFees + extra;
+
+          const netPnL = grossPnL - totalFees;
+          const netRoi = (netPnL / buyValue) * 100;
+
+          // Break-even sell (covers % fees only). Add flat fee by converting to per-coin approx.
+          let be = (b * (1 + fee)) / (1 - fee);
+          if (extra > 0) {
+            const extraPerCoin = extra / q;
+            be += extraPerCoin / (1 - fee);
+          }
+
+          // Leverage metrics (educational)
+          const marginUsed = buyValue / L;
+          const levRoi = marginUsed > 0 ? (netPnL / marginUsed) * 100 : netRoi;
+          const movePct = ((s - b) / b) * 100;
+
+          // Output main
+          const sign = netPnL >= 0 ? "+" : "";
+          out.textContent = `Net Profit/Loss: ${sign}${fmt(netPnL)}`;
+          sub.textContent = `Net ROI: ${sign}${fmt(netRoi)}% (after fees)`;
+
+          // meter: map -50%..+50% to 0..100 (cap)
+          const pct = clamp(((netRoi + 50) / 100) * 100, 0, 100);
+          pin.style.left = pct + "%";
+          meter.style.display = "block";
+
+          kpis.style.display = "grid";
+          kPnL.textContent = `${sign}${fmt(netPnL)}`;
+          kRoi.textContent = `${sign}${fmt(netRoi)}%`;
+          kFees.textContent = fmt(totalFees);
+          kBE.textContent = fmt(be);
+
+          kpis2.style.display = "grid";
+          kPos.textContent = fmt(buyValue);
+          kLevRoi.textContent = `${levRoi >= 0 ? "+" : ""}${fmt(levRoi)}%`;
+          kMargin.textContent = fmt(marginUsed);
+          kMove.textContent = `${movePct >= 0 ? "+" : ""}${fmt(movePct)}%`;
+
+          // Tips
+          const list = [];
+          if (fee > 0)
+            list.push(
+              "Fees reduce ROI — higher frequency trading needs stricter edge to stay profitable."
+            );
+          if (L > 1)
+            list.push(
+              "Leverage amplifies moves — use smaller position size and define stop-loss first."
+            );
+          if (Math.abs(movePct) < fee * 200)
+            list.push(
+              "Small price moves may not cover fees — aim for a move that beats fee drag."
+            );
+          list.push(
+            "Consider risk per trade (e.g., 1–2%) and avoid all-in positions."
+          );
+          list.push(
+            "Plan exits: take-profit levels + invalidation (stop-loss)."
+          );
+          tipsList.innerHTML = list.map((t) => `<li>${t}</li>`).join("");
+          tips.style.display = "block";
+        }
+
+        $("btnCalc").addEventListener("click", calc);
+
+        $("btnExample").addEventListener("click", function () {
+          buy.value = "25000";
+          sell.value = "27500";
+          qty.value = "0.10";
+          lev.value = "5";
+          feePct.value = "0.10";
+          netFee.value = "2";
+          calc();
+        });
+
+        [buy, sell, qty, lev, feePct, netFee].forEach((el) => {
+          el.addEventListener("input", () => {
+            if (buy.value && sell.value && qty.value) calc();
+          });
+          el.addEventListener("change", () => {
+            if (buy.value && sell.value && qty.value) calc();
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>
