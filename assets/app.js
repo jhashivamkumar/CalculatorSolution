@@ -1,4 +1,4 @@
-// Modern frontend: populate cards from dist/index.json with search, filtering, featured links, and reveal animations
+// Modern frontend: populate cards from /calculators.json with search, filtering, featured links, and reveal animations
 async function fetchJSON(path) {
   try {
     return await (await fetch(path)).json()
@@ -25,7 +25,7 @@ async function init() {
   // mark page for analytics / A/B testing
   document.documentElement.setAttribute('data-page', 'home')
   if (window.gtag) gtag('event', 'page_view', { page_title: 'Calculator Solution Home', page_path: '/' })
-  const data = await fetchJSON('calculators.json') || await fetchJSON('dist/index.json') || []
+  const data = await fetchJSON('/calculators.json') || await fetchJSON('/index.json') || []
   const cards = document.getElementById('cards')
   const search = document.getElementById('search')
   const categoryLinks = document.querySelectorAll('.category-link')
@@ -105,6 +105,9 @@ async function init() {
   }
 }
 
+  // allow category.js to trigger filtering
+  window.filterByCategory = (cat) => setCategory(cat)
+
 
   function render(list) {
     cards.innerHTML = ''
@@ -113,7 +116,7 @@ async function init() {
     list.forEach((c, i) => {
       const el = document.createElement('a')
       el.className = 'card'
-      el.href = `dist/${c.slug}.html`
+      el.href = `/${c.slug}.html`
       el.title = c.short || c.description || ''
 
       const categoryEmoji = {
@@ -154,7 +157,7 @@ async function init() {
     featured.forEach(item => {
       const link = document.createElement('a')
       link.className = 'featured-card reveal'
-      link.href = `dist/${item.slug}.html`
+      link.href = `/${item.slug}.html`
       link.innerHTML = `
         <h4>${item.title}</h4>
         <p>${item.short || item.description || ''}</p>
