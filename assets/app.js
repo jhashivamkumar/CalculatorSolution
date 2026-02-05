@@ -25,7 +25,21 @@ async function init() {
   // mark page for analytics / A/B testing
   document.documentElement.setAttribute('data-page', 'home')
   if (window.gtag) gtag('event', 'page_view', { page_title: 'Calculator Solution Home', page_path: '/' })
-  const data = await fetchJSON('/calculators.json') || await fetchJSON('/index.json') || []
+  let data =
+    (await fetchJSON('/calculators.json')) ||
+    (await fetchJSON('calculators.json')) ||
+    (await fetchJSON('/index.json')) ||
+    (await fetchJSON('index.json')) ||
+    []
+
+  // index.json shape: { calculators: [...] }
+  if (data && !Array.isArray(data) && Array.isArray(data.calculators)) {
+    data = data.calculators
+  }
+
+  if (!Array.isArray(data)) {
+    data = []
+  }
   const cards = document.getElementById('cards')
   const search = document.getElementById('search')
   const categoryLinks = document.querySelectorAll('.category-link')
